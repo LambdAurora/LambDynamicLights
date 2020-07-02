@@ -1,0 +1,70 @@
+#
+# LambdAurora's ignore file
+#
+# v0.13
+
+# JetBrains
+.idea/
+*.iml
+*.ipr
+*.iws
+## Intellij IDEA
+out/
+## CLion
+cmake-build-debug*/
+cmake-build-release*/
+## Eclipse
+eclipse
+*.launch
+.settings
+.metadata
+.classpath
+.project
+## Visual Studio
+.vs/
+CMakeSettings.json
+
+# Build system
+## Cargo
+Cargo.lock
+## CMake
+CMakeCache.txt
+CMakeFiles/
+## Gradle
+.gradle/
+## Node.JS
+node_modules/
+
+# Editors
+## VSCode
+.vscode/
+
+# Logging
+logs/
+
+# Languages
+## Java
+classes/
+## Python
+__pycache__/
+## Rust
+**/*.rs.bk
+
+# OS
+## Windows
+desktop.ini
+
+# File types
+*.dll
+*.so
+*.dylib
+*.lib
+lib*.a
+*.png~
+
+# Common
+bin/
+build/
+dist/
+run/
+target/
