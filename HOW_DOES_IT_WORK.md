@@ -55,6 +55,9 @@ double multiplier = 1.0 - dist / 7.75; // 7.75 because of the range
 double lightLevel = multiplier * (double) luminance;
 ```
 
+`EntityRenderDispatcher#getLight` also needs an injection like `getLightmapCoordinates`, it needs
+the same replacement of the lightmap value to avoid dark entities in a lit place.
+
 ### Chunk rebuilding
 
 To apply the dynamic lighting we have to request the affected chunks a rebuild to rebuild the lightmap,
