@@ -77,3 +77,6 @@ and avoid too many chunk rebuilding.
 
 This has still to be researched, if a method is found using shaders this mod is likely to switch
 to this method.
+
+Note: the shader-based method will break in the case of any other renderer registered.
+For compatibility it's the less ideal.

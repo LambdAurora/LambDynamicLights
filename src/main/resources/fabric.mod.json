@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "lambdynlights",
+  "name": "LambDynamicLights",
+  "version": "${version}",
+  "description": "Adds dynamic lights to the game.",
+  "authors": [
+    "LambdAurora"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lambdynamiclights",
+    "sources": "https://github.com/LambdAurora/LambDynamicLights.git",
+    "issues": "https://github.com/LambdAurora/LambDynamicLights/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/lambdynlights/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.lambdaurora.lambdynlights.LambDynLights"
+    ],
+    "modmenu": [
+      "me.lambdaurora.lambdynlights.LambDynLightsModMenu"
+    ]
+  },
+  "mixins": [
+    "lambdynlights.mixins.json",
+    "lambdynlights.lightsource.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.8.0",
+    "fabric": "*",
+    "minecraft": ">=1.16"
+  },
+  "recommends": {
+    "modmenu": ">=1.12.2"
+  },
+  "suggests": {
+    "flamingo": "*",
+    "ltr": "*"
+  },
+  "breaks": {
+    "modmenu": "<1.12.2",
+    "optifabric": "*"
+  },
+  "custom": {
+    "modmenu:clientsideOnly": true,
+    "modupdater": {
+      "strategy": "curseforge",
+      "projectID": 393442
+    }
+  }
+}

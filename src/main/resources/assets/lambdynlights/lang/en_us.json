@@ -1,0 +1,10 @@
+{
+  "lambdynlights.menu.title": "LambDynamicLights Settings",
+  "lambdynlights.mode.fastest": "Fastest",
+  "lambdynlights.mode.fast": "Fast",
+  "lambdynlights.mode.fancy": "Fancy",
+  "lambdynlights.options.mode": "Dynamic Lights",
+  "lambdynlights.tooltip.mode.1": "Enables dynamic lights. If enabled a player holding a torch will light up the area for example.",
+  "lambdynlights.tooltip.mode.2": "%s and %s will lag a bit behind but minimizes light updates.",
+  "lambdynlights.tooltip.mode.3": "%s is smooth dynamic lighting."
+}

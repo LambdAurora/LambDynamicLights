@@ -1,0 +1,86 @@
+plugins {
+    id 'fabric-loom' version '0.4-SNAPSHOT'
+    id 'java-library'
+}
+
+group = project.maven_group
+version = "${project.mod_version}+${project.minecraft_version}"
+archivesBaseName = project.archives_base_name + "-fabric"
+
+minecraft {
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        name = "AperLambda"
+        url = 'https://aperlambda.github.io/maven'
+    }
+    //maven { url = "https://jitpack.io" }
+    flatDir {
+        dirs "lib"
+    }
+}
+
+configurations {
+    shadow
+    implementation.extendsFrom shadow
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    modImplementation "me.lambdaurora:spruceui:${project.spruceui_version}"
+    include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
+
+    modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+    // modImplementation ":phosphor-fabric-mc${project.minecraft_version}-0.6.0+build.7-dev"
+    // One day, Sodium compatibility.
+    //modImplementation "com.github.jellysquid3:sodium:1.16.x~dev-SNAPSHOT"
+    //modImplementation ":sodium-fabric-mc1.16.1-0.1.0-SNAPSHOT-dev"
+
+    shadow "com.electronwill.night-config:core:3.6.3"
+    shadow "com.electronwill.night-config:toml:3.6.3"
+
+    shadow "org.aperlambda:lambdajcommon:1.8.0"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include "fabric.mod.json"
+        expand "version": project.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "fabric.mod.json"
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    withSourcesJar()
+}
+
+jar {
+    from "../LICENSE"
+
+    from {
+        configurations.shadow.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}

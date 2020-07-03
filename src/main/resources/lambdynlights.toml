@@ -1,0 +1,3 @@
+# LambDynamicLights configuration.
+# The dynamic lights mode
+mode = "off"

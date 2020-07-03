@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "me.lambdaurora.lambdynlights.mixin",
+  "plugin": "me.lambdaurora.lambdynlights.LambDynLightsMixinPlugin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "BuiltChunkStorageAccessor",
+    "CommonWorldRendererMixin",
+    "EntityRenderDispatcherMixin",
+    "VideoOptionsScreenMixin",
+    "WorldRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
