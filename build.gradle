@@ -17,10 +17,7 @@ repositories {
         name = "AperLambda"
         url = 'https://aperlambda.github.io/maven'
     }
-    //maven { url = "https://jitpack.io" }
-    flatDir {
-        dirs "lib"
-    }
+    maven { url = "https://jitpack.io" }
 }
 
 configurations {
@@ -36,19 +33,20 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation "me.lambdaurora:spruceui:${project.spruceui_version}"
+    modImplementation "com.github.lambdaurora:spruceui:${project.spruceui_version}"
     include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
 
     modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
-    // modImplementation ":phosphor-fabric-mc${project.minecraft_version}-0.6.0+build.7-dev"
-    // One day, Sodium compatibility.
     //modImplementation "com.github.jellysquid3:sodium:1.16.x~dev-SNAPSHOT"
-    //modImplementation ":sodium-fabric-mc1.16.1-0.1.0-SNAPSHOT-dev"
 
     shadow "com.electronwill.night-config:core:3.6.3"
     shadow "com.electronwill.night-config:toml:3.6.3"
 
-    shadow "org.aperlambda:lambdajcommon:1.8.0"
+    shadow ("org.aperlambda:lambdajcommon:1.8.0") {
+        // Minecraft already has all that google crap.
+        exclude group: 'com.google.code.gson'
+        exclude group: 'com.google.guava'
+    }
 }
 
 tasks.withType(JavaCompile) {

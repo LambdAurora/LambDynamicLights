@@ -4,9 +4,9 @@
   "plugin": "me.lambdaurora.lambdynlights.LambDynLightsMixinPlugin",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "BuiltChunkStorageAccessor",
     "CommonWorldRendererMixin",
     "EntityRenderDispatcherMixin",
+    "SodiumWorldRendererMixin",
     "VideoOptionsScreenMixin",
     "WorldRendererMixin"
   ],
