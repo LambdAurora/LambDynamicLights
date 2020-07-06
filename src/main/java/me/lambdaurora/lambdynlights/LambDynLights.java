@@ -10,15 +10,23 @@
 package me.lambdaurora.lambdynlights;
 
 import me.lambdaurora.lambdynlights.accessor.WorldRendererAccessor;
+import me.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.toast.SystemToast;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.LogManager;
@@ -29,12 +37,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Predicate;
 
 /**
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer
@@ -45,6 +54,7 @@ public class LambDynLights implements ClientModInitializer
     public final         DynamicLightsConfig                       config              = new DynamicLightsConfig(this);
     private final        ConcurrentLinkedQueue<DynamicLightSource> dynamicLightSources = new ConcurrentLinkedQueue<>();
     private              long                                      lastUpdate          = System.currentTimeMillis();
+    private              boolean                                   notifiedFirstTime   = false;
 
     @Override
     public void onInitializeClient()
@@ -53,6 +63,20 @@ public class LambDynLights implements ClientModInitializer
         this.log("Initializing LambDynamicLights...");
 
         this.config.load();
+
+        ClientTickEvents.START_WORLD_TICK.register(world -> {
+            if (!this.notifiedFirstTime && this.config.isFirstTime()) {
+                this.notifiedFirstTime = true;
+
+                MinecraftClient client = MinecraftClient.getInstance();
+                client.getToastManager().add(SystemToast.method_29047(client,
+                        SystemToast.Type.TUTORIAL_HINT,
+                        new LiteralText("LambDynamicLights").formatted(Formatting.GOLD),
+                        new TranslatableText("lambdynlights.toast.first_time")));
+            }
+        });
+
+        DynamicLightHandlers.registerDefaultHandlers();
     }
 
     /**
@@ -156,9 +180,9 @@ public class LambDynLights implements ClientModInitializer
         int luminance = lightSource.getLuminance();
         if (luminance > 0) {
             // Can't use Entity#squaredDistanceTo because of eye Y coordinate.
-            double dx = pos.getX() - lightSource.getDynamicLightEntity().getX() + 0.5;
-            double dy = pos.getY() - lightSource.getDynamicLightEntity().getEyeY() + 0.5;
-            double dz = pos.getZ() - lightSource.getDynamicLightEntity().getZ() + 0.5;
+            double dx = pos.getX() - lightSource.getDynamicLightX() + 0.5;
+            double dy = pos.getY() - lightSource.getDynamicLightY() + 0.5;
+            double dz = pos.getZ() - lightSource.getDynamicLightZ() + 0.5;
 
             double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
             // 7.75 because else we would have to update more chunks and that's not a good idea.
@@ -192,7 +216,7 @@ public class LambDynLights implements ClientModInitializer
      */
     public void addLightSource(@NotNull DynamicLightSource lightSource)
     {
-        if (!lightSource.getDynamicLightEntity().getEntityWorld().isClient())
+        if (!lightSource.getDynamicLightWorld().isClient())
             return;
         if (!this.config.getDynamicLightsMode().isEnabled())
             return;
@@ -209,7 +233,7 @@ public class LambDynLights implements ClientModInitializer
      */
     public boolean containsLightSource(@NotNull DynamicLightSource lightSource)
     {
-        if (!lightSource.getDynamicLightEntity().getEntityWorld().isClient())
+        if (!lightSource.getDynamicLightWorld().isClient())
             return false;
         return this.dynamicLightSources.contains(lightSource);
     }
@@ -248,6 +272,42 @@ public class LambDynLights implements ClientModInitializer
                 it.lambdynlights_scheduleTrackedChunksRebuild(MinecraftClient.getInstance().worldRenderer);
             break;
         }
+    }
+
+    /**
+     * Removes light sources if the filter matches.
+     *
+     * @param filter Filter.
+     */
+    public void removeLightSources(@NotNull Predicate<DynamicLightSource> filter)
+    {
+        Iterator<DynamicLightSource> dynamicLightSources = this.dynamicLightSources.iterator();
+        DynamicLightSource it;
+        while (dynamicLightSources.hasNext()) {
+            it = dynamicLightSources.next();
+            if (filter.test(it)) {
+                dynamicLightSources.remove();
+                if (MinecraftClient.getInstance().worldRenderer != null)
+                    it.lambdynlights_scheduleTrackedChunksRebuild(MinecraftClient.getInstance().worldRenderer);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Removes entities light source from tracked light sources.
+     */
+    public void removeEntitiesLightSource()
+    {
+        this.removeLightSources(lightSource -> (lightSource instanceof Entity && !(lightSource instanceof PlayerEntity)));
+    }
+
+    /**
+     * Removes block entities light source from tracked light sources.
+     */
+    public void removeBlockEntitiesLightSource()
+    {
+        this.removeLightSources(lightSource -> lightSource instanceof BlockEntity);
     }
 
     /**

@@ -3,16 +3,12 @@
   "package": "me.lambdaurora.lambdynlights.mixin.lightsource",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "BlazeEntityMixin",
-    "CreeperEntityMixin",
-    "EndermanEntityMixin",
+    "AbstractDecorationEntityMixin",
+    "BlockEntityMixin",
     "EntityMixin",
     "ExplosiveProjectileEntityMixin",
-    "ItemEntityMixin",
     "LivingEntityMixin",
-    "MagmaCubeEntityMixin",
-    "PlayerEntityMixin",
-    "SpectralArrowEntityMixin"
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

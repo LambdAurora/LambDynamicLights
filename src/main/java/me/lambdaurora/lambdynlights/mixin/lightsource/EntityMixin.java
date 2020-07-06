@@ -12,8 +12,10 @@ package me.lambdaurora.lambdynlights.mixin.lightsource;
 import me.lambdaurora.lambdynlights.DynamicLightSource;
 import me.lambdaurora.lambdynlights.DynamicLightsMode;
 import me.lambdaurora.lambdynlights.LambDynLights;
+import me.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -50,19 +52,22 @@ public abstract class EntityMixin implements DynamicLightSource
     public abstract double getY();
 
     @Shadow
-    public double prevX;
-    @Shadow
-    public double prevY;
-    @Shadow
-    public double prevZ;
-
-    @Shadow
     public int chunkX;
     @Shadow
     public int chunkZ;
 
+    @Shadow
+    public abstract boolean isOnFire();
+
+    @Shadow
+    public abstract EntityType<?> getType();
+
+    private int           lambdynlights_luminance     = 0;
     private int           lambdynlights_lastLuminance = 0;
     private long          lambdynlights_lastUpdate    = 0;
+    private double        lambdynlights_prevX;
+    private double        lambdynlights_prevY;
+    private double        lambdynlights_prevZ;
     private Set<BlockPos> trackedLitChunkPos          = new HashSet<>();
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -74,11 +79,9 @@ public abstract class EntityMixin implements DynamicLightSource
                 this.setDynamicLightEnabled(false);
             } else {
                 this.dynamicLightTick();
+                if (!LambDynLights.get().config.hasEntitiesLightSource() && this.getType() != EntityType.PLAYER)
+                    this.lambdynlights_luminance = 0;
                 LambDynLights.updateTracking(this);
-
-                if (!this.isDynamicLightEnabled()) {
-                    this.lambdynlights_lastLuminance = 0;
-                }
             }
         }
     }
@@ -91,9 +94,33 @@ public abstract class EntityMixin implements DynamicLightSource
     }
 
     @Override
-    public Entity getDynamicLightEntity()
+    public double getDynamicLightX()
     {
-        return (Entity) (Object) this;
+        return this.getX();
+    }
+
+    @Override
+    public double getDynamicLightY()
+    {
+        return this.getEyeY();
+    }
+
+    @Override
+    public double getDynamicLightZ()
+    {
+        return this.getZ();
+    }
+
+    @Override
+    public World getDynamicLightWorld()
+    {
+        return this.world;
+    }
+
+    @Override
+    public void resetDynamicLight()
+    {
+        this.lambdynlights_lastLuminance = 0;
     }
 
     @Override
@@ -114,18 +141,37 @@ public abstract class EntityMixin implements DynamicLightSource
     }
 
     @Override
+    public void dynamicLightTick()
+    {
+        this.lambdynlights_luminance = this.isOnFire() ? 15 : 0;
+
+        int luminance = DynamicLightHandlers.getLuminanceFrom((Entity) (Object) this);
+        if (luminance > this.lambdynlights_luminance)
+            this.lambdynlights_luminance = luminance;
+    }
+
+    @Override
+    public int getLuminance()
+    {
+        return this.lambdynlights_luminance;
+    }
+
+    @Override
     public void lambdynlights_updateDynamicLight(@NotNull WorldRenderer renderer)
     {
         if (!this.shouldUpdateDynamicLight())
             return;
 
-        double deltaX = this.getX() - this.prevX;
-        double deltaY = this.getY() - this.prevY;
-        double deltaZ = this.getZ() - this.prevZ;
+        double deltaX = this.getX() - this.lambdynlights_prevX;
+        double deltaY = this.getY() - this.lambdynlights_prevY;
+        double deltaZ = this.getZ() - this.lambdynlights_prevZ;
 
         int luminance = this.getLuminance();
 
         if (Math.abs(deltaX) > 0.1D || Math.abs(deltaY) > 0.1D || Math.abs(deltaZ) > 0.1D || luminance != this.lambdynlights_lastLuminance) {
+            this.lambdynlights_prevX = this.getX();
+            this.lambdynlights_prevY = this.getY();
+            this.lambdynlights_prevZ = this.getZ();
             this.lambdynlights_lastLuminance = luminance;
 
             Set<BlockPos> newPos = new HashSet<>();

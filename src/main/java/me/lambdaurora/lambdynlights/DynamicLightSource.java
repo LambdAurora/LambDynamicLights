@@ -10,20 +10,45 @@
 package me.lambdaurora.lambdynlights;
 
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a dynamic light source.
+ *
+ * @author LambdAurora
+ * @version 1.1.0
+ * @since 1.0.0
  */
 public interface DynamicLightSource
 {
     /**
-     * Returns the entity the dynamic light source is associated with.
+     * Returns the dynamic light source X coordinate.
      *
-     * @return The associated entity.
+     * @return The X coordinate.
      */
-    Entity getDynamicLightEntity();
+    double getDynamicLightX();
+
+    /**
+     * Returns the dynamic light source Y coordinate.
+     *
+     * @return The Y coordinate.
+     */
+    double getDynamicLightY();
+
+    /**
+     * Returns the dynamic light source Z coordinate.
+     *
+     * @return The Z coordinate.
+     */
+    double getDynamicLightZ();
+
+    /**
+     * Returns the dynamic light source world.
+     *
+     * @return The world instance.
+     */
+    World getDynamicLightWorld();
 
     /**
      * Returns whether the dynamic light is enabled or not.
@@ -44,11 +69,14 @@ public interface DynamicLightSource
      */
     default void setDynamicLightEnabled(boolean enabled)
     {
+        this.resetDynamicLight();
         if (enabled)
             LambDynLights.get().addLightSource(this);
         else
             LambDynLights.get().removeLightSource(this);
     }
+
+    void resetDynamicLight();
 
     /**
      * Returns the luminance of the light source.
@@ -56,17 +84,12 @@ public interface DynamicLightSource
      *
      * @return The luminance of the light source.
      */
-    default int getLuminance()
-    {
-        return this.getDynamicLightEntity().isOnFire() ? 15 : 0;
-    }
+    int getLuminance();
 
     /**
      * Executed at each tick.
      */
-    default void dynamicLightTick()
-    {
-    }
+    void dynamicLightTick();
 
     /**
      * Returns whether this dynamic light source should update.

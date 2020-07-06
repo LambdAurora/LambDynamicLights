@@ -5,10 +5,14 @@
   "compatibilityLevel": "JAVA_8",
   "client": [
     "CommonWorldRendererMixin",
+    "EntityLighterMixin",
     "EntityRenderDispatcherMixin",
     "SodiumWorldRendererMixin",
     "VideoOptionsScreenMixin",
-    "WorldRendererMixin"
+    "WorldMixin",
+    "WorldRendererMixin",
+    "ltr.LilTaterBlocksMixin",
+    "ltr.LilTaterBlockEntityAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

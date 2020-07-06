@@ -10,6 +10,7 @@
 package me.lambdaurora.lambdynlights.mixin.lightsource;
 
 import me.lambdaurora.lambdynlights.DynamicLightSource;
+import me.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -26,6 +27,8 @@ public abstract class ExplosiveProjectileEntityMixin implements DynamicLightSour
     @Override
     public int getLuminance()
     {
-        return 14;
+        if (LambDynLights.get().config.hasEntitiesLightSource())
+            return 14;
+        return 0;
     }
 }

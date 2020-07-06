@@ -16,22 +16,30 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
 public class DynamicLightsConfig
 {
-    private static final DynamicLightsMode DEFAULT_DYNAMIC_LIGHTS_MODE = DynamicLightsMode.OFF;
+    private static final DynamicLightsMode DEFAULT_DYNAMIC_LIGHTS_MODE         = DynamicLightsMode.OFF;
+    private static final boolean           DEFAULT_ENTITIES_LIGHT_SOURCE       = true;
+    private static final boolean           DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE = true;
 
-    protected final FileConfig        config = FileConfig.builder("config/lambdynlights.toml").concurrent().defaultResource("/lambdynlights.toml").autosave().build();
-    private final   LambDynLights     mod;
-    private         DynamicLightsMode dynamicLightsMode;
+    public static final Path              CONFIG_FILE_PATH = Paths.get("config/lambdynlights.toml");
+    protected final     FileConfig        config;
+    private final       LambDynLights     mod;
+    private             boolean           firstTime;
+    private             DynamicLightsMode dynamicLightsMode;
 
-    public final Option dynamicLightsModeOption = new SpruceCyclingOption("lambdynlights.options.mode",
+    public final Option dynamicLightsModeOption = new SpruceCyclingOption("lambdynlights.option.mode",
             amount -> this.setDynamicLightsMode(this.dynamicLightsMode.next()),
             option -> option.getDisplayPrefix().append(this.dynamicLightsMode.getTranslatedText()),
             new TranslatableText("lambdynlights.tooltip.mode.1")
@@ -43,6 +51,10 @@ public class DynamicLightsConfig
     public DynamicLightsConfig(@NotNull LambDynLights mod)
     {
         this.mod = mod;
+
+        this.firstTime = Files.notExists(CONFIG_FILE_PATH);
+
+        this.config = FileConfig.builder(CONFIG_FILE_PATH).concurrent().defaultResource("/lambdynlights.toml").autosave().build();
     }
 
     /**
@@ -52,8 +64,13 @@ public class DynamicLightsConfig
     {
         this.config.load();
 
-        this.dynamicLightsMode = DynamicLightsMode.byId(this.config.getOrElse("mode", DEFAULT_DYNAMIC_LIGHTS_MODE.getName()))
+        String dynamicLightsModeValue = this.config.getOrElse("mode", DEFAULT_DYNAMIC_LIGHTS_MODE.getName());
+        this.dynamicLightsMode = DynamicLightsMode.byId(dynamicLightsModeValue)
                 .orElse(DEFAULT_DYNAMIC_LIGHTS_MODE);
+
+        if (dynamicLightsModeValue.equalsIgnoreCase("none")) {
+            this.firstTime = true;
+        }
 
         this.mod.log("Configuration loaded.");
     }
@@ -72,6 +89,16 @@ public class DynamicLightsConfig
     public void reset()
     {
         this.setDynamicLightsMode(DEFAULT_DYNAMIC_LIGHTS_MODE);
+    }
+
+    /**
+     * Returns whether it's the first time the mod is loaded.
+     *
+     * @return True if it's the first time, else false.
+     */
+    public boolean isFirstTime()
+    {
+        return this.firstTime;
     }
 
     /**
@@ -97,5 +124,51 @@ public class DynamicLightsConfig
         if (!mode.isEnabled()) {
             this.mod.clearLightSources();
         }
+
+        this.firstTime = false;
+    }
+
+    /**
+     * Returns whether block entities as light source is enabled.
+     *
+     * @return True if block entities as light source is enabled, else false.
+     */
+    public boolean hasEntitiesLightSource()
+    {
+        return this.config.getOrElse("light_sources.entities", DEFAULT_ENTITIES_LIGHT_SOURCE);
+    }
+
+    /**
+     * Sets whether block entities as light source is enabled.
+     *
+     * @param enabled True if block entities as light source is enabled, else false.
+     */
+    public void setEntitiesLightSource(boolean enabled)
+    {
+        if (!enabled)
+            this.mod.removeEntitiesLightSource();
+        this.config.set("light_sources.entities", enabled);
+    }
+
+    /**
+     * Returns whether block entities as light source is enabled.
+     *
+     * @return True if block entities as light source is enabled, else false.
+     */
+    public boolean hasBlockEntitiesLightSource()
+    {
+        return this.config.getOrElse("light_sources.block_entities", DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE);
+    }
+
+    /**
+     * Sets whether block entities as light source is enabled.
+     *
+     * @param enabled True if block entities as light source is enabled, else false.
+     */
+    public void setBlockEntitiesLightSource(boolean enabled)
+    {
+        if (!enabled)
+            this.mod.removeBlockEntitiesLightSource();
+        this.config.set("light_sources.block_entities", enabled);
     }
 }

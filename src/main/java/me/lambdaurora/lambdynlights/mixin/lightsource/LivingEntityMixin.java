@@ -11,6 +11,7 @@ package me.lambdaurora.lambdynlights.mixin.lightsource;
 
 import me.lambdaurora.lambdynlights.DynamicLightSource;
 import me.lambdaurora.lambdynlights.LambDynLights;
+import me.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -41,6 +42,13 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
 
             this.lambdynlights_luminance = luminance;
         }
+
+        int luminance = DynamicLightHandlers.getLuminanceFrom(this);
+        if (luminance > this.lambdynlights_luminance)
+            this.lambdynlights_luminance = luminance;
+
+        if (!LambDynLights.get().config.hasEntitiesLightSource() && this.getType() != EntityType.PLAYER)
+            this.lambdynlights_luminance = 0;
     }
 
     @Override

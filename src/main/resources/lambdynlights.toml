@@ -1,3 +1,10 @@
 # LambDynamicLights configuration.
 # The dynamic lights mode
-mode = "off"
+mode = "none"
+
+ # Light sources settings.
+[light_sources]
+    # Enable entities light source.
+    entities = true
+    # Enable block entities light source.
+    block_entities = true

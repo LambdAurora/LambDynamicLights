@@ -12,7 +12,9 @@ package me.lambdaurora.lambdynlights.gui;
 import me.lambdaurora.lambdynlights.DynamicLightsConfig;
 import me.lambdaurora.lambdynlights.LambDynLights;
 import me.lambdaurora.spruceui.Tooltip;
+import me.lambdaurora.spruceui.option.SpruceBooleanOption;
 import me.lambdaurora.spruceui.option.SpruceResetOption;
+import me.lambdaurora.spruceui.option.SpruceSeparatorOption;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonListWidget;
@@ -26,13 +28,15 @@ import org.jetbrains.annotations.Nullable;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
 public class SettingsScreen extends Screen
 {
     private final DynamicLightsConfig config;
     private final Screen              parent;
+    private final Option              entitiesOption;
+    private final Option              blockEntitiesOption;
     private final Option              resetOption;
     private       ButtonListWidget    list;
 
@@ -42,6 +46,14 @@ public class SettingsScreen extends Screen
         this.parent = parent;
         this.config = LambDynLights.get().config;
 
+        this.entitiesOption = new SpruceBooleanOption("lambdynlights.option.entities",
+                this.config::hasEntitiesLightSource,
+                this.config::setEntitiesLightSource,
+                new TranslatableText("lambdynlights.tooltip.entities"));
+        this.blockEntitiesOption = new SpruceBooleanOption("lambdynlights.option.block_entities",
+                this.config::hasBlockEntitiesLightSource,
+                this.config::setBlockEntitiesLightSource,
+                new TranslatableText("lambdynlights.tooltip.block_entities"));
         this.resetOption = new SpruceResetOption(btn -> {
             this.config.reset();
             MinecraftClient client = MinecraftClient.getInstance();
@@ -69,6 +81,8 @@ public class SettingsScreen extends Screen
 
         this.list = new ButtonListWidget(this.client, this.width, this.height, 43, this.height - 29 - this.getTextHeight(), 25);
         this.list.addSingleOptionEntry(this.config.dynamicLightsModeOption);
+        this.list.addSingleOptionEntry(new SpruceSeparatorOption("lambdynlights.menu.light_sources", true, null));
+        this.list.addOptionEntry(this.entitiesOption, this.blockEntitiesOption);
         this.children.add(list);
 
         this.addButton(this.resetOption.createButton(this.client.options, this.width / 2 - 155, this.height - 29, 150));

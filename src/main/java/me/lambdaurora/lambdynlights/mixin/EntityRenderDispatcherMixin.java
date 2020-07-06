@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRenderDispatcherMixin
 {
-    @Inject(method = "getLight", at = @At("TAIL"), cancellable = true)
+    @Inject(method = "getLight", at = @At("RETURN"), cancellable = true)
     public void getLight(Entity entity, float tickDelta, CallbackInfoReturnable<Integer> cir)
     {
         if (!LambDynLights.get().config.getDynamicLightsMode().isEnabled())

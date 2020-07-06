@@ -16,8 +16,7 @@ item which makes light as a block, or create by an entity on fire, etc.
 
 Dynamic lights are present as an option in OptiFine or as a Forge mod (Dynamic Lights mod).
 
-Warning: this mod is not compatible with Sodium.
-Phosphor is compatible and recommended.
+[Sodium](https://github.com/jellysquid3/sodium-fabric) and [Phosphor](https://github.com/jellysquid3/phosphor-fabric) are compatible and recommended.
 
 ## Build
 

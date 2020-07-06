@@ -64,7 +64,7 @@ To apply the dynamic lighting we have to request the affected chunks a rebuild t
 which is the most critic part performance-wise. Rebuilding a chunk cost performances,
 that's why there's multiple mode: FASTEST, FAST and FANCY. The fast modes will limit the update.
 
-To manage chunk rebuilding, we inject at `WorldRenderer#setupTerrain` (`SodiumWorldRender#setupTerrain` if Sodium is present),
+To manage chunk rebuilding, we inject at `WorldRenderer#setupTerrain` (`WorldRenderer#render` at `WorldRenderer#setupTerrain` invoke if Sodium is present),
 and if fast mode then we check when the last update was done.
 If we can update, then we get the current dynamic light source position and get its chunk.
 After that we get the surrounding affect chunks and build a new Set of chunk coordinates which
@@ -74,9 +74,6 @@ need to be updated.
 
 This would be more ideal performance-wise as it would give the smoothness of the second method
 and avoid too many chunk rebuilding.
-
-This has still to be researched, if a method is found using shaders this mod is likely to switch
-to this method.
 
 Note: the shader-based method will break in the case of any other renderer registered.
 For compatibility it's the less ideal.

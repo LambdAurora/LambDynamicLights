@@ -18,6 +18,21 @@ repositories {
         url = 'https://aperlambda.github.io/maven'
     }
     maven { url = "https://jitpack.io" }
+    maven {
+        name = "grondag"
+        url = "https://grondag-repo.appspot.com"
+        credentials {
+            username "guest"
+            password ""
+        }
+    }
+    maven {
+        name = "Cotton"
+        url = "http://server.bbkr.space:8081/artifactory/libs-release/"
+    }
+    flatDir {
+        dirs "lib"
+    }
 }
 
 configurations {
@@ -37,7 +52,10 @@ dependencies {
     include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
 
     modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
-    //modImplementation "com.github.jellysquid3:sodium:1.16.x~dev-SNAPSHOT"
+    modImplementation ":LilTaterReloaded-1.1.6+1.16.1-dev"
+    //modImplementation "grondag:canvas-mc116:1.0.+"
+    modImplementation "com.github.jellysquid3:sodium:1.16.x~dev-SNAPSHOT"
+    modImplementation ":phosphor-fabric-mc1.16.1-0.6.0+build.7-dev"
 
     shadow "com.electronwill.night-config:core:3.6.3"
     shadow "com.electronwill.night-config:toml:3.6.3"
