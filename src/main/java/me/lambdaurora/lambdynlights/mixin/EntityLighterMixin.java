@@ -25,9 +25,13 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(targets = "me.jellysquid.mods.sodium.client.model.light.EntityLighter")
 public class EntityLighterMixin
 {
-    @Shadow @Final private static double MAX_LIGHTMAP_COORD;
+    @Shadow
+    @Final
+    private static double MAX_LIGHTMAP_COORD;
 
-    @Shadow @Final private static double MAX_LIGHT_VAL;
+    @Shadow
+    @Final
+    private static double MAX_LIGHT_VAL;
 
     @Inject(method = "getBlendedLight", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILEXCEPTION, cancellable = true)
     private static void onGetBlendedLight(Entity entity, float tickDelta, CallbackInfoReturnable<Integer> cir,

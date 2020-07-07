@@ -11,8 +11,8 @@
     "VideoOptionsScreenMixin",
     "WorldMixin",
     "WorldRendererMixin",
-    "ltr.LilTaterBlocksMixin",
-    "ltr.LilTaterBlockEntityAccessor"
+    "ltr.LilTaterBlockEntityAccessor",
+    "ltr.LilTaterBlocksMixin"
   ],
   "injectors": {
     "defaultRequire": 1
