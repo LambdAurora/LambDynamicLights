@@ -13,6 +13,7 @@ import me.lambdaurora.lambdynlights.accessor.WorldRendererAccessor;
 import me.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -22,11 +23,14 @@ import net.minecraft.client.toast.SystemToast;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.tag.Tag;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.LogManager;
@@ -43,18 +47,19 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer
 {
-    private static final double                                    MAX_RADIUS          = 7.75;
+    public static final  Tag<Item>                                 WATER_SENSITIVE_ITEMS = TagRegistry.item(new Identifier("lambdynlights", "water_sensitive"));
+    private static final double                                    MAX_RADIUS            = 7.75;
     private static       LambDynLights                             INSTANCE;
-    public final         Logger                                    logger              = LogManager.getLogger("lambdynlights");
-    public final         DynamicLightsConfig                       config              = new DynamicLightsConfig(this);
-    private final        ConcurrentLinkedQueue<DynamicLightSource> dynamicLightSources = new ConcurrentLinkedQueue<>();
-    private              long                                      lastUpdate          = System.currentTimeMillis();
-    private              boolean                                   notifiedFirstTime   = false;
+    public final         Logger                                    logger                = LogManager.getLogger("lambdynlights");
+    public final         DynamicLightsConfig                       config                = new DynamicLightsConfig(this);
+    private final        ConcurrentLinkedQueue<DynamicLightSource> dynamicLightSources   = new ConcurrentLinkedQueue<>();
+    private              long                                      lastUpdate            = System.currentTimeMillis();
+    private              boolean                                   notifiedFirstTime     = false;
 
     @Override
     public void onInitializeClient()
@@ -363,11 +368,16 @@ public class LambDynLights implements ClientModInitializer
     /**
      * Returns the luminance from an item stack.
      *
-     * @param stack The item stack.
+     * @param stack            The item stack.
+     * @param submergedInWater True if the stack is submerged in water, else false.
      * @return The luminance of the item.
      */
-    public static int getLuminanceFromItemStack(@NotNull ItemStack stack)
+    public static int getLuminanceFromItemStack(@NotNull ItemStack stack, boolean submergedInWater)
     {
+        if (INSTANCE.config.hasWaterSensitiveCheck() && submergedInWater && WATER_SENSITIVE_ITEMS.contains(stack.getItem())) {
+            return 0; // Don't emit light with water sensitive items while submerged in water.
+        }
+
         if (stack.getItem() instanceof BlockItem) {
             return ((BlockItem) stack.getItem()).getBlock().getDefaultState().getLuminance();
         } else if (stack.getItem() == Items.LAVA_BUCKET) {

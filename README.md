@@ -20,7 +20,7 @@ Dynamic lights are present as an option in OptiFine or as a Forge mod (Dynamic L
 
 ## Build
 
-Just do `./gradlew build` and everything should build just fine!
+Just do `./gradlew shadowRemapJar` and everything should build just fine!
 
 ## How does it work internally?
 

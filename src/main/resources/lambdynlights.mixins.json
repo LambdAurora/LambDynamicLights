@@ -7,11 +7,10 @@
     "CommonWorldRendererMixin",
     "EntityLighterMixin",
     "EntityRenderDispatcherMixin",
-    "SodiumWorldRendererMixin",
     "VideoOptionsScreenMixin",
     "WorldMixin",
     "WorldRendererMixin",
-    "ltr.LilTaterBlockEntityAccessor",
+    "ltr.LilTaterBlockEntityMixin",
     "ltr.LilTaterBlocksMixin"
   ],
   "injectors": {

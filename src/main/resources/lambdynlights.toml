@@ -8,3 +8,5 @@ mode = "none"
     entities = true
     # Enable block entities light source.
     block_entities = true
+    # Enables water-sensitive light sources check. This means that water-sensitive items will not light up when submerged in water.
+    water_sensitive_check = true

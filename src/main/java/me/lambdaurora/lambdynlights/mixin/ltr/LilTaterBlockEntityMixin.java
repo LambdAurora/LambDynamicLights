@@ -9,18 +9,24 @@
 
 package me.lambdaurora.lambdynlights.mixin.ltr;
 
+import me.lambdaurora.lambdynlights.util.LilTaterBlockEntityAccessor;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.gen.Accessor;
-import org.spongepowered.asm.mixin.gen.Invoker;
 
+@Pseudo
 @Mixin(targets = "mods.ltr.entities.LilTaterBlockEntity")
-public interface LilTaterBlockEntityAccessor
+public abstract class LilTaterBlockEntityMixin implements Inventory, LilTaterBlockEntityAccessor
 {
-    @Invoker("isEmpty")
-    boolean lambdynlights_isEmpty();
+    @Override
+    public boolean lambdynlights_isEmpty()
+    {
+        return this.isEmpty();
+    }
 
-    @Accessor("items")
-    DefaultedList<ItemStack> lambdynlights_getItems();
+    @Accessor(value = "items", remap = false)
+    public abstract DefaultedList<ItemStack> lambdynlights_getItems();
 }

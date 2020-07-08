@@ -24,7 +24,7 @@ import java.nio.file.Paths;
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0
  */
 public class DynamicLightsConfig
@@ -32,6 +32,7 @@ public class DynamicLightsConfig
     private static final DynamicLightsMode DEFAULT_DYNAMIC_LIGHTS_MODE         = DynamicLightsMode.OFF;
     private static final boolean           DEFAULT_ENTITIES_LIGHT_SOURCE       = true;
     private static final boolean           DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE = true;
+    private static final boolean           DEFAULT_WATER_SENSITIVE_CHECK       = true;
 
     public static final Path              CONFIG_FILE_PATH = Paths.get("config/lambdynlights.toml");
     protected final     FileConfig        config;
@@ -41,7 +42,7 @@ public class DynamicLightsConfig
 
     public final Option dynamicLightsModeOption = new SpruceCyclingOption("lambdynlights.option.mode",
             amount -> this.setDynamicLightsMode(this.dynamicLightsMode.next()),
-            option -> option.getDisplayPrefix().append(this.dynamicLightsMode.getTranslatedText()),
+            option -> option.getDisplayText(this.dynamicLightsMode.getTranslatedText()),
             new TranslatableText("lambdynlights.tooltip.mode.1")
                     .append(new LiteralText("\n"))
                     .append(new TranslatableText("lambdynlights.tooltip.mode.2", DynamicLightsMode.FASTEST.getTranslatedText(), DynamicLightsMode.FAST.getTranslatedText()))
@@ -89,6 +90,9 @@ public class DynamicLightsConfig
     public void reset()
     {
         this.setDynamicLightsMode(DEFAULT_DYNAMIC_LIGHTS_MODE);
+        this.setEntitiesLightSource(DEFAULT_ENTITIES_LIGHT_SOURCE);
+        this.setBlockEntitiesLightSource(DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE);
+        this.setWaterSensitiveCheck(DEFAULT_WATER_SENSITIVE_CHECK);
     }
 
     /**
@@ -170,5 +174,25 @@ public class DynamicLightsConfig
         if (!enabled)
             this.mod.removeBlockEntitiesLightSource();
         this.config.set("light_sources.block_entities", enabled);
+    }
+
+    /**
+     * Returns whether water sensitive check is enabled or not.
+     *
+     * @return True if water sensitive check is enabled, else false.
+     */
+    public boolean hasWaterSensitiveCheck()
+    {
+        return this.config.getOrElse("light_sources.water_sensitive_check", DEFAULT_WATER_SENSITIVE_CHECK);
+    }
+
+    /**
+     * Sets whether water sensitive check is enabled or not.
+     *
+     * @param waterSensitive True if water sensitive check is enabled, else false.
+     */
+    public void setWaterSensitiveCheck(boolean waterSensitive)
+    {
+        this.config.set("light_sources.water_sensitive_check", waterSensitive);
     }
 }

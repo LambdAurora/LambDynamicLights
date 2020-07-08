@@ -11,6 +11,7 @@ package me.lambdaurora.lambdynlights.gui;
 
 import me.lambdaurora.lambdynlights.DynamicLightsConfig;
 import me.lambdaurora.lambdynlights.LambDynLights;
+import me.lambdaurora.lambdynlights.LambDynLightsCompat;
 import me.lambdaurora.spruceui.Tooltip;
 import me.lambdaurora.spruceui.option.SpruceBooleanOption;
 import me.lambdaurora.spruceui.option.SpruceResetOption;
@@ -20,6 +21,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.options.Option;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0
  */
 public class SettingsScreen extends Screen
@@ -37,6 +39,7 @@ public class SettingsScreen extends Screen
     private final Screen              parent;
     private final Option              entitiesOption;
     private final Option              blockEntitiesOption;
+    private final Option              waterSensitiveOption;
     private final Option              resetOption;
     private       ButtonListWidget    list;
 
@@ -54,6 +57,10 @@ public class SettingsScreen extends Screen
                 this.config::hasBlockEntitiesLightSource,
                 this.config::setBlockEntitiesLightSource,
                 new TranslatableText("lambdynlights.tooltip.block_entities"));
+        this.waterSensitiveOption = new SpruceBooleanOption("lambdynlights.option.water_sensitive",
+                this.config::hasWaterSensitiveCheck,
+                this.config::setWaterSensitiveCheck,
+                new TranslatableText("lambdynlights.tooltip.water_sensitive"));
         this.resetOption = new SpruceResetOption(btn -> {
             this.config.reset();
             MinecraftClient client = MinecraftClient.getInstance();
@@ -83,6 +90,7 @@ public class SettingsScreen extends Screen
         this.list.addSingleOptionEntry(this.config.dynamicLightsModeOption);
         this.list.addSingleOptionEntry(new SpruceSeparatorOption("lambdynlights.menu.light_sources", true, null));
         this.list.addOptionEntry(this.entitiesOption, this.blockEntitiesOption);
+        this.list.addOptionEntry(this.waterSensitiveOption, null);
         this.children.add(list);
 
         this.addButton(this.resetOption.createButton(this.client.options, this.width / 2 - 155, this.height - 29, 150));
@@ -97,6 +105,11 @@ public class SettingsScreen extends Screen
         this.list.render(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);
         this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 8, 16777215);
+
+        if (LambDynLightsCompat.isCanvasInstalled()) {
+            this.drawCenteredString(matrices, this.textRenderer, I18n.translate("lambdynlights.menu.canvas.1"), this.width / 2, this.height - 29 - (5 + this.textRenderer.fontHeight) * 3, 0xFFFF0000);
+            this.drawCenteredString(matrices, this.textRenderer, I18n.translate("lambdynlights.menu.canvas.2"), this.width / 2, this.height - 29 - (5 + this.textRenderer.fontHeight) * 2, 0xFFFF0000);
+        }
 
         Tooltip.renderAll(matrices);
     }

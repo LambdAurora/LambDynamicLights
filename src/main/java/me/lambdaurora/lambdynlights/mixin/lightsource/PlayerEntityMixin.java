@@ -40,7 +40,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
         } else {
             int luminance = 0;
             for (ItemStack equipped : this.getItemsEquipped()) {
-                luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped));
+                luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, this.isSubmergedInWater()));
             }
 
             this.lambdynlights_luminance = luminance;

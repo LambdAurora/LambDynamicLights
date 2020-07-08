@@ -1,6 +1,9 @@
+import net.fabricmc.loom.task.RemapJarTask
+
 plugins {
     id 'fabric-loom' version '0.4-SNAPSHOT'
     id 'java-library'
+    id 'maven-publish'
 }
 
 group = project.maven_group
@@ -37,7 +40,7 @@ repositories {
 
 configurations {
     shadow
-    implementation.extendsFrom shadow
+    api.extendsFrom shadow
 }
 
 dependencies {
@@ -52,15 +55,13 @@ dependencies {
     include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
 
     modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
-    modImplementation ":LilTaterReloaded-1.1.6+1.16.1-dev"
     //modImplementation "grondag:canvas-mc116:1.0.+"
     modImplementation "com.github.jellysquid3:sodium:1.16.x~dev-SNAPSHOT"
-    modImplementation ":phosphor-fabric-mc1.16.1-0.6.0+build.7-dev"
 
     shadow "com.electronwill.night-config:core:3.6.3"
     shadow "com.electronwill.night-config:toml:3.6.3"
 
-    shadow ("org.aperlambda:lambdajcommon:1.8.0") {
+    shadow("org.aperlambda:lambdajcommon:1.8.0") {
         // Minecraft already has all that google crap.
         exclude group: 'com.google.code.gson'
         exclude group: 'com.google.guava'
@@ -93,10 +94,72 @@ java {
 
 jar {
     from "../LICENSE"
+}
+
+task shadowJar(type: Jar) {
+    archiveClassifier.set("dev")
+
+    from sourceSets.main.output
 
     from {
         configurations.shadow.collect {
             it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+task shadowRemapJar(type: RemapJarTask) {
+    dependsOn shadowJar
+
+    input = file("${project.buildDir}/libs/$archivesBaseName-$version-dev.jar")
+    archiveName = "${archivesBaseName}-${version}.jar"
+    addNestedDependencies = true
+}
+
+// configure the maven publication
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+
+            pom {
+                name = "LambDynamicLights"
+                description = "Adds dynamic lights to the game."
+            }
+
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+
+                configurations.shadow.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                    dependencyNode.appendNode('scope', 'compile')
+                }
+            }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        maven {
+            name = "BuildDirLocal"
+            url = "$buildDir/repo"
+        }
+        maven {
+            name = "GithubPackages"
+            url = uri("https://maven.pkg.github.com/LambdAurora/LambDynamicLights")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
         }
     }
 }

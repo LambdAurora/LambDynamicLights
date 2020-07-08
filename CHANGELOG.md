@@ -19,3 +19,13 @@
    - Lil taters will light up the area if they hold an item emitting light.
  - Fixed light not moving when light source was moving too slow.
  - Fixed lighting errors with Sodium.
+
+## v1.2.0
+
+ - Added water-sensitive check for items and light sources.
+   - Added data item tag `#lambdynlights:water_sensitive` which lists every item which can't light up in the water.
+   - Added an option to enable/disable the feature
+ - Updated SpruceUI to v1.5.6 to fix latest snapshots issues.
+ - Added "early/WIP" compatibility with [Canvas Renderer](https://www.curseforge.com/minecraft/mc-mods/canvas-renderer).
+   - Added a warning message about performance issues. 
+ - Fixed a crash with Sodium rc7 with smooth lighting set to HIGH.

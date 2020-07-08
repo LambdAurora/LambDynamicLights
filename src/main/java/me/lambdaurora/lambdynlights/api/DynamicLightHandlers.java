@@ -14,6 +14,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +23,7 @@ import java.util.Map;
 
 /**
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.1.0
  */
 public class DynamicLightHandlers
@@ -46,8 +47,11 @@ public class DynamicLightHandlers
                 luminance = entity.getCarriedBlock().getLuminance();
             return luminance;
         });
-        registerDynamicLightHandler(EntityType.ITEM, entity -> LambDynLights.getLuminanceFromItemStack(entity.getStack()));
-        registerDynamicLightHandler(EntityType.ITEM_FRAME, entity -> LambDynLights.getLuminanceFromItemStack(entity.getHeldItemStack()));
+        registerDynamicLightHandler(EntityType.ITEM, entity -> LambDynLights.getLuminanceFromItemStack(entity.getStack(), entity.isSubmergedInWater()));
+        registerDynamicLightHandler(EntityType.ITEM_FRAME, entity -> {
+            World world = entity.getEntityWorld();
+            return LambDynLights.getLuminanceFromItemStack(entity.getHeldItemStack(), !world.getFluidState(entity.getBlockPos()).isEmpty());
+        });
         registerDynamicLightHandler(EntityType.MAGMA_CUBE, entity -> (entity.stretch > 0.6) ? 11 : 8);
         registerDynamicLightHandler(EntityType.SPECTRAL_ARROW, entity -> 8);
     }

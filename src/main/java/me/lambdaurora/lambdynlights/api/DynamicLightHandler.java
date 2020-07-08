@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> The type of the light source.
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.1.0
  */
 public interface DynamicLightHandler<T>
@@ -44,7 +44,7 @@ public interface DynamicLightHandler<T>
         return entity -> {
             int luminance = 0;
             for (ItemStack equipped : entity.getItemsEquipped()) {
-                luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped));
+                luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, entity.isSubmergedInWater()));
             }
             return Math.max(luminance, handler.getLuminance(entity));
         };
