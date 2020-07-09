@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:campfire",
+    "minecraft:fire_charge",
     "minecraft:lantern",
     "minecraft:lava_bucket",
     "minecraft:redstone_torch",

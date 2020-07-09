@@ -10,10 +10,12 @@
 package me.lambdaurora.lambdynlights.gui;
 
 import me.lambdaurora.lambdynlights.DynamicLightsConfig;
+import me.lambdaurora.lambdynlights.ExplosiveLightingMode;
 import me.lambdaurora.lambdynlights.LambDynLights;
 import me.lambdaurora.lambdynlights.LambDynLightsCompat;
 import me.lambdaurora.spruceui.Tooltip;
 import me.lambdaurora.spruceui.option.SpruceBooleanOption;
+import me.lambdaurora.spruceui.option.SpruceCyclingOption;
 import me.lambdaurora.spruceui.option.SpruceResetOption;
 import me.lambdaurora.spruceui.option.SpruceSeparatorOption;
 import net.minecraft.client.MinecraftClient;
@@ -30,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 1.2.0
+ * @version 1.2.1
  * @since 1.0.0
  */
 public class SettingsScreen extends Screen
@@ -40,6 +42,8 @@ public class SettingsScreen extends Screen
     private final Option              entitiesOption;
     private final Option              blockEntitiesOption;
     private final Option              waterSensitiveOption;
+    private final Option              creeperLightingOption;
+    private final Option              tntLightingOption;
     private final Option              resetOption;
     private       ButtonListWidget    list;
 
@@ -61,6 +65,20 @@ public class SettingsScreen extends Screen
                 this.config::hasWaterSensitiveCheck,
                 this.config::setWaterSensitiveCheck,
                 new TranslatableText("lambdynlights.tooltip.water_sensitive"));
+        this.creeperLightingOption = new SpruceCyclingOption("entity.minecraft.creeper",
+                amount -> this.config.setCreeperLightingMode(this.config.getCreeperLightingMode().next()),
+                option -> option.getDisplayText(this.config.getCreeperLightingMode().getTranslatedText()),
+                new TranslatableText("lambdynlights.tooltip.creeper_lighting",
+                        ExplosiveLightingMode.OFF.getTranslatedText(),
+                        ExplosiveLightingMode.SIMPLE.getTranslatedText(),
+                        ExplosiveLightingMode.FANCY.getTranslatedText()));
+        this.tntLightingOption = new SpruceCyclingOption("block.minecraft.tnt",
+                amount -> this.config.setTntLightingMode(this.config.getTntLightingMode().next()),
+                option -> option.getDisplayText(this.config.getTntLightingMode().getTranslatedText()),
+                new TranslatableText("lambdynlights.tooltip.tnt_lighting",
+                        ExplosiveLightingMode.OFF.getTranslatedText(),
+                        ExplosiveLightingMode.SIMPLE.getTranslatedText(),
+                        ExplosiveLightingMode.FANCY.getTranslatedText()));
         this.resetOption = new SpruceResetOption(btn -> {
             this.config.reset();
             MinecraftClient client = MinecraftClient.getInstance();
@@ -91,6 +109,7 @@ public class SettingsScreen extends Screen
         this.list.addSingleOptionEntry(new SpruceSeparatorOption("lambdynlights.menu.light_sources", true, null));
         this.list.addOptionEntry(this.entitiesOption, this.blockEntitiesOption);
         this.list.addOptionEntry(this.waterSensitiveOption, null);
+        this.list.addOptionEntry(this.creeperLightingOption, this.tntLightingOption);
         this.children.add(list);
 
         this.addButton(this.resetOption.createButton(this.client.options, this.width / 2 - 155, this.height - 29, 150));

@@ -23,10 +23,10 @@ import java.util.Map;
 
 /**
  * @author LambdAurora
- * @version 1.2.0
+ * @version 1.2.1
  * @since 1.1.0
  */
-public class DynamicLightHandlers
+public final class DynamicLightHandlers
 {
     private static Map<EntityType<? extends Entity>, DynamicLightHandler<? extends Entity>>                ENTITES_HANDLER        = new HashMap<>();
     private static Map<BlockEntityType<? extends BlockEntity>, DynamicLightHandler<? extends BlockEntity>> BLOCK_ENTITIES_HANDLER = new HashMap<>();
@@ -37,10 +37,7 @@ public class DynamicLightHandlers
     public static void registerDefaultHandlers()
     {
         registerDynamicLightHandler(EntityType.BLAZE, entity -> 10);
-        registerDynamicLightHandler(EntityType.CREEPER, entity -> {
-            if (entity.getClientFuseTime(0.0F) > 0.001D) return 10;
-            else return 0;
-        });
+        registerDynamicLightHandler(EntityType.CREEPER, DynamicLightHandler.makeCreeperEntityHandler(null));
         registerDynamicLightHandler(EntityType.ENDERMAN, entity -> {
             int luminance = 0;
             if (entity.getCarriedBlock() != null)

@@ -9,8 +9,8 @@
 
 package me.lambdaurora.lambdynlights;
 
+import me.lambdaurora.spruceui.SpruceTexts;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import org.aperlambda.lambdacommon.utils.Nameable;
 import org.jetbrains.annotations.NotNull;
@@ -22,23 +22,23 @@ import java.util.Optional;
  * Represents the dynamic lights mode.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.2.1
  * @since 1.0.0
  */
 public enum DynamicLightsMode implements Nameable
 {
-    OFF(0, Formatting.RED),
-    FASTEST(500, Formatting.GOLD),
-    FAST(250, Formatting.YELLOW),
-    FANCY(0, Formatting.GREEN);
+    OFF(0, Formatting.RED, SpruceTexts.OPTIONS_OFF),
+    FASTEST(500, Formatting.GOLD, SpruceTexts.OPTIONS_GENERIC_FASTEST),
+    FAST(250, Formatting.YELLOW, SpruceTexts.OPTIONS_GENERIC_FAST),
+    FANCY(0, Formatting.GREEN, SpruceTexts.OPTIONS_GENERIC_FANCY);
 
-    private final int        delay;
-    private final Formatting formatting;
+    private final int  delay;
+    private final Text translatedText;
 
-    DynamicLightsMode(int delay, @NotNull Formatting formatting)
+    DynamicLightsMode(int delay, @NotNull Formatting formatting, @NotNull Text translatedText)
     {
         this.delay = delay;
-        this.formatting = formatting;
+        this.translatedText = translatedText.copy().formatted(formatting);
     }
 
     /**
@@ -84,11 +84,6 @@ public enum DynamicLightsMode implements Nameable
         return v[this.ordinal() + 1];
     }
 
-    public @NotNull String getTranslationKey()
-    {
-        return this == OFF ? "options.off" : ("lambdynlights.mode." + this.getName());
-    }
-
     /**
      * Returns the translated text of the dynamic lights mode.
      *
@@ -96,7 +91,7 @@ public enum DynamicLightsMode implements Nameable
      */
     public @NotNull Text getTranslatedText()
     {
-        return new TranslatableText(this.getTranslationKey()).formatted(this.formatting);
+        return this.translatedText;
     }
 
     @Override

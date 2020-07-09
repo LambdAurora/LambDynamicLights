@@ -8,7 +8,8 @@
     "EntityMixin",
     "ExplosiveProjectileEntityMixin",
     "LivingEntityMixin",
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "TntEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

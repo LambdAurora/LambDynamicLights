@@ -29,3 +29,10 @@
  - Added "early/WIP" compatibility with [Canvas Renderer](https://www.curseforge.com/minecraft/mc-mods/canvas-renderer).
    - Added a warning message about performance issues. 
  - Fixed a crash with Sodium rc7 with smooth lighting set to HIGH.
+ 
+### v1.2.1
+
+ - Added TNT dynamic lighting.
+ - Added lighting options for TNT and Creepers.
+ - Updated SpruceUI to v1.5.8
+ - Fixed player dynamic lighting not getting tracked when changing dimensions.

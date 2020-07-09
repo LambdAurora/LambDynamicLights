@@ -25,7 +25,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
     @Shadow
     public abstract boolean isSpectator();
 
-    private int lambdynlights_luminance;
+    private int   lambdynlights_luminance;
+    private World lambdynlights_lastWorld;
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world)
     {
@@ -48,6 +49,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
 
         if (this.isSpectator())
             this.lambdynlights_luminance = 0;
+
+        if (this.lambdynlights_lastWorld != this.getEntityWorld()) {
+            this.lambdynlights_lastWorld = this.getEntityWorld();
+            this.lambdynlights_luminance = 0;
+        }
     }
 
     @Override

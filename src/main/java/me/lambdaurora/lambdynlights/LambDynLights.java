@@ -21,6 +21,8 @@ import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.TntEntity;
+import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -47,7 +49,7 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 1.2.0
+ * @version 1.2.1
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer
@@ -308,6 +310,22 @@ public class LambDynLights implements ClientModInitializer
     }
 
     /**
+     * Removes Creeper light sources from tracked light sources.
+     */
+    public void removeCreeperLightSources()
+    {
+        this.removeLightSources(entity -> entity instanceof CreeperEntity);
+    }
+
+    /**
+     * Removes TNT light sources from tracked light sources.
+     */
+    public void removeTntLightSources()
+    {
+        this.removeLightSources(entity -> entity instanceof TntEntity);
+    }
+
+    /**
      * Removes block entities light source from tracked light sources.
      */
     public void removeBlockEntitiesLightSource()
@@ -383,7 +401,8 @@ public class LambDynLights implements ClientModInitializer
         } else if (stack.getItem() == Items.LAVA_BUCKET) {
             return Blocks.LAVA.getDefaultState().getLuminance();
         } else if (stack.getItem() == Items.BLAZE_ROD
-                || stack.getItem() == Items.BLAZE_POWDER) {
+                || stack.getItem() == Items.BLAZE_POWDER
+                || stack.getItem() == Items.FIRE_CHARGE) {
             return 10;
         } else if (stack.getItem() == Items.GLOWSTONE_DUST
                 || stack.getItem() == Items.PRISMARINE_CRYSTALS) {

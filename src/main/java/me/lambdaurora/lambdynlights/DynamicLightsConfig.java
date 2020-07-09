@@ -24,21 +24,25 @@ import java.nio.file.Paths;
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 1.2.0
+ * @version 1.2.1
  * @since 1.0.0
  */
 public class DynamicLightsConfig
 {
-    private static final DynamicLightsMode DEFAULT_DYNAMIC_LIGHTS_MODE         = DynamicLightsMode.OFF;
-    private static final boolean           DEFAULT_ENTITIES_LIGHT_SOURCE       = true;
-    private static final boolean           DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE = true;
-    private static final boolean           DEFAULT_WATER_SENSITIVE_CHECK       = true;
+    private static final DynamicLightsMode     DEFAULT_DYNAMIC_LIGHTS_MODE         = DynamicLightsMode.OFF;
+    private static final boolean               DEFAULT_ENTITIES_LIGHT_SOURCE       = true;
+    private static final boolean               DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE = true;
+    private static final boolean               DEFAULT_WATER_SENSITIVE_CHECK       = true;
+    private static final ExplosiveLightingMode DEFAULT_CREEPER_LIGHTING_MODE       = ExplosiveLightingMode.SIMPLE;
+    private static final ExplosiveLightingMode DEFAULT_TNT_LIGHTING_MODE           = ExplosiveLightingMode.OFF;
 
-    public static final Path              CONFIG_FILE_PATH = Paths.get("config/lambdynlights.toml");
-    protected final     FileConfig        config;
-    private final       LambDynLights     mod;
-    private             boolean           firstTime;
-    private             DynamicLightsMode dynamicLightsMode;
+    public static final Path                  CONFIG_FILE_PATH = Paths.get("config/lambdynlights.toml");
+    protected final     FileConfig            config;
+    private final       LambDynLights         mod;
+    private             boolean               firstTime;
+    private             DynamicLightsMode     dynamicLightsMode;
+    private             ExplosiveLightingMode creeperLightingMode;
+    private             ExplosiveLightingMode tntLightingMode;
 
     public final Option dynamicLightsModeOption = new SpruceCyclingOption("lambdynlights.option.mode",
             amount -> this.setDynamicLightsMode(this.dynamicLightsMode.next()),
@@ -68,6 +72,10 @@ public class DynamicLightsConfig
         String dynamicLightsModeValue = this.config.getOrElse("mode", DEFAULT_DYNAMIC_LIGHTS_MODE.getName());
         this.dynamicLightsMode = DynamicLightsMode.byId(dynamicLightsModeValue)
                 .orElse(DEFAULT_DYNAMIC_LIGHTS_MODE);
+        this.creeperLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.creeper", DEFAULT_CREEPER_LIGHTING_MODE.getName()))
+                .orElse(DEFAULT_CREEPER_LIGHTING_MODE);
+        this.tntLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.tnt", DEFAULT_TNT_LIGHTING_MODE.getName()))
+                .orElse(DEFAULT_TNT_LIGHTING_MODE);
 
         if (dynamicLightsModeValue.equalsIgnoreCase("none")) {
             this.firstTime = true;
@@ -93,6 +101,8 @@ public class DynamicLightsConfig
         this.setEntitiesLightSource(DEFAULT_ENTITIES_LIGHT_SOURCE);
         this.setBlockEntitiesLightSource(DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE);
         this.setWaterSensitiveCheck(DEFAULT_WATER_SENSITIVE_CHECK);
+        this.setCreeperLightingMode(DEFAULT_CREEPER_LIGHTING_MODE);
+        this.setTntLightingMode(DEFAULT_TNT_LIGHTING_MODE);
     }
 
     /**
@@ -194,5 +204,53 @@ public class DynamicLightsConfig
     public void setWaterSensitiveCheck(boolean waterSensitive)
     {
         this.config.set("light_sources.water_sensitive_check", waterSensitive);
+    }
+
+    /**
+     * Returns the Creeper dynamic lighting mode.
+     *
+     * @return The Creeper dynamic lighting mode.
+     */
+    public ExplosiveLightingMode getCreeperLightingMode()
+    {
+        return this.creeperLightingMode;
+    }
+
+    /**
+     * Sets the Creeper dynamic lighting mode.
+     *
+     * @param lightingMode The Creeper dynamic lighting mode.
+     */
+    public void setCreeperLightingMode(@NotNull ExplosiveLightingMode lightingMode)
+    {
+        this.creeperLightingMode = lightingMode;
+
+        if (!lightingMode.isEnabled())
+            this.mod.removeCreeperLightSources();
+        this.config.set("light_sources.creeper", lightingMode.getName());
+    }
+
+    /**
+     * Returns the TNT dynamic lighting mode.
+     *
+     * @return The TNT dynamic lighting mode.
+     */
+    public ExplosiveLightingMode getTntLightingMode()
+    {
+        return this.tntLightingMode;
+    }
+
+    /**
+     * Sets the TNT dynamic lighting mode.
+     *
+     * @param lightingMode The TNT dynamic lighting mode.
+     */
+    public void setTntLightingMode(@NotNull ExplosiveLightingMode lightingMode)
+    {
+        this.tntLightingMode = lightingMode;
+
+        if (!lightingMode.isEnabled())
+            this.mod.removeTntLightSources();
+        this.config.set("light_sources.tnt", lightingMode.getName());
     }
 }

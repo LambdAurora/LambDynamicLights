@@ -1,18 +1,19 @@
 {
   "lambdynlights.menu.light_sources": "Sources de lumières dynamiques",
   "lambdynlights.menu.title": "LambDynamicLights paramètres",
-  "lambdynlights.mode.fastest": "Très rapides",
-  "lambdynlights.mode.fast": "Rapides",
-  "lambdynlights.mode.fancy": "Détaillés",
+  "lambdynlights.menu.canvas.1": "Désactiver la lumière dynamique provenante des entités est recommendé avec Canvas!",
+  "lambdynlights.menu.canvas.2": "La lumière dynamique avec Canvas est actuellement très demandante en ressources!",
   "lambdynlights.option.block_entities": "Entités blocs",
   "lambdynlights.option.entities": "Entités",
   "lambdynlights.option.mode": "Lumières dynamiques",
   "lambdynlights.option.water_sensitive": "Sensibilité à l'eau",
   "lambdynlights.toast.first_time": "Désactivé par défaut, veuillez vérifier les paramètres vidéo ou les paramètres du mod!",
   "lambdynlights.tooltip.block_entities": "Active les lumières dynamiques provenantes des entités blocs.",
+  "lambdynlights.tooltip.creeper_lighting": "Détermine le mode de lumière dynamique de la Creeper.\n- %s: désactive la lumière dynamique pour la Creeper.\n- %s: ajoute un niveau de lumière constant.\n- %s: ajoute un niveau de lumière dynamique.",
   "lambdynlights.tooltip.entities": "Active les lumières dynamiques provenantes des entités. Note: les joueurs sont toujours actifs.",
   "lambdynlights.tooltip.mode.1": "Active les lumières dynamiques. Par exemple, si activé alors un joueur tenant une torche va éclairer l'espace autour.",
   "lambdynlights.tooltip.mode.2": "%s et %s ont un mouvement saccadé mais mettent à jour la lumière le moins possible.",
   "lambdynlights.tooltip.mode.3": "%s a un mouvement fluide.",
+  "lambdynlights.tooltip.tnt_lighting": "Détermine le mode de lumière dynamique de la TNT.\n- %s: désactive la lumière dynamique pour la TNT.\n- %s: ajoute un niveau de lumière constant.\n- %s: ajoute un niveau de lumière dynamique.",
   "lambdynlights.tooltip.water_sensitive": "Active la vérification de sources de lumière sensibles à l'eau. C'est-à-dire que certains objets ne vont pas émettre de lumière dans l'eau comme la torche."
 }
