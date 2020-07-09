@@ -25,3 +25,7 @@ Just do `./gradlew shadowRemapJar` and everything should build just fine!
 ## How does it work internally?
 
 Check [this documentation](https://github.com/LambdAurora/LambDynamicLights/blob/mc1.16/HOW_DOES_IT_WORK.md).
+
+## Is there an API? How to use it as a developer?
+
+Check [this documentation](https://github.com/LambdAurora/LambDynamicLights/blob/mc1.16/API.md).

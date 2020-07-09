@@ -34,5 +34,6 @@
 
  - Added TNT dynamic lighting.
  - Added lighting options for TNT and Creepers.
+ - Added luminance value to Fire charge item.
  - Updated SpruceUI to v1.5.8
  - Fixed player dynamic lighting not getting tracked when changing dimensions.
