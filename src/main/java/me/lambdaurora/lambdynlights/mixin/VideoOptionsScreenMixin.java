@@ -42,8 +42,8 @@ public class VideoOptionsScreenMixin extends GameOptionsScreen
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    private void onRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci)
+    private void onRender(int mouseX, int mouseY, float delta, CallbackInfo ci)
     {
-        Tooltip.renderAll(matrices);
+        Tooltip.renderAll(this);
     }
 }

@@ -16,8 +16,6 @@ item which makes light as a block, or create by an entity on fire, etc.
 
 Dynamic lights are present as an option in OptiFine or as a Forge mod (Dynamic Lights mod).
 
-[Sodium](https://github.com/jellysquid3/sodium-fabric) and [Phosphor](https://github.com/jellysquid3/phosphor-fabric) are compatible and recommended.
-
 ## Build
 
 Just do `./gradlew shadowRemapJar` and everything should build just fine!

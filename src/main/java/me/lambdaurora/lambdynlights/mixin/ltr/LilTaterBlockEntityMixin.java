@@ -12,7 +12,7 @@ package me.lambdaurora.lambdynlights.mixin.ltr;
 import me.lambdaurora.lambdynlights.util.LilTaterBlockEntityAccessor;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.DefaultedList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.gen.Accessor;
@@ -24,7 +24,7 @@ public abstract class LilTaterBlockEntityMixin implements Inventory, LilTaterBlo
     @Override
     public boolean lambdynlights_isEmpty()
     {
-        return this.isEmpty();
+        return this.isInvEmpty();
     }
 
     @Accessor(value = "items", remap = false)

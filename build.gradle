@@ -51,12 +51,13 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation "com.github.lambdaurora:spruceui:${project.spruceui_version}"
+    modImplementation("me.lambdaurora:spruceui:${project.spruceui_version}") {
+        exclude group: "io.github.prospector"
+    }
     include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
 
     modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
     //modImplementation "grondag:canvas-mc116:1.0.+"
-    modImplementation "com.github.jellysquid3:sodium:1.16.x~dev-SNAPSHOT"
 
     shadow "com.electronwill.night-config:core:3.6.3"
     shadow "com.electronwill.night-config:toml:3.6.3"

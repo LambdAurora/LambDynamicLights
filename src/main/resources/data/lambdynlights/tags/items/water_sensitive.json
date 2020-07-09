@@ -6,9 +6,6 @@
     "minecraft:lantern",
     "minecraft:lava_bucket",
     "minecraft:redstone_torch",
-    "minecraft:soul_campfire",
-    "minecraft:soul_lantern",
-    "minecraft:soul_torch",
     "minecraft:torch"
   ]
 }

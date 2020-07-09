@@ -10,7 +10,7 @@
 package me.lambdaurora.lambdynlights.util;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.DefaultedList;
 
 public interface LilTaterBlockEntityAccessor
 {

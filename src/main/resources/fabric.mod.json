@@ -30,17 +30,17 @@
   "depends": {
     "fabricloader": ">=0.8.0",
     "fabric": "*",
-    "minecraft": ">=1.16"
+    "minecraft": "1.15.x"
   },
   "recommends": {
-    "modmenu": ">=1.12.2"
+    "modmenu": ">=1.10.2"
   },
   "suggests": {
     "flamingo": "*",
     "ltr": "*"
   },
   "breaks": {
-    "modmenu": "<1.12.2",
+    "modmenu": "<1.10.2",
     "optifabric": "*"
   },
   "custom": {

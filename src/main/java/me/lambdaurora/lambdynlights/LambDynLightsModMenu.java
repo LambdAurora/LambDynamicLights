@@ -17,14 +17,20 @@ import me.lambdaurora.lambdynlights.gui.SettingsScreen;
  * Represents the API implementation of ModMenu for LambDynamicLights.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.2.1+1.15.2
  * @since 1.0.0
  */
 public class LambDynLightsModMenu implements ModMenuApi
 {
     @Override
+    public String getModId()
+    {
+        return "lambdynlights";
+    }
+
+    @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory()
     {
-        return parent -> new SettingsScreen(parent);
+        return SettingsScreen::new;
     }
 }

@@ -76,8 +76,7 @@ public class LambDynLights implements ClientModInitializer
                 this.notifiedFirstTime = true;
 
                 MinecraftClient client = MinecraftClient.getInstance();
-                client.getToastManager().add(SystemToast.method_29047(client,
-                        SystemToast.Type.TUTORIAL_HINT,
+                client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT,
                         new LiteralText("LambDynamicLights").formatted(Formatting.GOLD),
                         new TranslatableText("lambdynlights.toast.first_time")));
             }

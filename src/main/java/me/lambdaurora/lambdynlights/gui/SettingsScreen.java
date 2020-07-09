@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.2.1+1.15.2
  * @since 1.0.0
  */
 public class SettingsScreen extends Screen
@@ -95,7 +95,7 @@ public class SettingsScreen extends Screen
 
     private int getTextHeight()
     {
-        return (5 + this.textRenderer.fontHeight) * 3 + 5;
+        return (5 + this.minecraft.textRenderer.fontHeight) * 3 + 5;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class SettingsScreen extends Screen
         super.init();
         int buttonHeight = 20;
 
-        this.list = new ButtonListWidget(this.client, this.width, this.height, 43, this.height - 29 - this.getTextHeight(), 25);
+        this.list = new ButtonListWidget(this.minecraft, this.width, this.height, 43, this.height - 29 - this.getTextHeight(), 25);
         this.list.addSingleOptionEntry(this.config.dynamicLightsModeOption);
         this.list.addSingleOptionEntry(new SpruceSeparatorOption("lambdynlights.menu.light_sources", true, null));
         this.list.addOptionEntry(this.entitiesOption, this.blockEntitiesOption);
@@ -112,24 +112,24 @@ public class SettingsScreen extends Screen
         this.list.addOptionEntry(this.creeperLightingOption, this.tntLightingOption);
         this.children.add(list);
 
-        this.addButton(this.resetOption.createButton(this.client.options, this.width / 2 - 155, this.height - 29, 150));
-        this.addButton(new ButtonWidget(this.width / 2 - 155 + 160, this.height - 29, 150, buttonHeight, new TranslatableText("gui.done"),
-                (buttonWidget) -> this.client.openScreen(this.parent)));
+        this.addButton(this.resetOption.createButton(this.minecraft.options, this.width / 2 - 155, this.height - 29, 150));
+        this.addButton(new ButtonWidget(this.width / 2 - 155 + 160, this.height - 29, 150, buttonHeight, new TranslatableText("gui.done").asFormattedString(),
+                (buttonWidget) -> this.minecraft.openScreen(this.parent)));
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(int mouseX, int mouseY, float delta)
     {
-        this.renderBackground(matrices);
-        this.list.render(matrices, mouseX, mouseY, delta);
-        super.render(matrices, mouseX, mouseY, delta);
-        this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 8, 16777215);
+        this.renderBackground();
+        this.list.render(mouseX, mouseY, delta);
+        super.render(mouseX, mouseY, delta);
+        this.drawCenteredString(this.minecraft.textRenderer, this.title.asFormattedString(), this.width / 2, 8, 16777215);
 
         if (LambDynLightsCompat.isCanvasInstalled()) {
-            this.drawCenteredString(matrices, this.textRenderer, I18n.translate("lambdynlights.menu.canvas.1"), this.width / 2, this.height - 29 - (5 + this.textRenderer.fontHeight) * 3, 0xFFFF0000);
-            this.drawCenteredString(matrices, this.textRenderer, I18n.translate("lambdynlights.menu.canvas.2"), this.width / 2, this.height - 29 - (5 + this.textRenderer.fontHeight) * 2, 0xFFFF0000);
+            this.drawCenteredString(this.minecraft.textRenderer, I18n.translate("lambdynlights.menu.canvas.1"), this.width / 2, this.height - 29 - (5 + this.minecraft.textRenderer.fontHeight) * 3, 0xFFFF0000);
+            this.drawCenteredString(this.minecraft.textRenderer, I18n.translate("lambdynlights.menu.canvas.2"), this.width / 2, this.height - 29 - (5 + this.minecraft.textRenderer.fontHeight) * 2, 0xFFFF0000);
         }
 
-        Tooltip.renderAll(matrices);
+        Tooltip.renderAll(this);
     }
 }
