@@ -54,7 +54,7 @@ dependencies {
     modImplementation("me.lambdaurora:spruceui:${project.spruceui_version}") {
         exclude group: "io.github.prospector"
     }
-    include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
+    include "me.lambdaurora:spruceui:${project.spruceui_version}"
 
     modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
     //modImplementation "grondag:canvas-mc116:1.0.+"
