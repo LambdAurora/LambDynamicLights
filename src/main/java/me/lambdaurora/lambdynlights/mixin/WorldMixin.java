@@ -31,7 +31,7 @@ public abstract class WorldMixin
 
     @Inject(
             method = "tickBlockEntities",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/BlockEntity;isRemoved()Z", shift = At.Shift.BEFORE),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Tickable;tick()V", shift = At.Shift.BEFORE),
             locals = LocalCapture.CAPTURE_FAILEXCEPTION
     )
     private void onBlockEntityTick(CallbackInfo ci, Profiler profiler, Iterator<BlockEntity> iterator, BlockEntity blockEntity)
