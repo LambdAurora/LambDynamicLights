@@ -37,3 +37,8 @@
  - Added luminance value to Fire charge item.
  - Updated SpruceUI to v1.5.8
  - Fixed player dynamic lighting not getting tracked when changing dimensions.
+
+### v1.2.2
+
+ - Changed video options dynamic lighting button to redirect to LambDynamicLights settings.
+ - Fixed random crash.
