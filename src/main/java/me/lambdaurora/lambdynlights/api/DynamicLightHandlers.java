@@ -14,6 +14,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +24,7 @@ import java.util.Map;
 
 /**
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.2.3
  * @since 1.1.0
  */
 public final class DynamicLightHandlers
@@ -36,7 +37,7 @@ public final class DynamicLightHandlers
      */
     public static void registerDefaultHandlers()
     {
-        registerDynamicLightHandler(EntityType.BLAZE, entity -> 10);
+        registerDynamicLightHandler(EntityType.BLAZE, DynamicLightHandler.makeHandler(blaze -> 10, blaze -> true));
         registerDynamicLightHandler(EntityType.CREEPER, DynamicLightHandler.makeCreeperEntityHandler(null));
         registerDynamicLightHandler(EntityType.ENDERMAN, entity -> {
             int luminance = 0;
@@ -125,9 +126,12 @@ public final class DynamicLightHandlers
     {
         if (!LambDynLights.get().config.hasEntitiesLightSource())
             return 0;
-        if (!ENTITES_HANDLER.containsKey(entity.getType()))
+        DynamicLightHandler<T> handler = (DynamicLightHandler<T>) getDynamicLightHandler(entity.getType());
+        if (handler == null)
             return 0;
-        return ((DynamicLightHandler<T>) ENTITES_HANDLER.get(entity.getType())).getLuminance(entity);
+        if (handler.isWaterSensitive(entity) && !entity.getEntityWorld().getFluidState(new BlockPos(entity.getX(), entity.getEyeY(), entity.getZ())).isEmpty())
+            return 0;
+        return handler.getLuminance(entity);
     }
 
     /**
@@ -142,8 +146,11 @@ public final class DynamicLightHandlers
     {
         if (!LambDynLights.get().config.hasBlockEntitiesLightSource())
             return 0;
-        if (!BLOCK_ENTITIES_HANDLER.containsKey(entity.getType()))
+        DynamicLightHandler<T> handler = (DynamicLightHandler<T>) getDynamicLightHandler(entity.getType());
+        if (handler == null)
             return 0;
-        return ((DynamicLightHandler<T>) BLOCK_ENTITIES_HANDLER.get(entity.getType())).getLuminance(entity);
+        if (handler.isWaterSensitive(entity) && entity.getWorld() != null && !entity.getWorld().getFluidState(entity.getPos()).isEmpty())
+            return 0;
+        return handler.getLuminance(entity);
     }
 }

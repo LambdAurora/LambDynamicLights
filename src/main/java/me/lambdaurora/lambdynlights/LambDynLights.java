@@ -35,6 +35,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +50,7 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.2.3
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer
@@ -392,7 +393,10 @@ public class LambDynLights implements ClientModInitializer
      */
     public static int getLuminanceFromItemStack(@NotNull ItemStack stack, boolean submergedInWater)
     {
-        if (INSTANCE.config.hasWaterSensitiveCheck() && submergedInWater && WATER_SENSITIVE_ITEMS.contains(stack.getItem())) {
+        Identifier itemId = Registry.ITEM.getId(stack.getItem());
+        if (INSTANCE.config.hasWaterSensitiveCheck() && submergedInWater &&
+                // The water-sensitive items list can be partially override by the server with the tag.
+                (INSTANCE.config.getWaterSensitiveItems().contains(itemId) || WATER_SENSITIVE_ITEMS.contains(stack.getItem()))) {
             return 0; // Don't emit light with water sensitive items while submerged in water.
         }
 

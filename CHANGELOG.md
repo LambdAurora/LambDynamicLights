@@ -42,3 +42,11 @@
 
  - Changed video options dynamic lighting button to redirect to LambDynamicLights settings.
  - Fixed random crash.
+
+### v1.2.3
+
+ - Added Simplified Chinese translation.
+ - Fixed water-sensitive items lighting up in water on dedicated servers.
+    - Added new configuration entry `light_sources.water_sensitive`.
+    - Keep `#lambdynlights:water_sensitive` item tag for servers.
+    - Added `DynamicLightHandler#isWaterSensitive` to make some entities water-sensitive like the blaze.

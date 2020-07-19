@@ -16,7 +16,9 @@ If your entity re-implements tick without calling the super method the dynamic l
 
 ### `DynamicLightHandler`
 
-A dynamic light handler is an interface with one method: `int getLuminance(T lightSource)`.
+A dynamic light handler is an interface with different methods:
+ - `int getLuminance(T lightSource)`
+ - `boolean isWaterSensitive(T lightSource)` - with default `false`
 
 The returned value is between 0 and 15 which are luminance values, `lightSource` is of the type of the entity and is the targeted entity.
 The method is called for every entity matching the type at each tick.
@@ -38,7 +40,7 @@ And that's all! The mod will light up your entities following your handler.
 #### Blaze
 
 ```java
-registerDynamicLightHandler(EntityType.BLAZE, entity -> 10);
+registerDynamicLightHandler(EntityType.BLAZE, DynamicLightHandler.makeHandler(blaze -> 10, blaze -> true));
 ```
 
 #### Enderman
@@ -63,6 +65,7 @@ registerDynamicLightHandler(EntityType.ITEM_FRAME, entity -> {
 
 ## Utility methods
 
+ - `DynamicLightHandler#makeHandler` will transforms 2 functions into an handler.
  - `DynamicLightHandler#makeLivingEntityHandler` will merge the given handler with a basic handler for living entity which detects item light sources.
  - `DynamicLightHandler#makeCreeperEntityHandler` will optionally merge the given handler with a basic handler for creepers. May be useful for Creepers mod.
  - `LambDynLights#getLuminanceFromItemStack` will return the luminance value of the given item stack.
@@ -71,4 +74,4 @@ registerDynamicLightHandler(EntityType.ITEM_FRAME, entity -> {
 
 This is an item tag which lists water-sensitive light-emitting items.
 
-Every items listed in this tag will not emit light in water.
+Every items listed in this tag will not emit light in water. This tag mays be useful for server owners to keep control of this feature.

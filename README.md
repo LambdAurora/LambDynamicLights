@@ -22,6 +22,13 @@ Dynamic lights are present as an option in OptiFine or as a Forge mod (Dynamic L
 
 Just do `./gradlew shadowRemapJar` and everything should build just fine!
 
+## Configuration
+
+You can configure the mod by editing the file in `config/lambdynlights.toml`.
+You also can use the configuration GUI of the mod, which is more recommended to avoid crashes.
+
+The only thing that has to be configured in the configuration file is the list of items being water-sensitive. Everything else is available in the GUI.
+
 ## How does it work internally?
 
 Check [this documentation](https://github.com/LambdAurora/LambDynamicLights/blob/mc1.16/HOW_DOES_IT_WORK.md).
