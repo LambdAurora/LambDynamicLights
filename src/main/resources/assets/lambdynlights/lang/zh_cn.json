@@ -1,0 +1,19 @@
+{
+  "lambdynlights.menu.light_sources": "动态光源",
+  "lambdynlights.menu.title": "动态光源设置",
+  "lambdynlights.menu.canvas.1": "建议使用Canvas Mods时禁用实体动态照明！",
+  "lambdynlights.menu.canvas.2": "Canvas Mods的动态光源目前性能很好！",
+  "lambdynlights.option.block_entities": "方块实体",
+  "lambdynlights.option.entities": "实体",
+  "lambdynlights.option.mode": "动态光源",
+  "lambdynlights.option.water_sensitive": "水敏感光源检查",
+  "lambdynlights.toast.first_time": "默认禁用，检查模组或视频设置！",
+  "lambdynlights.tooltip.block_entities": "启用方块实体动态光源。",
+  "lambdynlights.tooltip.creeper_lighting": "设置苦力怕动态光源模式。\n- %s 禁用苦力怕动态光源。\n- %s 设置恒定亮度。\n- %s 设置动态亮度。",
+  "lambdynlights.tooltip.entities": "启用实体动态照明。注意：玩家总是活跃的。",
+  "lambdynlights.tooltip.mode.1": "启用动态灯光。如果启用，手持手电筒的玩家将照亮该区域。",
+  "lambdynlights.tooltip.mode.2": "%s 和 %s 会落后一点，但会最小化灯光更新。",
+  "lambdynlights.tooltip.mode.3": "%s 是平滑的动态照明。",
+  "lambdynlights.tooltip.tnt_lighting": "设置TNT动态光源模式。\n- %s 禁用TNT动态光源。\n- %s 设置恒定亮度。\n- %s 设置动态亮度。",
+  "lambdynlights.tooltip.water_sensitive": "启用水敏感光源检查。这意味着有些物品在浸没在水中时不会发光。"
+}
