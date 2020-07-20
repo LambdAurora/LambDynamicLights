@@ -7,7 +7,7 @@
   "lambdynlights.option.entities": "Сущности",
   "lambdynlights.option.mode": "Динамическое освещение",
   "lambdynlights.option.water_sensitive": "Проверка на нахождение в воде",
-  "lambdynlights.toast.first_time": Отключено по умолчанию, проверьте мод или Настройки Графики!",
+  "lambdynlights.toast.first_time": "Отключено по умолчанию, проверьте мод или Настройки Графики!",
   "lambdynlights.tooltip.block_entities": "Включает динамическое освещение сущностей.",
   "lambdynlights.tooltip.creeper_lighting": "Устанавливает режим динамического освещения у Криперов.\n- %s отключает динамическое освещение Криперов.\n- %s устанавливает постоянную яркость.\n- %s устанавливает динамическую яркость.",
   "lambdynlights.tooltip.entities": "Включает динамическое освещение сущностей. Примечание: освещение игроков активно всегда.",
