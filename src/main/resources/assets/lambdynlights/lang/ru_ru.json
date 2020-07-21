@@ -3,7 +3,7 @@
   "lambdynlights.menu.title": "Настройки LambDynamicLights",
   "lambdynlights.menu.canvas.1": "При использовании Canvas рекомендуется отключить динамическое освещение сущностей!",
   "lambdynlights.menu.canvas.2": "На данный момент при использовании Canvas динамическое освещение ресурсозатратно!",
-  "lambdynlights.option.block_entities": "Блоки-сущности",
+  "lambdynlights.option.block_entities": "Сущности-блоки",
   "lambdynlights.option.entities": "Сущности",
   "lambdynlights.option.mode": "Динамическое освещение",
   "lambdynlights.option.water_sensitive": "Проверка на нахождение в воде",
