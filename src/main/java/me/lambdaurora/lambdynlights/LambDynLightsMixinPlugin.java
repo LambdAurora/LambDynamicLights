@@ -36,9 +36,7 @@ public class LambDynLightsMixinPlugin implements IMixinConfigPlugin
 
         boolean canvasInstalled = LambDynLightsCompat.isCanvasInstalled();
         boolean sodiumInstalled = LambDynLightsCompat.isSodiumInstalled();
-        this.conditionalMixins.put("me.lambdaurora.lambdynlights.mixin.CanvasWorldRendererMixin", canvasInstalled);
-        this.conditionalMixins.put("me.lambdaurora.lambdynlights.mixin.EntityLighterMixin", sodiumInstalled);
-        this.conditionalMixins.put("me.lambdaurora.lambdynlights.mixin.SodiumWorldRendererMixin", sodiumInstalled);
+        this.conditionalMixins.put("me.lambdaurora.lambdynlights.mixin.EntityLighterMixin", LambDynLightsCompat.isSodium010Installed());
         this.conditionalMixins.put("me.lambdaurora.lambdynlights.mixin.WorldRendererMixin", !sodiumInstalled && !canvasInstalled);
     }
 

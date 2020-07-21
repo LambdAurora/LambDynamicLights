@@ -31,6 +31,12 @@ public class EntityLighterMixin
     )
     private static int onGetWorldLight(World world, LightType type, BlockPos pos)
     {
+        /*
+            TO BE REMOVED IN FUTURE VERSIONS
+
+            This is only here to keep compatibility with Sodium 0.1.0.
+            In newer versions this is broken and use EntityRendererMixin instead (which is much simpler)
+         */
         int vanilla = world.getLightLevel(type, pos);
         double luminance = LambDynLights.get().getDynamicLuminance(pos);
         return (int) Math.max(vanilla, Math.round(luminance));

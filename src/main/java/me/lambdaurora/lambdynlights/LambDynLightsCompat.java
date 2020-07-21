@@ -50,4 +50,15 @@ public final class LambDynLightsCompat
     {
         return FabricLoader.getInstance().isModLoaded("sodium");
     }
+
+    /**
+     * Returns whether Sodium 0.1.0 is installed.
+     *
+     * @return True if Sodium 0.1.0 is installed, else false.
+     */
+    public static boolean isSodium010Installed()
+    {
+        return FabricLoader.getInstance().getModContainer("sodium").map(mod -> mod.getMetadata().getVersion().getFriendlyString().equalsIgnoreCase("0.1.0"))
+                .orElse(false);
+    }
 }
