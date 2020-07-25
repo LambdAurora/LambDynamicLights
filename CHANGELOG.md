@@ -47,10 +47,11 @@
 
  - Added Simplified Chinese translations.
  - Added German translations.
- - Added Russian translatins.
+ - Added Russian translations ([#9](https://github.com/LambdAurora/LambDynamicLights/pull/9)).
  - Updated [SpruceUI](https://github.com/LambdAurora/SpruceUI) to v1.5.11.
- - Fixed water-sensitive items lighting up in water on dedicated servers.
+ - Fixed dynamic lighting update issues at chunk borders ([#12](https://github.com/LambdAurora/LambDynamicLights/issues/12)).
+ - Fixed water-sensitive items lighting up in water on dedicated servers. ([#3](https://github.com/LambdAurora/LambDynamicLights/issues/3))
     - Added new configuration entry `light_sources.water_sensitive`.
     - Keep `#lambdynlights:water_sensitive` item tag for servers.
     - Added `DynamicLightHandler#isWaterSensitive` to make some entities water-sensitive like the blaze.
- - Fixed incompatibility with latest Sodium development versions.
+ - Fixed incompatibility with latest Sodium development versions. ([#6](https://github.com/LambdAurora/LambDynamicLights/issues/6))

@@ -9,6 +9,7 @@
 
 package me.lambdaurora.lambdynlights.mixin.lightsource;
 
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import me.lambdaurora.lambdynlights.DynamicLightSource;
 import me.lambdaurora.lambdynlights.DynamicLightsMode;
 import me.lambdaurora.lambdynlights.LambDynLights;
@@ -26,9 +27,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements DynamicLightSource
@@ -62,13 +60,16 @@ public abstract class EntityMixin implements DynamicLightSource
     @Shadow
     public abstract EntityType<?> getType();
 
-    private int           lambdynlights_luminance     = 0;
-    private int           lambdynlights_lastLuminance = 0;
-    private long          lambdynlights_lastUpdate    = 0;
-    private double        lambdynlights_prevX;
-    private double        lambdynlights_prevY;
-    private double        lambdynlights_prevZ;
-    private Set<BlockPos> trackedLitChunkPos          = new HashSet<>();
+    @Shadow
+    public abstract BlockPos getBlockPos();
+
+    private int             lambdynlights_luminance     = 0;
+    private int             lambdynlights_lastLuminance = 0;
+    private long            lambdynlights_lastUpdate    = 0;
+    private double          lambdynlights_prevX;
+    private double          lambdynlights_prevY;
+    private double          lambdynlights_prevZ;
+    private LongOpenHashSet trackedLitChunkPos          = new LongOpenHashSet();
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void onTick(CallbackInfo ci)
@@ -174,7 +175,7 @@ public abstract class EntityMixin implements DynamicLightSource
             this.lambdynlights_prevZ = this.getZ();
             this.lambdynlights_lastLuminance = luminance;
 
-            Set<BlockPos> newPos = new HashSet<>();
+            LongOpenHashSet newPos = new LongOpenHashSet();
 
             if (luminance > 0) {
                 BlockPos chunkPos = new BlockPos(this.chunkX, MathHelper.floorDiv((int) this.getEyeY(), 16), this.chunkZ);
@@ -182,9 +183,9 @@ public abstract class EntityMixin implements DynamicLightSource
                 LambDynLights.scheduleChunkRebuild(renderer, chunkPos);
                 LambDynLights.updateTrackedChunks(chunkPos, this.trackedLitChunkPos, newPos);
 
-                Direction directionX = (MathHelper.fastFloor(this.getX()) & 15) >= 8 ? Direction.EAST : Direction.WEST;
+                Direction directionX = (this.getBlockPos().getX() & 15) >= 8 ? Direction.EAST : Direction.WEST;
                 Direction directionY = (MathHelper.fastFloor(this.getEyeY()) & 15) >= 8 ? Direction.UP : Direction.DOWN;
-                Direction directionZ = (MathHelper.fastFloor(this.getZ()) & 15) >= 8 ? Direction.SOUTH : Direction.NORTH;
+                Direction directionZ = (this.getBlockPos().getZ() & 15) >= 8 ? Direction.SOUTH : Direction.NORTH;
 
                 for (int i = 0; i < 7; i++) {
                     if (i % 4 == 0) {
@@ -212,8 +213,8 @@ public abstract class EntityMixin implements DynamicLightSource
     @Override
     public void lambdynlights_scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer)
     {
-        for (BlockPos pos : this.trackedLitChunkPos) {
-            LambDynLights.scheduleChunkRebuild(renderer, pos);
+        for (long pos : this.trackedLitChunkPos) {
+            LambDynLights.scheduleChunkRebuild(renderer, BlockPos.fromLong(pos));
         }
     }
 }
