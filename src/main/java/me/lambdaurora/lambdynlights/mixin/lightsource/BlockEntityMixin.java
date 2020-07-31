@@ -9,6 +9,7 @@
 
 package me.lambdaurora.lambdynlights.mixin.lightsource;
 
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import me.lambdaurora.lambdynlights.DynamicLightSource;
 import me.lambdaurora.lambdynlights.DynamicLightsMode;
 import me.lambdaurora.lambdynlights.LambDynLights;
@@ -27,8 +28,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Mixin(BlockEntity.class)
 public abstract class BlockEntityMixin implements DynamicLightSource
@@ -41,11 +40,11 @@ public abstract class BlockEntityMixin implements DynamicLightSource
     protected World world;
 
     @Shadow
-    protected boolean       removed;
-    private   int           lambdynlights_luminance     = 0;
-    private   int           lambdynlights_lastLuminance = 0;
-    private   long          lambdynlights_lastUpdate    = 0;
-    private   Set<BlockPos> trackedLitChunkPos          = new HashSet<>();
+    protected boolean         removed;
+    private   int             lambdynlights_luminance     = 0;
+    private   int             lambdynlights_lastLuminance = 0;
+    private   long            lambdynlights_lastUpdate    = 0;
+    private   LongOpenHashSet trackedLitChunkPos          = new LongOpenHashSet();
 
     @Override
     public double getDynamicLightX()
@@ -134,15 +133,15 @@ public abstract class BlockEntityMixin implements DynamicLightSource
             this.lambdynlights_lastLuminance = luminance;
 
             if (this.trackedLitChunkPos.isEmpty()) {
-                BlockPos chunkPos = new BlockPos(MathHelper.floorDiv((int) this.getDynamicLightX(), 16),
-                        MathHelper.floorDiv((int) this.getDynamicLightY(), 16),
-                        MathHelper.floorDiv((int) this.getDynamicLightZ(), 16));
+                BlockPos chunkPos = new BlockPos(MathHelper.floorDiv(this.pos.getX(), 16),
+                        MathHelper.floorDiv(this.pos.getY(), 16),
+                        MathHelper.floorDiv(this.pos.getZ(), 16));
 
                 LambDynLights.updateTrackedChunks(chunkPos, null, this.trackedLitChunkPos);
 
-                Direction directionX = (MathHelper.fastFloor(this.getDynamicLightX()) & 15) >= 8 ? Direction.EAST : Direction.WEST;
-                Direction directionY = (MathHelper.fastFloor(this.getDynamicLightY()) & 15) >= 8 ? Direction.UP : Direction.DOWN;
-                Direction directionZ = (MathHelper.fastFloor(this.getDynamicLightZ()) & 15) >= 8 ? Direction.SOUTH : Direction.NORTH;
+                Direction directionX = (this.pos.getX() & 15) >= 8 ? Direction.EAST : Direction.WEST;
+                Direction directionY = (this.pos.getY() & 15) >= 8 ? Direction.UP : Direction.DOWN;
+                Direction directionZ = (this.pos.getZ() & 15) >= 8 ? Direction.SOUTH : Direction.NORTH;
 
                 for (int i = 0; i < 7; i++) {
                     if (i % 4 == 0) {
@@ -167,8 +166,8 @@ public abstract class BlockEntityMixin implements DynamicLightSource
     @Override
     public void lambdynlights_scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer)
     {
-        for (BlockPos pos : this.trackedLitChunkPos) {
-            LambDynLights.scheduleChunkRebuild(renderer, pos);
+        for (long pos : this.trackedLitChunkPos) {
+            LambDynLights.scheduleChunkRebuild(renderer, BlockPos.fromLong(pos));
         }
     }
 }

@@ -1,0 +1,19 @@
+{
+  "lambdynlights.menu.light_sources": "Fuentes de luz dinámica",
+  "lambdynlights.menu.title": "Configuración de LambDynamicLights",
+  "lambdynlights.menu.canvas.1": "Se recomienda deshabilitar la iluminación dinámica de las entidades con Canvas!",
+  "lambdynlights.menu.canvas.2": "La iluminación dinámica con Canvas es pesado en rendimiento!",
+  "lambdynlights.option.block_entities": "Entidades de bloque",
+  "lambdynlights.option.entities": "Entidades",
+  "lambdynlights.option.mode": "Iluminación dinámica",
+  "lambdynlights.option.water_sensitive": "Verificación de sensibilidad al agua",
+  "lambdynlights.toast.first_time": "Deshabilitado por defecto, prueba al configuración del mod o gráficos!",
+  "lambdynlights.tooltip.block_entities": "Habilita la iluminación dinámica de entidades de bloque.",
+  "lambdynlights.tooltip.creeper_lighting": "Establece el modo de iluminación dinámica del Creeper.\n%s - Deshabilita la iluminación dinámica del Creeper.\n%s - Establece una luminancia constante.\n%s - Establece una luminancia dinámica.",
+  "lambdynlights.tooltip.entities": "Habilita la iluminación dinámica de entidades. Nota: los jugadores siempre están activos.",
+  "lambdynlights.tooltip.mode.1": "Habilita iluminaciónes dinámica. Si está habilitado, un jugador con una antorcha iluminará el área, por ejemplo.",
+  "lambdynlights.tooltip.mode.2": "%s y %s se retrasarán un poco, pero minimizan las actualizaciones de luz.",
+  "lambdynlights.tooltip.mode.3": "%s es una iluminación dinámica suave.",
+  "lambdynlights.tooltip.tnt_lighting": "Establece el modo de iluminación dinámica del TNT.\n%s - Deshabilita la iluminación dinámica TNT.\n%s - Establece una luminancia constante.\n%s - Establece una luminancia dinámica.",
+  "lambdynlights.tooltip.water_sensitive": "Habilita la verificación de fuentes de luz sensibles al agua. Esto significa que algunos ítems no emitirán luz mientras estén sumergidos en agua."
+}

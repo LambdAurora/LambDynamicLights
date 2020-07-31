@@ -9,6 +9,7 @@
 
 package me.lambdaurora.lambdynlights;
 
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import me.lambdaurora.lambdynlights.accessor.WorldRendererAccessor;
 import me.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import net.fabricmc.api.ClientModInitializer;
@@ -42,7 +43,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Predicate;
 
@@ -362,12 +362,15 @@ public class LambDynLights implements ClientModInitializer
      * @param old      The set of old chunk coordinates to remove this chunk from it.
      * @param newPos   The set of new chunk coordinates to add this chunk to it.
      */
-    public static void updateTrackedChunks(@NotNull BlockPos chunkPos, @Nullable Set<BlockPos> old, @Nullable Set<BlockPos> newPos)
+    public static void updateTrackedChunks(@NotNull BlockPos chunkPos, @Nullable LongOpenHashSet old, @Nullable LongOpenHashSet newPos)
     {
-        if (old != null)
-            old.remove(chunkPos);
-        if (newPos != null)
-            newPos.add(chunkPos);
+        if (old != null || newPos != null) {
+            long pos = chunkPos.asLong();
+            if (old != null)
+                old.remove(pos);
+            if (newPos != null)
+                newPos.add(pos);
+        }
     }
 
     /**

@@ -6,7 +6,7 @@
   "client": [
     "CommonWorldRendererMixin",
     "EntityLighterMixin",
-    "EntityRenderDispatcherMixin",
+    "EntityRendererMixin",
     "VideoOptionsScreenMixin",
     "WorldMixin",
     "WorldRendererMixin",
