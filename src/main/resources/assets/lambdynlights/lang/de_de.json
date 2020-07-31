@@ -2,18 +2,18 @@
   "lambdynlights.menu.light_sources": "Dynamische Lichtquellen",
   "lambdynlights.menu.title": "LambDynamicLights Einstellungen",
   "lambdynlights.menu.canvas.1": "Mit Canvas ist es empfohlen, die dynamische Entitäten-Beleuchtung auszuschalten!",
-  "lambdynlights.menu.canvas.2": "Dynamische Beleuchtung mit Canvas ist zur Zeit sehr Leistungsbedürftig!",
-  "lambdynlights.option.block_entities": "Blockentitäten",
+  "lambdynlights.menu.canvas.2": "Dynamische Beleuchtung mit Canvas ist zur Zeit sehr leistungsbedürftig!",
+  "lambdynlights.option.block_entities": "Blockobjekte",
   "lambdynlights.option.entities": "Objekte",
   "lambdynlights.option.mode": "Dynamische Lichter",
   "lambdynlights.option.water_sensitive": "Wasserempfindlichkeit",
   "lambdynlights.toast.first_time": "Automatisch ausgeschaltet, prüfen Sie die Mod- oder Videoeinstellungen nach!",
-  "lambdynlights.tooltip.block_entities": "Schaltet Blockentitäten dynamische Beleuchtung ein.",
-  "lambdynlights.tooltip.creeper_lighting": "Ändert das Verhalten der dynamische Beleuchtung des Creepers\n- %s schaltet dieses aus.\n- %s: konstante Beleuchtung durch explosierende Creepers.\n- %s: steigende Beleuchtung durch explosierende Creepers.",
+  "lambdynlights.tooltip.block_entities": "Schaltet dynamische Beleuchtung für Blockobjekte ein.",
+  "lambdynlights.tooltip.creeper_lighting": "Ändert das Verhalten der dynamische Beleuchtung bei Creepern\n- %s schaltet dieses aus.\n- %s: konstante Beleuchtung durch explodierende Creepers.\n- %s: Zunehmende Beleuchtung durch explodierende Creepers.",
   "lambdynlights.tooltip.entities": "Aktiviert die dynamische Beleuchtung von Objekten. (Spielerbeleuchtung ist immer aktiviert)",
-  "lambdynlights.tooltip.mode.1": "Aktiviert dynamische Beleuchtung. Wenn es aktiviert ist wird zB. einem Fackel-haltendem Spieler seine Umgebung beleuchtet.",
+  "lambdynlights.tooltip.mode.1": "Aktiviert dynamische Beleuchtung. Wenn aktiv, wird z. B. ein Spieler, der eine Fackel hält, die Umgebung beleuchten."
   "lambdynlights.tooltip.mode.2": "%s und %s haben eine kleine Verzögerung, aber lösen weniger Lichtupdates aus.",
   "lambdynlights.tooltip.mode.3": "Mit %s sind die Bewegungen von Lichtquellen flüssig.",
   "lambdynlights.tooltip.tnt_lighting": "Ändert das Verhalten der dynamischer Beleuchtung von TNT.\n- %s schaltet dieses aus.\n- %s: konstante Beleuchtung.\n- %s steigende Beuleuchtung.",
-  "lambdynlights.tooltip.water_sensitive": "Aktiviert die Wasserempfindlichkeit: einige Gegenstände werden kein Licht im Wasser abgeben."
+  "lambdynlights.tooltip.water_sensitive": "Aktiviert die Wasserempfindlichkeit: Einige Gegenstände werden kein Licht im Wasser abgeben."
 }
