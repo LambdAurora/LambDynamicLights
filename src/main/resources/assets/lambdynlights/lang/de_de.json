@@ -7,7 +7,7 @@
   "lambdynlights.option.entities": "Objekte",
   "lambdynlights.option.mode": "Dynamische Lichter",
   "lambdynlights.option.water_sensitive": "Wasserempfindlichkeit",
-  "lambdynlights.toast.first_time": "Automatisch ausgeschaltet, prüfen Sie die Mod- oder Videoeinstellungen nach!",
+  "lambdynlights.toast.first_time": "Standardmäßig ausgeschaltet, prüfen Sie in den Mod- oder Videoeinstellungen nach!",
   "lambdynlights.tooltip.block_entities": "Schaltet dynamische Beleuchtung für Blockobjekte ein.",
   "lambdynlights.tooltip.creeper_lighting": "Ändert das Verhalten der dynamische Beleuchtung bei Creepern\n- %s schaltet dieses aus.\n- %s: konstante Beleuchtung durch explodierende Creepers.\n- %s: Zunehmende Beleuchtung durch explodierende Creepers.",
   "lambdynlights.tooltip.entities": "Aktiviert die dynamische Beleuchtung von Objekten. (Spielerbeleuchtung ist immer aktiviert)",
