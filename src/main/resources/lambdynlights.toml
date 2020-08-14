@@ -14,13 +14,3 @@ mode = "none"
     creeper = "simple"
     # TNT lighting mode. May be off, simple or fancy.
     tnt = "off"
-    # Water sensitive items list.
-    water_sensitive = [
-        "minecraft:campfire",
-        "minecraft:fire_charge",
-        "minecraft:lava_bucket",
-        "minecraft:redstone_torch",
-        "minecraft:soul_campfire",
-        "minecraft:soul_torch",
-        "minecraft:torch"
-    ]

@@ -24,7 +24,7 @@ import java.util.Map;
 
 /**
  * @author LambdAurora
- * @version 1.2.3
+ * @version 1.3.0
  * @since 1.1.0
  */
 public final class DynamicLightHandlers

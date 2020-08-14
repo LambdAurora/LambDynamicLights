@@ -23,7 +23,7 @@ import java.util.function.Function;
  *
  * @param <T> The type of the light source.
  * @author LambdAurora
- * @version 1.2.3
+ * @version 1.3.0
  * @since 1.1.0
  */
 public interface DynamicLightHandler<T>

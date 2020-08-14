@@ -1,0 +1,5 @@
+{
+  "item": "minecraft:lava_bucket",
+  "luminance": "minecraft:lava",
+  "water_sensitive": true
+}

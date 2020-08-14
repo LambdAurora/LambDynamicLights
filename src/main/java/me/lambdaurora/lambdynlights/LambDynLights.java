@@ -12,10 +12,11 @@ package me.lambdaurora.lambdynlights;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import me.lambdaurora.lambdynlights.accessor.WorldRendererAccessor;
 import me.lambdaurora.lambdynlights.api.DynamicLightHandlers;
+import me.lambdaurora.lambdynlights.api.item.ItemLightSources;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.tag.TagRegistry;
-import net.minecraft.block.Blocks;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
@@ -25,18 +26,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.tag.Tag;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -50,19 +48,19 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 1.2.3
+ * @version 1.3.0
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer
 {
-    public static final  Tag<Item>                                 WATER_SENSITIVE_ITEMS = TagRegistry.item(new Identifier("lambdynlights", "water_sensitive"));
-    private static final double                                    MAX_RADIUS            = 7.75;
+    public static final  String                                    MODID               = "lambdynlights";
+    private static final double                                    MAX_RADIUS          = 7.75;
     private static       LambDynLights                             INSTANCE;
-    public final         Logger                                    logger                = LogManager.getLogger("lambdynlights");
-    public final         DynamicLightsConfig                       config                = new DynamicLightsConfig(this);
-    private final        ConcurrentLinkedQueue<DynamicLightSource> dynamicLightSources   = new ConcurrentLinkedQueue<>();
-    private              long                                      lastUpdate            = System.currentTimeMillis();
-    private              boolean                                   notifiedFirstTime     = false;
+    public final         Logger                                    logger              = LogManager.getLogger(MODID);
+    public final         DynamicLightsConfig                       config              = new DynamicLightsConfig(this);
+    private final        ConcurrentLinkedQueue<DynamicLightSource> dynamicLightSources = new ConcurrentLinkedQueue<>();
+    private              long                                      lastUpdate          = System.currentTimeMillis();
+    private              boolean                                   notifiedFirstTime   = false;
 
     @Override
     public void onInitializeClient()
@@ -77,10 +75,25 @@ public class LambDynLights implements ClientModInitializer
                 this.notifiedFirstTime = true;
 
                 MinecraftClient client = MinecraftClient.getInstance();
-                client.getToastManager().add(SystemToast.method_29047(client,
+                client.getToastManager().add(SystemToast.create(client,
                         SystemToast.Type.TUTORIAL_HINT,
                         new LiteralText("LambDynamicLights").formatted(Formatting.GOLD),
                         new TranslatableText("lambdynlights.toast.first_time")));
+            }
+        });
+
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener()
+        {
+            @Override
+            public Identifier getFabricId()
+            {
+                return new Identifier(MODID, "dynamiclights_resources");
+            }
+
+            @Override
+            public void apply(ResourceManager manager)
+            {
+                ItemLightSources.load(manager);
             }
         });
 
@@ -345,6 +358,16 @@ public class LambDynLights implements ClientModInitializer
     }
 
     /**
+     * Prints a warning message to the terminal.
+     *
+     * @param info The message to print.
+     */
+    public void warn(String info)
+    {
+        this.logger.warn("[LambDynLights] " + info);
+    }
+
+    /**
      * Schedules a chunk rebuild at the specified chunk position.
      *
      * @param renderer The renderer.
@@ -396,28 +419,7 @@ public class LambDynLights implements ClientModInitializer
      */
     public static int getLuminanceFromItemStack(@NotNull ItemStack stack, boolean submergedInWater)
     {
-        Identifier itemId = Registry.ITEM.getId(stack.getItem());
-        if (INSTANCE.config.hasWaterSensitiveCheck() && submergedInWater &&
-                // The water-sensitive items list can be partially override by the server with the tag.
-                (INSTANCE.config.getWaterSensitiveItems().contains(itemId) || WATER_SENSITIVE_ITEMS.contains(stack.getItem()))) {
-            return 0; // Don't emit light with water sensitive items while submerged in water.
-        }
-
-        if (stack.getItem() instanceof BlockItem) {
-            return ((BlockItem) stack.getItem()).getBlock().getDefaultState().getLuminance();
-        } else if (stack.getItem() == Items.LAVA_BUCKET) {
-            return Blocks.LAVA.getDefaultState().getLuminance();
-        } else if (stack.getItem() == Items.BLAZE_ROD
-                || stack.getItem() == Items.BLAZE_POWDER
-                || stack.getItem() == Items.FIRE_CHARGE) {
-            return 10;
-        } else if (stack.getItem() == Items.GLOWSTONE_DUST
-                || stack.getItem() == Items.PRISMARINE_CRYSTALS) {
-            return 8;
-        } else if (stack.getItem() == Items.NETHER_STAR) {
-            return Blocks.BEACON.getDefaultState().getLuminance() / 2;
-        }
-        return 0;
+        return ItemLightSources.getLuminance(stack, submergedInWater);
     }
 
     /**

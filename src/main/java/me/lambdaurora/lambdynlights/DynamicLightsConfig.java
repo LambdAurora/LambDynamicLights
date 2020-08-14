@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 1.2.3
+ * @version 1.3.0
  * @since 1.0.0
  */
 public class DynamicLightsConfig
@@ -39,15 +39,6 @@ public class DynamicLightsConfig
     private static final boolean               DEFAULT_WATER_SENSITIVE_CHECK       = true;
     private static final ExplosiveLightingMode DEFAULT_CREEPER_LIGHTING_MODE       = ExplosiveLightingMode.SIMPLE;
     private static final ExplosiveLightingMode DEFAULT_TNT_LIGHTING_MODE           = ExplosiveLightingMode.OFF;
-    private static final List<String>          DEFAULT_WATER_SENSITIVE_ITEMS       = Arrays.asList(
-            "minecraft:campfire",
-            "minecraft:fire_charge",
-            "minecraft:lava_bucket",
-            "minecraft:redstone_torch",
-            "minecraft:soul_campfire",
-            "minecraft:soul_torch",
-            "minecraft:torch"
-    );
 
     public static final Path                  CONFIG_FILE_PATH = Paths.get("config/lambdynlights.toml");
     protected final     FileConfig            config;
@@ -56,7 +47,6 @@ public class DynamicLightsConfig
     private             DynamicLightsMode     dynamicLightsMode;
     private             ExplosiveLightingMode creeperLightingMode;
     private             ExplosiveLightingMode tntLightingMode;
-    private             List<Identifier>      waterSensitiveItems;
 
     public final Option dynamicLightsModeOption = new SpruceCyclingOption("lambdynlights.option.mode",
             amount -> this.setDynamicLightsMode(this.dynamicLightsMode.next()),
@@ -90,9 +80,6 @@ public class DynamicLightsConfig
                 .orElse(DEFAULT_CREEPER_LIGHTING_MODE);
         this.tntLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.tnt", DEFAULT_TNT_LIGHTING_MODE.getName()))
                 .orElse(DEFAULT_TNT_LIGHTING_MODE);
-
-        waterSensitiveItems = this.config.getOrElse("light_sources.water_sensitive", DEFAULT_WATER_SENSITIVE_ITEMS)
-                .stream().map(Identifier::new).collect(Collectors.toList());
 
         if (dynamicLightsModeValue.equalsIgnoreCase("none")) {
             this.firstTime = true;
@@ -269,15 +256,5 @@ public class DynamicLightsConfig
         if (!lightingMode.isEnabled())
             this.mod.removeTntLightSources();
         this.config.set("light_sources.tnt", lightingMode.getName());
-    }
-
-    /**
-     * Returns the list of water-sensitive items.
-     *
-     * @return The list of water-sensitive items.
-     */
-    public @NotNull List<Identifier> getWaterSensitiveItems()
-    {
-        return this.waterSensitiveItems;
     }
 }

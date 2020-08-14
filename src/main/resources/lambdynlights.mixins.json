@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_8",
   "client": [
     "CommonWorldRendererMixin",
-    "EntityLighterMixin",
     "EntityRendererMixin",
     "VideoOptionsScreenMixin",
     "WorldMixin",

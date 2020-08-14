@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.3.0
  * @since 1.0.0
  */
 public class SettingsScreen extends Screen
@@ -56,15 +56,15 @@ public class SettingsScreen extends Screen
         this.entitiesOption = new SpruceBooleanOption("lambdynlights.option.entities",
                 this.config::hasEntitiesLightSource,
                 this.config::setEntitiesLightSource,
-                new TranslatableText("lambdynlights.tooltip.entities"));
+                new TranslatableText("lambdynlights.tooltip.entities"), true);
         this.blockEntitiesOption = new SpruceBooleanOption("lambdynlights.option.block_entities",
                 this.config::hasBlockEntitiesLightSource,
                 this.config::setBlockEntitiesLightSource,
-                new TranslatableText("lambdynlights.tooltip.block_entities"));
+                new TranslatableText("lambdynlights.tooltip.block_entities"), true);
         this.waterSensitiveOption = new SpruceBooleanOption("lambdynlights.option.water_sensitive",
                 this.config::hasWaterSensitiveCheck,
                 this.config::setWaterSensitiveCheck,
-                new TranslatableText("lambdynlights.tooltip.water_sensitive"));
+                new TranslatableText("lambdynlights.tooltip.water_sensitive"), true);
         this.creeperLightingOption = new SpruceCyclingOption("entity.minecraft.creeper",
                 amount -> this.config.setCreeperLightingMode(this.config.getCreeperLightingMode().next()),
                 option -> option.getDisplayText(this.config.getCreeperLightingMode().getTranslatedText()),
@@ -123,11 +123,11 @@ public class SettingsScreen extends Screen
         this.renderBackground(matrices);
         this.list.render(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);
-        this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 8, 16777215);
+        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 8, 16777215);
 
         if (LambDynLightsCompat.isCanvasInstalled()) {
-            this.drawCenteredString(matrices, this.textRenderer, I18n.translate("lambdynlights.menu.canvas.1"), this.width / 2, this.height - 29 - (5 + this.textRenderer.fontHeight) * 3, 0xFFFF0000);
-            this.drawCenteredString(matrices, this.textRenderer, I18n.translate("lambdynlights.menu.canvas.2"), this.width / 2, this.height - 29 - (5 + this.textRenderer.fontHeight) * 2, 0xFFFF0000);
+            drawCenteredString(matrices, this.textRenderer, I18n.translate("lambdynlights.menu.canvas.1"), this.width / 2, this.height - 29 - (5 + this.textRenderer.fontHeight) * 3, 0xFFFF0000);
+            drawCenteredString(matrices, this.textRenderer, I18n.translate("lambdynlights.menu.canvas.2"), this.width / 2, this.height - 29 - (5 + this.textRenderer.fontHeight) * 2, 0xFFFF0000);
         }
 
         Tooltip.renderAll(matrices);

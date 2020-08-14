@@ -43,15 +43,15 @@
  - Changed video options dynamic lighting button to redirect to LambDynamicLights settings.
  - Fixed random crash.
 
-### v1.2.3
+## v1.3.0
 
  - Added Simplified Chinese translations.
  - Added German translations.
  - Added Russian translations ([#9](https://github.com/LambdAurora/LambDynamicLights/pull/9)).
- - Updated [SpruceUI](https://github.com/LambdAurora/SpruceUI) to v1.5.11.
+ - Updated to Minecraft 1.16.2
+ - Updated [SpruceUI](https://github.com/LambdAurora/SpruceUI) to v1.6.1.
  - Fixed dynamic lighting update issues at chunk borders ([#12](https://github.com/LambdAurora/LambDynamicLights/issues/12)).
  - Fixed water-sensitive items lighting up in water on dedicated servers. ([#3](https://github.com/LambdAurora/LambDynamicLights/issues/3))
-    - Added new configuration entry `light_sources.water_sensitive`.
-    - Keep `#lambdynlights:water_sensitive` item tag for servers.
+    - Added new JSON API to add item luminance and water-sensitivity through resource packs.
     - Added `DynamicLightHandler#isWaterSensitive` to make some entities water-sensitive like the blaze.
  - Fixed incompatibility with latest Sodium development versions. ([#6](https://github.com/LambdAurora/LambDynamicLights/issues/6))
