@@ -1,0 +1,19 @@
+ {
+  "lambdynlights.menu.light_sources": "Źródła dynamicznego światła",
+  "lambdynlights.menu.title": "Ustawienia LambDynamicLights",
+  "lambdynlights.menu.canvas.1": "Wyłączenie dynamicznego oświetlenia dla bytów jest zalecane w przypadku użycia Canvas! ",
+  "lambdynlights.menu.canvas.2": "Na tą chwilę dynamiczne oświetlenie użyte z Canvasem powoduje spadek wydajności!",
+  "lambdynlights.option.block_entities": "Byty bloków",
+  "lambdynlights.option.entities": "Byty",
+  "lambdynlights.option.mode": "Dynamiczne oświetlenie",
+  "lambdynlights.option.water_sensitive": "Sprawdzaj wrażliwość na wodę",
+  "lambdynlights.toast.first_time": "Domyślnie wyłączony, sprawdź ustawienia graficzne naszej modyfikacji!",
+  "lambdynlights.tooltip.block_entities": "Aktywuje dynamiczne oświetlenie generowane przez byty bloków.",
+  "lambdynlights.tooltip.creeper_lighting": "Ustawia dynamiczne oświetlenie Creepera.\n- %s deaktywuje dynamiczne oświetlenie Creepera.\n- %s ustawia stałą jasność.\n- %s ustawia dynamiczną jasność.",
+  "lambdynlights.tooltip.entities": "Aktywuje dynamiczne oświetlenie dla bytów. Uwaga: dla graczy jest to zawsze aktywne.",
+  "lambdynlights.tooltip.mode.1": "Aktywuje dynamiczne oświetlenie. Jeśli włączone gracz trzymający pochodnie będzie oświetlał pobliski teren.",
+  "lambdynlights.tooltip.mode.2": "%s oraz %s będą delikatnie opóźnione, jednak zminimalizują ilość aktualizacji oświetlenia.",
+  "lambdynlights.tooltip.mode.3": "%s jest dokładnym dynamicznym oświetleniem.",
+  "lambdynlights.tooltip.tnt_lighting": "Ustawia tryb dynamicznego oświetlenia dla TNT.\n- %s deaktywuje dynamiczne oświetlenie TNT.\n- %s ustawia stałą jasność.\n- %s ustawia dynamiczną jasność.",
+  "lambdynlights.tooltip.water_sensitive": "Aktywuje sprawdzanie wrażliwości źródła światła na wodę. Oznacza to, że niektóre przedmioty po znalezieniu się w wodzie nie będą wytwarzały światła."
+}
