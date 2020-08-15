@@ -47,13 +47,15 @@
 
  - Added Simplified Chinese translations.
  - Added German translations.
- - Added Mexican Spanish translations ([#13](https://github.com/LambdAurora/LambDynamicLights/pull/13))
- - Added Polish translations ([#15](https://github.com/LambdAurora/LambDynamicLights/pull/15))
+ - Added Mexican Spanish translations ([#13](https://github.com/LambdAurora/LambDynamicLights/pull/13)).
+ - Added Polish translations ([#15](https://github.com/LambdAurora/LambDynamicLights/pull/15)).
  - Added Russian translations ([#9](https://github.com/LambdAurora/LambDynamicLights/pull/9)).
+ - Added spectral arrow as item emitting light ([#17](https://github.com/LambdAurora/LambDynamicLights/pull/17)).
+ - Added dynamic lighting on glowing entities ([#17](https://github.com/LambdAurora/LambDynamicLights/pull/17)).
  - Updated to Minecraft 1.16.2
- - Updated [SpruceUI](https://github.com/LambdAurora/SpruceUI) to v1.6.1.
+ - Updated [SpruceUI](https://github.com/LambdAurora/SpruceUI) to v1.6.2.
  - Fixed dynamic lighting update issues at chunk borders ([#12](https://github.com/LambdAurora/LambDynamicLights/issues/12)).
  - Fixed water-sensitive items lighting up in water on dedicated servers. ([#3](https://github.com/LambdAurora/LambDynamicLights/issues/3))
     - Added new JSON API to add item luminance and water-sensitivity through resource packs.
     - Added `DynamicLightHandler#isWaterSensitive` to make some entities water-sensitive like the blaze.
- - Fixed incompatibility with latest Sodium development versions. ([#6](https://github.com/LambdAurora/LambDynamicLights/issues/6))
+ - Fixed incompatibility with future Sodium versions. ([#6](https://github.com/LambdAurora/LambDynamicLights/issues/6))
