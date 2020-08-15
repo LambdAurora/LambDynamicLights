@@ -409,7 +409,8 @@ public class LambDynLights implements ClientModInitializer
             return Blocks.LAVA.getDefaultState().getLuminance();
         } else if (stack.getItem() == Items.BLAZE_ROD
                 || stack.getItem() == Items.BLAZE_POWDER
-                || stack.getItem() == Items.FIRE_CHARGE) {
+                || stack.getItem() == Items.FIRE_CHARGE
+                || stack.getItem() == Items.SPECTRAL_ARROW) {
             return 10;
         } else if (stack.getItem() == Items.GLOWSTONE_DUST
                 || stack.getItem() == Items.PRISMARINE_CRYSTALS) {
