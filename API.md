@@ -70,8 +70,61 @@ registerDynamicLightHandler(EntityType.ITEM_FRAME, entity -> {
  - `DynamicLightHandler#makeCreeperEntityHandler` will optionally merge the given handler with a basic handler for creepers. May be useful for Creepers mod.
  - `LambDynLights#getLuminanceFromItemStack` will return the luminance value of the given item stack.
  
-## `#lambdynlights:water_sensitive` tag
+## Item light sources
 
-This is an item tag which lists water-sensitive light-emitting items.
+By default every items will emit the same amount of light as their assigned block if possible.
 
-Every items listed in this tag will not emit light in water. This tag mays be useful for server owners to keep control of this feature.
+But for items that are not assigned to a block, or for items that should not lit up underwater, there's JSON files to write!
+
+The JSONs are located in `<modid>:dynamiclights/item/<file>.json`.
+
+### JSON item light source
+
+The format is simple:
+
+- `item` - The identifier of the affected item.
+- `luminance` - Either a number between `0` and `15` and corresponds to the luminance value, 
+    or is a string with either a block identifier to get the luminance from 
+    or `"block"` to use the default assigned block luminance value.
+- `water_sensitive` *(Optional)* - `true` if the item doesn't emit light when submerged in water, else `false`.
+
+#### Examples
+
+##### `lambdynlights:dynamiclights/item/fire_charge.json`
+
+```json
+{
+  "item": "minecraft:fire_charge",
+  "luminance": 10,
+  "water_sensitive": true
+}
+```
+
+##### `lambdynlights:dynamiclights/item/lava_bucket.json`
+
+```json
+{
+  "item": "minecraft:lava_bucket",
+  "luminance": "minecraft:lava",
+  "water_sensitive": true
+}
+```
+
+##### `lambdynlights:dynamiclights/item/nether_star.json`
+
+```json
+{
+  "item": "minecraft:nether_star",
+  "luminance": 8
+}
+```
+
+##### `lambdynlights:dynamiclights/item/torch.json`
+
+```json
+{
+  "item": "minecraft:torch",
+  "luminance": "block",
+  "water_sensitive": true
+}
+```

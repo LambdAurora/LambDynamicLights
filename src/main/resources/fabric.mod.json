@@ -28,9 +28,9 @@
     "lambdynlights.lightsource.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.8.0",
+    "fabricloader": ">=0.9.0",
     "fabric": ">=0.14.0",
-    "minecraft": ">=1.16"
+    "minecraft": ">=1.16.2"
   },
   "recommends": {
     "modmenu": ">=1.12.2"
@@ -44,7 +44,6 @@
     "optifabric": "*"
   },
   "custom": {
-    "modmenu:clientsideOnly": true,
     "modupdater": {
       "strategy": "curseforge",
       "projectID": 393442

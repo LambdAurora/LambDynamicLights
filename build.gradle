@@ -45,7 +45,7 @@ configurations {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
@@ -56,12 +56,12 @@ dependencies {
 
     modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
     //modImplementation "grondag:canvas-mc116:1.0.+"
-    modImplementation "com.github.jellysquid3:sodium-fabric:1.16.x~dev-SNAPSHOT"
+    //modImplementation "me.jellysquid.mods:sodium:0.1.0+v8-SNAPSHOT"
 
     shadow "com.electronwill.night-config:core:3.6.3"
     shadow "com.electronwill.night-config:toml:3.6.3"
 
-    shadow("org.aperlambda:lambdajcommon:1.8.0") {
+    shadow("org.aperlambda:lambdajcommon:1.8.1") {
         // Minecraft already has all that google crap.
         exclude group: 'com.google.code.gson'
         exclude group: 'com.google.guava'
