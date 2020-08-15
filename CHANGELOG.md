@@ -47,6 +47,8 @@
 
  - Added Simplified Chinese translations.
  - Added German translations.
+ - Added Mexican Spanish translations ([#13](https://github.com/LambdAurora/LambDynamicLights/pull/13))
+ - Added Polish translations ([#15](https://github.com/LambdAurora/LambDynamicLights/pull/15))
  - Added Russian translations ([#9](https://github.com/LambdAurora/LambDynamicLights/pull/9)).
  - Updated to Minecraft 1.16.2
  - Updated [SpruceUI](https://github.com/LambdAurora/SpruceUI) to v1.6.1.
