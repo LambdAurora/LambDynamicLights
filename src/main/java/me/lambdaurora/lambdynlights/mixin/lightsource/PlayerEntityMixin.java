@@ -37,7 +37,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
     @Override
     public void dynamicLightTick()
     {
-        if (this.isOnFire()) {
+        if (this.isOnFire() || this.isGlowing()) {
             this.lambdynlights_luminance = 15;
         } else {
             int luminance = 0;
