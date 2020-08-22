@@ -25,7 +25,7 @@ This method is used by this mod.
 
 ### Dynamic luminance injection
 
-As [@Martmists](https://github.com/martmists) suggested, `WorldRenderer#getLightmapCoordinates` is a great entrypoint.
+As [@MaryWeeb](https://github.com/MaryWeeb) suggested, `WorldRenderer#getLightmapCoordinates` is a great entrypoint.
 
 This method gives lightmap coordinates in the format `(skyLevel << 20 | blockLevel << 4)`
 and to get the blockLevel from the lightmap use `LightmapTextureManager#getBlockLightCoordinates`.
