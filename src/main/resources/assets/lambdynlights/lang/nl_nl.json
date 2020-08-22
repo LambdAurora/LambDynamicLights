@@ -1,0 +1,19 @@
+{
+  "lambdynlights.menu.light_sources": "Dynamische Licht Bronnen",
+  "lambdynlights.menu.title": "LambDynamicLights Instellingen",
+  "lambdynlights.menu.canvas.1": "Dynamische entiteit lichten is niet aanbevolen in gebruik met Canvas!",
+  "lambdynlights.menu.canvas.2": "Dynamische lichtbronnen met Canvas presteert momenteel heel zwaar!",
+  "lambdynlights.option.block_entities": "Blok Entiteiten",
+  "lambdynlights.option.entities": "Entiteiten",
+  "lambdynlights.option.mode": "Dynamische Lichtbronnen",
+  "lambdynlights.option.water_sensitive": "Water Sensitiviteit Check",
+  "lambdynlights.toast.first_time": "Standaard uitgeschakeld, check mod of Video Instellingen!",
+  "lambdynlights.tooltip.block_entities": "Schakelt dynamische block entiteiten in.",
+  "lambdynlights.tooltip.creeper_lighting": "Stelt de creeper lichtmodus in.\n- %s zet dynamische creeper lichtbronnen uit.\n- %s zet een constante lichtsterkte.\n- %s zet een dynamische lichtsterkte.",
+  "lambdynlights.tooltip.entities": "Laat entiteiten dynamische lichtbronnen maken. Lot op: Spelers zijn altijd actief.",
+  "lambdynlights.tooltip.mode.1": "Zet dynamische lichtbronnen aan. Wanneer aan maken spelers licht als ze een fakkel dragen bijvoorbeeld.",
+  "lambdynlights.tooltip.mode.2": "%s en %s zullen langzamer reageren, maar licht updates zullen verminderd worden.",
+  "lambdynlights.tooltip.mode.3": "%s is soepel dynamisch licht",
+  "lambdynlights.tooltip.tnt_lighting": "Stelt de TNT lichtmodus in.\n- %s zet dynamische TNT lichtbronnen uit.\n- %s zet een constante lichtsterkte.\n- %s zet een dynamische lichtsterkte.",
+  "lambdynlights.tooltip.water_sensitive": "Maakt licht water-sensitief. Dit betekent dat sommige objecten onder water geen licht geven."
+}
