@@ -29,7 +29,7 @@ public class EntityRendererMixin<T extends Entity>
             return; // Do not touch to the value.
 
         int vanilla = cir.getReturnValueI();
-        int posLuminance = (int) LambDynLights.get().getDynamicLuminance(pos);
+        int posLuminance = (int) LambDynLights.get().getDynamicLightLevel(pos);
         int entityLuminance = ((DynamicLightSource) entity).getLuminance();
 
         cir.setReturnValue(Math.max(Math.max(vanilla, entityLuminance), posLuminance));

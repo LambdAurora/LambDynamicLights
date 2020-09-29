@@ -12,7 +12,7 @@ UpcraftLP method can be found here: https://gist.github.com/UpcraftLP/93db478535
 AtomicStryker method can be found here: https://github.com/AtomicStryker/atomicstrykers-minecraft-mods/tree/1.14.3/DynamicLights
 
 Both methods suffer from a "laggy" dynamic lighting, the way the light moves is too much tied to
-the block positions as it only injects at luminance getters in `WorldChunk` or a lighting provider.
+the block positions as it only injects at light level getters in `WorldChunk` or a lighting provider.
 It will only provide the dynamic light value of the light source if the block position is the position
 of the light source.
 
@@ -36,16 +36,16 @@ light sources, their distances and the luminance), if the dynamic value is highe
 then we replace it.
 
 This also means that we can't just do like the previous method and only give the source luminance but
-we also have to calculate the surrounding luminance created by the dynamic light source in a specified
+we also have to calculate the surrounding light level created by the dynamic light sources in a specified
 range (which is 7.75 to limit chunk rebuilding to 8 chunks (which is still a lot)).
 
 When getting the dynamic light value at the specified position, it has to be a `double` and not
-an integer as the light value calculated with the range has to be precise.
+an integer as the light level calculated within the range has to be precise.
 To modify the lightmap with the dynamic light value, it has to be multiplied by 16.0 instead of
 using a bitshift to preserve as much as possible the precision.
 
-Dynamic light value at a specified position is calculated in a for-loop with all the dynamic light
-sources, only the highest light value is kept. The light value is calculated as follow:
+Dynamic light level at a specified position is calculated in a for-loop with all the dynamic light
+sources, only the highest light level is kept. The light level is calculated as follow:
 
 ```java
 // dist being the distance between the light source origin and the position where the

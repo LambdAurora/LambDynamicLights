@@ -25,17 +25,17 @@
  - Added water-sensitive check for items and light sources.
    - Added data item tag `#lambdynlights:water_sensitive` which lists every item which can't light up in the water.
    - Added an option to enable/disable the feature
- - Updated SpruceUI to v1.5.6 to fix latest snapshots issues.
- - Added "early/WIP" compatibility with [Canvas Renderer](https://www.curseforge.com/minecraft/mc-mods/canvas-renderer).
+ - Updated [SpruceUI] to v1.5.6 to fix latest snapshots issues.
+ - Added "early/WIP" compatibility with [Canvas Renderer].
    - Added a warning message about performance issues. 
- - Fixed a crash with Sodium rc7 with smooth lighting set to HIGH.
+ - Fixed a crash with [Sodium] rc7 with smooth lighting set to HIGH.
  
 ### v1.2.1
 
  - Added TNT dynamic lighting.
  - Added lighting options for TNT and Creepers.
  - Added luminance value to Fire charge item.
- - Updated SpruceUI to v1.5.8
+ - Updated [SpruceUI] to v1.5.8
  - Fixed player dynamic lighting not getting tracked when changing dimensions.
 
 ### v1.2.2
@@ -53,9 +53,17 @@
  - Added spectral arrow as item emitting light ([#17](https://github.com/LambdAurora/LambDynamicLights/pull/17)).
  - Added dynamic lighting on glowing entities ([#17](https://github.com/LambdAurora/LambDynamicLights/pull/17)).
  - Updated to Minecraft 1.16.2
- - Updated [SpruceUI](https://github.com/LambdAurora/SpruceUI) to v1.6.2.
+ - Updated [SpruceUI] to v1.6.2.
  - Fixed dynamic lighting update issues at chunk borders ([#12](https://github.com/LambdAurora/LambDynamicLights/issues/12)).
  - Fixed water-sensitive items lighting up in water on dedicated servers. ([#3](https://github.com/LambdAurora/LambDynamicLights/issues/3))
     - Added new JSON API to add item luminance and water-sensitivity through resource packs.
     - Added `DynamicLightHandler#isWaterSensitive` to make some entities water-sensitive like the blaze.
- - Fixed incompatibility with future Sodium versions. ([#6](https://github.com/LambdAurora/LambDynamicLights/issues/6))
+ - Fixed incompatibility with future [Sodium] versions. ([#6](https://github.com/LambdAurora/LambDynamicLights/issues/6))
+
+## v1.3.1
+
+ - Fixed entity lighting issue with [Sodium] 0.1.0. ([#23](https://github.com/LambdAurora/LambDynamicLights/issues/23))
+
+[SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
+[Sodium]: https://www.curseforge.com/minecraft/mc-mods/sodium "Sodium CurseForge page"
+[Canvas Renderer]: https://www.curseforge.com/minecraft/mc-mods/canvas-renderer "Canvas Renderer CurseForge page"

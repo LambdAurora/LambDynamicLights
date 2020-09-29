@@ -16,18 +16,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
  * Represents an item light source.
  *
  * @author LambdAurora
- * @version 1.3.0
+ * @version 1.3.1
  * @since 1.3.0
  */
 public class ItemLightSource
@@ -50,12 +52,37 @@ public class ItemLightSource
         this.waterSensitive = waterSensitive;
     }
 
-    public int getLuminance(boolean submergedInWater)
+    /**
+     * Gets the luminance of the item.
+     *
+     * @param stack            The item stack.
+     * @param submergedInWater True if submerged in water, else false.
+     * @return The luminance value between 0 and 15.
+     */
+    public int getLuminance(@NotNull ItemStack stack, boolean submergedInWater)
     {
         if (this.waterSensitive && LambDynLights.get().config.hasWaterSensitiveCheck() && submergedInWater)
             return 0; // Don't emit light with water sensitive items while submerged in water.
 
         return this.luminance;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemLightSource that = (ItemLightSource) o;
+        return luminance == that.luminance &&
+                waterSensitive == that.waterSensitive &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(item, that.item);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, item, luminance, waterSensitive);
     }
 
     @Override

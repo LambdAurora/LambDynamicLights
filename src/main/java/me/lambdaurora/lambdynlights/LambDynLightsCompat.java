@@ -15,7 +15,7 @@ import net.fabricmc.loader.api.FabricLoader;
  * Represents a utility class for compatibility.
  *
  * @author LambdAurora
- * @version 1.3.0
+ * @version 1.3.1
  * @since 1.0.0
  */
 public final class LambDynLightsCompat
@@ -49,5 +49,16 @@ public final class LambDynLightsCompat
     public static boolean isSodiumInstalled()
     {
         return FabricLoader.getInstance().isModLoaded("sodium");
+    }
+
+    /**
+     * Returns whether Sodium 0.1.0 is installed.
+     *
+     * @return True if Sodium 0.1.0 is installed, else false.
+     */
+    public static boolean isSodium010Installed()
+    {
+        return FabricLoader.getInstance().getModContainer("sodium").map(mod -> mod.getMetadata().getVersion().getFriendlyString().equalsIgnoreCase("0.1.0"))
+                .orElse(false);
     }
 }
