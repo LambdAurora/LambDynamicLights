@@ -15,5 +15,5 @@
   "lambdynlights.tooltip.mode.2": "%s ja %s on väikese viiteajaga, kuid minimeerivad valgusuuendusi.",
   "lambdynlights.tooltip.mode.3": "%s on sujuv dünaamiline valgustus.",
   "lambdynlights.tooltip.tnt_lighting": "Määrab dünamiidi dünaamilise valgustuse režiimi.\n- %s keelab dünamiidi dünaamilise valgustuse.\n- %s määrab püsiva ereduse.\n- %s määrab dünaamilise ereduse.",
-  "lambdynlights.tooltip.water_sensitive": "Lubab vee-tundliku valgusallikate kontrolli. See tähendab, et mõned esemed ei erita valgust vee all."
+  "lambdynlights.tooltip.water_sensitive": "Lubab veetundliku valgusallikate kontrolli. See tähendab, et mõned esemed ei erita valgust vee all."
 }
