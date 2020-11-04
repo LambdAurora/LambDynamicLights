@@ -29,7 +29,7 @@ public abstract class TntEntityMixin extends Entity implements DynamicLightSourc
     private int fuseTimer;
 
     private double lambdynlights_startFuseTimer = 80.0;
-    private int    lambdynlights_luminance;
+    private int lambdynlights_luminance;
 
     public TntEntityMixin(EntityType<?> type, World world)
     {
@@ -45,11 +45,11 @@ public abstract class TntEntityMixin extends Entity implements DynamicLightSourc
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci)
     {
+        // We do not want to update the entity on the server.
         if (this.getEntityWorld().isClient()) {
             if (!LambDynLights.get().config.getTntLightingMode().isEnabled())
                 return;
 
-            // We do not want to update the entity on the server.
             if (this.removed) {
                 this.setDynamicLightEnabled(false);
             } else {

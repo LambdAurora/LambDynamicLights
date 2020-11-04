@@ -13,17 +13,24 @@ import me.lambdaurora.lambdynlights.DynamicLightSource;
 import me.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.AbstractDecorationEntity;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(AbstractDecorationEntity.class)
-public abstract class AbstractDecorationEntityMixin extends Entity implements DynamicLightSource
+/**
+ * Adds the tick method for dynamic light source tracking in minecart entities.
+ *
+ * @author LambdAurora
+ * @version 1.3.2
+ * @since 1.3.2
+ */
+@Mixin(AbstractMinecartEntity.class)
+public abstract class AbstractMinecartEntityMixin extends Entity implements DynamicLightSource
 {
-    public AbstractDecorationEntityMixin(EntityType<?> type, World world)
+    public AbstractMinecartEntityMixin(EntityType<?> type, World world)
     {
         super(type, world);
     }

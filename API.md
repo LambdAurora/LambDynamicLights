@@ -6,11 +6,27 @@ Then try the API of this mod!
 
 ## Quick note
 
-Every time entity is referenced it means either an entity or a block entity.
+Every time an entity is referenced it means either an entity or a block entity.
 
 Block entity dynamic lighting is non-recommended if avoidable with block states.
 
 If your entity re-implements tick without calling the super method the dynamic light handler will not work.
+
+## LambDynamicLights entrypoint
+
+Any API calls should be done in the custom entrypoint.
+
+To use the entrypoint, make a new class implementing `DynamicLightsInitializer`,
+add in your `fabric.mod.json` this:
+```json
+  "entrypoints": {
+    "dynamiclights": [
+      "path.to.your.Class"
+    ]
+  }
+```
+
+Once done, you can call the methods presented in the rest of this document in the method `onInitializeDynamicLights`.
 
 ## Dynamic light handlers
 

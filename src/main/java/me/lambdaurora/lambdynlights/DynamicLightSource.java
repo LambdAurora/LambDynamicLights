@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents a dynamic light source.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.3.2
  * @since 1.0.0
  */
 public interface DynamicLightSource
@@ -98,7 +98,7 @@ public interface DynamicLightSource
      */
     boolean shouldUpdateDynamicLight();
 
-    void lambdynlights_updateDynamicLight(@NotNull WorldRenderer renderer);
+    boolean lambdynlights_updateDynamicLight(@NotNull WorldRenderer renderer);
 
     void lambdynlights_scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer);
 }

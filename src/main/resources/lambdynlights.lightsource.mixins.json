@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "client": [
     "AbstractDecorationEntityMixin",
+    "AbstractMinecartEntityMixin",
     "BlockEntityMixin",
     "EntityMixin",
     "ExplosiveProjectileEntityMixin",

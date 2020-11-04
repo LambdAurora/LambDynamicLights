@@ -40,11 +40,11 @@ public abstract class BlockEntityMixin implements DynamicLightSource
     protected World world;
 
     @Shadow
-    protected boolean         removed;
-    private   int             lambdynlights_luminance     = 0;
-    private   int             lambdynlights_lastLuminance = 0;
-    private   long            lambdynlights_lastUpdate    = 0;
-    private   LongOpenHashSet trackedLitChunkPos          = new LongOpenHashSet();
+    protected boolean removed;
+    private int lambdynlights_luminance = 0;
+    private int lambdynlights_lastLuminance = 0;
+    private long lambdynlights_lastUpdate = 0;
+    private LongOpenHashSet trackedLitChunkPos = new LongOpenHashSet();
 
     @Override
     public double getDynamicLightX()
@@ -85,9 +85,9 @@ public abstract class BlockEntityMixin implements DynamicLightSource
     @Override
     public void dynamicLightTick()
     {
+        // We do not want to update the entity on the server.
         if (this.world == null || !this.world.isClient())
             return;
-        // We do not want to update the entity on the server.
         if (!this.removed) {
             this.lambdynlights_luminance = DynamicLightHandlers.getLuminanceFrom((BlockEntity) (Object) this);
             LambDynLights.updateTracking(this);
@@ -122,10 +122,10 @@ public abstract class BlockEntityMixin implements DynamicLightSource
     }
 
     @Override
-    public void lambdynlights_updateDynamicLight(@NotNull WorldRenderer renderer)
+    public boolean lambdynlights_updateDynamicLight(@NotNull WorldRenderer renderer)
     {
         if (!this.shouldUpdateDynamicLight())
-            return;
+            return false;
 
         int luminance = this.getLuminance();
 
@@ -160,7 +160,9 @@ public abstract class BlockEntityMixin implements DynamicLightSource
 
             // Schedules the rebuild of chunks.
             this.lambdynlights_scheduleTrackedChunksRebuild(renderer);
+            return true;
         }
+        return false;
     }
 
     @Override

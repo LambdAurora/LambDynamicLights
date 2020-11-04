@@ -24,13 +24,18 @@ import java.util.Map;
 
 /**
  * @author LambdAurora
- * @version 1.3.0
+ * @version 1.3.2
  * @since 1.1.0
  */
 public final class DynamicLightHandlers
 {
-    private static Map<EntityType<? extends Entity>, DynamicLightHandler<? extends Entity>>                ENTITES_HANDLER        = new HashMap<>();
+    private static Map<EntityType<? extends Entity>, DynamicLightHandler<? extends Entity>> ENTITES_HANDLER = new HashMap<>();
     private static Map<BlockEntityType<? extends BlockEntity>, DynamicLightHandler<? extends BlockEntity>> BLOCK_ENTITIES_HANDLER = new HashMap<>();
+
+    private DynamicLightHandlers()
+    {
+        throw new UnsupportedOperationException("DynamicLightHandlers only contains static definitions.");
+    }
 
     /**
      * Registers the default handlers.
@@ -57,9 +62,9 @@ public final class DynamicLightHandlers
     /**
      * Registers an entity dynamic light handler.
      *
-     * @param type    The entity type.
+     * @param type The entity type.
      * @param handler The dynamic light handler.
-     * @param <T>     The type of the entity.
+     * @param <T> The type of the entity.
      */
     public static <T extends Entity> void registerDynamicLightHandler(@NotNull EntityType<T> type, @NotNull DynamicLightHandler<T> handler)
     {
@@ -74,9 +79,9 @@ public final class DynamicLightHandlers
     /**
      * Registers a block entity dynamic light handler.
      *
-     * @param type    The block entity type.
+     * @param type The block entity type.
      * @param handler The dynamic light handler.
-     * @param <T>     The type of the block entity.
+     * @param <T> The type of the block entity.
      */
     public static <T extends BlockEntity> void registerDynamicLightHandler(@NotNull BlockEntityType<T> type, @NotNull DynamicLightHandler<T> handler)
     {
@@ -92,7 +97,7 @@ public final class DynamicLightHandlers
      * Returns the registered dynamic light handler of the specified entity.
      *
      * @param type The entity type.
-     * @param <T>  The type of the entity.
+     * @param <T> The type of the entity.
      * @return The registered dynamic light handler.
      */
     @SuppressWarnings("unchecked")
@@ -105,7 +110,7 @@ public final class DynamicLightHandlers
      * Returns the registered dynamic light handler of the specified block entity.
      *
      * @param type The block entity type.
-     * @param <T>  The type of the block entity.
+     * @param <T> The type of the block entity.
      * @return The registered dynamic light handler.
      */
     @SuppressWarnings("unchecked")
@@ -118,7 +123,7 @@ public final class DynamicLightHandlers
      * Returns the luminance from an entity.
      *
      * @param entity The entity.
-     * @param <T>    The type of the entity.
+     * @param <T> The type of the entity.
      * @return The luminance.
      */
     @SuppressWarnings("unchecked")
@@ -138,7 +143,7 @@ public final class DynamicLightHandlers
      * Returns the luminance from a block entity.
      *
      * @param entity The block entity.
-     * @param <T>    The type of the block entity.
+     * @param <T> The type of the block entity.
      * @return The luminance.
      */
     @SuppressWarnings("unchecked")

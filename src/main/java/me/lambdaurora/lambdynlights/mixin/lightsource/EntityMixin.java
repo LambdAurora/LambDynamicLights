@@ -63,19 +63,19 @@ public abstract class EntityMixin implements DynamicLightSource
     @Shadow
     public abstract BlockPos getBlockPos();
 
-    private int             lambdynlights_luminance     = 0;
-    private int             lambdynlights_lastLuminance = 0;
-    private long            lambdynlights_lastUpdate    = 0;
-    private double          lambdynlights_prevX;
-    private double          lambdynlights_prevY;
-    private double          lambdynlights_prevZ;
-    private LongOpenHashSet trackedLitChunkPos          = new LongOpenHashSet();
+    private int lambdynlights_luminance = 0;
+    private int lambdynlights_lastLuminance = 0;
+    private long lambdynlights_lastUpdate = 0;
+    private double lambdynlights_prevX;
+    private double lambdynlights_prevY;
+    private double lambdynlights_prevZ;
+    private LongOpenHashSet trackedLitChunkPos = new LongOpenHashSet();
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void onTick(CallbackInfo ci)
     {
+        // We do not want to update the entity on the server.
         if (this.world.isClient()) {
-            // We do not want to update the entity on the server.
             if (this.removed) {
                 this.setDynamicLightEnabled(false);
             } else {
@@ -158,10 +158,10 @@ public abstract class EntityMixin implements DynamicLightSource
     }
 
     @Override
-    public void lambdynlights_updateDynamicLight(@NotNull WorldRenderer renderer)
+    public boolean lambdynlights_updateDynamicLight(@NotNull WorldRenderer renderer)
     {
         if (!this.shouldUpdateDynamicLight())
-            return;
+            return false;
 
         double deltaX = this.getX() - this.lambdynlights_prevX;
         double deltaY = this.getY() - this.lambdynlights_prevY;
@@ -207,7 +207,9 @@ public abstract class EntityMixin implements DynamicLightSource
             this.lambdynlights_scheduleTrackedChunksRebuild(renderer);
             // Update tracked lit chunks.
             this.trackedLitChunkPos = newPos;
+            return true;
         }
+        return false;
     }
 
     @Override

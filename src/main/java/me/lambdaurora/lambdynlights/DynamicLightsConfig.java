@@ -14,39 +14,35 @@ import me.lambdaurora.spruceui.option.SpruceCyclingOption;
 import net.minecraft.client.options.Option;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 1.3.0
+ * @version 1.3.2
  * @since 1.0.0
  */
 public class DynamicLightsConfig
 {
-    private static final DynamicLightsMode     DEFAULT_DYNAMIC_LIGHTS_MODE         = DynamicLightsMode.OFF;
-    private static final boolean               DEFAULT_ENTITIES_LIGHT_SOURCE       = true;
-    private static final boolean               DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE = true;
-    private static final boolean               DEFAULT_WATER_SENSITIVE_CHECK       = true;
-    private static final ExplosiveLightingMode DEFAULT_CREEPER_LIGHTING_MODE       = ExplosiveLightingMode.SIMPLE;
-    private static final ExplosiveLightingMode DEFAULT_TNT_LIGHTING_MODE           = ExplosiveLightingMode.OFF;
+    private static final DynamicLightsMode DEFAULT_DYNAMIC_LIGHTS_MODE = DynamicLightsMode.OFF;
+    private static final boolean DEFAULT_ENTITIES_LIGHT_SOURCE = true;
+    private static final boolean DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE = true;
+    private static final boolean DEFAULT_WATER_SENSITIVE_CHECK = true;
+    private static final ExplosiveLightingMode DEFAULT_CREEPER_LIGHTING_MODE = ExplosiveLightingMode.SIMPLE;
+    private static final ExplosiveLightingMode DEFAULT_TNT_LIGHTING_MODE = ExplosiveLightingMode.OFF;
 
-    public static final Path                  CONFIG_FILE_PATH = Paths.get("config/lambdynlights.toml");
-    protected final     FileConfig            config;
-    private final       LambDynLights         mod;
-    private             boolean               firstTime;
-    private             DynamicLightsMode     dynamicLightsMode;
-    private             ExplosiveLightingMode creeperLightingMode;
-    private             ExplosiveLightingMode tntLightingMode;
+    public static final Path CONFIG_FILE_PATH = Paths.get("config/lambdynlights.toml");
+    protected final FileConfig config;
+    private final LambDynLights mod;
+    private boolean firstTime;
+    private DynamicLightsMode dynamicLightsMode;
+    private ExplosiveLightingMode creeperLightingMode;
+    private ExplosiveLightingMode tntLightingMode;
 
     public final Option dynamicLightsModeOption = new SpruceCyclingOption("lambdynlights.option.mode",
             amount -> this.setDynamicLightsMode(this.dynamicLightsMode.next()),
@@ -136,12 +132,12 @@ public class DynamicLightsConfig
      */
     public void setDynamicLightsMode(@NotNull DynamicLightsMode mode)
     {
-        this.dynamicLightsMode = mode;
-        this.config.set("mode", mode.getName());
-
         if (!mode.isEnabled()) {
             this.mod.clearLightSources();
         }
+
+        this.dynamicLightsMode = mode;
+        this.config.set("mode", mode.getName());
 
         this.firstTime = false;
     }

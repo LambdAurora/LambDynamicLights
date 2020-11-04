@@ -12,11 +12,14 @@ package me.lambdaurora.lambdynlights;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import me.lambdaurora.lambdynlights.accessor.WorldRendererAccessor;
 import me.lambdaurora.lambdynlights.api.DynamicLightHandlers;
+import me.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
 import me.lambdaurora.lambdynlights.api.item.ItemLightSources;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
@@ -41,26 +44,29 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 1.3.1
+ * @version 1.3.2
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer
 {
-    public static final  String                                    MODID               = "lambdynlights";
-    private static final double                                    MAX_RADIUS          = 7.75;
-    private static       LambDynLights                             INSTANCE;
-    public final         Logger                                    logger              = LogManager.getLogger(MODID);
-    public final         DynamicLightsConfig                       config              = new DynamicLightsConfig(this);
-    private final        ConcurrentLinkedQueue<DynamicLightSource> dynamicLightSources = new ConcurrentLinkedQueue<>();
-    private              long                                      lastUpdate          = System.currentTimeMillis();
-    private              boolean                                   notifiedFirstTime   = false;
+    public static final String MODID = "lambdynlights";
+    private static final double MAX_RADIUS = 7.75;
+    private static LambDynLights INSTANCE;
+    public final Logger logger = LogManager.getLogger(MODID);
+    public final DynamicLightsConfig config = new DynamicLightsConfig(this);
+    private final ConcurrentLinkedQueue<DynamicLightSource> dynamicLightSources = new ConcurrentLinkedQueue<>();
+    private long lastUpdate = System.currentTimeMillis();
+    private int lastUpdateCount = 0;
+    private boolean notifiedFirstTime = false;
 
     @Override
     public void onInitializeClient()
@@ -81,6 +87,10 @@ public class LambDynLights implements ClientModInitializer
                         new TranslatableText("lambdynlights.toast.first_time")));
             }
         });
+
+        FabricLoader.getInstance().getEntrypointContainers("dynamiclights", DynamicLightsInitializer.class)
+                .stream().map(EntrypointContainer::getEntrypoint)
+                .forEach(DynamicLightsInitializer::onInitializeDynamicLights);
 
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener()
         {
@@ -113,17 +123,28 @@ public class LambDynLights implements ClientModInitializer
         long now = System.currentTimeMillis();
         if (now >= this.lastUpdate + 50) {
             this.lastUpdate = now;
+            this.lastUpdateCount = 0;
 
             for (DynamicLightSource lightSource : this.dynamicLightSources) {
-                lightSource.lambdynlights_updateDynamicLight(renderer);
+                if (lightSource.lambdynlights_updateDynamicLight(renderer)) this.lastUpdateCount++;
             }
         }
     }
 
     /**
+     * Returns the last number of dynamic light source updates.
+     *
+     * @return The last number of dynamic light source updates.
+     */
+    public int getLastUpdateCount()
+    {
+        return this.lastUpdateCount;
+    }
+
+    /**
      * Returns the lightmap with combined light levels.
      *
-     * @param pos      The position.
+     * @param pos The position.
      * @param lightmap The vanilla lightmap.
      * @return The modified lightmap.
      */
@@ -135,7 +156,7 @@ public class LambDynLights implements ClientModInitializer
     /**
      * Returns the lightmap with combined light levels.
      *
-     * @param entity   The entity.
+     * @param entity The entity.
      * @param lightmap The vanilla lightmap.
      * @return The
      */
@@ -151,7 +172,7 @@ public class LambDynLights implements ClientModInitializer
      * Returns the lightmap with combined light levels.
      *
      * @param dynamicLightLevel The dynamic light level.
-     * @param lightmap          The vanilla lightmap.
+     * @param lightmap The vanilla lightmap.
      * @return The modified lightmap.
      */
     public int getLightmapWithDynamicLight(double dynamicLightLevel, int lightmap)
@@ -191,8 +212,8 @@ public class LambDynLights implements ClientModInitializer
     /**
      * Returns the dynamic light level generated by the light source at the specified position.
      *
-     * @param pos               The position.
-     * @param lightSource       The light source.
+     * @param pos The position.
+     * @param lightSource The light source.
      * @param currentLightLevel The current surrounding dynamic light level.
      * @return The dynamic light level.
      */
@@ -260,6 +281,16 @@ public class LambDynLights implements ClientModInitializer
     }
 
     /**
+     * Returns the number of dynamic light sources that currently emit lights.
+     *
+     * @return The number of dynamic light sources emitting light.
+     */
+    public int getLightSourcesCount()
+    {
+        return this.dynamicLightSources.size();
+    }
+
+    /**
      * Removes the light source from the tracked light sources.
      *
      * @param lightSource The light source to remove.
@@ -289,9 +320,11 @@ public class LambDynLights implements ClientModInitializer
         while (dynamicLightSources.hasNext()) {
             it = dynamicLightSources.next();
             dynamicLightSources.remove();
-            if (MinecraftClient.getInstance().worldRenderer != null)
+            if (MinecraftClient.getInstance().worldRenderer != null) {
+                if (it.getLuminance() > 0)
+                    it.resetDynamicLight();
                 it.lambdynlights_scheduleTrackedChunksRebuild(MinecraftClient.getInstance().worldRenderer);
-            break;
+            }
         }
     }
 
@@ -308,8 +341,11 @@ public class LambDynLights implements ClientModInitializer
             it = dynamicLightSources.next();
             if (filter.test(it)) {
                 dynamicLightSources.remove();
-                if (MinecraftClient.getInstance().worldRenderer != null)
+                if (MinecraftClient.getInstance().worldRenderer != null) {
+                    if (it.getLuminance() > 0)
+                        it.resetDynamicLight();
                     it.lambdynlights_scheduleTrackedChunksRebuild(MinecraftClient.getInstance().worldRenderer);
+                }
                 break;
             }
         }
@@ -382,8 +418,8 @@ public class LambDynLights implements ClientModInitializer
      * Updates the tracked chunk sets.
      *
      * @param chunkPos The chunk position.
-     * @param old      The set of old chunk coordinates to remove this chunk from it.
-     * @param newPos   The set of new chunk coordinates to add this chunk to it.
+     * @param old The set of old chunk coordinates to remove this chunk from it.
+     * @param newPos The set of new chunk coordinates to add this chunk to it.
      */
     public static void updateTrackedChunks(@NotNull BlockPos chunkPos, @Nullable LongOpenHashSet old, @Nullable LongOpenHashSet newPos)
     {
@@ -413,7 +449,7 @@ public class LambDynLights implements ClientModInitializer
     /**
      * Returns the luminance from an item stack.
      *
-     * @param stack            The item stack.
+     * @param stack The item stack.
      * @param submergedInWater True if the stack is submerged in water, else false.
      * @return The luminance of the item.
      */

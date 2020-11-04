@@ -64,6 +64,15 @@
 
  - Fixed entity lighting issue with [Sodium] 0.1.0. ([#23](https://github.com/LambdAurora/LambDynamicLights/issues/23))
 
+## v1.3.2
+
+ - Added entity lighting capabilities to minecarts.
+ - Added `DynamicLightsInitializer` and `dynamiclights` entrypoint.
+ - Added Estonian translations.
+ - Added Turkish translations.
+ - Updated French translations.
+ - Fixed memory leak in dynamic light source tracking. ([#30](https://github.com/LambdAurora/LambDynamicLights/issues/30))
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [Sodium]: https://www.curseforge.com/minecraft/mc-mods/sodium "Sodium CurseForge page"
 [Canvas Renderer]: https://www.curseforge.com/minecraft/mc-mods/canvas-renderer "Canvas Renderer CurseForge page"

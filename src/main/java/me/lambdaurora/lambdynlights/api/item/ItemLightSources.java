@@ -30,13 +30,18 @@ import java.util.Optional;
  * Represents an item light sources manager.
  *
  * @author LambdAurora
- * @version 1.3.1
+ * @version 1.3.2
  * @since 1.3.0
  */
 public final class ItemLightSources
 {
-    private static final List<ItemLightSource> ITEM_LIGHT_SOURCES        = new ArrayList<>();
+    private static final List<ItemLightSource> ITEM_LIGHT_SOURCES = new ArrayList<>();
     private static final List<ItemLightSource> STATIC_ITEM_LIGHT_SOURCES = new ArrayList<>();
+
+    private ItemLightSources()
+    {
+        throw new UnsupportedOperationException("ItemLightSources only contains static definitions.");
+    }
 
     /**
      * Loads the item light source data from resource pack.
@@ -112,7 +117,7 @@ public final class ItemLightSources
     /**
      * Returns the luminance of the item in the stack.
      *
-     * @param stack            The item stack.
+     * @param stack The item stack.
      * @param submergedInWater True if the stack is submerged in water, else false.
      * @return A luminance value.
      */
