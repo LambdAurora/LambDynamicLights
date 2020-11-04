@@ -1,0 +1,19 @@
+{
+  "lambdynlights.menu.light_sources": "Dinamik Işık Kaynakları",
+  "lambdynlights.menu.title": "LambDynamicLights (LambDinamikIşıklar) Ayarları",
+  "lambdynlights.menu.canvas.1": "Varlıkların dinamik ışıklandırmasını devre dışı bırakmanız Canvas'la beraber önerilir!",
+  "lambdynlights.menu.canvas.2": "Canvas'la beraber dinamik ışıklandırma şu an yavaş performansta!",
+  "lambdynlights.option.block_entities": "Varlıkları Engelle",
+  "lambdynlights.option.entities": "Varlıklar",
+  "lambdynlights.option.mode": "Dinamik Işıklar",
+  "lambdynlights.option.water_sensitive": "Suya Duyarlılık Kontrolü",
+  "lambdynlights.toast.first_time": "Varsayılan olarak kapalı, moda veya Görüntü Ayarları'na göz atın!",
+  "lambdynlights.tooltip.block_entities": "Blok varlıkların dinamik ışıklandırmasını etkinleştirir.",
+  "lambdynlights.tooltip.creeper_lighting": "Creeper'a dinamik ışıklandırma ekler.\n- %s Creeper ışıklandırmasını devre dışı bırakır.\n- %s sabit bir ışıltı ekler.\n- %s dinamik bir ışıltı ekler.",
+  "lambdynlights.tooltip.entities": "Varlıkların dinamik ışıklandırmasını etkinleştirir. Not: Oyuncularda her zaman aktiftir.",
+  "lambdynlights.tooltip.mode.1": "Dinamık ışıkları etkinleştirir. Örneğin eğer bir oyuncu meşale tutuyorsa bulunduğu alanı aydınlatır.",
+  "lambdynlights.tooltip.mode.2": "%s ve %s arkada biraz gecikebilir (lag) ama ışık güncellemelerini azaltır.",
+  "lambdynlights.tooltip.mode.3": "%s bir yumuşak dinamik ışıklandırmadır.",
+  "lambdynlights.tooltip.tnt_lighting": "TNT'ye dinamik ışıklandırma ekler.\n- %s TNT ışıklandırmasını devre dışı bırakır.\n- %s sabit bir ışıltı ekler.\n- %s dinamik bir ışıltı ekler.",
+  "lambdynlights.tooltip.water_sensitive": "Suya duyarlı ışık kaynaklarını etkinleştirir. Bazı eşyalar suyun içinde batarken ışık yaymayacak."
+}
