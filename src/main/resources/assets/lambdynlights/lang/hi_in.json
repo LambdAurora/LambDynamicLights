@@ -1,0 +1,19 @@
+{
+  "lambdynlights.menu.light_sources": "गतिशील प्रकाश स्रोतो",
+  "lambdynlights.menu.title": "LambDynamicLights विन्यास",
+  "lambdynlights.menu.canvas.1": "कैनवस के साथ संस्थाओं के गतिशील प्रकाश को निष्क्रिय करने की सिफारिश किया गई है!",
+  "lambdynlights.menu.canvas.2": "कैनवास के साथ गतिशील प्रकाश का प्रदर्शन खराब है!",
+  "lambdynlights.option.block_entities": "प्रखंड अस्तित्व",
+  "lambdynlights.option.entities": "अस्तित्व",
+  "lambdynlights.option.mode": "गतिशील प्रकाश",
+  "lambdynlights.option.water_sensitive": "जल संवेदनशीलता",
+  "lambdynlights.toast.first_time": "गतिशील प्रकाश सक्षम नहीं हैं। इसे मॉड विन्यास में सक्षम कीजिऐ!",
+  "lambdynlights.tooltip.block_entities": "प्रखंड अस्तित्व के गतिशील प्रकाश",
+  "lambdynlights.tooltip.creeper_lighting": "क्रीपर का गतिशील प्रकाश का प्रकार बदल देता है| \n- %s - क्रीपर का गतिशील प्रकाश को अक्षम करता है|\n- %s - निरंतर चमक सेट करता है|\n- %s - गतिशील प्रकाश सेट करता है|",
+  "lambdynlights.tooltip.entities": "अस्तित्व का गतिशील प्रकाश सक्षम बनाता है| खिलाड़ी हमेशा सक्रिय रहते हैं|",
+  "lambdynlights.tooltip.mode.1": "गतिशील प्रकाश का सक्षम करता है | उदाहरण के लिए, यदि सक्षम है, तो एक मशाल वाला खिलाड़ी, क्षेत्र को रोशन करेगा|",
+  "lambdynlights.tooltip.mode.2": "%s और %s थोड़ा पिछड़ जाएंगे, लेकिन हल्के अपडेट को कम कर देंगे|",
+  "lambdynlights.tooltip.mode.3": "%s चिकनी गतिशील प्रकाश व्यवस्था है|",
+  "lambdynlights.tooltip.tnt_lighting": "टीएनटी का गतिशील प्रकाश का प्रकार बदल देता है|\n- %s - टीएनटी का गतिशील प्रकाश को अक्षम करता ह|n- %s - निरंतर चमक सेट करता है| \n- गतिशील प्रकाश सेट करता है|",
+  "lambdynlights.tooltip.water_sensitive": "जल संवेदनशील प्रकाश स्रोतों के सत्यापन की अनुमति देता है। इसका मतलब है कि पानी में डूबे रहने पर कुछ वस्तुएं प्रकाश का उत्सर्जन नहीं करेंगी|"
+}
