@@ -68,7 +68,9 @@
 
  - Added entity lighting capabilities to minecarts.
  - Added `DynamicLightsInitializer` and `dynamiclights` entrypoint.
+ - Added Brazilian Portuguese translations.
  - Added Estonian translations.
+ - Added Hindi translations.
  - Added Turkish translations.
  - Updated French translations.
  - Fixed memory leak in dynamic light source tracking. ([#30](https://github.com/LambdAurora/LambDynamicLights/issues/30))
