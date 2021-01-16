@@ -7,7 +7,6 @@
   "lambdynlights.option.entities": "अस्तित्व",
   "lambdynlights.option.mode": "गतिशील प्रकाश",
   "lambdynlights.option.water_sensitive": "जल संवेदनशीलता",
-  "lambdynlights.toast.first_time": "गतिशील प्रकाश सक्षम नहीं हैं। इसे मॉड विन्यास में सक्षम कीजिऐ!",
   "lambdynlights.tooltip.block_entities": "प्रखंड अस्तित्व के गतिशील प्रकाश",
   "lambdynlights.tooltip.creeper_lighting": "क्रीपर का गतिशील प्रकाश का प्रकार बदल देता है| \n- %s - क्रीपर का गतिशील प्रकाश को अक्षम करता है|\n- %s - निरंतर चमक सेट करता है|\n- %s - गतिशील प्रकाश सेट करता है|",
   "lambdynlights.tooltip.entities": "अस्तित्व का गतिशील प्रकाश सक्षम बनाता है| खिलाड़ी हमेशा सक्रिय रहते हैं|",

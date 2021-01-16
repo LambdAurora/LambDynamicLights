@@ -11,52 +11,51 @@ package me.lambdaurora.lambdynlights;
 
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a dynamic light source.
  *
  * @author LambdAurora
- * @version 1.3.2
+ * @version 1.3.3
  * @since 1.0.0
  */
-public interface DynamicLightSource
-{
+public interface DynamicLightSource {
     /**
      * Returns the dynamic light source X coordinate.
      *
-     * @return The X coordinate.
+     * @return the X coordinate
      */
     double getDynamicLightX();
 
     /**
      * Returns the dynamic light source Y coordinate.
      *
-     * @return The Y coordinate.
+     * @return the Y coordinate
      */
     double getDynamicLightY();
 
     /**
      * Returns the dynamic light source Z coordinate.
      *
-     * @return The Z coordinate.
+     * @return the Z coordinate
      */
     double getDynamicLightZ();
 
     /**
      * Returns the dynamic light source world.
      *
-     * @return The world instance.
+     * @return the world instance
      */
     World getDynamicLightWorld();
 
     /**
      * Returns whether the dynamic light is enabled or not.
      *
-     * @return True if the dynamic light is enabled, else false.
+     * @return {@code true} if the dynamic light is enabled, else {@code false}
      */
-    default boolean isDynamicLightEnabled()
-    {
+    default boolean isDynamicLightEnabled() {
         return LambDynLights.get().config.getDynamicLightsMode().isEnabled() && LambDynLights.get().containsLightSource(this);
     }
 
@@ -65,10 +64,10 @@ public interface DynamicLightSource
      * <p>
      * Note: please do not call this function in your mod or you will break things.
      *
-     * @param enabled True if the dynamic light is enabled, else false.
+     * @param enabled {@code true} if the dynamic light is enabled, else {@code false}
      */
-    default void setDynamicLightEnabled(boolean enabled)
-    {
+    @ApiStatus.Internal
+    default void setDynamicLightEnabled(boolean enabled) {
         this.resetDynamicLight();
         if (enabled)
             LambDynLights.get().addLightSource(this);
@@ -82,7 +81,7 @@ public interface DynamicLightSource
      * Returns the luminance of the light source.
      * The maximum is 15, below 1 values are ignored.
      *
-     * @return The luminance of the light source.
+     * @return the luminance of the light source
      */
     int getLuminance();
 
@@ -94,7 +93,7 @@ public interface DynamicLightSource
     /**
      * Returns whether this dynamic light source should update.
      *
-     * @return True if this dynamic light source should update, else false.
+     * @return {@code true} if this dynamic light source should update, else {@code false}
      */
     boolean shouldUpdateDynamicLight();
 

@@ -7,7 +7,6 @@
   "lambdynlights.option.entities": "Entidades",
   "lambdynlights.option.mode": "Iluminación dinámica",
   "lambdynlights.option.water_sensitive": "Verificación de sensibilidad al agua",
-  "lambdynlights.toast.first_time": "Deshabilitado por defecto, prueba al configuración del mod o gráficos!",
   "lambdynlights.tooltip.block_entities": "Habilita la iluminación dinámica de entidades de bloque.",
   "lambdynlights.tooltip.creeper_lighting": "Establece el modo de iluminación dinámica del Creeper.\n%s - Deshabilita la iluminación dinámica del Creeper.\n%s - Establece una luminancia constante.\n%s - Establece una luminancia dinámica.",
   "lambdynlights.tooltip.entities": "Habilita la iluminación dinámica de entidades. Nota: los jugadores siempre están activos.",

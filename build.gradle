@@ -1,15 +1,24 @@
 import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
-    id 'fabric-loom' version '0.4-SNAPSHOT'
+    id 'fabric-loom' version '0.5-SNAPSHOT'
     id 'java-library'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
     id 'net.minecrell.licenser' version '0.4.1'
 }
 
 group = project.maven_group
-version = "${project.mod_version}+${project.minecraft_version}"
+version = "${project.mod_version}+${getMCVersionString()}"
 archivesBaseName = project.archives_base_name + "-fabric"
+
+def getMCVersionString() {
+    if (project.minecraft_version.matches("\\d\\dw\\d\\d[a-z]")) {
+        return project.minecraft_version
+    }
+    int lastDot = project.minecraft_version.lastIndexOf('.')
+    return project.minecraft_version.substring(0, lastDot)
+}
 
 minecraft {
 }
@@ -55,18 +64,14 @@ dependencies {
     modImplementation "com.github.lambdaurora:spruceui:${project.spruceui_version}"
     include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
 
-    modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+    modImplementation("io.github.prospector:modmenu:${project.modmenu_version}") {
+        transitive = false
+    }
     //modImplementation "grondag:canvas-mc116:1.0.+"
     modImplementation "com.github.jellysquid3:sodium-fabric:mc1.16.3-0.1.0"
 
     shadow "com.electronwill.night-config:core:3.6.3"
     shadow "com.electronwill.night-config:toml:3.6.3"
-
-    shadow("org.aperlambda:lambdajcommon:1.8.1") {
-        // Minecraft already has all that google crap.
-        exclude group: 'com.google.code.gson'
-        exclude group: 'com.google.guava'
-    }
 }
 
 tasks.withType(JavaCompile) {
@@ -102,16 +107,12 @@ license {
     include '**/*.java'
 }
 
-task shadowJar(type: Jar) {
-    archiveClassifier.set("dev")
+shadowJar {
+    dependsOn(project(":").jar)
+    configurations = [project.configurations.shadow]
+    archiveClassifier.set('dev')
 
-    from sourceSets.main.output
-
-    from {
-        configurations.shadow.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
+    relocate 'com.electronwill.nightconfig', 'me.lambdaurora.lambdynlights.shadow.nightconfig'
 }
 
 task shadowRemapJar(type: RemapJarTask) {
@@ -121,6 +122,7 @@ task shadowRemapJar(type: RemapJarTask) {
     archiveName = "${archivesBaseName}-${version}.jar"
     addNestedDependencies = true
 }
+build.dependsOn(shadowRemapJar)
 
 // configure the maven publication
 publishing {

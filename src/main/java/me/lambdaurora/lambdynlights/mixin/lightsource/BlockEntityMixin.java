@@ -15,8 +15,10 @@ import me.lambdaurora.lambdynlights.DynamicLightsMode;
 import me.lambdaurora.lambdynlights.LambDynLights;
 import me.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -133,7 +135,7 @@ public abstract class BlockEntityMixin implements DynamicLightSource
             this.lambdynlights_lastLuminance = luminance;
 
             if (this.trackedLitChunkPos.isEmpty()) {
-                BlockPos chunkPos = new BlockPos(MathHelper.floorDiv(this.pos.getX(), 16),
+                BlockPos.Mutable chunkPos = new BlockPos.Mutable(MathHelper.floorDiv(this.pos.getX(), 16),
                         MathHelper.floorDiv(this.pos.getY(), 16),
                         MathHelper.floorDiv(this.pos.getZ(), 16));
 
@@ -145,14 +147,14 @@ public abstract class BlockEntityMixin implements DynamicLightSource
 
                 for (int i = 0; i < 7; i++) {
                     if (i % 4 == 0) {
-                        chunkPos = chunkPos.offset(directionX); // X
+                        chunkPos.move(directionX); // X
                     } else if (i % 4 == 1) {
-                        chunkPos = chunkPos.offset(directionZ); // XZ
+                        chunkPos.move(directionZ); // XZ
                     } else if (i % 4 == 2) {
-                        chunkPos = chunkPos.offset(directionX.getOpposite()); // Z
+                        chunkPos.move(directionX.getOpposite()); // Z
                     } else {
-                        chunkPos = chunkPos.offset(directionZ.getOpposite()); // origin
-                        chunkPos = chunkPos.offset(directionY); // Y
+                        chunkPos.move(directionZ.getOpposite()); // origin
+                        chunkPos.move(directionY); // Y
                     }
                     LambDynLights.updateTrackedChunks(chunkPos, null, this.trackedLitChunkPos);
                 }
@@ -168,8 +170,9 @@ public abstract class BlockEntityMixin implements DynamicLightSource
     @Override
     public void lambdynlights_scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer)
     {
+        if (this.world == MinecraftClient.getInstance().world)
         for (long pos : this.trackedLitChunkPos) {
-            LambDynLights.scheduleChunkRebuild(renderer, BlockPos.fromLong(pos));
+            LambDynLights.scheduleChunkRebuild(renderer, pos);
         }
     }
 }

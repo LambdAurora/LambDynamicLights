@@ -7,7 +7,6 @@
   "lambdynlights.option.entities": "Entiteiten",
   "lambdynlights.option.mode": "Dynamische Lichtbronnen",
   "lambdynlights.option.water_sensitive": "Water Sensitiviteit Check",
-  "lambdynlights.toast.first_time": "Standaard uitgeschakeld, check mod of Video Instellingen!",
   "lambdynlights.tooltip.block_entities": "Schakelt dynamische block entiteiten in.",
   "lambdynlights.tooltip.creeper_lighting": "Stelt de creeper lichtmodus in.\n- %s zet dynamische creeper lichtbronnen uit.\n- %s zet een constante lichtsterkte.\n- %s zet een dynamische lichtsterkte.",
   "lambdynlights.tooltip.entities": "Laat entiteiten dynamische lichtbronnen maken. Lot op: Spelers zijn altijd actief.",

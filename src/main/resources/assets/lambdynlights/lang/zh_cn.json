@@ -7,7 +7,6 @@
   "lambdynlights.option.entities": "实体",
   "lambdynlights.option.mode": "动态光照",
   "lambdynlights.option.water_sensitive": "水敏光源检查",
-  "lambdynlights.toast.first_time": "默认禁用，先看看模组或视频设置吧！",
   "lambdynlights.tooltip.block_entities": "启用方块实体的动态光照。",
   "lambdynlights.tooltip.creeper_lighting": "设置苦力怕的动态光照模式。\n- %s 禁用苦力怕动态光照。\n- %s 会设置一个恒定的亮度。\n- %s 会设置动态的亮度。",
   "lambdynlights.tooltip.entities": "启用实体的动态光照。注：与玩家的设置相独立。",

@@ -7,7 +7,6 @@
   "lambdynlights.option.entities": "Varlıklar",
   "lambdynlights.option.mode": "Dinamik Işıklar",
   "lambdynlights.option.water_sensitive": "Suya Duyarlılık Kontrolü",
-  "lambdynlights.toast.first_time": "Varsayılan olarak kapalı, moda veya Görüntü Ayarları'na göz atın!",
   "lambdynlights.tooltip.block_entities": "Blok varlıkların dinamik ışıklandırmasını etkinleştirir.",
   "lambdynlights.tooltip.creeper_lighting": "Creeper'a dinamik ışıklandırma ekler.\n- %s Creeper ışıklandırmasını devre dışı bırakır.\n- %s sabit bir ışıltı ekler.\n- %s dinamik bir ışıltı ekler.",
   "lambdynlights.tooltip.entities": "Varlıkların dinamik ışıklandırmasını etkinleştirir. Not: Oyuncularda her zaman aktiftir.",

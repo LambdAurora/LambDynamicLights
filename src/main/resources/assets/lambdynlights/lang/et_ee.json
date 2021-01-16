@@ -7,7 +7,6 @@
   "lambdynlights.option.entities": "Olemid",
   "lambdynlights.option.mode": "Dünaamiline valgustus",
   "lambdynlights.option.water_sensitive": "Vee tundlikkuse kontroll",
-  "lambdynlights.toast.first_time": "Vaikimisi keelatud, vaata üle modi- või graafikaseaded!",
   "lambdynlights.tooltip.block_entities": "Lubab dünaamilise valgustuse plokiolemitele.",
   "lambdynlights.tooltip.creeper_lighting": "Määrab creeperi dünaamilise valgustuse režiimi.\n- %s keelab creeperi dünaamilise valgustuse.\n- %s määrab püsiva ereduse.\n- %s määrab dünaamilise ereduse.",
   "lambdynlights.tooltip.entities": "Lubab olemite dünaamilise valgustuse. Märkus: mängijad on alati aktiivsed.",

@@ -21,7 +21,7 @@ import java.util.Set;
  * LambDynamicLights mixin plugin for conditional mixins.
  *
  * @author LambdAurora
- * @version 1.3.1
+ * @version 1.3.3
  * @since 1.0.0
  */
 public class LambDynLightsMixinPlugin implements IMixinConfigPlugin
@@ -34,9 +34,6 @@ public class LambDynLightsMixinPlugin implements IMixinConfigPlugin
         this.conditionalMixins.put("me.lambdaurora.lambdynlights.mixin.ltr.LilTaterBlocksMixin", ltrInstalled);
         this.conditionalMixins.put("me.lambdaurora.lambdynlights.mixin.ltr.LilTaterBlockEntityMixin", ltrInstalled);
 
-        boolean canvasInstalled = LambDynLightsCompat.isCanvasInstalled();
-        boolean sodiumInstalled = LambDynLightsCompat.isSodiumInstalled();
-        this.conditionalMixins.put("me.lambdaurora.lambdynlights.mixin.WorldRendererMixin", !sodiumInstalled && !canvasInstalled);
         this.conditionalMixins.put("me.lambdaurora.lambdynlights.mixin.EntityLighterMixin", LambDynLightsCompat.isSodium010Installed());
     }
 

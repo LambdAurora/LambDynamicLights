@@ -12,7 +12,6 @@
     "MinecraftClientMixin",
     "VideoOptionsScreenMixin",
     "WorldMixin",
-    "WorldRendererMixin",
     "ltr.LilTaterBlockEntityMixin",
     "ltr.LilTaterBlocksMixin"
   ],

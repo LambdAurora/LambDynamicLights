@@ -34,25 +34,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = WorldRenderer.class, priority = 900)
 public abstract class CommonWorldRendererMixin implements WorldRendererAccessor
 {
-    @Shadow
-    @Final
-    private MinecraftClient client;
-
     @Invoker("scheduleChunkRender")
     @Override
     public abstract void lambdynlights_scheduleChunkRebuild(int x, int y, int z, boolean important);
-
-    @Inject(
-            method = "render",
-            at = @At("HEAD")
-    )
-    private void onRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci)
-    {
-        if (LambDynLightsCompat.isSodiumInstalled() || LambDynLightsCompat.isCanvasInstalled()) {
-            this.client.getProfiler().swap("dynamic_lighting");
-            LambDynLights.get().updateAll((WorldRenderer) (Object) this);
-        }
-    }
 
     @Inject(
             method = "getLightmapCoordinates(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;)I",

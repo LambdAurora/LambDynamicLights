@@ -7,7 +7,6 @@
   "lambdynlights.option.entities": "Byty",
   "lambdynlights.option.mode": "Dynamiczne oświetlenie",
   "lambdynlights.option.water_sensitive": "Sprawdz. wrażliw. na wodę",
-  "lambdynlights.toast.first_time": "Domyślnie wyłączony, sprawdź ustawienia graficzne naszej modyfikacji!",
   "lambdynlights.tooltip.block_entities": "Aktywuje dynamiczne oświetlenie generowane przez byty bloków.",
   "lambdynlights.tooltip.creeper_lighting": "Ustawia dynamiczne oświetlenie Creepera.\n- %s deaktywuje dynamiczne oświetlenie Creepera.\n- %s ustawia stałą jasność.\n- %s ustawia dynamiczną jasność.",
   "lambdynlights.tooltip.entities": "Aktywuje dynamiczne oświetlenie dla bytów. Uwaga: dla graczy jest to zawsze aktywne.",

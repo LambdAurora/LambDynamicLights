@@ -14,6 +14,7 @@ import me.lambdaurora.lambdynlights.DynamicLightSource;
 import me.lambdaurora.lambdynlights.DynamicLightsMode;
 import me.lambdaurora.lambdynlights.LambDynLights;
 import me.lambdaurora.lambdynlights.api.DynamicLightHandlers;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -29,8 +30,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin implements DynamicLightSource
-{
+public abstract class EntityMixin implements DynamicLightSource {
     @Shadow
     public World world;
 
@@ -72,8 +72,7 @@ public abstract class EntityMixin implements DynamicLightSource
     private LongOpenHashSet trackedLitChunkPos = new LongOpenHashSet();
 
     @Inject(method = "tick", at = @At("TAIL"))
-    public void onTick(CallbackInfo ci)
-    {
+    public void onTick(CallbackInfo ci) {
         // We do not want to update the entity on the server.
         if (this.world.isClient()) {
             if (this.removed) {
@@ -88,45 +87,38 @@ public abstract class EntityMixin implements DynamicLightSource
     }
 
     @Inject(method = "remove", at = @At("TAIL"))
-    public void onRemove(CallbackInfo ci)
-    {
+    public void onRemove(CallbackInfo ci) {
         if (this.world.isClient())
             this.setDynamicLightEnabled(false);
     }
 
     @Override
-    public double getDynamicLightX()
-    {
+    public double getDynamicLightX() {
         return this.getX();
     }
 
     @Override
-    public double getDynamicLightY()
-    {
+    public double getDynamicLightY() {
         return this.getEyeY();
     }
 
     @Override
-    public double getDynamicLightZ()
-    {
+    public double getDynamicLightZ() {
         return this.getZ();
     }
 
     @Override
-    public World getDynamicLightWorld()
-    {
+    public World getDynamicLightWorld() {
         return this.world;
     }
 
     @Override
-    public void resetDynamicLight()
-    {
+    public void resetDynamicLight() {
         this.lambdynlights_lastLuminance = 0;
     }
 
     @Override
-    public boolean shouldUpdateDynamicLight()
-    {
+    public boolean shouldUpdateDynamicLight() {
         DynamicLightsMode mode = LambDynLights.get().config.getDynamicLightsMode();
         if (!mode.isEnabled())
             return false;
@@ -142,8 +134,7 @@ public abstract class EntityMixin implements DynamicLightSource
     }
 
     @Override
-    public void dynamicLightTick()
-    {
+    public void dynamicLightTick() {
         this.lambdynlights_luminance = this.isOnFire() ? 15 : 0;
 
         int luminance = DynamicLightHandlers.getLuminanceFrom((Entity) (Object) this);
@@ -152,17 +143,14 @@ public abstract class EntityMixin implements DynamicLightSource
     }
 
     @Override
-    public int getLuminance()
-    {
+    public int getLuminance() {
         return this.lambdynlights_luminance;
     }
 
     @Override
-    public boolean lambdynlights_updateDynamicLight(@NotNull WorldRenderer renderer)
-    {
+    public boolean lambdynlights_updateDynamicLight(@NotNull WorldRenderer renderer) {
         if (!this.shouldUpdateDynamicLight())
             return false;
-
         double deltaX = this.getX() - this.lambdynlights_prevX;
         double deltaY = this.getY() - this.lambdynlights_prevY;
         double deltaZ = this.getZ() - this.lambdynlights_prevZ;
@@ -178,7 +166,7 @@ public abstract class EntityMixin implements DynamicLightSource
             LongOpenHashSet newPos = new LongOpenHashSet();
 
             if (luminance > 0) {
-                BlockPos chunkPos = new BlockPos(this.chunkX, MathHelper.floorDiv((int) this.getEyeY(), 16), this.chunkZ);
+                BlockPos.Mutable chunkPos = new BlockPos.Mutable(this.chunkX, MathHelper.floorDiv((int) this.getEyeY(), 16), this.chunkZ);
 
                 LambDynLights.scheduleChunkRebuild(renderer, chunkPos);
                 LambDynLights.updateTrackedChunks(chunkPos, this.trackedLitChunkPos, newPos);
@@ -189,14 +177,14 @@ public abstract class EntityMixin implements DynamicLightSource
 
                 for (int i = 0; i < 7; i++) {
                     if (i % 4 == 0) {
-                        chunkPos = chunkPos.offset(directionX); // X
+                        chunkPos.move(directionX); // X
                     } else if (i % 4 == 1) {
-                        chunkPos = chunkPos.offset(directionZ); // XZ
+                        chunkPos.move(directionZ); // XZ
                     } else if (i % 4 == 2) {
-                        chunkPos = chunkPos.offset(directionX.getOpposite()); // Z
+                        chunkPos.move(directionX.getOpposite()); // Z
                     } else {
-                        chunkPos = chunkPos.offset(directionZ.getOpposite()); // origin
-                        chunkPos = chunkPos.offset(directionY); // Y
+                        chunkPos.move(directionZ.getOpposite()); // origin
+                        chunkPos.move(directionY); // Y
                     }
                     LambDynLights.scheduleChunkRebuild(renderer, chunkPos);
                     LambDynLights.updateTrackedChunks(chunkPos, this.trackedLitChunkPos, newPos);
@@ -213,10 +201,10 @@ public abstract class EntityMixin implements DynamicLightSource
     }
 
     @Override
-    public void lambdynlights_scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer)
-    {
-        for (long pos : this.trackedLitChunkPos) {
-            LambDynLights.scheduleChunkRebuild(renderer, BlockPos.fromLong(pos));
-        }
+    public void lambdynlights_scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer) {
+        if (MinecraftClient.getInstance().world == this.world)
+            for (long pos : this.trackedLitChunkPos) {
+                LambDynLights.scheduleChunkRebuild(renderer, pos);
+            }
     }
 }

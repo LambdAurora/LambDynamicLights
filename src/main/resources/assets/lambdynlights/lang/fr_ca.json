@@ -7,7 +7,6 @@
   "lambdynlights.option.entities": "Entités",
   "lambdynlights.option.mode": "Lumières dynamiques",
   "lambdynlights.option.water_sensitive": "Sensibilité à l'eau",
-  "lambdynlights.toast.first_time": "Désactivé par défaut, veuillez vérifier les paramètres vidéo ou les paramètres du mod!",
   "lambdynlights.tooltip.block_entities": "Active les lumières dynamiques provenantes des entités blocs.",
   "lambdynlights.tooltip.creeper_lighting": "Détermine le mode de lumière dynamique de la Creeper.\n- %s: désactive la lumière dynamique pour la Creeper.\n- %s: ajoute un niveau de lumière constant.\n- %s: ajoute un niveau de lumière dynamique.",
   "lambdynlights.tooltip.entities": "Active les lumières dynamiques provenantes des entités. Note: les joueurs sont toujours actifs.",

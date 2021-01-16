@@ -75,6 +75,14 @@
  - Updated French translations.
  - Fixed memory leak in dynamic light source tracking. ([#30](https://github.com/LambdAurora/LambDynamicLights/issues/30))
 
+# v1.3.3
+
+ - Added Italian translations ([#40](https://github.com/LambdAurora/LambDynamicLights/pull/40)).
+ - Optimized dynamic lighting update methods.
+ - Fixed crash when leaving world with some minimaps mods. ([#37](https://github.com/LambdAurora/LambDynamicLights/issues/37), [#41](https://github.com/LambdAurora/LambDynamicLights/issues/41))
+ - Fixed crash with Immersive Portals ([#39](https://github.com/LambdAurora/LambDynamicLights/issues/39)).
+ - Updated [SpruceUI], and Fabric API dependencies.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
-[Sodium]: https://www.curseforge.com/minecraft/mc-mods/sodium "Sodium CurseForge page"
+[Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
 [Canvas Renderer]: https://www.curseforge.com/minecraft/mc-mods/canvas-renderer "Canvas Renderer CurseForge page"

@@ -1,6 +1,6 @@
 # LambDynamicLights configuration.
 # The dynamic lights mode
-mode = "none"
+mode = "fancy"
 
  # Light sources settings.
 [light_sources]
