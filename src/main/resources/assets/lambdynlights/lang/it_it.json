@@ -1,0 +1,19 @@
+{
+  "lambdynlights.menu.light_sources": "Fonti luminose dinamiche",
+  "lambdynlights.menu.title": "Impostazioni di LambDynamicLights",
+  "lambdynlights.menu.canvas.1": "È raccomandato disattivare le luci dinamiche delle entità con Canvas!",
+  "lambdynlights.menu.canvas.2": "Attualmente la luminosità dinamica è molto pesante con Canvas!",
+  "lambdynlights.option.block_entities": "Entità blocco",
+  "lambdynlights.option.entities": "Entità",
+  "lambdynlights.option.mode": "Luci dinamiche",
+  "lambdynlights.option.water_sensitive": "Controllo della sensibilità dell'acqua",
+  "lambdynlights.toast.first_time": "Disattivata di predefinito, controlla le impostazioni grafiche o della mod!",
+  "lambdynlights.tooltip.block_entities": "Attiva l'illuminazione dinamica delle entità blocco.",
+  "lambdynlights.tooltip.creeper_lighting": "Imposta la modalità d'illuminazione dinamica dei Creeper.\n- %s disattiva l'illuminazione dinamica dei Creeper.\n- %s imposta una luminosità costante.\n- %s imposta una luminosità dinamica.",
+  "lambdynlights.tooltip.entities": "Attiva l'illuminazione dinamica delle entità. Nota: l'illuminazione dinamica dei giocatori è sempre attiva.",
+  "lambdynlights.tooltip.mode.1": "Attiva le luci dinamiche. Se attivo, per esempio, un giocatore con una torcia in mano emetterà luce.",
+  "lambdynlights.tooltip.mode.2": "%s e %s avranno un leggero ritardo ma minimizzeranno gli aggiornamenti della luce.",
+  "lambdynlights.tooltip.mode.3": "%s attiva l'illuminazione dinamica soffusa.",
+  "lambdynlights.tooltip.tnt_lighting": "Imposta la modalità d'illuminazione dinamica della TNT.\n- %s disattiva l'illuminazione dinamica della TNT.\n- %s imposta una luminosità costante.\n- %s imposta una luminosità dinamica.",
+  "lambdynlights.tooltip.water_sensitive": "Attiva il controllo delle fonti di luce sensibili all'acqua. Questo vuol dire che certi oggetti non emetteranno luce mentre sommersi."
+}
