@@ -1,11 +1,11 @@
 # LambDynamicLights changelog
 
-## v1.0.0
+## 1.0.0
 
  - Initial release.
  - Added dynamic lighting to the game.
  
-## v1.1.0
+## 1.1.0
 
  - Added item frame dynamic lighting.
  - Added API.
@@ -20,30 +20,30 @@
  - Fixed light not moving when light source was moving too slow.
  - Fixed lighting errors with Sodium.
 
-## v1.2.0
+## 1.2.0
 
  - Added water-sensitive check for items and light sources.
    - Added data item tag `#lambdynlights:water_sensitive` which lists every item which can't light up in the water.
    - Added an option to enable/disable the feature
- - Updated [SpruceUI] to v1.5.6 to fix latest snapshots issues.
+ - Updated [SpruceUI] to 1.5.6 to fix latest snapshots issues.
  - Added "early/WIP" compatibility with [Canvas Renderer].
    - Added a warning message about performance issues. 
  - Fixed a crash with [Sodium] rc7 with smooth lighting set to HIGH.
  
-### v1.2.1
+### 1.2.1
 
  - Added TNT dynamic lighting.
  - Added lighting options for TNT and Creepers.
  - Added luminance value to Fire charge item.
- - Updated [SpruceUI] to v1.5.8
+ - Updated [SpruceUI] to 1.5.8
  - Fixed player dynamic lighting not getting tracked when changing dimensions.
 
-### v1.2.2
+### 1.2.2
 
  - Changed video options dynamic lighting button to redirect to LambDynamicLights settings.
  - Fixed random crash.
 
-## v1.3.0
+## 1.3.0
 
  - Added Simplified Chinese translations.
  - Added German translations.
@@ -53,18 +53,18 @@
  - Added spectral arrow as item emitting light ([#17](https://github.com/LambdAurora/LambDynamicLights/pull/17)).
  - Added dynamic lighting on glowing entities ([#17](https://github.com/LambdAurora/LambDynamicLights/pull/17)).
  - Updated to Minecraft 1.16.2
- - Updated [SpruceUI] to v1.6.2.
+ - Updated [SpruceUI] to 1.6.2.
  - Fixed dynamic lighting update issues at chunk borders ([#12](https://github.com/LambdAurora/LambDynamicLights/issues/12)).
  - Fixed water-sensitive items lighting up in water on dedicated servers. ([#3](https://github.com/LambdAurora/LambDynamicLights/issues/3))
     - Added new JSON API to add item luminance and water-sensitivity through resource packs.
     - Added `DynamicLightHandler#isWaterSensitive` to make some entities water-sensitive like the blaze.
  - Fixed incompatibility with future [Sodium] versions. ([#6](https://github.com/LambdAurora/LambDynamicLights/issues/6))
 
-## v1.3.1
+### 1.3.1
 
  - Fixed entity lighting issue with [Sodium] 0.1.0. ([#23](https://github.com/LambdAurora/LambDynamicLights/issues/23))
 
-## v1.3.2
+### 1.3.2
 
  - Added entity lighting capabilities to minecarts.
  - Added `DynamicLightsInitializer` and `dynamiclights` entrypoint.
@@ -75,13 +75,19 @@
  - Updated French translations.
  - Fixed memory leak in dynamic light source tracking. ([#30](https://github.com/LambdAurora/LambDynamicLights/issues/30))
 
-# v1.3.3
+### 1.3.3
 
  - Added Italian translations ([#40](https://github.com/LambdAurora/LambDynamicLights/pull/40)).
  - Optimized dynamic lighting update methods.
  - Fixed crash when leaving world with some minimaps mods. ([#37](https://github.com/LambdAurora/LambDynamicLights/issues/37), [#41](https://github.com/LambdAurora/LambDynamicLights/issues/41))
  - Fixed crash with Immersive Portals ([#39](https://github.com/LambdAurora/LambDynamicLights/issues/39)).
  - Updated [SpruceUI], and Fabric API dependencies.
+
+### 1.3.4
+
+ - Fix ghost dynamic light source ([#47](https://github.com/LambdAurora/LambDynamicLights/issues/47)).
+ - Fix missing background in settings screen.
+ - Updated [SpruceUI].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"

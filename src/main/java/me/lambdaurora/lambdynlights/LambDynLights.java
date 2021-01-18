@@ -48,7 +48,7 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 1.3.3
+ * @version 1.3.4
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer {
@@ -372,7 +372,7 @@ public class LambDynLights implements ClientModInitializer {
      * @param chunkPos the packed chunk position
      */
     public static void scheduleChunkRebuild(@NotNull WorldRenderer renderer, long chunkPos) {
-        scheduleChunkRebuild(renderer, ChunkSectionPos.unpackX(chunkPos), ChunkSectionPos.unpackY(chunkPos), ChunkSectionPos.unpackZ(chunkPos));
+        scheduleChunkRebuild(renderer, BlockPos.unpackLongX(chunkPos), BlockPos.unpackLongY(chunkPos), BlockPos.unpackLongZ(chunkPos));
     }
 
     public static void scheduleChunkRebuild(@NotNull WorldRenderer renderer, int x, int y, int z) {

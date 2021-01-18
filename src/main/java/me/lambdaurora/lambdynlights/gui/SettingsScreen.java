@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 1.3.3
+ * @version 1.3.4
  * @since 1.0.0
  */
 public class SettingsScreen extends SpruceScreen {
@@ -106,6 +106,11 @@ public class SettingsScreen extends SpruceScreen {
         this.addChild(this.resetOption.createWidget(Position.of(this, this.width / 2 - 155, this.height - 29), 150));
         this.addChild(new SpruceButtonWidget(Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150, 20, new TranslatableText("gui.done"),
                 (btn) -> this.client.openScreen(this.parent)));
+    }
+
+    @Override
+    public void renderBackground(MatrixStack matrices) {
+        this.renderBackgroundTexture(0);
     }
 
     @Override

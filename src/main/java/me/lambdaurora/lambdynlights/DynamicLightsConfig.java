@@ -23,11 +23,11 @@ import java.nio.file.Paths;
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 1.3.3
+ * @version 1.3.4
  * @since 1.0.0
  */
 public class DynamicLightsConfig {
-    private static final DynamicLightsMode DEFAULT_DYNAMIC_LIGHTS_MODE = DynamicLightsMode.OFF;
+    private static final DynamicLightsMode DEFAULT_DYNAMIC_LIGHTS_MODE = DynamicLightsMode.FANCY;
     private static final boolean DEFAULT_ENTITIES_LIGHT_SOURCE = true;
     private static final boolean DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE = true;
     private static final boolean DEFAULT_WATER_SENSITIVE_CHECK = true;
