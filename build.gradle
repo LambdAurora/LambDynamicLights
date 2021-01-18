@@ -43,9 +43,6 @@ repositories {
         name = "Cotton"
         url = "http://server.bbkr.space:8081/artifactory/libs-release/"
     }
-    flatDir {
-        dirs "lib"
-    }
 }
 
 configurations {
