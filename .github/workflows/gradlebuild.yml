@@ -18,7 +18,7 @@ jobs:
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: Build with Gradle
-        run: gradle build
+        run: gradle shadowRemapJar
 
       - uses: actions/upload-artifact@v2
         with:
