@@ -10,8 +10,8 @@
 package me.lambdaurora.lambdynlights;
 
 import com.electronwill.nightconfig.core.file.FileConfig;
-import me.lambdaurora.spruceui.option.SpruceCyclingOption;
-import me.lambdaurora.spruceui.option.SpruceOption;
+import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
+import dev.lambdaurora.spruceui.option.SpruceOption;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import org.jetbrains.annotations.NotNull;

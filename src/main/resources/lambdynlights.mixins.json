@@ -7,7 +7,6 @@
     "ClientWorldMixin",
     "CommonWorldRendererMixin",
     "DebugHudMixin",
-    "EntityLighterMixin",
     "EntityRendererMixin",
     "MinecraftClientMixin",
     "VideoOptionsScreenMixin",

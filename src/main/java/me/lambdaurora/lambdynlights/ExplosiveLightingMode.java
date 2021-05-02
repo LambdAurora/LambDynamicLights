@@ -9,7 +9,7 @@
 
 package me.lambdaurora.lambdynlights;
 
-import me.lambdaurora.spruceui.SpruceTexts;
+import dev.lambdaurora.spruceui.SpruceTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.aperlambda.lambdacommon.utils.Nameable;

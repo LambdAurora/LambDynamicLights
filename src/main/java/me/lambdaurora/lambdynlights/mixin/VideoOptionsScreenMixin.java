@@ -9,14 +9,14 @@
 
 package me.lambdaurora.lambdynlights.mixin;
 
+import dev.lambdaurora.spruceui.Tooltip;
 import me.lambdaurora.lambdynlights.gui.DynamicLightsOptionsOption;
-import me.lambdaurora.spruceui.Tooltip;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.VideoOptionsScreen;
-import net.minecraft.client.gui.screen.options.GameOptionsScreen;
+import net.minecraft.client.gui.screen.option.GameOptionsScreen;
+import net.minecraft.client.gui.screen.option.VideoOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonListWidget;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.options.Option;
+import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.option.Option;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;

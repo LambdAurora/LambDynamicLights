@@ -9,15 +9,16 @@
 
 package me.lambdaurora.lambdynlights.gui;
 
+import dev.lambdaurora.spruceui.Position;
+import dev.lambdaurora.spruceui.option.*;
+import dev.lambdaurora.spruceui.screen.SpruceScreen;
+import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
+import dev.lambdaurora.spruceui.widget.container.SpruceOptionListWidget;
 import me.lambdaurora.lambdynlights.DynamicLightsConfig;
 import me.lambdaurora.lambdynlights.ExplosiveLightingMode;
 import me.lambdaurora.lambdynlights.LambDynLights;
 import me.lambdaurora.lambdynlights.LambDynLightsCompat;
-import me.lambdaurora.spruceui.Position;
-import me.lambdaurora.spruceui.option.*;
-import me.lambdaurora.spruceui.screen.SpruceScreen;
-import me.lambdaurora.spruceui.widget.SpruceButtonWidget;
-import me.lambdaurora.spruceui.widget.container.SpruceOptionListWidget;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;

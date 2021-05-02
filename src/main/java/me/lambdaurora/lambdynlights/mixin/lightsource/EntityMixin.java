@@ -19,6 +19,7 @@ import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -35,7 +36,9 @@ public abstract class EntityMixin implements DynamicLightSource {
     public World world;
 
     @Shadow
-    public boolean removed;
+    public boolean isRemoved() {
+        return false;
+    }
 
     @Shadow
     public abstract double getX();
@@ -50,9 +53,9 @@ public abstract class EntityMixin implements DynamicLightSource {
     public abstract double getY();
 
     @Shadow
-    public int chunkX;
-    @Shadow
-    public int chunkZ;
+    public ChunkPos getChunkPos() {
+        return null;
+    }
 
     @Shadow
     public abstract boolean isOnFire();
@@ -75,7 +78,7 @@ public abstract class EntityMixin implements DynamicLightSource {
     public void onTick(CallbackInfo ci) {
         // We do not want to update the entity on the server.
         if (this.world.isClient()) {
-            if (this.removed) {
+            if (this.isRemoved()) {
                 this.setDynamicLightEnabled(false);
             } else {
                 this.dynamicLightTick();
@@ -166,7 +169,7 @@ public abstract class EntityMixin implements DynamicLightSource {
             LongOpenHashSet newPos = new LongOpenHashSet();
 
             if (luminance > 0) {
-                BlockPos.Mutable chunkPos = new BlockPos.Mutable(this.chunkX, MathHelper.floorDiv((int) this.getEyeY(), 16), this.chunkZ);
+                BlockPos.Mutable chunkPos = new BlockPos.Mutable(this.getChunkPos().x, MathHelper.floorDiv((int) this.getEyeY(), 16), this.getChunkPos().z);
 
                 LambDynLights.scheduleChunkRebuild(renderer, chunkPos);
                 LambDynLights.updateTrackedChunks(chunkPos, this.trackedLitChunkPos, newPos);

@@ -79,7 +79,7 @@ public class LambDynLights implements ClientModInitializer {
             }
 
             @Override
-            public void apply(ResourceManager manager) {
+            public void reload(ResourceManager manager) {
                 ItemLightSources.load(manager);
             }
         });

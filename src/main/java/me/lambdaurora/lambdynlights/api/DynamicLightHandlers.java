@@ -57,6 +57,7 @@ public final class DynamicLightHandlers
         });
         registerDynamicLightHandler(EntityType.MAGMA_CUBE, entity -> (entity.stretch > 0.6) ? 11 : 8);
         registerDynamicLightHandler(EntityType.SPECTRAL_ARROW, entity -> 8);
+        registerDynamicLightHandler(EntityType.GLOW_SQUID, entity -> 15);
     }
 
     /**

@@ -8,7 +8,9 @@
  */
 
 package me.lambdaurora.lambdynlights.mixin;
-
+public class EntityLighterMixin
+{
+/*
 import me.jellysquid.mods.sodium.client.model.light.EntityLighter;
 import me.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.util.math.BlockPos;
@@ -17,10 +19,9 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-
+/*
 @Mixin(value = EntityLighter.class)
-public class EntityLighterMixin
-{
+
     @Redirect(
             method = "getBlendedLight",
             at = @At(
@@ -36,9 +37,9 @@ public class EntityLighterMixin
 
             This is only here to keep compatibility with Sodium 0.1.0.
             In newer versions this is broken and use EntityRendererMixin instead (which is much simpler)
-         */
+         *//*
         int vanilla = world.getLightLevel(type, pos);
         double luminance = LambDynLights.get().getDynamicLightLevel(pos);
         return (int) Math.max(vanilla, Math.round(luminance));
-    }
+    }*/
 }

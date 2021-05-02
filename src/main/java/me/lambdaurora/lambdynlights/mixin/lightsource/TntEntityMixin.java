@@ -25,8 +25,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TntEntity.class)
 public abstract class TntEntityMixin extends Entity implements DynamicLightSource
 {
-    @Shadow
-    private int fuseTimer;
+
+
+    @Shadow public abstract int getFuse();
 
     private double lambdynlights_startFuseTimer = 80.0;
     private int lambdynlights_luminance;
@@ -39,7 +40,7 @@ public abstract class TntEntityMixin extends Entity implements DynamicLightSourc
     @Inject(method = "<init>(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/World;)V", at = @At("TAIL"))
     private void onNew(EntityType<? extends TntEntity> entityType, World world, CallbackInfo ci)
     {
-        this.lambdynlights_startFuseTimer = this.fuseTimer;
+        this.lambdynlights_startFuseTimer = this.getFuse();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -50,7 +51,7 @@ public abstract class TntEntityMixin extends Entity implements DynamicLightSourc
             if (!LambDynLights.get().config.getTntLightingMode().isEnabled())
                 return;
 
-            if (this.removed) {
+            if (this.isRemoved()) {
                 this.setDynamicLightEnabled(false);
             } else {
                 this.dynamicLightTick();
@@ -67,7 +68,7 @@ public abstract class TntEntityMixin extends Entity implements DynamicLightSourc
         } else {
             ExplosiveLightingMode lightingMode = LambDynLights.get().config.getTntLightingMode();
             if (lightingMode == ExplosiveLightingMode.FANCY) {
-                double fuse = this.fuseTimer / this.lambdynlights_startFuseTimer;
+                double fuse = this.getFuse() / this.lambdynlights_startFuseTimer;
                 this.lambdynlights_luminance = (int) (-(fuse * fuse) * 10.0) + 10;
             } else {
                 this.lambdynlights_luminance = 10;
