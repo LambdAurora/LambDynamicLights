@@ -2,7 +2,7 @@ plugins {
     id 'fabric-loom' version '0.8-SNAPSHOT'
     id 'java-library'
     id 'maven-publish'
-    id 'com.github.johnrengelman.shadow' version '5.1.0'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
     id 'org.cadixdev.licenser' version '0.5.0'
 }
 
