@@ -1,16 +1,19 @@
-import net.fabricmc.loom.task.RemapJarTask
-
 plugins {
-    id 'fabric-loom' version '0.5-SNAPSHOT'
+    id 'fabric-loom' version '0.8-SNAPSHOT'
     id 'java-library'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '5.1.0'
-    id 'net.minecrell.licenser' version '0.4.1'
+    id 'org.cadixdev.licenser' version '0.5.0'
 }
+
+import net.fabricmc.loom.task.RemapJarTask
 
 group = project.maven_group
 version = "${project.mod_version}+${getMCVersionString()}"
 archivesBaseName = project.archives_base_name + "-fabric"
+
+// This field defines the Java version your mod target.
+def targetJavaVersion = 16
 
 def getMCVersionString() {
     if (project.minecraft_version.matches("\\d\\dw\\d\\d[a-z]")) {
@@ -27,7 +30,11 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        name = "AperLambda"
+        name = 'Terraformers'
+        url = 'https://maven.terraformersmc.com/releases/'
+    }
+    maven {
+        name = 'AperLambda'
         url = 'https://aperlambda.github.io/maven'
     }
     maven { url = "https://jitpack.io" }
@@ -38,10 +45,6 @@ repositories {
             username "guest"
             password ""
         }
-    }
-    maven {
-        name = "Cotton"
-        url = "http://server.bbkr.space:8081/artifactory/libs-release/"
     }
 }
 
@@ -61,42 +64,41 @@ dependencies {
     modImplementation "com.github.lambdaurora:spruceui:${project.spruceui_version}"
     include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
 
-    modImplementation("io.github.prospector:modmenu:${project.modmenu_version}") {
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         transitive = false
     }
     //modImplementation "grondag:canvas-mc116:1.0.+"
-    modImplementation "com.github.jellysquid3:sodium-fabric:mc1.16.3-0.1.0"
+    //modImplementation "com.github.jellysquid3:sodium-fabric:mc1.16.3-0.1.0"
 
     shadow "com.electronwill.night-config:core:3.6.3"
     shadow "com.electronwill.night-config:toml:3.6.3"
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+java {
+    sourceCompatibility = JavaVersion.toVersion(targetJavaVersion)
+    targetCompatibility = JavaVersion.toVersion(targetJavaVersion)
+
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = 'UTF-8'
+
+    it.options.release.set(targetJavaVersion)
 }
 
 processResources {
     inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
+    filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
-    }
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-
-    withSourcesJar()
 }
 
 jar {
-    from "../LICENSE"
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
 }
 
 license {

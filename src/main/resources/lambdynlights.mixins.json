@@ -1,13 +1,12 @@
 {
   "required": true,
-  "package": "me.lambdaurora.lambdynlights.mixin",
-  "plugin": "me.lambdaurora.lambdynlights.LambDynLightsMixinPlugin",
-  "compatibilityLevel": "JAVA_8",
+  "package": "dev.lambdaurora.lambdynlights.mixin",
+  "plugin": "dev.lambdaurora.lambdynlights.LambDynLightsMixinPlugin",
+  "compatibilityLevel": "JAVA_16",
   "client": [
     "ClientWorldMixin",
     "CommonWorldRendererMixin",
     "DebugHudMixin",
-    "EntityLighterMixin",
     "EntityRendererMixin",
     "MinecraftClientMixin",
     "VideoOptionsScreenMixin",
