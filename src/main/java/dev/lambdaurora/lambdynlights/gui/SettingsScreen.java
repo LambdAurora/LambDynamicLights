@@ -14,6 +14,7 @@ import dev.lambdaurora.lambdynlights.ExplosiveLightingMode;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.LambDynLightsCompat;
 import dev.lambdaurora.spruceui.Position;
+import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.option.*;
 import dev.lambdaurora.spruceui.screen.SpruceScreen;
 import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
@@ -100,10 +101,11 @@ public class SettingsScreen extends SpruceScreen {
         this.list.addOptionEntry(this.entitiesOption, this.blockEntitiesOption);
         this.list.addOptionEntry(this.waterSensitiveOption, null);
         this.list.addOptionEntry(this.creeperLightingOption, this.tntLightingOption);
-        this.addChild(list);
+        this.addDrawableChild(list);
 
-        this.addChild(this.resetOption.createWidget(Position.of(this, this.width / 2 - 155, this.height - 29), 150));
-        this.addChild(new SpruceButtonWidget(Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150, 20, new TranslatableText("gui.done"),
+        this.addDrawableChild(this.resetOption.createWidget(Position.of(this, this.width / 2 - 155, this.height - 29), 150));
+        this.addDrawableChild(new SpruceButtonWidget(Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150, 20,
+                SpruceTexts.GUI_DONE,
                 (btn) -> this.client.openScreen(this.parent)));
     }
 

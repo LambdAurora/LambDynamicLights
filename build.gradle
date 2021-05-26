@@ -10,7 +10,7 @@ import net.fabricmc.loom.task.RemapJarTask
 
 group = project.maven_group
 version = "${project.mod_version}+${getMCVersionString()}"
-archivesBaseName = project.archives_base_name + "-fabric"
+archivesBaseName = project.archives_base_name
 
 // This field defines the Java version your mod target.
 def targetJavaVersion = 16
@@ -37,7 +37,10 @@ repositories {
         name = 'AperLambda'
         url = 'https://aperlambda.github.io/maven'
     }
-    maven { url = "https://jitpack.io" }
+    maven {
+        name 'Gegy'
+        url 'https://maven.gegy.dev'
+    }
     maven {
         name = "grondag"
         url = "https://grondag-repo.appspot.com"
@@ -59,10 +62,10 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-    modImplementation "com.github.lambdaurora:spruceui:${project.spruceui_version}"
-    include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
+    modImplementation "dev.lambdaurora:spruceui:${project.spruceui_version}"
+    include "dev.lambdaurora:spruceui:${project.spruceui_version}"
 
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         transitive = false
