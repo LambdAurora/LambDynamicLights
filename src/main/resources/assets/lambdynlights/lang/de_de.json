@@ -10,7 +10,7 @@
   "lambdynlights.tooltip.block_entities": "Schaltet dynamische Beleuchtung für Blockobjekte ein.",
   "lambdynlights.tooltip.creeper_lighting": "Ändert das Verhalten der dynamische Beleuchtung bei Creepern\n- %s schaltet dieses aus.\n- %s: konstante Beleuchtung durch explodierende Creepers.\n- %s: Zunehmende Beleuchtung durch explodierende Creepers.",
   "lambdynlights.tooltip.entities": "Aktiviert die dynamische Beleuchtung von Objekten. (Spielerbeleuchtung ist immer aktiviert)",
-  "lambdynlights.tooltip.mode.1": "Aktiviert dynamische Beleuchtung. Wenn aktiv, wird z. B. ein Spieler, der eine Fackel hält, die Umgebung beleuchten."
+  "lambdynlights.tooltip.mode.1": "Aktiviert dynamische Beleuchtung. Wenn aktiv, wird z. B. ein Spieler, der eine Fackel hält, die Umgebung beleuchten.",
   "lambdynlights.tooltip.mode.2": "%s und %s haben eine kleine Verzögerung, aber lösen weniger Lichtupdates aus.",
   "lambdynlights.tooltip.mode.3": "Mit %s sind die Bewegungen von Lichtquellen flüssig.",
   "lambdynlights.tooltip.tnt_lighting": "Ändert das Verhalten der dynamischer Beleuchtung von TNT.\n- %s schaltet dieses aus.\n- %s: konstante Beleuchtung.\n- %s steigende Beuleuchtung.",
