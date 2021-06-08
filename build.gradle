@@ -1,12 +1,25 @@
 plugins {
-    id 'fabric-loom' version '0.8-SNAPSHOT'
+    id 'fabric-loom' version '0.8.+'
     id 'java-library'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
-    id 'org.cadixdev.licenser' version '0.5.0'
+    id 'org.cadixdev.licenser' version '0.6.0'
+    id 'com.modrinth.minotaur' version '1.2.+'
 }
 
 import net.fabricmc.loom.task.RemapJarTask
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import com.modrinth.minotaur.TaskModrinthUpload
+import com.modrinth.minotaur.request.VersionType
+import com.modrinth.minotaur.responses.ResponseError
+import org.apache.http.client.config.CookieSpecs
+import org.apache.http.client.config.RequestConfig
+import org.apache.http.client.entity.EntityBuilder
+import org.apache.http.client.methods.HttpPatch
+import org.apache.http.entity.ContentType
+import org.apache.http.impl.client.HttpClientBuilder
+import org.apache.http.util.EntityUtils
 
 group = project.maven_group
 version = "${project.mod_version}+${getMCVersionString()}"
@@ -15,12 +28,27 @@ archivesBaseName = project.archives_base_name
 // This field defines the Java version your mod target.
 def targetJavaVersion = 16
 
-def getMCVersionString() {
-    if (project.minecraft_version.matches("\\d\\dw\\d\\d[a-z]")) {
+boolean isMCVersionNonRelease() {
+    return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
+            || project.minecraft_version.matches('\\d+\\.\\d+-(pre|rc)(\\d+)')
+}
+
+String getMCVersionString() {
+    if (isMCVersionNonRelease()) {
         return project.minecraft_version
     }
-    int lastDot = project.minecraft_version.lastIndexOf('.')
-    return project.minecraft_version.substring(0, lastDot)
+    def version = project.minecraft_version.split('\\.')
+    return version[0] + '.' + version[1]
+}
+
+String parseReadme() {
+    def excludeRegex = /(?m)<!-- modrinth_exclude\.start -->(.|\n)*?<!-- modrinth_exclude\.end -->/
+    def linkRegex = /!\[([A-z_ ]+)]\((images\/[A-z.\/_]+)\)/
+
+    def readme = (String) file('README.md').text
+    readme = readme.replaceAll(excludeRegex, '')
+    //readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.17/$2)')
+    return readme
 }
 
 minecraft {
@@ -58,7 +86,7 @@ configurations {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
@@ -70,11 +98,9 @@ dependencies {
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         transitive = false
     }
-    //modImplementation "grondag:canvas-mc116:1.0.+"
-    //modImplementation "com.github.jellysquid3:sodium-fabric:mc1.16.3-0.1.0"
 
-    shadow "com.electronwill.night-config:core:3.6.3"
-    shadow "com.electronwill.night-config:toml:3.6.3"
+    shadow 'com.electronwill.night-config:core:3.6.3'
+    shadow 'com.electronwill.night-config:toml:3.6.3'
 }
 
 java {
@@ -91,15 +117,15 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property 'version', project.version
 
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
     }
 }
 
 jar {
-    from("LICENSE") {
+    from('LICENSE') {
         rename { "${it}_${project.archivesBaseName}" }
     }
 }
@@ -110,21 +136,73 @@ license {
 }
 
 shadowJar {
-    dependsOn(project(":").jar)
+    dependsOn jar
     configurations = [project.configurations.shadow]
     archiveClassifier.set('dev')
 
-    relocate 'com.electronwill.nightconfig', 'me.lambdaurora.lambdynlights.shadow.nightconfig'
+    relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdynlights.shadow.nightconfig'
 }
+remapJar.dependsOn(shadowJar)
 
 task shadowRemapJar(type: RemapJarTask) {
     dependsOn shadowJar
 
-    input = file("${project.buildDir}/libs/$archivesBaseName-$version-dev.jar")
-    archiveName = "${archivesBaseName}-${version}.jar"
-    addNestedDependencies = true
+    input.set(file("${project.buildDir}/libs/$archivesBaseName-${project.version}-dev.jar"))
+    archiveFileName = "${archivesBaseName}-${project.version}.jar"
+    addNestedDependencies.set(true)
 }
 build.dependsOn(shadowRemapJar)
+
+task publishModrinth(type: TaskModrinthUpload) {
+    dependsOn(build)
+    onlyIf {
+        System.getenv('MODRINTH_TOKEN')
+    }
+
+    token = System.getenv('MODRINTH_TOKEN')
+    projectId = project.modrinth_id
+    versionNumber = version
+    versionName = "LambDynamicLights ${project.mod_version} (${getMCVersionString()})"
+    uploadFile = shadowRemapJar
+    addGameVersion((String) project.minecraft_version)
+    addLoader('fabric')
+    versionType = isMCVersionNonRelease() ? VersionType.BETA : VersionType.RELEASE
+
+    // Changelog fetching
+    def changelogText = file('CHANGELOG.md').text
+    def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
+    def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
+    def matcher = changelogText =~ changelogRegex
+    matcher.find()
+
+    changelog = matcher.group(1)
+
+    // Readme
+    doFirst {
+        final def client = HttpClientBuilder.create().setDefaultRequestConfig(RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build()).build()
+        final def patch = new HttpPatch((String) (apiURL + '/v1/mod/' + projectId))
+        patch.addHeader("Authorization", token)
+
+        var json = new JsonObject()
+        json.addProperty("body", parseReadme())
+        patch.setEntity(EntityBuilder.create()
+                .setText(json.toString())
+                .setContentType(ContentType.APPLICATION_JSON)
+                .build())
+
+        final def response = client.execute(patch)
+        final int status = response.getStatusLine().getStatusCode()
+
+        final def gson = new GsonBuilder().create()
+        if (status == 200) {
+            project.getLogger().lifecycle("Successfully updated readme to ${projectId}.")
+        } else {
+            errorInfo = gson.fromJson(EntityUtils.toString(response.getEntity()), ResponseError.class)
+            project.getLogger().error("Upload failed! Status: ${status} Error: ${errorInfo.getError()} Reason: ${errorInfo.getDescription()}")
+            throw new GradleException("Upload failed! Status: ${status} Reason: ${errorInfo.getDescription()}")
+        }
+    }
+}
 
 // configure the maven publication
 publishing {

@@ -1,9 +1,9 @@
 name: Gradle Build
 
 on:
-  push:
-    branches:
-      - '*'
+  release:
+    types:
+      - published
 
 jobs:
   build:
@@ -18,9 +18,6 @@ jobs:
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: Build with Gradle
-        run: ./gradlew build
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Artifacts
-          path: ./build/libs/
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: ./gradlew publishModrinth

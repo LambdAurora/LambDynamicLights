@@ -89,6 +89,13 @@
  - Fix missing background in settings screen.
  - Updated [SpruceUI].
 
+## 2.0.0
+
+ - Updated to Minecraft 1.17.
+ - Updated to Java 16.
+ - Added dynamic lighting to the Glow Squid.
+ - And more.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
 [Canvas Renderer]: https://www.curseforge.com/minecraft/mc-mods/canvas-renderer "Canvas Renderer CurseForge page"
