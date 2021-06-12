@@ -252,18 +252,18 @@ publishing {
         }
         maven {
             name = 'GithubPackages'
-            url = uri('https://maven.pkg.github.com/LambdAurora/SpruceUI')
+            url = uri('https://maven.pkg.github.com/LambdAurora/LambDynamicLights')
             credentials {
                 username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
                 password = project.findProperty('gpr.key') ?: System.getenv('TOKEN')
             }
         }
 
-        def spruceuiMaven = System.getenv('SPRUCEUI_MAVEN')
-        if (spruceuiMaven) {
+        def ldlMaven = System.getenv('LDL_MAVEN')
+        if (ldlMaven) {
             maven {
-                name = 'SpruceUIMaven'
-                url = uri(spruceuiMaven)
+                name = 'LambDynamicLightsMaven'
+                url = uri(ldlMaven)
                 credentials {
                     username = project.findProperty('gpr.user') ?: System.getenv('MAVEN_USERNAME')
                     password = project.findProperty('gpr.key') ?: System.getenv('MAVEN_PASSWORD')
