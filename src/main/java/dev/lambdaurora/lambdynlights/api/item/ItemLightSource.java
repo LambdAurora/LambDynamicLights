@@ -10,9 +10,7 @@
 package dev.lambdaurora.lambdynlights.api.item;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import dev.lambdaurora.lambdynlights.LambDynLights;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -22,7 +20,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.Optional;
 
 /**

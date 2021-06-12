@@ -177,6 +177,15 @@ task publishModrinth(type: TaskModrinthUpload) {
 
     changelog = matcher.group(1)
 
+    def changelogLines = changelogText.split('\n')
+    def linkRefRegex = ~'^\\[([A-z0-9 _\\-/+.]+)]: '
+    for (int i = changelogLines.length - 1; i > 0; i--) {
+        def line = changelogLines[i]
+        if ((line =~ linkRefRegex).find())
+            changelog += '\n' + line
+        else break
+    }
+
     // Readme
     doFirst {
         final def client = HttpClientBuilder.create().setDefaultRequestConfig(RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build()).build()
@@ -238,15 +247,27 @@ publishing {
     repositories {
         mavenLocal()
         maven {
-            name = "BuildDirLocal"
+            name = 'BuildDirLocal'
             url = "$buildDir/repo"
         }
         maven {
-            name = "GithubPackages"
-            url = uri("https://maven.pkg.github.com/LambdAurora/LambDynamicLights")
+            name = 'GithubPackages'
+            url = uri('https://maven.pkg.github.com/LambdAurora/SpruceUI')
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
+                password = project.findProperty('gpr.key') ?: System.getenv('TOKEN')
+            }
+        }
+
+        def spruceuiMaven = System.getenv('SPRUCEUI_MAVEN')
+        if (spruceuiMaven) {
+            maven {
+                name = 'SpruceUIMaven'
+                url = uri(spruceuiMaven)
+                credentials {
+                    username = project.findProperty('gpr.user') ?: System.getenv('MAVEN_USERNAME')
+                    password = project.findProperty('gpr.key') ?: System.getenv('MAVEN_PASSWORD')
+                }
             }
         }
     }

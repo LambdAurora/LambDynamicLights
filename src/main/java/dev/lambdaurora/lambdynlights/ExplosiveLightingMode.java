@@ -10,9 +10,9 @@
 package dev.lambdaurora.lambdynlights;
 
 import dev.lambdaurora.spruceui.SpruceTexts;
+import dev.lambdaurora.spruceui.util.Nameable;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.aperlambda.lambdacommon.utils.Nameable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -22,7 +22,7 @@ import java.util.Optional;
  * Represents the explosives dynamic lighting mode.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 2.0.1
  * @since 1.2.1
  */
 public enum ExplosiveLightingMode implements Nameable {

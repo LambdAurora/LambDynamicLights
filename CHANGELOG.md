@@ -96,6 +96,12 @@
  - Added dynamic lighting to the Glow Squid.
  - And more.
 
+### 2.0.1
+
+ - Fixed mixin warnings ([#65](https://github.com/LambdAurora/LambDynamicLights/issues/65)).
+ - Removed any usage of a library.
+ - Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
 [Canvas Renderer]: https://www.curseforge.com/minecraft/mc-mods/canvas-renderer "Canvas Renderer CurseForge page"

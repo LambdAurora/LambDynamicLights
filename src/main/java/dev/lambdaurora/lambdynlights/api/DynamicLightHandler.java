@@ -12,7 +12,6 @@ package dev.lambdaurora.lambdynlights.api;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,11 +96,11 @@ public interface DynamicLightHandler<T> {
             public int getLuminance(T entity) {
                 int luminance = 0;
 
-                if (entity.getClientFuseTime(0.0F) > 0.001D) {
+                if (entity.getClientFuseTime(0.f) > 0.001) {
                     luminance = switch (LambDynLights.get().config.getCreeperLightingMode()) {
                         case OFF -> 0;
                         case SIMPLE -> 10;
-                        case FANCY ->  (int) (entity.getClientFuseTime(0.0F) * 10.0);
+                        case FANCY -> (int) (entity.getClientFuseTime(0.f) * 10.0);
                     };
                 }
 

@@ -9,13 +9,13 @@
 
 package dev.lambdaurora.lambdynlights.api.item;
 
+import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import org.aperlambda.lambdacommon.LambdaConstants;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -27,10 +27,11 @@ import java.util.List;
  * Represents an item light sources manager.
  *
  * @author LambdAurora
- * @version 1.3.2
+ * @version 2.0.1
  * @since 1.3.0
  */
 public final class ItemLightSources {
+    private static final JsonParser JSON_PARSER = new JsonParser();
     private static final List<ItemLightSource> ITEM_LIGHT_SOURCES = new ArrayList<>();
     private static final List<ItemLightSource> STATIC_ITEM_LIGHT_SOURCES = new ArrayList<>();
 
@@ -55,7 +56,7 @@ public final class ItemLightSources {
         var id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
         try {
             var stream = resourceManager.getResource(resourceId).getInputStream();
-            var json = LambdaConstants.JSON_PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
+            var json = JSON_PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
 
             ItemLightSource.fromJson(id, json).ifPresent(data -> {
                 if (!STATIC_ITEM_LIGHT_SOURCES.contains(data))
