@@ -1,0 +1,18 @@
+{
+  "lambdynlights.menu.light_sources": "Dynamiska ljuskällor",
+  "lambdynlights.menu.title": "LambDynamicLights-inställningar",
+  "lambdynlights.menu.canvas.1": "Att avaktivera entitiers dynamiska ljus rekommenderas med Canvas!",
+  "lambdynlights.menu.canvas.2": "Dynamiskt ljus med Canvas är prestandakrävande!",
+  "lambdynlights.option.block_entities": "Blockentities",
+  "lambdynlights.option.entities": "Entities",
+  "lambdynlights.option.mode": "Dynamiskt Ljus",
+  "lambdynlights.option.water_sensitive": "Vattenkänslighetstest",
+  "lambdynlights.tooltip.block_entities": "Aktiverar blockentitiers dynamiska ljus.",
+  "lambdynlights.tooltip.creeper_lighting": "Aktiverar Creeperns dynamiska ljusläge.\n- %s avaktiverar Creeperns dynamiska ljus.\n- %s sätter en konstant luminans.\n- %s sätter en dynamisk luminans.",
+  "lambdynlights.tooltip.entities": "Aktiverar entities dynamiska ljus. Notera: spelare är alltid aktiva.",
+  "lambdynlights.tooltip.mode.1": "Aktiverar dynamiskt ljus. Om påslaget kommer t.ex. en spelare som håller en fackla lysa upp området.",
+  "lambdynlights.tooltip.mode.2": "%s och %s kommer att lagga lite bakom men minimerar ljusuppdateringar.",
+  "lambdynlights.tooltip.mode.3": "%s är jämnt dynamiskt ljus.",
+  "lambdynlights.tooltip.tnt_lighting": "Sätter TNT:ns dynamiska ljusläge.\n- %s avaktiverar TNT:ns dynamiska ljus.\n- %s sätter en konstant luminans.\n- %s sätter en dynamisk luminans.",
+  "lambdynlights.tooltip.water_sensitive": "Aktiverar det vattenkänsliga ljuskällstestet. Detta innebär att vissa föremål inte kommer att ge ifrån sig ljus när de är under vatten."
+}
