@@ -1,7 +1,7 @@
 {
   "lambdynlights.menu.light_sources": "Dynamiska ljuskällor",
   "lambdynlights.menu.title": "LambDynamicLights-inställningar",
-  "lambdynlights.menu.canvas.1": "Att avaktivera entitiers dynamiska ljus rekommenderas med Canvas!",
+  "lambdynlights.menu.canvas.1": "Att avaktivera entities dynamiska ljus rekommenderas med Canvas!",
   "lambdynlights.menu.canvas.2": "Dynamiskt ljus med Canvas är prestandakrävande!",
   "lambdynlights.option.block_entities": "Blockentities",
   "lambdynlights.option.entities": "Entities",
