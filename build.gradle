@@ -1,18 +1,18 @@
 plugins {
-    id 'fabric-loom' version '0.8.+'
+    id 'fabric-loom' version '0.9.+'
     id 'java-library'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
-    id 'org.cadixdev.licenser' version '0.6.0'
+    id 'org.cadixdev.licenser' version '0.6.1'
     id 'com.modrinth.minotaur' version '1.2.+'
 }
 
-import net.fabricmc.loom.task.RemapJarTask
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.modrinth.minotaur.TaskModrinthUpload
 import com.modrinth.minotaur.request.VersionType
 import com.modrinth.minotaur.responses.ResponseError
+import net.fabricmc.loom.task.RemapJarTask
 import org.apache.http.client.config.CookieSpecs
 import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.entity.EntityBuilder
@@ -173,17 +173,18 @@ task publishModrinth(type: TaskModrinthUpload) {
     def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
     def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
     def matcher = changelogText =~ changelogRegex
-    matcher.find()
 
-    changelog = matcher.group(1)
+    if (matcher.find()) {
+        changelog = matcher.group(1)
 
-    def changelogLines = changelogText.split('\n')
-    def linkRefRegex = ~'^\\[([A-z0-9 _\\-/+.]+)]: '
-    for (int i = changelogLines.length - 1; i > 0; i--) {
-        def line = changelogLines[i]
-        if ((line =~ linkRefRegex).find())
-            changelog += '\n' + line
-        else break
+        def changelogLines = changelogText.split('\n')
+        def linkRefRegex = ~'^\\[([A-z0-9 _\\-/+.]+)]: '
+        for (int i = changelogLines.length - 1; i > 0; i--) {
+            def line = changelogLines[i]
+            if ((line =~ linkRefRegex).find())
+                changelog += '\n' + line
+            else break
+        }
     }
 
     // Readme
