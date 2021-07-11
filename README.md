@@ -21,7 +21,7 @@ And this is now possible with this mod as it adds dynamic lights to the game.
 You can see in the darkness thanks to your torch now!
 
 This mod adds dynamic lights to Minecraft. Dynamic lights are lights created by an entity holding an
-item which makes light as a block, or create by an entity on fire, etc.
+item which makes light as a block, or created by an entity on fire, etc.
 
 [Trailer](https://www.youtube.com/embed/r8r1TNG45tM?wmode=transparent)
 
@@ -45,7 +45,7 @@ Searching other mods to replace OptiFine? [Check out this list!](https://gist.gi
 
 ### Items emit light
 
-Dropped items, which already emit light as a block, will also dynamically emit light!
+Dropped items which already emit light as a block, will also dynamically emit light!
 
 ![Torch](https://media.forgecdn.net/attachments/301/21/2020-07-04_22.png)
 
@@ -63,7 +63,7 @@ Any entity on fire will emit light!
 
 ### Spectral arrows
 
-Spectral arrows will emit a weak light!
+Spectral arrows will emit a very weak light!
 
 ![Spectral arrows](https://media.forgecdn.net/attachments/301/25/2020-07-04_22.png)
 
