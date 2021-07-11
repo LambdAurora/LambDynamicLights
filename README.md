@@ -13,19 +13,19 @@ A dynamic lights mod for Fabric.
 
 ## 📖 What's this mod?
 
-It's dark outside, very dark...
-You can't see a lot in the darkness, you wished you had a torch,
+It's dark outside, extremely dark...
+You can't see a lot in the darkness, you wish you had a torch,
 or a lantern to hold and see in the light...
 
-And this is possible with this mod as it adds dynamic lights to the game.
-Now you will be able to see in the darkness thanks to your torch!
+And this is now possible with this mod as it adds dynamic lights to the game.
+You can see in the darkness thanks to your torch now!
 
 This mod adds dynamic lights to Minecraft. Dynamic lights are lights created by an entity holding an
 item which makes light as a block, or create by an entity on fire, etc.
 
 [Trailer](https://www.youtube.com/embed/r8r1TNG45tM?wmode=transparent)
 
-Searching other mods to replace OptiFine? [Check out that list!](https://gist.github.com/LambdAurora/1f6a4a99af374ce500f250c6b42e8754)
+Searching other mods to replace OptiFine? [Check out this list!](https://gist.github.com/LambdAurora/1f6a4a99af374ce500f250c6b42e8754)
 
 ## ✅ Features:
 
@@ -49,7 +49,7 @@ Dropped items, which already emit light as a block, will also dynamically emit l
 
 ![Torch](https://media.forgecdn.net/attachments/301/21/2020-07-04_22.png)
 
-### Hold items emit light
+### Held items emit light
 
 Light is emitted when entities hold light emitting items.
 
@@ -81,7 +81,7 @@ As of v1.2.1.
 
 ## 📖 Usage
 
-To use this mod it's very simple!
+Using this mod is very simple!
 
 Install it in your mods folder along with [Fabric API] and [ModMenu], (and [Sodium] if wanted for better performances).
 
