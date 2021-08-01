@@ -27,7 +27,7 @@ import java.util.List;
  * Represents an item light sources manager.
  *
  * @author LambdAurora
- * @version 2.0.1
+ * @version 2.0.2
  * @since 1.3.0
  */
 public final class ItemLightSources {
@@ -87,7 +87,7 @@ public final class ItemLightSources {
     /**
      * Registers an item light source data.
      *
-     * @param data The item light source data.
+     * @param data the item light source data
      */
     public static void registerItemLightSource(@NotNull ItemLightSource data) {
         for (var other : STATIC_ITEM_LIGHT_SOURCES) {
@@ -104,9 +104,9 @@ public final class ItemLightSources {
     /**
      * Returns the luminance of the item in the stack.
      *
-     * @param stack The item stack.
-     * @param submergedInWater True if the stack is submerged in water, else false.
-     * @return A luminance value.
+     * @param stack the item stack
+     * @param submergedInWater {@code true} if the stack is submerged in water, else {@code false}
+     * @return a luminance value
      */
     public static int getLuminance(@NotNull ItemStack stack, boolean submergedInWater) {
         for (var data : ITEM_LIGHT_SOURCES) {
@@ -115,7 +115,7 @@ public final class ItemLightSources {
             }
         }
         if (stack.getItem() instanceof BlockItem blockItem)
-            return blockItem.getBlock().getDefaultState().getLuminance();
-        return 0;
+            return ItemLightSource.BlockItemLightSource.getLuminance(stack, blockItem.getBlock().getDefaultState());
+        else return 0;
     }
 }

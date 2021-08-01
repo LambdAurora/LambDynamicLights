@@ -15,6 +15,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +24,7 @@ import java.util.Map;
 
 /**
  * @author LambdAurora
- * @version 1.3.2
+ * @version 2.0.2
  * @since 1.1.0
  */
 public final class DynamicLightHandlers {
@@ -51,9 +52,15 @@ public final class DynamicLightHandlers {
             var world = entity.getEntityWorld();
             return LambDynLights.getLuminanceFromItemStack(entity.getHeldItemStack(), !world.getFluidState(entity.getBlockPos()).isEmpty());
         });
+        registerDynamicLightHandler(EntityType.GLOW_ITEM_FRAME, entity -> {
+            var world = entity.getEntityWorld();
+            return Math.max(14, LambDynLights.getLuminanceFromItemStack(entity.getHeldItemStack(), !world.getFluidState(entity.getBlockPos()).isEmpty()));
+        });
         registerDynamicLightHandler(EntityType.MAGMA_CUBE, entity -> (entity.stretch > 0.6) ? 11 : 8);
         registerDynamicLightHandler(EntityType.SPECTRAL_ARROW, entity -> 8);
-        registerDynamicLightHandler(EntityType.GLOW_SQUID, entity -> 12);
+        registerDynamicLightHandler(EntityType.GLOW_SQUID,
+                entity -> (int) MathHelper.clampedLerp(0.f, 12.f, 1.f - entity.getDarkTicksRemaining() / 10.f)
+        );
     }
 
     /**

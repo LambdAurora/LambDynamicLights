@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -42,9 +43,14 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 
     @Shadow
     protected boolean removed;
-    private int lambdynlights_luminance = 0;
-    private int lambdynlights_lastLuminance = 0;
-    private long lambdynlights_lastUpdate = 0;
+
+    @Unique
+    private int luminance = 0;
+    @Unique
+    private int lastLuminance = 0;
+    @Unique
+    private long lastUpdate = 0;
+    @Unique
     private LongOpenHashSet trackedLitChunkPos = new LongOpenHashSet();
 
     @Override
@@ -74,7 +80,7 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 
     @Override
     public void resetDynamicLight() {
-        this.lambdynlights_lastLuminance = 0;
+        this.lastLuminance = 0;
     }
 
     @Override
@@ -83,18 +89,18 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
         if (this.world == null || !this.world.isClient())
             return;
         if (!this.removed) {
-            this.lambdynlights_luminance = DynamicLightHandlers.getLuminanceFrom((BlockEntity) (Object) this);
+            this.luminance = DynamicLightHandlers.getLuminanceFrom((BlockEntity) (Object) this);
             LambDynLights.updateTracking(this);
 
             if (!this.isDynamicLightEnabled()) {
-                this.lambdynlights_lastLuminance = 0;
+                this.lastLuminance = 0;
             }
         }
     }
 
     @Override
     public int getLuminance() {
-        return this.lambdynlights_luminance;
+        return this.luminance;
     }
 
     @Override
@@ -104,11 +110,11 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
             return false;
         if (mode.hasDelay()) {
             long currentTime = System.currentTimeMillis();
-            if (currentTime < this.lambdynlights_lastUpdate + mode.getDelay()) {
+            if (currentTime < this.lastUpdate + mode.getDelay()) {
                 return false;
             }
 
-            this.lambdynlights_lastUpdate = currentTime;
+            this.lastUpdate = currentTime;
         }
         return true;
     }
@@ -120,8 +126,8 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 
         int luminance = this.getLuminance();
 
-        if (luminance != this.lambdynlights_lastLuminance) {
-            this.lambdynlights_lastLuminance = luminance;
+        if (luminance != this.lastLuminance) {
+            this.lastLuminance = luminance;
 
             if (this.trackedLitChunkPos.isEmpty()) {
                 var chunkPos = new BlockPos.Mutable(MathHelper.floorDiv(this.pos.getX(), 16),

@@ -1,4 +1,4 @@
-name: Gradle Build
+name: Modrinth Publish
 
 on:
   release:

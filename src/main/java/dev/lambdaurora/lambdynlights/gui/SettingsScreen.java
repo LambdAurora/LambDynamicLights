@@ -106,7 +106,7 @@ public class SettingsScreen extends SpruceScreen {
         this.addDrawableChild(this.resetOption.createWidget(Position.of(this, this.width / 2 - 155, this.height - 29), 150));
         this.addDrawableChild(new SpruceButtonWidget(Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150, 20,
                 SpruceTexts.GUI_DONE,
-                (btn) -> this.client.openScreen(this.parent)));
+                btn -> this.client.setScreen(this.parent)));
     }
 
     @Override

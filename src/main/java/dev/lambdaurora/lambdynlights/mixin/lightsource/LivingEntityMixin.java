@@ -18,10 +18,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements DynamicLightSource {
-    private int lambdynlights$luminance;
+    @Unique
+    private int luminance;
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -30,7 +32,7 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
     @Override
     public void dynamicLightTick() {
         if (this.isOnFire() || this.isGlowing()) {
-            this.lambdynlights$luminance = 15;
+            this.luminance = 15;
         } else {
             int luminance = 0;
             var eyePos = new BlockPos(this.getX(), this.getEyeY(), this.getZ());
@@ -40,19 +42,19 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
                     luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
             }
 
-            this.lambdynlights$luminance = luminance;
+            this.luminance = luminance;
         }
 
         int luminance = DynamicLightHandlers.getLuminanceFrom(this);
-        if (luminance > this.lambdynlights$luminance)
-            this.lambdynlights$luminance = luminance;
+        if (luminance > this.luminance)
+            this.luminance = luminance;
 
         if (!LambDynLights.get().config.hasEntitiesLightSource() && this.getType() != EntityType.PLAYER)
-            this.lambdynlights$luminance = 0;
+            this.luminance = 0;
     }
 
     @Override
     public int getLuminance() {
-        return this.lambdynlights$luminance;
+        return this.luminance;
     }
 }

@@ -32,6 +32,6 @@ public final class DynamicLightsOptionsOption extends Option {
 
     @Override
     public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
-        return new ButtonWidget(x, y, width, 20, this.text, btn -> MinecraftClient.getInstance().openScreen(new SettingsScreen(this.parent)));
+        return new ButtonWidget(x, y, width, 20, this.text, btn -> MinecraftClient.getInstance().setScreen(new SettingsScreen(this.parent)));
     }
 }

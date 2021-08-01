@@ -1,5 +1,6 @@
 plugins {
-    id 'fabric-loom' version '0.9.+'
+    id 'fabric-loom' version '0.9.25'
+    id 'io.github.juuxel.loom-quiltflower' version '1.1.1'
     id 'java-library'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
@@ -58,23 +59,23 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        name = 'Terraformers'
-        url = 'https://maven.terraformersmc.com/releases/'
+        name 'Terraformers'
+        url 'https://maven.terraformersmc.com/releases/'
     }
     maven {
-        name = 'AperLambda'
-        url = 'https://aperlambda.github.io/maven'
+        name 'AperLambda'
+        url 'https://aperlambda.github.io/maven'
     }
     maven {
         name 'Gegy'
         url 'https://maven.gegy.dev'
     }
     maven {
-        name = "grondag"
-        url = "https://grondag-repo.appspot.com"
+        name 'grondag'
+        url 'https://grondag-repo.appspot.com'
         credentials {
-            username "guest"
-            password ""
+            username 'guest'
+            password ''
         }
     }
 }

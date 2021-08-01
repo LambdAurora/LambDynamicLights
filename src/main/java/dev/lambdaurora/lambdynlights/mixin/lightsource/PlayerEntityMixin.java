@@ -18,14 +18,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements DynamicLightSource {
     @Shadow
     public abstract boolean isSpectator();
 
-    private int lambdynlights$luminance;
-    private World lambdynlights$lastWorld;
+    @Unique
+    private int luminance;
+    @Unique
+    private World lastWorld;
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -34,7 +37,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
     @Override
     public void dynamicLightTick() {
         if (this.isOnFire() || this.isGlowing()) {
-            this.lambdynlights$luminance = 15;
+            this.luminance = 15;
         } else {
             int luminance = 0;
             var eyePos = new BlockPos(this.getX(), this.getEyeY(), this.getZ());
@@ -44,20 +47,20 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
                     luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
             }
 
-            this.lambdynlights$luminance = luminance;
+            this.luminance = luminance;
         }
 
         if (this.isSpectator())
-            this.lambdynlights$luminance = 0;
+            this.luminance = 0;
 
-        if (this.lambdynlights$lastWorld != this.getEntityWorld()) {
-            this.lambdynlights$lastWorld = this.getEntityWorld();
-            this.lambdynlights$luminance = 0;
+        if (this.lastWorld != this.getEntityWorld()) {
+            this.lastWorld = this.getEntityWorld();
+            this.luminance = 0;
         }
     }
 
     @Override
     public int getLuminance() {
-        return this.lambdynlights$luminance;
+        return this.luminance;
     }
 }

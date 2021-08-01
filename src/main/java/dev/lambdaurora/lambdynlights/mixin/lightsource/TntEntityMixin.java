@@ -18,6 +18,7 @@ import net.minecraft.entity.TntEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -27,8 +28,10 @@ public abstract class TntEntityMixin extends Entity implements DynamicLightSourc
     @Shadow
     public abstract int getFuse();
 
-    private int lambdynlights$startFuseTimer = 80;
-    private int lambdynlights$luminance;
+    @Unique
+    private int startFuseTimer = 80;
+    @Unique
+    private int luminance;
 
     public TntEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -36,7 +39,7 @@ public abstract class TntEntityMixin extends Entity implements DynamicLightSourc
 
     @Inject(method = "<init>(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/World;)V", at = @At("TAIL"))
     private void onNew(EntityType<? extends TntEntity> entityType, World world, CallbackInfo ci) {
-        this.lambdynlights$startFuseTimer = this.getFuse();
+        this.startFuseTimer = this.getFuse();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -58,20 +61,20 @@ public abstract class TntEntityMixin extends Entity implements DynamicLightSourc
     @Override
     public void dynamicLightTick() {
         if (this.isOnFire()) {
-            this.lambdynlights$luminance = 15;
+            this.luminance = 15;
         } else {
             ExplosiveLightingMode lightingMode = LambDynLights.get().config.getTntLightingMode();
             if (lightingMode == ExplosiveLightingMode.FANCY) {
-                var fuse = this.getFuse() / this.lambdynlights$startFuseTimer;
-                this.lambdynlights$luminance = (int) (-(fuse * fuse) * 10.0) + 10;
+                var fuse = this.getFuse() / this.startFuseTimer;
+                this.luminance = (int) (-(fuse * fuse) * 10.0) + 10;
             } else {
-                this.lambdynlights$luminance = 10;
+                this.luminance = 10;
             }
         }
     }
 
     @Override
     public int getLuminance() {
-        return this.lambdynlights$luminance;
+        return this.luminance;
     }
 }

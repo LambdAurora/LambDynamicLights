@@ -102,6 +102,16 @@
  - Removed any usage of a library.
  - Updated [SpruceUI].
 
+### 2.0.2
+
+ - Added Swedish translations ([#68](https://github.com/LambdAurora/LambDynamicLights/pull/68)).
+ - Block items now respect the `BlockStateTag` in item's NBT ([#71](https://github.com/LambdAurora/LambDynamicLights/issues/71)).
+ - Fixed glow item frames not emitting light ([#63](https://github.com/LambdAurora/LambDynamicLights/issues/63)).
+ - Fixed minecart not emitting light when holding a light source ([#70](https://github.com/LambdAurora/LambDynamicLights/issues/70)).
+ - Fixed glow berries not emitting light ([#72](https://github.com/LambdAurora/LambDynamicLights/issues/72)).
+ - Fixed glow squids not dimming when attacked ([#75](https://github.com/LambdAurora/LambDynamicLights/issues/75)).
+ - Fixed LambDynamicLights not rebuilding the correct chunks when at Y -18 or Y -50 ([#76](https://github.com/LambdAurora/LambDynamicLights/issues/76)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
 [Canvas Renderer]: https://www.curseforge.com/minecraft/mc-mods/canvas-renderer "Canvas Renderer CurseForge page"
