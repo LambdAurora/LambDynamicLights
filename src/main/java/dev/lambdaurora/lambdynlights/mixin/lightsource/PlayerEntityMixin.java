@@ -9,6 +9,9 @@
 
 package dev.lambdaurora.lambdynlights.mixin.lightsource;
 
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketsApi;
+
 import dev.lambdaurora.lambdynlights.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.entity.EntityType;
@@ -45,6 +48,19 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
             for (var equipped : this.getItemsEquipped()) {
                 if (!equipped.isEmpty())
                     luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
+            }
+            
+            if(LambDynLightsCompat.isTrinketsInstalled()) {
+                List<Pair<SlotReference, ItemStack>> a = TrinketsApi.getTrinketComponent(this).get().getAllEquipped();
+
+			    for(Pair<SlotReference, ItemStack> pair : a) {
+				    ItemStack stack = pair.getRight();
+
+				    if(stack != null && stack.getItem() != null) {
+					    if(!stack.isEmpty())
+						    luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(stack, submergedInFluid));
+				    }
+			    }
             }
 
             this.luminance = luminance;
