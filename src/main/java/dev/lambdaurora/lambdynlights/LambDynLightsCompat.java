@@ -47,4 +47,8 @@ public final class LambDynLightsCompat {
         return FabricLoader.getInstance().getModContainer("sodium").map(mod -> mod.getMetadata().getVersion().getFriendlyString().startsWith("0.1.0"))
                 .orElse(false);
     }
+    
+    public static boolean isTrinketsInstalled() {
+        return FabricLoader.getInstance().isModLoaded("trinkets");    
+    }
 }
