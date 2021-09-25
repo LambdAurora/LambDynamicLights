@@ -74,6 +74,11 @@ repositories {
         name 'grondag'
         url 'https://maven.dblsaiko.net/'
     }
+    
+    maven {
+		name = "Ladysnake Libs"
+		url = "https://ladysnake.jfrog.io/artifactory/mods"
+	}
 }
 
 configurations {
@@ -98,6 +103,8 @@ dependencies {
 
     shadow 'com.electronwill.night-config:core:3.6.3'
     shadow 'com.electronwill.night-config:toml:3.6.3'
+    
+    modImplementation "dev.emi:trinkets:3.0.4"
 }
 
 java {
