@@ -75,9 +75,10 @@ repositories {
         url 'https://maven.dblsaiko.net/'
     }
     
-    maven {
-	name = "Ladysnake Libs"
-	url = "https://ladysnake.jfrog.io/artifactory/mods"
+  
+	maven {
+		name 'Ladysnake Libs'
+		url 'https://ladysnake.jfrog.io/artifactory/mods'
 	}
 }
 
@@ -100,11 +101,11 @@ dependencies {
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         transitive = false
     }
-
-    shadow 'com.electronwill.night-config:core:3.6.3'
-    shadow 'com.electronwill.night-config:toml:3.6.3'
     
     modImplementation "dev.emi:trinkets:3.0.4"
+    
+    shadow 'com.electronwill.night-config:core:3.6.3'
+    shadow 'com.electronwill.night-config:toml:3.6.3'
 }
 
 java {
