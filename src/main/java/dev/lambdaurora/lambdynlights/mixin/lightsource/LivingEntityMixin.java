@@ -41,6 +41,19 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
                 if (!equipped.isEmpty())
                     luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
             }
+            
+            if(LambDynLightsCompat.isTrinketsInstalled()) {
+				List<Pair<SlotReference, ItemStack>> trinkets = TrinketsApi.getTrinketComponent((LivingEntity) (Object) this).get().getAllEquipped();
+
+				for(Pair<SlotReference, ItemStack> equipped : trinkets) {
+					ItemStack stack = equipped.getRight();
+
+					if(stack != null && stack.getItem() != null) {
+						if(!stack.isEmpty())
+							luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(stack, submergedInFluid));
+					}
+				}
+			}
 
             this.luminance = luminance;
         }
