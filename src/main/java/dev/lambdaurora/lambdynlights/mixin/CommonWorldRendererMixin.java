@@ -23,17 +23,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = WorldRenderer.class, priority = 900)
 public abstract class CommonWorldRendererMixin implements WorldRendererAccessor {
-    @Invoker("scheduleChunkRender")
-    @Override
-    public abstract void lambdynlights_scheduleChunkRebuild(int x, int y, int z, boolean important);
+	@Invoker("scheduleChunkRender")
+	@Override
+	public abstract void lambdynlights_scheduleChunkRebuild(int x, int y, int z, boolean important);
 
-    @Inject(
-            method = "getLightmapCoordinates(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;)I",
-            at = @At("TAIL"),
-            cancellable = true
-    )
-    private static void onGetLightmapCoordinates(BlockRenderView world, BlockState state, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
-        if (!world.getBlockState(pos).isOpaqueFullCube(world, pos) && LambDynLights.get().config.getDynamicLightsMode().isEnabled())
-            cir.setReturnValue(LambDynLights.get().getLightmapWithDynamicLight(pos, cir.getReturnValue()));
-    }
+	@Inject(
+			method = "getLightmapCoordinates(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;)I",
+			at = @At("TAIL"),
+			cancellable = true
+	)
+	private static void onGetLightmapCoordinates(BlockRenderView world, BlockState state, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
+		if (!world.getBlockState(pos).isOpaqueFullCube(world, pos) && LambDynLights.get().config.getDynamicLightsMode().isEnabled())
+			cir.setReturnValue(LambDynLights.get().getLightmapWithDynamicLight(pos, cir.getReturnValue()));
+	}
 }

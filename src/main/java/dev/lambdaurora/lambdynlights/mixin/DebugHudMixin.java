@@ -28,23 +28,23 @@ import java.util.List;
  */
 @Mixin(DebugHud.class)
 public class DebugHudMixin {
-    @Inject(method = "getLeftText", at = @At("RETURN"))
-    private void onGetLeftText(CallbackInfoReturnable<List<String>> cir) {
-        var list = cir.getReturnValue();
-        var ldl = LambDynLights.get();
-        var builder = new StringBuilder("Dynamic Light Sources: ");
-        builder.append(ldl.getLightSourcesCount())
-                .append(" (U: ")
-                .append(ldl.getLastUpdateCount());
+	@Inject(method = "getLeftText", at = @At("RETURN"))
+	private void onGetLeftText(CallbackInfoReturnable<List<String>> cir) {
+		var list = cir.getReturnValue();
+		var ldl = LambDynLights.get();
+		var builder = new StringBuilder("Dynamic Light Sources: ");
+		builder.append(ldl.getLightSourcesCount())
+				.append(" (U: ")
+				.append(ldl.getLastUpdateCount());
 
-        if (!ldl.config.getDynamicLightsMode().isEnabled()) {
-            builder.append(" ; ");
-            builder.append(Formatting.RED);
-            builder.append("Disabled");
-            builder.append(Formatting.RESET);
-        }
+		if (!ldl.config.getDynamicLightsMode().isEnabled()) {
+			builder.append(" ; ");
+			builder.append(Formatting.RED);
+			builder.append("Disabled");
+			builder.append(Formatting.RESET);
+		}
 
-        builder.append(')');
-        list.add(builder.toString());
-    }
+		builder.append(')');
+		list.add(builder.toString());
+	}
 }

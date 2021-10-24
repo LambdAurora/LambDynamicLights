@@ -33,42 +33,42 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(AbstractMinecartEntity.class)
 public abstract class AbstractMinecartEntityMixin extends Entity implements DynamicLightSource {
-    @Shadow
-    public abstract BlockState getContainedBlock();
+	@Shadow
+	public abstract BlockState getContainedBlock();
 
-    @Unique
-    private int luminance;
+	@Unique
+	private int luminance;
 
-    public AbstractMinecartEntityMixin(EntityType<?> type, World world) {
-        super(type, world);
-    }
+	public AbstractMinecartEntityMixin(EntityType<?> type, World world) {
+		super(type, world);
+	}
 
-    @Inject(method = "tick", at = @At("HEAD"))
-    private void onTick(CallbackInfo ci) {
-        // We do not want to update the entity on the server.
-        if (this.world.isClient()) {
-            if (this.isRemoved()) {
-                this.setDynamicLightEnabled(false);
-            } else {
-                this.dynamicLightTick();
-                LambDynLights.updateTracking(this);
-            }
-        }
-    }
+	@Inject(method = "tick", at = @At("HEAD"))
+	private void onTick(CallbackInfo ci) {
+		// We do not want to update the entity on the server.
+		if (this.world.isClient()) {
+			if (this.isRemoved()) {
+				this.setDynamicLightEnabled(false);
+			} else {
+				this.dynamicLightTick();
+				LambDynLights.updateTracking(this);
+			}
+		}
+	}
 
-    @Override
-    public void dynamicLightTick() {
-        this.luminance = Math.max(
-                Math.max(
-                        this.isOnFire() ? 15 : 0,
-                        this.getContainedBlock().getLuminance()
-                ),
-                DynamicLightHandlers.getLuminanceFrom(this)
-        );
-    }
+	@Override
+	public void dynamicLightTick() {
+		this.luminance = Math.max(
+				Math.max(
+						this.isOnFire() ? 15 : 0,
+						this.getContainedBlock().getLuminance()
+				),
+				DynamicLightHandlers.getLuminanceFrom(this)
+		);
+	}
 
-    @Override
-    public int getLuminance() {
-        return this.luminance;
-    }
+	@Override
+	public int getLuminance() {
+		return this.luminance;
+	}
 }

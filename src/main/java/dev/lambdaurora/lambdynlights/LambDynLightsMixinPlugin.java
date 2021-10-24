@@ -25,42 +25,42 @@ import java.util.Set;
  * @since 1.0.0
  */
 public class LambDynLightsMixinPlugin implements IMixinConfigPlugin {
-    private final HashMap<String, Boolean> conditionalMixins = new HashMap<>();
+	private final HashMap<String, Boolean> conditionalMixins = new HashMap<>();
 
-    public LambDynLightsMixinPlugin() {
-        boolean ltrInstalled = LambDynLightsCompat.isLilTaterReloadedInstalled();
-        this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.ltr.LilTaterBlocksMixin", ltrInstalled);
-        this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.ltr.LilTaterBlockEntityMixin", ltrInstalled);
-    }
+	public LambDynLightsMixinPlugin() {
+		boolean ltrInstalled = LambDynLightsCompat.isLilTaterReloadedInstalled();
+		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.ltr.LilTaterBlocksMixin", ltrInstalled);
+		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.ltr.LilTaterBlockEntityMixin", ltrInstalled);
+	}
 
-    @Override
-    public void onLoad(String mixinPackage) {
-    }
+	@Override
+	public void onLoad(String mixinPackage) {
+	}
 
-    @Override
-    public String getRefMapperConfig() {
-        return null;
-    }
+	@Override
+	public String getRefMapperConfig() {
+		return null;
+	}
 
-    @Override
-    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return this.conditionalMixins.getOrDefault(mixinClassName, Boolean.TRUE);
-    }
+	@Override
+	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+		return this.conditionalMixins.getOrDefault(mixinClassName, Boolean.TRUE);
+	}
 
-    @Override
-    public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
-    }
+	@Override
+	public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
+	}
 
-    @Override
-    public List<String> getMixins() {
-        return null;
-    }
+	@Override
+	public List<String> getMixins() {
+		return null;
+	}
 
-    @Override
-    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-    }
+	@Override
+	public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+	}
 
-    @Override
-    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-    }
+	@Override
+	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+	}
 }

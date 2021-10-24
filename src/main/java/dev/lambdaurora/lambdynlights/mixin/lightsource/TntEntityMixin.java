@@ -25,56 +25,56 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TntEntity.class)
 public abstract class TntEntityMixin extends Entity implements DynamicLightSource {
-    @Shadow
-    public abstract int getFuse();
+	@Shadow
+	public abstract int getFuse();
 
-    @Unique
-    private int startFuseTimer = 80;
-    @Unique
-    private int luminance;
+	@Unique
+	private int startFuseTimer = 80;
+	@Unique
+	private int luminance;
 
-    public TntEntityMixin(EntityType<?> type, World world) {
-        super(type, world);
-    }
+	public TntEntityMixin(EntityType<?> type, World world) {
+		super(type, world);
+	}
 
-    @Inject(method = "<init>(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/World;)V", at = @At("TAIL"))
-    private void onNew(EntityType<? extends TntEntity> entityType, World world, CallbackInfo ci) {
-        this.startFuseTimer = this.getFuse();
-    }
+	@Inject(method = "<init>(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/World;)V", at = @At("TAIL"))
+	private void onNew(EntityType<? extends TntEntity> entityType, World world, CallbackInfo ci) {
+		this.startFuseTimer = this.getFuse();
+	}
 
-    @Inject(method = "tick", at = @At("TAIL"))
-    private void onTick(CallbackInfo ci) {
-        // We do not want to update the entity on the server.
-        if (this.getEntityWorld().isClient()) {
-            if (!LambDynLights.get().config.getTntLightingMode().isEnabled())
-                return;
+	@Inject(method = "tick", at = @At("TAIL"))
+	private void onTick(CallbackInfo ci) {
+		// We do not want to update the entity on the server.
+		if (this.getEntityWorld().isClient()) {
+			if (!LambDynLights.get().config.getTntLightingMode().isEnabled())
+				return;
 
-            if (this.isRemoved()) {
-                this.setDynamicLightEnabled(false);
-            } else {
-                this.dynamicLightTick();
-                LambDynLights.updateTracking(this);
-            }
-        }
-    }
+			if (this.isRemoved()) {
+				this.setDynamicLightEnabled(false);
+			} else {
+				this.dynamicLightTick();
+				LambDynLights.updateTracking(this);
+			}
+		}
+	}
 
-    @Override
-    public void dynamicLightTick() {
-        if (this.isOnFire()) {
-            this.luminance = 15;
-        } else {
-            ExplosiveLightingMode lightingMode = LambDynLights.get().config.getTntLightingMode();
-            if (lightingMode == ExplosiveLightingMode.FANCY) {
-                var fuse = this.getFuse() / this.startFuseTimer;
-                this.luminance = (int) (-(fuse * fuse) * 10.0) + 10;
-            } else {
-                this.luminance = 10;
-            }
-        }
-    }
+	@Override
+	public void dynamicLightTick() {
+		if (this.isOnFire()) {
+			this.luminance = 15;
+		} else {
+			ExplosiveLightingMode lightingMode = LambDynLights.get().config.getTntLightingMode();
+			if (lightingMode == ExplosiveLightingMode.FANCY) {
+				var fuse = this.getFuse() / this.startFuseTimer;
+				this.luminance = (int) (-(fuse * fuse) * 10.0) + 10;
+			} else {
+				this.luminance = 10;
+			}
+		}
+	}
 
-    @Override
-    public int getLuminance() {
-        return this.luminance;
-    }
+	@Override
+	public int getLuminance() {
+		return this.luminance;
+	}
 }

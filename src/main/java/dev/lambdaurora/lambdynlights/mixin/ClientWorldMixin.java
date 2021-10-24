@@ -21,15 +21,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientWorld.class)
 public abstract class ClientWorldMixin {
-    @Shadow
-    protected abstract EntityLookup<Entity> getEntityLookup();
+	@Shadow
+	protected abstract EntityLookup<Entity> getEntityLookup();
 
-    @Inject(method = "removeEntity(ILnet/minecraft/entity/Entity$RemovalReason;)V", at = @At("HEAD"))
-    private void onFinishRemovingEntity(int entityId, Entity.RemovalReason removalReason, CallbackInfo ci) {
-        var entity = this.getEntityLookup().get(entityId);
-        if (entity != null) {
-            var dls = (DynamicLightSource) entity;
-            dls.setDynamicLightEnabled(false);
-        }
-    }
+	@Inject(method = "removeEntity(ILnet/minecraft/entity/Entity$RemovalReason;)V", at = @At("HEAD"))
+	private void onFinishRemovingEntity(int entityId, Entity.RemovalReason removalReason, CallbackInfo ci) {
+		var entity = this.getEntityLookup().get(entityId);
+		if (entity != null) {
+			var dls = (DynamicLightSource) entity;
+			dls.setDynamicLightEnabled(false);
+		}
+	}
 }

@@ -17,13 +17,13 @@ package dev.lambdaurora.lambdynlights.accessor;
  * @since 1.0.0
  */
 public interface WorldRendererAccessor {
-    /**
-     * Schedules a chunk rebuild.
-     *
-     * @param x X coordinates of the chunk.
-     * @param y Y coordinates of the chunk.
-     * @param z Z coordinates of the chunk.
-     * @param important True if important, else false.
-     */
-    void lambdynlights_scheduleChunkRebuild(int x, int y, int z, boolean important);
+	/**
+	 * Schedules a chunk rebuild.
+	 *
+	 * @param x X coordinates of the chunk.
+	 * @param y Y coordinates of the chunk.
+	 * @param z Z coordinates of the chunk.
+	 * @param important True if important, else false.
+	 */
+	void lambdynlights_scheduleChunkRebuild(int x, int y, int z, boolean important);
 }

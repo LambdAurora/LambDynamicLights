@@ -20,11 +20,11 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Pseudo
 @Mixin(targets = "mods.ltr.entities.LilTaterBlockEntity")
 public abstract class LilTaterBlockEntityMixin implements Inventory, LilTaterBlockEntityAccessor {
-    @Override
-    public boolean lambdynlights_isEmpty() {
-        return this.isEmpty();
-    }
+	@Override
+	public boolean lambdynlights_isEmpty() {
+		return this.isEmpty();
+	}
 
-    @Accessor(value = "items", remap = false)
-    public abstract DefaultedList<ItemStack> lambdynlights_getItems();
+	@Accessor(value = "items", remap = false)
+	public abstract DefaultedList<ItemStack> lambdynlights_getItems();
 }

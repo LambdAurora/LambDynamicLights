@@ -22,45 +22,45 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements DynamicLightSource {
-    @Shadow
-    public abstract boolean isSpectator();
+	@Shadow
+	public abstract boolean isSpectator();
 
-    @Unique
-    private int luminance;
-    @Unique
-    private World lastWorld;
+	@Unique
+	private int luminance;
+	@Unique
+	private World lastWorld;
 
-    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
-        super(entityType, world);
-    }
+	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+		super(entityType, world);
+	}
 
-    @Override
-    public void dynamicLightTick() {
-        if (this.isOnFire() || this.isGlowing()) {
-            this.luminance = 15;
-        } else {
-            int luminance = 0;
-            var eyePos = new BlockPos(this.getX(), this.getEyeY(), this.getZ());
-            boolean submergedInFluid = !this.world.getFluidState(eyePos).isEmpty();
-            for (var equipped : this.getItemsEquipped()) {
-                if (!equipped.isEmpty())
-                    luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
-            }
+	@Override
+	public void dynamicLightTick() {
+		if (this.isOnFire() || this.isGlowing()) {
+			this.luminance = 15;
+		} else {
+			int luminance = 0;
+			var eyePos = new BlockPos(this.getX(), this.getEyeY(), this.getZ());
+			boolean submergedInFluid = !this.world.getFluidState(eyePos).isEmpty();
+			for (var equipped : this.getItemsEquipped()) {
+				if (!equipped.isEmpty())
+					luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
+			}
 
-            this.luminance = luminance;
-        }
+			this.luminance = luminance;
+		}
 
-        if (this.isSpectator())
-            this.luminance = 0;
+		if (this.isSpectator())
+			this.luminance = 0;
 
-        if (this.lastWorld != this.getEntityWorld()) {
-            this.lastWorld = this.getEntityWorld();
-            this.luminance = 0;
-        }
-    }
+		if (this.lastWorld != this.getEntityWorld()) {
+			this.lastWorld = this.getEntityWorld();
+			this.luminance = 0;
+		}
+	}
 
-    @Override
-    public int getLuminance() {
-        return this.luminance;
-    }
+	@Override
+	public int getLuminance() {
+		return this.luminance;
+	}
 }

@@ -24,21 +24,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Pseudo
 @Mixin(targets = "mods.ltr.registry.LilTaterBlocks", remap = false)
 public class LilTaterBlocksMixin {
-    @Accessor("LIL_TATER_BLOCK_ENTITY")
-    private static BlockEntityType<?> getLilTaterBlockEntity() {
-        throw new IllegalStateException("Accessor did not apply properly.");
-    }
+	@Accessor("LIL_TATER_BLOCK_ENTITY")
+	private static BlockEntityType<?> getLilTaterBlockEntity() {
+		throw new IllegalStateException("Accessor did not apply properly.");
+	}
 
-    @Inject(method = "init", at = @At("TAIL"))
-    private static void onInit(CallbackInfo ci) {
-        DynamicLightHandlers.registerDynamicLightHandler(getLilTaterBlockEntity(), entity -> {
-            int luminance = 0;
-            if (!((LilTaterBlockEntityAccessor) entity).lambdynlights_isEmpty()) {
-                for (ItemStack item : ((LilTaterBlockEntityAccessor) entity).lambdynlights_getItems()) {
-                    luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(item, !entity.getCachedState().getFluidState().isEmpty()));
-                }
-            }
-            return luminance;
-        });
-    }
+	@Inject(method = "init", at = @At("TAIL"))
+	private static void onInit(CallbackInfo ci) {
+		DynamicLightHandlers.registerDynamicLightHandler(getLilTaterBlockEntity(), entity -> {
+			int luminance = 0;
+			if (!((LilTaterBlockEntityAccessor) entity).lambdynlights_isEmpty()) {
+				for (ItemStack item : ((LilTaterBlockEntityAccessor) entity).lambdynlights_getItems()) {
+					luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(item, !entity.getCachedState().getFluidState().isEmpty()));
+				}
+			}
+			return luminance;
+		});
+	}
 }
