@@ -72,11 +72,7 @@ repositories {
     }
     maven {
         name 'grondag'
-        url 'https://grondag-repo.appspot.com'
-        credentials {
-            username 'guest'
-            password ''
-        }
+        url 'https://maven.dblsaiko.net/'
     }
 }
 
