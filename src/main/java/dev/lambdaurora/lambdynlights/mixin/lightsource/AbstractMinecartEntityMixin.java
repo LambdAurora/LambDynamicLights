@@ -37,7 +37,7 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Dyna
 	public abstract BlockState getContainedBlock();
 
 	@Unique
-	private int luminance;
+	private int lambdynlights$luminance;
 
 	public AbstractMinecartEntityMixin(EntityType<?> type, World world) {
 		super(type, world);
@@ -58,7 +58,7 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Dyna
 
 	@Override
 	public void dynamicLightTick() {
-		this.luminance = Math.max(
+		this.lambdynlights$luminance = Math.max(
 				Math.max(
 						this.isOnFire() ? 15 : 0,
 						this.getContainedBlock().getLuminance()
@@ -69,6 +69,6 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Dyna
 
 	@Override
 	public int getLuminance() {
-		return this.luminance;
+		return this.lambdynlights$luminance;
 	}
 }

@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements DynamicLightSource {
 	@Unique
-	private int luminance;
+	protected int lambdynlights$luminance;
 
 	public LivingEntityMixin(EntityType<?> type, World world) {
 		super(type, world);
@@ -32,7 +32,7 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
 	@Override
 	public void dynamicLightTick() {
 		if (this.isOnFire() || this.isGlowing()) {
-			this.luminance = 15;
+			this.lambdynlights$luminance = 15;
 		} else {
 			int luminance = 0;
 			var eyePos = new BlockPos(this.getX(), this.getEyeY(), this.getZ());
@@ -42,19 +42,19 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
 					luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
 			}
 
-			this.luminance = luminance;
+			this.lambdynlights$luminance = luminance;
 		}
 
 		int luminance = DynamicLightHandlers.getLuminanceFrom(this);
-		if (luminance > this.luminance)
-			this.luminance = luminance;
+		if (luminance > this.lambdynlights$luminance)
+			this.lambdynlights$luminance = luminance;
 
 		if (!LambDynLights.get().config.hasEntitiesLightSource() && this.getType() != EntityType.PLAYER)
-			this.luminance = 0;
+			this.lambdynlights$luminance = 0;
 	}
 
 	@Override
 	public int getLuminance() {
-		return this.luminance;
+		return this.lambdynlights$luminance;
 	}
 }

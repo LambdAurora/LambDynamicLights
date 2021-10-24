@@ -51,7 +51,7 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 	@Unique
 	private long lastUpdate = 0;
 	@Unique
-	private LongOpenHashSet trackedLitChunkPos = new LongOpenHashSet();
+	private final LongOpenHashSet lambdynlights$trackedLitChunkPos = new LongOpenHashSet();
 
 	@Override
 	public double getDynamicLightX() {
@@ -129,12 +129,12 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 		if (luminance != this.lastLuminance) {
 			this.lastLuminance = luminance;
 
-			if (this.trackedLitChunkPos.isEmpty()) {
+			if (this.lambdynlights$trackedLitChunkPos.isEmpty()) {
 				var chunkPos = new BlockPos.Mutable(MathHelper.floorDiv(this.pos.getX(), 16),
 						MathHelper.floorDiv(this.pos.getY(), 16),
 						MathHelper.floorDiv(this.pos.getZ(), 16));
 
-				LambDynLights.updateTrackedChunks(chunkPos, null, this.trackedLitChunkPos);
+				LambDynLights.updateTrackedChunks(chunkPos, null, this.lambdynlights$trackedLitChunkPos);
 
 				var directionX = (this.pos.getX() & 15) >= 8 ? Direction.EAST : Direction.WEST;
 				var directionY = (this.pos.getY() & 15) >= 8 ? Direction.UP : Direction.DOWN;
@@ -151,7 +151,7 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 						chunkPos.move(directionZ.getOpposite()); // origin
 						chunkPos.move(directionY); // Y
 					}
-					LambDynLights.updateTrackedChunks(chunkPos, null, this.trackedLitChunkPos);
+					LambDynLights.updateTrackedChunks(chunkPos, null, this.lambdynlights$trackedLitChunkPos);
 				}
 			}
 
@@ -165,7 +165,7 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 	@Override
 	public void lambdynlights$scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer) {
 		if (this.world == MinecraftClient.getInstance().world)
-			for (long pos : this.trackedLitChunkPos) {
+			for (long pos : this.lambdynlights$trackedLitChunkPos) {
 				LambDynLights.scheduleChunkRebuild(renderer, pos);
 			}
 	}

@@ -31,7 +31,7 @@ public abstract class TntEntityMixin extends Entity implements DynamicLightSourc
 	@Unique
 	private int startFuseTimer = 80;
 	@Unique
-	private int luminance;
+	private int lambdynlights$luminance;
 
 	public TntEntityMixin(EntityType<?> type, World world) {
 		super(type, world);
@@ -61,20 +61,20 @@ public abstract class TntEntityMixin extends Entity implements DynamicLightSourc
 	@Override
 	public void dynamicLightTick() {
 		if (this.isOnFire()) {
-			this.luminance = 15;
+			this.lambdynlights$luminance = 15;
 		} else {
 			ExplosiveLightingMode lightingMode = LambDynLights.get().config.getTntLightingMode();
 			if (lightingMode == ExplosiveLightingMode.FANCY) {
 				var fuse = this.getFuse() / this.startFuseTimer;
-				this.luminance = (int) (-(fuse * fuse) * 10.0) + 10;
+				this.lambdynlights$luminance = (int) (-(fuse * fuse) * 10.0) + 10;
 			} else {
-				this.luminance = 10;
+				this.lambdynlights$luminance = 10;
 			}
 		}
 	}
 
 	@Override
 	public int getLuminance() {
-		return this.luminance;
+		return this.lambdynlights$luminance;
 	}
 }

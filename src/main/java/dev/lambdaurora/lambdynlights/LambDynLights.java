@@ -46,14 +46,14 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer {
-	public static final String MODID = "lambdynlights";
+	public static final String NAMESPACE = "lambdynlights";
 	private static final double MAX_RADIUS = 7.75;
 	private static LambDynLights INSTANCE;
-	public final Logger logger = LogManager.getLogger(MODID);
+	public final Logger logger = LogManager.getLogger(NAMESPACE);
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
 	private final ConcurrentLinkedQueue<DynamicLightSource> dynamicLightSources = new ConcurrentLinkedQueue<>();
 	private long lastUpdate = System.currentTimeMillis();
@@ -73,7 +73,7 @@ public class LambDynLights implements ClientModInitializer {
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 			@Override
 			public Identifier getFabricId() {
-				return new Identifier(MODID, "dynamiclights_resources");
+				return new Identifier(NAMESPACE, "dynamiclights_resources");
 			}
 
 			@Override
@@ -375,7 +375,7 @@ public class LambDynLights implements ClientModInitializer {
 
 	public static void scheduleChunkRebuild(@NotNull WorldRenderer renderer, int x, int y, int z) {
 		if (MinecraftClient.getInstance().world != null)
-			((WorldRendererAccessor) renderer).lambdynlights_scheduleChunkRebuild(x, y, z, false);
+			((WorldRendererAccessor) renderer).lambdynlights$scheduleChunkRebuild(x, y, z, false);
 	}
 
 	/**

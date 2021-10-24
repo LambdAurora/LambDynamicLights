@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 
 public interface LilTaterBlockEntityAccessor {
-	boolean lambdynlights_isEmpty();
+	boolean lambdynlights$isEmpty();
 
-	DefaultedList<ItemStack> lambdynlights_getItems();
+	DefaultedList<ItemStack> lambdynlights$getItems();
 }

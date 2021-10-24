@@ -60,19 +60,19 @@ public abstract class EntityMixin implements DynamicLightSource {
 	public abstract ChunkPos getChunkPos();
 
 	@Unique
-	private int luminance = 0;
+	protected int lambdynlights$luminance = 0;
 	@Unique
-	private int lastLuminance = 0;
+	private int lambdynlights$lastLuminance = 0;
 	@Unique
-	private long lastUpdate = 0;
+	private long lambdynlights$lastUpdate = 0;
 	@Unique
-	private double prevX;
+	private double lambdynlights$prevX;
 	@Unique
-	private double prevY;
+	private double lambdynlights$prevY;
 	@Unique
-	private double prevZ;
+	private double lambdynlights$prevZ;
 	@Unique
-	private LongOpenHashSet trackedLitChunkPos = new LongOpenHashSet();
+	private LongOpenHashSet lambdynlights$trackedLitChunkPos = new LongOpenHashSet();
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void onTick(CallbackInfo ci) {
@@ -83,7 +83,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 			} else {
 				this.dynamicLightTick();
 				if (!LambDynLights.get().config.hasEntitiesLightSource() && this.getType() != EntityType.PLAYER)
-					this.luminance = 0;
+					this.lambdynlights$luminance = 0;
 				LambDynLights.updateTracking(this);
 			}
 		}
@@ -117,7 +117,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 
 	@Override
 	public void resetDynamicLight() {
-		this.lastLuminance = 0;
+		this.lambdynlights$lastLuminance = 0;
 	}
 
 	@Override
@@ -127,44 +127,44 @@ public abstract class EntityMixin implements DynamicLightSource {
 			return false;
 		if (mode.hasDelay()) {
 			long currentTime = System.currentTimeMillis();
-			if (currentTime < this.lastUpdate + mode.getDelay()) {
+			if (currentTime < this.lambdynlights$lastUpdate + mode.getDelay()) {
 				return false;
 			}
 
-			this.lastUpdate = currentTime;
+			this.lambdynlights$lastUpdate = currentTime;
 		}
 		return true;
 	}
 
 	@Override
 	public void dynamicLightTick() {
-		this.luminance = this.isOnFire() ? 15 : 0;
+		this.lambdynlights$luminance = this.isOnFire() ? 15 : 0;
 
 		int luminance = DynamicLightHandlers.getLuminanceFrom((Entity) (Object) this);
-		if (luminance > this.luminance)
-			this.luminance = luminance;
+		if (luminance > this.lambdynlights$luminance)
+			this.lambdynlights$luminance = luminance;
 	}
 
 	@Override
 	public int getLuminance() {
-		return this.luminance;
+		return this.lambdynlights$luminance;
 	}
 
 	@Override
 	public boolean lambdynlights$updateDynamicLight(@NotNull WorldRenderer renderer) {
 		if (!this.shouldUpdateDynamicLight())
 			return false;
-		double deltaX = this.getX() - this.prevX;
-		double deltaY = this.getY() - this.prevY;
-		double deltaZ = this.getZ() - this.prevZ;
+		double deltaX = this.getX() - this.lambdynlights$prevX;
+		double deltaY = this.getY() - this.lambdynlights$prevY;
+		double deltaZ = this.getZ() - this.lambdynlights$prevZ;
 
 		int luminance = this.getLuminance();
 
-		if (Math.abs(deltaX) > 0.1D || Math.abs(deltaY) > 0.1D || Math.abs(deltaZ) > 0.1D || luminance != this.lastLuminance) {
-			this.prevX = this.getX();
-			this.prevY = this.getY();
-			this.prevZ = this.getZ();
-			this.lastLuminance = luminance;
+		if (Math.abs(deltaX) > 0.1D || Math.abs(deltaY) > 0.1D || Math.abs(deltaZ) > 0.1D || luminance != this.lambdynlights$lastLuminance) {
+			this.lambdynlights$prevX = this.getX();
+			this.lambdynlights$prevY = this.getY();
+			this.lambdynlights$prevZ = this.getZ();
+			this.lambdynlights$lastLuminance = luminance;
 
 			var newPos = new LongOpenHashSet();
 
@@ -173,7 +173,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 				var chunkPos = new BlockPos.Mutable(entityChunkPos.x, ChunkSectionPos.getSectionCoord(this.getEyeY()), entityChunkPos.z);
 
 				LambDynLights.scheduleChunkRebuild(renderer, chunkPos);
-				LambDynLights.updateTrackedChunks(chunkPos, this.trackedLitChunkPos, newPos);
+				LambDynLights.updateTrackedChunks(chunkPos, this.lambdynlights$trackedLitChunkPos, newPos);
 
 				var directionX = (this.getBlockPos().getX() & 15) >= 8 ? Direction.EAST : Direction.WEST;
 				var directionY = (MathHelper.fastFloor(this.getEyeY()) & 15) >= 8 ? Direction.UP : Direction.DOWN;
@@ -191,14 +191,14 @@ public abstract class EntityMixin implements DynamicLightSource {
 						chunkPos.move(directionY); // Y
 					}
 					LambDynLights.scheduleChunkRebuild(renderer, chunkPos);
-					LambDynLights.updateTrackedChunks(chunkPos, this.trackedLitChunkPos, newPos);
+					LambDynLights.updateTrackedChunks(chunkPos, this.lambdynlights$trackedLitChunkPos, newPos);
 				}
 			}
 
 			// Schedules the rebuild of removed chunks.
 			this.lambdynlights$scheduleTrackedChunksRebuild(renderer);
 			// Update tracked lit chunks.
-			this.trackedLitChunkPos = newPos;
+			this.lambdynlights$trackedLitChunkPos = newPos;
 			return true;
 		}
 		return false;
@@ -207,7 +207,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 	@Override
 	public void lambdynlights$scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer) {
 		if (MinecraftClient.getInstance().world == this.world)
-			for (long pos : this.trackedLitChunkPos) {
+			for (long pos : this.lambdynlights$trackedLitChunkPos) {
 				LambDynLights.scheduleChunkRebuild(renderer, pos);
 			}
 	}

@@ -32,8 +32,7 @@ public abstract class WorldMixin {
 	public abstract boolean isClient();
 
 	@Shadow
-	@Nullable
-	public abstract BlockEntity getBlockEntity(BlockPos pos);
+	public abstract @Nullable BlockEntity getBlockEntity(BlockPos pos);
 
 	@Inject(
 			method = "tickBlockEntities",

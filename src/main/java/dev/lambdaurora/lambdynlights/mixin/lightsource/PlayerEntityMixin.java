@@ -11,6 +11,8 @@ package dev.lambdaurora.lambdynlights.mixin.lightsource;
 
 import dev.lambdaurora.lambdynlights.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.LambDynLights;
+import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,9 +28,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
 	public abstract boolean isSpectator();
 
 	@Unique
-	private int luminance;
+	protected int lambdynlights$luminance;
 	@Unique
-	private World lastWorld;
+	private World lambdynlights$lastWorld;
 
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
 		super(entityType, world);
@@ -37,9 +39,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
 	@Override
 	public void dynamicLightTick() {
 		if (this.isOnFire() || this.isGlowing()) {
-			this.luminance = 15;
+			this.lambdynlights$luminance = 15;
 		} else {
-			int luminance = 0;
+			int luminance = DynamicLightHandlers.getLuminanceFrom((Entity) this);
+
 			var eyePos = new BlockPos(this.getX(), this.getEyeY(), this.getZ());
 			boolean submergedInFluid = !this.world.getFluidState(eyePos).isEmpty();
 			for (var equipped : this.getItemsEquipped()) {
@@ -47,20 +50,20 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
 					luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
 			}
 
-			this.luminance = luminance;
+			this.lambdynlights$luminance = luminance;
 		}
 
 		if (this.isSpectator())
-			this.luminance = 0;
+			this.lambdynlights$luminance = 0;
 
-		if (this.lastWorld != this.getEntityWorld()) {
-			this.lastWorld = this.getEntityWorld();
-			this.luminance = 0;
+		if (this.lambdynlights$lastWorld != this.getEntityWorld()) {
+			this.lambdynlights$lastWorld = this.getEntityWorld();
+			this.lambdynlights$luminance = 0;
 		}
 	}
 
 	@Override
 	public int getLuminance() {
-		return this.luminance;
+		return this.lambdynlights$luminance;
 	}
 }
