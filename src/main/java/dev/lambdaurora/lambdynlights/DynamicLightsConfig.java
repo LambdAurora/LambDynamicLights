@@ -37,6 +37,11 @@ public class DynamicLightsConfig {
 	public static final Path CONFIG_FILE_PATH = Paths.get("config/lambdynlights.toml");
 	protected final FileConfig config;
 	private final LambDynLights mod;
+
+	private boolean entitiesLightSource;
+	private boolean blockEntitiesLightSource;
+	private boolean waterSensitiveCheck;
+
 	private DynamicLightsMode dynamicLightsMode;
 	private ExplosiveLightingMode creeperLightingMode;
 	private ExplosiveLightingMode tntLightingMode;
@@ -61,6 +66,10 @@ public class DynamicLightsConfig {
 	 */
 	public void load() {
 		this.config.load();
+
+		this.entitiesLightSource = this.config.getOrElse("light_sources.entities", DEFAULT_ENTITIES_LIGHT_SOURCE);
+		this.blockEntitiesLightSource = this.config.getOrElse("light_sources.block_entities", DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE);
+		this.waterSensitiveCheck = this.config.getOrElse("light_sources.water_sensitive_check", DEFAULT_WATER_SENSITIVE_CHECK);
 
 		String dynamicLightsModeValue = this.config.getOrElse("mode", DEFAULT_DYNAMIC_LIGHTS_MODE.getName());
 		this.dynamicLightsMode = DynamicLightsMode.byId(dynamicLightsModeValue)
@@ -121,7 +130,7 @@ public class DynamicLightsConfig {
 	 * @return {@code true} if block entities as light source is enabled, else {@code false}
 	 */
 	public boolean hasEntitiesLightSource() {
-		return this.config.getOrElse("light_sources.entities", DEFAULT_ENTITIES_LIGHT_SOURCE);
+		return this.entitiesLightSource;
 	}
 
 	/**
@@ -132,6 +141,8 @@ public class DynamicLightsConfig {
 	public void setEntitiesLightSource(boolean enabled) {
 		if (!enabled)
 			this.mod.removeEntitiesLightSource();
+
+		this.entitiesLightSource = enabled;
 		this.config.set("light_sources.entities", enabled);
 	}
 
@@ -141,7 +152,7 @@ public class DynamicLightsConfig {
 	 * @return {@code true} if block entities as light source is enabled, else {@code false}.
 	 */
 	public boolean hasBlockEntitiesLightSource() {
-		return this.config.getOrElse("light_sources.block_entities", DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE);
+		return this.blockEntitiesLightSource;
 	}
 
 	/**
@@ -152,6 +163,8 @@ public class DynamicLightsConfig {
 	public void setBlockEntitiesLightSource(boolean enabled) {
 		if (!enabled)
 			this.mod.removeBlockEntitiesLightSource();
+
+		this.blockEntitiesLightSource = enabled;
 		this.config.set("light_sources.block_entities", enabled);
 	}
 
@@ -161,7 +174,7 @@ public class DynamicLightsConfig {
 	 * @return {@code true} if water sensitive check is enabled, else {@code false}
 	 */
 	public boolean hasWaterSensitiveCheck() {
-		return this.config.getOrElse("light_sources.water_sensitive_check", DEFAULT_WATER_SENSITIVE_CHECK);
+		return this.waterSensitiveCheck;
 	}
 
 	/**
@@ -170,6 +183,7 @@ public class DynamicLightsConfig {
 	 * @param waterSensitive {@code true} if water sensitive check is enabled, else {@code false}
 	 */
 	public void setWaterSensitiveCheck(boolean waterSensitive) {
+		this.waterSensitiveCheck = waterSensitive;
 		this.config.set("light_sources.water_sensitive_check", waterSensitive);
 	}
 
