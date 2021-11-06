@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.Nullable;
+//import javax.annotation.Nullable;
 
 @Mixin(BlockEntity.class)
 public abstract class BlockEntityMixin implements DynamicLightSource {
@@ -38,7 +38,7 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 	protected BlockPos pos;
 
 	@Shadow
-	@Nullable
+//	@Nullable
 	protected World world;
 
 	@Shadow
