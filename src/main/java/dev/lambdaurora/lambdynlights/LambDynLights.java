@@ -52,6 +52,7 @@ import java.util.function.Predicate;
 public class LambDynLights implements ClientModInitializer {
 	public static final String NAMESPACE = "lambdynlights";
 	private static final double MAX_RADIUS = 7.75;
+	private static final double MAX_RADIUS_SQUARED = 60.0625;
 	private static LambDynLights INSTANCE;
 	public final Logger logger = LogManager.getLogger(NAMESPACE);
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
@@ -199,14 +200,14 @@ public class LambDynLights implements ClientModInitializer {
 			double dy = pos.getY() - lightSource.getDynamicLightY() + 0.5;
 			double dz = pos.getZ() - lightSource.getDynamicLightZ() + 0.5;
 
-			double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+			double distanceSqared = dx * dx + dy * dy + dz * dz;
 			// 7.75 because else we would have to update more chunks and that's not a good idea.
 			// 15 (max range for blocks) would be too much and a bit cheaty.
-			if (distance <= MAX_RADIUS) {
-				double multiplier = 1.0 - distance / MAX_RADIUS;
+			if (distanceSqared <= MAX_RADIUS_SQUARED) {
+				double multiplier = 1.0 - Math.sqrt(distanceSqared) / MAX_RADIUS;
 				double lightLevel = multiplier * (double) luminance;
 				if (lightLevel > currentLightLevel) {
-					currentLightLevel = lightLevel;
+					return lightLevel;
 				}
 			}
 		}
@@ -401,9 +402,12 @@ public class LambDynLights implements ClientModInitializer {
 	 * @param lightSource the light source
 	 */
 	public static void updateTracking(@NotNull DynamicLightSource lightSource) {
-		if (!lightSource.isDynamicLightEnabled() && lightSource.getLuminance() > 0) {
+		boolean enabled = lightSource.isDynamicLightEnabled();
+		int luminance = lightSource.getLuminance();
+
+		if (!enabled && luminance > 0) {
 			lightSource.setDynamicLightEnabled(true);
-		} else if (lightSource.isDynamicLightEnabled() && lightSource.getLuminance() < 1) {
+		} else if (enabled && luminance < 1) {
 			lightSource.setDynamicLightEnabled(false);
 		}
 	}
