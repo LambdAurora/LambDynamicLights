@@ -200,11 +200,11 @@ public class LambDynLights implements ClientModInitializer {
 			double dy = pos.getY() - lightSource.getDynamicLightY() + 0.5;
 			double dz = pos.getZ() - lightSource.getDynamicLightZ() + 0.5;
 
-			double distanceSqared = dx * dx + dy * dy + dz * dz;
+			double distanceSquared = dx * dx + dy * dy + dz * dz;
 			// 7.75 because else we would have to update more chunks and that's not a good idea.
 			// 15 (max range for blocks) would be too much and a bit cheaty.
-			if (distanceSqared <= MAX_RADIUS_SQUARED) {
-				double multiplier = 1.0 - Math.sqrt(distanceSqared) / MAX_RADIUS;
+			if (distanceSquared <= MAX_RADIUS_SQUARED) {
+				double multiplier = 1.0 - Math.sqrt(distanceSquared) / MAX_RADIUS;
 				double lightLevel = multiplier * (double) luminance;
 				if (lightLevel > currentLightLevel) {
 					return lightLevel;
