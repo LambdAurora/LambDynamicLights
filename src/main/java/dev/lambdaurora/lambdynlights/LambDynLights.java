@@ -52,7 +52,7 @@ import java.util.function.Predicate;
 public class LambDynLights implements ClientModInitializer {
 	public static final String NAMESPACE = "lambdynlights";
 	private static final double MAX_RADIUS = 7.75;
-	private static final double MAX_RADIUS_SQUARED = 60.0625;
+	private static final double MAX_RADIUS_SQUARED = MAX_RADIUS * MAX_RADIUS;
 	private static LambDynLights INSTANCE;
 	public final Logger logger = LogManager.getLogger(NAMESPACE);
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
