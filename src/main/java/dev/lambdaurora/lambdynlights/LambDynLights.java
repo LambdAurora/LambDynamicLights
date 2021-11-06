@@ -39,7 +39,9 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Predicate;
 
 /**
@@ -55,7 +57,8 @@ public class LambDynLights implements ClientModInitializer {
 	private static LambDynLights INSTANCE;
 	public final Logger logger = LogManager.getLogger(NAMESPACE);
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
-	private final ConcurrentLinkedQueue<DynamicLightSource> dynamicLightSources = new ConcurrentLinkedQueue<>();
+	private final Set<DynamicLightSource> dynamicLightSources = new HashSet<>();
+	private final ReentrantReadWriteLock lightSourcesLock = new ReentrantReadWriteLock();
 	private long lastUpdate = System.currentTimeMillis();
 	private int lastUpdateCount = 0;
 
@@ -104,9 +107,11 @@ public class LambDynLights implements ClientModInitializer {
 			this.lastUpdate = now;
 			this.lastUpdateCount = 0;
 
+			lightSourcesLock.readLock().lock();
 			for (var lightSource : this.dynamicLightSources) {
 				if (lightSource.lambdynlights$updateDynamicLight(renderer)) this.lastUpdateCount++;
 			}
+			lightSourcesLock.readLock().unlock();
 		}
 	}
 
@@ -176,9 +181,11 @@ public class LambDynLights implements ClientModInitializer {
 	 */
 	public double getDynamicLightLevel(@NotNull BlockPos pos) {
 		double result = 0;
+		lightSourcesLock.readLock().lock();
 		for (var lightSource : this.dynamicLightSources) {
 			result = maxDynamicLightLevel(pos, lightSource, result);
 		}
+		lightSourcesLock.readLock().unlock();
 
 		return MathHelper.clamp(result, 0, 15);
 	}
@@ -225,7 +232,9 @@ public class LambDynLights implements ClientModInitializer {
 			return;
 		if (this.containsLightSource(lightSource))
 			return;
+		lightSourcesLock.writeLock().lock();
 		this.dynamicLightSources.add(lightSource);
+		lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
@@ -237,7 +246,12 @@ public class LambDynLights implements ClientModInitializer {
 	public boolean containsLightSource(@NotNull DynamicLightSource lightSource) {
 		if (!lightSource.getDynamicLightWorld().isClient())
 			return false;
-		return this.dynamicLightSources.contains(lightSource);
+
+		boolean result;
+		lightSourcesLock.readLock().lock();
+		result = this.dynamicLightSources.contains(lightSource);
+		lightSourcesLock.readLock().unlock();
+		return result;
 	}
 
 	/**
@@ -246,7 +260,13 @@ public class LambDynLights implements ClientModInitializer {
 	 * @return the number of dynamic light sources emitting light
 	 */
 	public int getLightSourcesCount() {
-		return this.dynamicLightSources.size();
+		int result;
+
+		lightSourcesLock.readLock().lock();
+		result = this.dynamicLightSources.size();
+		lightSourcesLock.readLock().unlock();
+
+		return result;
 	}
 
 	/**
@@ -255,6 +275,8 @@ public class LambDynLights implements ClientModInitializer {
 	 * @param lightSource the light source to remove
 	 */
 	public void removeLightSource(@NotNull DynamicLightSource lightSource) {
+		lightSourcesLock.writeLock().lock();
+
 		var dynamicLightSources = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
 		while (dynamicLightSources.hasNext()) {
@@ -266,12 +288,16 @@ public class LambDynLights implements ClientModInitializer {
 				break;
 			}
 		}
+
+		lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
 	 * Clears light sources.
 	 */
 	public void clearLightSources() {
+		lightSourcesLock.writeLock().lock();
+
 		var dynamicLightSources = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
 		while (dynamicLightSources.hasNext()) {
@@ -283,6 +309,8 @@ public class LambDynLights implements ClientModInitializer {
 				it.lambdynlights$scheduleTrackedChunksRebuild(MinecraftClient.getInstance().worldRenderer);
 			}
 		}
+
+		lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
@@ -291,6 +319,8 @@ public class LambDynLights implements ClientModInitializer {
 	 * @param filter the removal filter
 	 */
 	public void removeLightSources(@NotNull Predicate<DynamicLightSource> filter) {
+		lightSourcesLock.writeLock().lock();
+
 		var dynamicLightSources = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
 		while (dynamicLightSources.hasNext()) {
@@ -305,6 +335,8 @@ public class LambDynLights implements ClientModInitializer {
 				break;
 			}
 		}
+
+		lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
