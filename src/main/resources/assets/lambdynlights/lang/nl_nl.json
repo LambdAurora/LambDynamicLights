@@ -3,6 +3,7 @@
   "lambdynlights.menu.title": "LambDynamicLights Instellingen",
   "lambdynlights.menu.canvas.1": "Dynamische entiteit lichten is niet aanbevolen in gebruik met Canvas!",
   "lambdynlights.menu.canvas.2": "Dynamische lichtbronnen met Canvas presteert momenteel heel zwaar!",
+  "lambdynlights.menu.tabs.general": "Algemeen",
   "lambdynlights.option.light_sources.block_entities": "Blok Entiteiten",
   "lambdynlights.option.light_sources.entities": "Entiteiten",
   "lambdynlights.option.light_sources.water_sensitive_check": "Water Sensitiviteit Check",
