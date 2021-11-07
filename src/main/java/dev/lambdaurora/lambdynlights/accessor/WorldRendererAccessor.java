@@ -20,10 +20,10 @@ public interface WorldRendererAccessor {
 	/**
 	 * Schedules a chunk rebuild.
 	 *
-	 * @param x X coordinates of the chunk.
-	 * @param y Y coordinates of the chunk.
-	 * @param z Z coordinates of the chunk.
-	 * @param important True if important, else false.
+	 * @param x X coordinates of the chunk
+	 * @param y Y coordinates of the chunk
+	 * @param z Z coordinates of the chunk
+	 * @param important {@code true} if important, else {@code false}
 	 */
 	void lambdynlights$scheduleChunkRebuild(int x, int y, int z, boolean important);
 }

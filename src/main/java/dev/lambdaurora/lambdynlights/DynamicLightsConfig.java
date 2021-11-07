@@ -10,6 +10,8 @@
 package dev.lambdaurora.lambdynlights;
 
 import com.electronwill.nightconfig.core.file.FileConfig;
+import dev.lambdaurora.lambdynlights.config.BooleanSettingEntry;
+import dev.lambdaurora.lambdynlights.config.SettingEntry;
 import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
 import net.minecraft.text.LiteralText;
@@ -38,6 +40,9 @@ public class DynamicLightsConfig {
 	protected final FileConfig config;
 	private final LambDynLights mod;
 	private DynamicLightsMode dynamicLightsMode;
+	private final BooleanSettingEntry entitiesLightSource;
+	private final BooleanSettingEntry blockEntitiesLightSource;
+	private final BooleanSettingEntry waterSensitiveCheck;
 	private ExplosiveLightingMode creeperLightingMode;
 	private ExplosiveLightingMode tntLightingMode;
 
@@ -54,6 +59,18 @@ public class DynamicLightsConfig {
 		this.mod = mod;
 
 		this.config = FileConfig.builder(CONFIG_FILE_PATH).concurrent().defaultResource("/lambdynlights.toml").autosave().build();
+		this.entitiesLightSource = new BooleanSettingEntry("light_sources.entities", DEFAULT_ENTITIES_LIGHT_SOURCE, this.config,
+				new TranslatableText("lambdynlights.tooltip.entities"))
+				.withOnSet(value -> {
+					if (!value) this.mod.removeEntitiesLightSource();
+				});
+		this.blockEntitiesLightSource = new BooleanSettingEntry("light_sources.block_entities", DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE, this.config,
+				new TranslatableText("lambdynlights.tooltip.block_entities"))
+				.withOnSet(value -> {
+					if (!value) this.mod.removeBlockEntitiesLightSource();
+				});
+		this.waterSensitiveCheck = new BooleanSettingEntry("light_sources.water_sensitive_check", DEFAULT_WATER_SENSITIVE_CHECK, this.config,
+				new TranslatableText("lambdynlights.tooltip.water_sensitive"));
 	}
 
 	/**
@@ -65,12 +82,24 @@ public class DynamicLightsConfig {
 		String dynamicLightsModeValue = this.config.getOrElse("mode", DEFAULT_DYNAMIC_LIGHTS_MODE.getName());
 		this.dynamicLightsMode = DynamicLightsMode.byId(dynamicLightsModeValue)
 				.orElse(DEFAULT_DYNAMIC_LIGHTS_MODE);
+		this.entitiesLightSource.load(this.config);
+		this.blockEntitiesLightSource.load(this.config);
+		this.waterSensitiveCheck.load(this.config);
 		this.creeperLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.creeper", DEFAULT_CREEPER_LIGHTING_MODE.getName()))
 				.orElse(DEFAULT_CREEPER_LIGHTING_MODE);
 		this.tntLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.tnt", DEFAULT_TNT_LIGHTING_MODE.getName()))
 				.orElse(DEFAULT_TNT_LIGHTING_MODE);
 
 		this.mod.log("Configuration loaded.");
+	}
+
+	/**
+	 * Loads the setting.
+	 *
+	 * @param settingEntry the setting to load
+	 */
+	public void load(SettingEntry<?> settingEntry) {
+		settingEntry.load(this.config);
 	}
 
 	/**
@@ -85,9 +114,9 @@ public class DynamicLightsConfig {
 	 */
 	public void reset() {
 		this.setDynamicLightsMode(DEFAULT_DYNAMIC_LIGHTS_MODE);
-		this.setEntitiesLightSource(DEFAULT_ENTITIES_LIGHT_SOURCE);
-		this.setBlockEntitiesLightSource(DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE);
-		this.setWaterSensitiveCheck(DEFAULT_WATER_SENSITIVE_CHECK);
+		this.getEntitiesLightSource().set(DEFAULT_ENTITIES_LIGHT_SOURCE);
+		this.getBlockEntitiesLightSource().set(DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE);
+		this.getWaterSensitiveCheck().set(DEFAULT_WATER_SENSITIVE_CHECK);
 		this.setCreeperLightingMode(DEFAULT_CREEPER_LIGHTING_MODE);
 		this.setTntLightingMode(DEFAULT_TNT_LIGHTING_MODE);
 	}
@@ -116,61 +145,24 @@ public class DynamicLightsConfig {
 	}
 
 	/**
-	 * Returns whether block entities as light source is enabled.
-	 *
-	 * @return {@code true} if block entities as light source is enabled, else {@code false}
+	 * {@return the entities as light source setting holder}
 	 */
-	public boolean hasEntitiesLightSource() {
-		return this.config.getOrElse("light_sources.entities", DEFAULT_ENTITIES_LIGHT_SOURCE);
+	public BooleanSettingEntry getEntitiesLightSource() {
+		return this.entitiesLightSource;
 	}
 
 	/**
-	 * Sets whether block entities as light source is enabled.
-	 *
-	 * @param enabled {@code true} if block entities as light source is enabled, else {@code false}
+	 * {@return the block entities as light source setting holder}
 	 */
-	public void setEntitiesLightSource(boolean enabled) {
-		if (!enabled)
-			this.mod.removeEntitiesLightSource();
-		this.config.set("light_sources.entities", enabled);
+	public BooleanSettingEntry getBlockEntitiesLightSource() {
+		return this.blockEntitiesLightSource;
 	}
 
 	/**
-	 * Returns whether block entities as light source is enabled.
-	 *
-	 * @return {@code true} if block entities as light source is enabled, else {@code false}.
+	 * {@return the water sensitive check setting holder}
 	 */
-	public boolean hasBlockEntitiesLightSource() {
-		return this.config.getOrElse("light_sources.block_entities", DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE);
-	}
-
-	/**
-	 * Sets whether block entities as light source is enabled.
-	 *
-	 * @param enabled {@code true} if block entities as light source is enabled, else {@code false}.
-	 */
-	public void setBlockEntitiesLightSource(boolean enabled) {
-		if (!enabled)
-			this.mod.removeBlockEntitiesLightSource();
-		this.config.set("light_sources.block_entities", enabled);
-	}
-
-	/**
-	 * Returns whether water sensitive check is enabled or not.
-	 *
-	 * @return {@code true} if water sensitive check is enabled, else {@code false}
-	 */
-	public boolean hasWaterSensitiveCheck() {
-		return this.config.getOrElse("light_sources.water_sensitive_check", DEFAULT_WATER_SENSITIVE_CHECK);
-	}
-
-	/**
-	 * Sets whether water sensitive check is enabled or not.
-	 *
-	 * @param waterSensitive {@code true} if water sensitive check is enabled, else {@code false}
-	 */
-	public void setWaterSensitiveCheck(boolean waterSensitive) {
-		this.config.set("light_sources.water_sensitive_check", waterSensitive);
+	public BooleanSettingEntry getWaterSensitiveCheck() {
+		return this.waterSensitiveCheck;
 	}
 
 	/**

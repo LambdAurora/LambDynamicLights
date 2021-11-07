@@ -50,7 +50,10 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Dyna
 			if (this.isRemoved()) {
 				this.setDynamicLightEnabled(false);
 			} else {
-				this.dynamicLightTick();
+				if (!LambDynLights.get().config.getEntitiesLightSource().get() || !DynamicLightHandlers.canLightUp(this))
+					this.lambdynlights$luminance = 0;
+				else
+					this.dynamicLightTick();
 				LambDynLights.updateTracking(this);
 			}
 		}

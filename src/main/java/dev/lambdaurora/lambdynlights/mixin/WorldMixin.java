@@ -40,7 +40,7 @@ public abstract class WorldMixin {
 			locals = LocalCapture.CAPTURE_FAILEXCEPTION
 	)
 	private void onBlockEntityTick(CallbackInfo ci, Profiler profiler, Iterator<BlockEntity> iterator, BlockEntityTickInvoker blockEntityTickInvoker) {
-		if (this.isClient() && LambDynLights.get().config.hasBlockEntitiesLightSource()) {
+		if (this.isClient() && LambDynLights.get().config.getBlockEntitiesLightSource().get()) {
 			var blockEntity = this.getBlockEntity(blockEntityTickInvoker.getPos());
 			if (blockEntity != null)
 				((DynamicLightSource) blockEntity).dynamicLightTick();

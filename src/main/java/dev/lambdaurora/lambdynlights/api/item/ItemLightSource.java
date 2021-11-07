@@ -28,7 +28,7 @@ import java.util.Optional;
  * Represents an item light source.
  *
  * @author LambdAurora
- * @version 2.0.2
+ * @version 2.1.0
  * @since 1.3.0
  */
 public abstract class ItemLightSource {
@@ -66,7 +66,7 @@ public abstract class ItemLightSource {
 	 * @return the luminance value between {@code 0} and {@code 15}
 	 */
 	public int getLuminance(ItemStack stack, boolean submergedInWater) {
-		if (this.waterSensitive() && LambDynLights.get().config.hasWaterSensitiveCheck() && submergedInWater)
+		if (this.waterSensitive() && LambDynLights.get().config.getWaterSensitiveCheck().get() && submergedInWater)
 			return 0; // Don't emit light with water sensitive items while submerged in water.
 
 		return this.getLuminance(stack);

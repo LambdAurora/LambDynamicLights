@@ -108,11 +108,11 @@ public class LambDynLights implements ClientModInitializer {
 			this.lastUpdate = now;
 			this.lastUpdateCount = 0;
 
-			lightSourcesLock.readLock().lock();
+			this.lightSourcesLock.readLock().lock();
 			for (var lightSource : this.dynamicLightSources) {
 				if (lightSource.lambdynlights$updateDynamicLight(renderer)) this.lastUpdateCount++;
 			}
-			lightSourcesLock.readLock().unlock();
+			this.lightSourcesLock.readLock().unlock();
 		}
 	}
 
@@ -182,11 +182,11 @@ public class LambDynLights implements ClientModInitializer {
 	 */
 	public double getDynamicLightLevel(@NotNull BlockPos pos) {
 		double result = 0;
-		lightSourcesLock.readLock().lock();
+		this.lightSourcesLock.readLock().lock();
 		for (var lightSource : this.dynamicLightSources) {
 			result = maxDynamicLightLevel(pos, lightSource, result);
 		}
-		lightSourcesLock.readLock().unlock();
+		this.lightSourcesLock.readLock().unlock();
 
 		return MathHelper.clamp(result, 0, 15);
 	}
@@ -233,9 +233,9 @@ public class LambDynLights implements ClientModInitializer {
 			return;
 		if (this.containsLightSource(lightSource))
 			return;
-		lightSourcesLock.writeLock().lock();
+		this.lightSourcesLock.writeLock().lock();
 		this.dynamicLightSources.add(lightSource);
-		lightSourcesLock.writeLock().unlock();
+		this.lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
@@ -249,9 +249,9 @@ public class LambDynLights implements ClientModInitializer {
 			return false;
 
 		boolean result;
-		lightSourcesLock.readLock().lock();
+		this.lightSourcesLock.readLock().lock();
 		result = this.dynamicLightSources.contains(lightSource);
-		lightSourcesLock.readLock().unlock();
+		this.lightSourcesLock.readLock().unlock();
 		return result;
 	}
 
@@ -263,9 +263,9 @@ public class LambDynLights implements ClientModInitializer {
 	public int getLightSourcesCount() {
 		int result;
 
-		lightSourcesLock.readLock().lock();
+		this.lightSourcesLock.readLock().lock();
 		result = this.dynamicLightSources.size();
-		lightSourcesLock.readLock().unlock();
+		this.lightSourcesLock.readLock().unlock();
 
 		return result;
 	}
@@ -276,7 +276,7 @@ public class LambDynLights implements ClientModInitializer {
 	 * @param lightSource the light source to remove
 	 */
 	public void removeLightSource(@NotNull DynamicLightSource lightSource) {
-		lightSourcesLock.writeLock().lock();
+		this.lightSourcesLock.writeLock().lock();
 
 		var dynamicLightSources = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
@@ -290,14 +290,14 @@ public class LambDynLights implements ClientModInitializer {
 			}
 		}
 
-		lightSourcesLock.writeLock().unlock();
+		this.lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
 	 * Clears light sources.
 	 */
 	public void clearLightSources() {
-		lightSourcesLock.writeLock().lock();
+		this.lightSourcesLock.writeLock().lock();
 
 		var dynamicLightSources = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
@@ -311,7 +311,7 @@ public class LambDynLights implements ClientModInitializer {
 			}
 		}
 
-		lightSourcesLock.writeLock().unlock();
+		this.lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
@@ -320,7 +320,7 @@ public class LambDynLights implements ClientModInitializer {
 	 * @param filter the removal filter
 	 */
 	public void removeLightSources(@NotNull Predicate<DynamicLightSource> filter) {
-		lightSourcesLock.writeLock().lock();
+		this.lightSourcesLock.writeLock().lock();
 
 		var dynamicLightSources = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
@@ -337,7 +337,7 @@ public class LambDynLights implements ClientModInitializer {
 			}
 		}
 
-		lightSourcesLock.writeLock().unlock();
+		this.lightSourcesLock.writeLock().unlock();
 	}
 
 	/**

@@ -31,6 +31,11 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
 
 	@Override
 	public void dynamicLightTick() {
+		if (!LambDynLights.get().config.getEntitiesLightSource().get() || !DynamicLightHandlers.canLightUp(this)) {
+			this.lambdynlights$luminance = 0;
+			return;
+		}
+
 		if (this.isOnFire() || this.isGlowing()) {
 			this.lambdynlights$luminance = 15;
 		} else {
@@ -48,9 +53,6 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
 		int luminance = DynamicLightHandlers.getLuminanceFrom(this);
 		if (luminance > this.lambdynlights$luminance)
 			this.lambdynlights$luminance = luminance;
-
-		if (!LambDynLights.get().config.hasEntitiesLightSource() && this.getType() != EntityType.PLAYER)
-			this.lambdynlights$luminance = 0;
 	}
 
 	@Override

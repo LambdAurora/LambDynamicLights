@@ -11,6 +11,7 @@ package dev.lambdaurora.lambdynlights.mixin.lightsource;
 
 import dev.lambdaurora.lambdynlights.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.LambDynLights;
+import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
@@ -33,7 +34,10 @@ public abstract class AbstractDecorationEntityMixin extends Entity implements Dy
 			if (this.isRemoved()) {
 				this.setDynamicLightEnabled(false);
 			} else {
-				this.dynamicLightTick();
+				if (!LambDynLights.get().config.getEntitiesLightSource().get() || !DynamicLightHandlers.canLightUp(this))
+					this.resetDynamicLight();
+				else
+					this.dynamicLightTick();
 				LambDynLights.updateTracking(this);
 			}
 		}

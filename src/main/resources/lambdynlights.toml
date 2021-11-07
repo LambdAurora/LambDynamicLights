@@ -14,3 +14,6 @@ mode = "fancy"
     creeper = "simple"
     # TNT lighting mode. May be off, simple or fancy.
     tnt = "off"
+
+[light_sources.settings.entities.minecraft]
+    glow_item_frame = false

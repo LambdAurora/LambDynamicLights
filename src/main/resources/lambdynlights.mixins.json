@@ -4,8 +4,10 @@
   "plugin": "dev.lambdaurora.lambdynlights.LambDynLightsMixinPlugin",
   "compatibilityLevel": "JAVA_16",
   "client": [
+    "BlockEntityTypeMixin",
     "ClientWorldMixin",
     "CommonWorldRendererMixin",
+    "EntityTypeMixin",
     "DebugHudMixin",
     "EntityRendererMixin",
     "MinecraftClientMixin",
