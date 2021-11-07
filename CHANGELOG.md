@@ -112,6 +112,13 @@
  - Fixed glow squids not dimming when attacked ([#75](https://github.com/LambdAurora/LambDynamicLights/issues/75)).
  - Fixed LambDynamicLights not rebuilding the correct chunks when at Y -18 or Y -50 ([#76](https://github.com/LambdAurora/LambDynamicLights/issues/76)).
 
+## 2.1.0
+
+ - Added individual entity toggles ([#64](https://github.com/LambdAurora/LambDynamicLights/issues/64), [#79](https://github.com/LambdAurora/LambDynamicLights/issues/79)).
+ - Optimized hot methods `maxDynamicLightLevel` and `updateTracking` ([#84](https://github.com/LambdAurora/LambDynamicLights/pull/84)).
+ - Use `HashSet` for `dynamicLightSources` ([#85](https://github.com/LambdAurora/LambDynamicLights/pull/85)).
+ - Cache config values for better performances ([#80](https://github.com/LambdAurora/LambDynamicLights/issues/80)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
 [Canvas Renderer]: https://www.curseforge.com/minecraft/mc-mods/canvas-renderer "Canvas Renderer CurseForge page"
