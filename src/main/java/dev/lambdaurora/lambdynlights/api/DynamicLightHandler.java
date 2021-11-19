@@ -24,6 +24,8 @@ import java.util.function.Function;
  * @author LambdAurora
  * @version 1.3.0
  * @since 1.1.0
+ *
+ * @see dev.lambdaurora.lambdynlights.api
  */
 public interface DynamicLightHandler<T> {
 	/**
