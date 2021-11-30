@@ -1,6 +1,6 @@
 plugins {
-    id 'fabric-loom' version '0.9.+'
-    id 'io.github.juuxel.loom-quiltflower' version '1.3.0'
+    id 'fabric-loom' version '0.10.+'
+    id 'io.github.juuxel.loom-quiltflower-mini' version '1.1.0'
     id 'java-library'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
@@ -48,7 +48,7 @@ String parseReadme() {
 
     def readme = (String) file('README.md').text
     readme = readme.replaceAll(excludeRegex, '')
-    //readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.17/$2)')
+    readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.17/$2)')
     return readme
 }
 
@@ -58,10 +58,6 @@ repositories {
     maven {
         name 'Terraformers'
         url 'https://maven.terraformersmc.com/releases/'
-    }
-    maven {
-        name 'AperLambda'
-        url 'https://aperlambda.github.io/maven'
     }
     maven {
         name 'Gegy'
@@ -212,12 +208,7 @@ task publishModrinth(type: TaskModrinthUpload) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+            from components.java
 
             pom {
                 name = "LambDynamicLights"

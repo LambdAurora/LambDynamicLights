@@ -31,14 +31,14 @@
     "fabricloader": ">=0.11.3",
     "fabric": ">=0.34.9",
     "minecraft": ">=1.17",
-    "spruceui": ">=3.2.0",
+    "spruceui": ">=3.3.0",
     "java": ">=16"
   },
   "recommends": {
     "modmenu": ">=2.0.0"
   },
   "suggests": {
-    "flamingo": "*",
+    "ears": "*",
     "ltr": "*",
     "sodium": "*",
     "canvas": "*"
