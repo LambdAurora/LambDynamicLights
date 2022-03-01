@@ -103,19 +103,33 @@ public final class ItemLightSources {
 
 	/**
 	 * Returns the luminance of the item in the stack.
+	 * Enchantment bonus is calculated here
 	 *
 	 * @param stack the item stack
 	 * @param submergedInWater {@code true} if the stack is submerged in water, else {@code false}
 	 * @return a luminance value
 	 */
 	public static int getLuminance(@NotNull ItemStack stack, boolean submergedInWater) {
+		int retval = 0;
+		boolean foundSource = false;
+		// There is literally negative reasons to iterate through an array rather than use a hashmap here, TODO
 		for (var data : ITEM_LIGHT_SOURCES) {
 			if (data.item() == stack.getItem()) {
-				return data.getLuminance(stack, submergedInWater);
+				retval = data.getLuminance(stack, submergedInWater);
+				foundSource = true;
+				break;
 			}
 		}
-		if (stack.getItem() instanceof BlockItem blockItem)
-			return ItemLightSource.BlockItemLightSource.getLuminance(stack, blockItem.getBlock().getDefaultState());
-		else return 0;
+		// If not a registered item type, but it is a block that emits light, find its light level and use that
+		if (!foundSource) {
+			if (stack.getItem() instanceof BlockItem blockItem) {
+				retval = ItemLightSource.BlockItemLightSource.getLuminance(stack, blockItem.getBlock().getDefaultState());
+			}
+		}
+		// Add the bonus light level from an enchantment glint. This is calculated here and not in ItemLightSource because some items (tools, compasses, notch apples, etc) won't be registered but still can have glints
+		if (stack.hasGlint()) {
+			retval = Math.min(retval + 3, 15);
+		}
+		return retval;
 	}
 }
