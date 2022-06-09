@@ -122,7 +122,10 @@
 ### 2.1.1
 
  - Updated to Minecraft 1.19.
+ - Updated [SpruceUI].
+ - Updated [pridelib].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
+[pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
 [Canvas Renderer]: https://www.curseforge.com/minecraft/mc-mods/canvas-renderer "Canvas Renderer CurseForge page"
