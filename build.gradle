@@ -186,14 +186,6 @@ publishing {
 			name = 'BuildDirLocal'
 			url = "$buildDir/repo"
 		}
-		maven {
-			name = 'GithubPackages'
-			url = uri('https://maven.pkg.github.com/LambdAurora/LambDynamicLights')
-			credentials {
-				username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
-				password = project.findProperty('gpr.key') ?: System.getenv('TOKEN')
-			}
-		}
 
 		def ldlMaven = System.getenv('LDL_MAVEN')
 		if (ldlMaven) {
