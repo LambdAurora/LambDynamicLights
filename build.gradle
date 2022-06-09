@@ -133,7 +133,7 @@ prepareRemapJar.dependsOn(shadowJar)
 modrinth {
 	projectId = project.modrinth_id
 	versionName = "LambDynamicLights ${project.mod_version} (${getMCVersionString()})"
-	uploadFile = tasks.shadowJar
+	uploadFile = tasks.remapJar
 	loaders = ["fabric", "quilt"]
 	gameVersions = [project.minecraft_version]
 	versionType = isMCVersionNonRelease() ? "beta" : "release"
