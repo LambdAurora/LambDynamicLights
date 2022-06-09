@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2020-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *

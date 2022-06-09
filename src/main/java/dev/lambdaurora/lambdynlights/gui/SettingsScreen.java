@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2020-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *
@@ -32,8 +32,7 @@ import dev.lambdaurora.spruceui.widget.container.tabbed.SpruceTabbedWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +44,7 @@ import java.util.stream.Collectors;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 1.3.4
+ * @version 2.1.1
  * @since 1.0.0
  */
 public class SettingsScreen extends SpruceScreen {
@@ -62,7 +61,7 @@ public class SettingsScreen extends SpruceScreen {
 	private SpruceTabbedWidget tabbedWidget;
 
 	public SettingsScreen(@Nullable Screen parent) {
-		super(new TranslatableText("lambdynlights.menu.title"));
+		super(Text.translatable("lambdynlights.menu.title"));
 		this.parent = parent;
 		this.config = LambDynLights.get().config;
 
@@ -72,14 +71,14 @@ public class SettingsScreen extends SpruceScreen {
 		this.creeperLightingOption = new SpruceCyclingOption("entity.minecraft.creeper",
 				amount -> this.config.setCreeperLightingMode(this.config.getCreeperLightingMode().next()),
 				option -> option.getDisplayText(this.config.getCreeperLightingMode().getTranslatedText()),
-				new TranslatableText("lambdynlights.tooltip.creeper_lighting",
+				Text.translatable("lambdynlights.tooltip.creeper_lighting",
 						ExplosiveLightingMode.OFF.getTranslatedText(),
 						ExplosiveLightingMode.SIMPLE.getTranslatedText(),
 						ExplosiveLightingMode.FANCY.getTranslatedText()));
 		this.tntLightingOption = new SpruceCyclingOption("block.minecraft.tnt",
 				amount -> this.config.setTntLightingMode(this.config.getTntLightingMode().next()),
 				option -> option.getDisplayText(this.config.getTntLightingMode().getTranslatedText()),
-				new TranslatableText("lambdynlights.tooltip.tnt_lighting",
+				Text.translatable("lambdynlights.tooltip.tnt_lighting",
 						ExplosiveLightingMode.OFF.getTranslatedText(),
 						ExplosiveLightingMode.SIMPLE.getTranslatedText(),
 						ExplosiveLightingMode.FANCY.getTranslatedText()));
@@ -104,16 +103,16 @@ public class SettingsScreen extends SpruceScreen {
 	protected void init() {
 		super.init();
 
-		var dynamicLightSources = new TranslatableText(DYNAMIC_LIGHT_SOURCES_KEY);
+		var dynamicLightSources = Text.translatable(DYNAMIC_LIGHT_SOURCES_KEY);
 
 		this.tabbedWidget = new SpruceTabbedWidget(Position.origin(), this.width, this.height, null, Math.max(100, this.width / 8), 0);
 		this.tabbedWidget.getList().setBackground(RandomPrideFlagBackground.random());
-		this.tabbedWidget.addTabEntry(new TranslatableText("lambdynlights.menu.tabs.general"), null,
+		this.tabbedWidget.addTabEntry(Text.translatable("lambdynlights.menu.tabs.general"), null,
 				this.tabContainerBuilder(this::buildGeneralTab));
 		this.tabbedWidget.addSeparatorEntry(null);
-		this.tabbedWidget.addTabEntry(new LiteralText("").append(dynamicLightSources).append(": ").append(this.entitiesOption.getPrefix()),
+		this.tabbedWidget.addTabEntry(Text.empty().append(dynamicLightSources).append(": ").append(this.entitiesOption.getPrefix()),
 				null, this.tabContainerBuilder(this::buildEntitiesTab));
-		this.tabbedWidget.addTabEntry(new LiteralText("").append(dynamicLightSources).append(": ").append(this.blockEntitiesOption.getPrefix()),
+		this.tabbedWidget.addTabEntry(Text.empty().append(dynamicLightSources).append(": ").append(this.blockEntitiesOption.getPrefix()),
 				null, this.tabContainerBuilder(this::buildBlockEntitiesTab));
 		this.addDrawableChild(this.tabbedWidget);
 	}
@@ -154,11 +153,11 @@ public class SettingsScreen extends SpruceScreen {
 
 		if (LambDynLightsCompat.isCanvasInstalled()) {
 			var firstLine = new SpruceLabelWidget(Position.of(0, height - 29 - (5 + this.textRenderer.fontHeight) * 3),
-					new TranslatableText("lambdynlights.menu.canvas.1"), width);
+					Text.translatable("lambdynlights.menu.canvas.1"), width);
 			firstLine.setCentered(true);
 			container.addChild(firstLine);
 			label = new SpruceLabelWidget(Position.of(0, firstLine.getY() + firstLine.getHeight() + 5),
-					new TranslatableText("lambdynlights.menu.canvas.2"), width);
+					Text.translatable("lambdynlights.menu.canvas.2"), width);
 			label.setCentered(true);
 			container.addChild(label);
 		}

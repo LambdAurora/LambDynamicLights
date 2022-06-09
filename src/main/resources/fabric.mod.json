@@ -23,16 +23,17 @@
       "dev.lambdaurora.lambdynlights.LambDynLightsModMenu"
     ]
   },
+  "accessWidener": "lambdynlights.accesswidener",
   "mixins": [
     "lambdynlights.mixins.json",
     "lambdynlights.lightsource.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.11.3",
+    "fabricloader": ">=0.12.12",
     "fabric": ">=0.34.9",
-    "minecraft": ">=1.17",
+    "minecraft": ">=1.18.1",
     "spruceui": ">=3.3.0",
-    "java": ">=16"
+    "java": ">=17"
   },
   "recommends": {
     "modmenu": ">=2.0.0"

@@ -1,6 +1,9 @@
-Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+Copyright © ${YEAR} LambdAurora <email@lambdaurora.dev>
 
 This file is part of LambDynamicLights.
 
 Licensed under the MIT license. For more information,
 see the LICENSE file.
+
+;;year_selection: file
+;;year_display: lenient_range

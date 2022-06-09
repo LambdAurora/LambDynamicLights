@@ -119,6 +119,10 @@
  - Use `HashSet` for `dynamicLightSources` ([#85](https://github.com/LambdAurora/LambDynamicLights/pull/85)).
  - Cache config values for better performances ([#80](https://github.com/LambdAurora/LambDynamicLights/issues/80)).
 
+### 2.1.1
+
+ - Updated to Minecraft 1.19.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
 [Canvas Renderer]: https://www.curseforge.com/minecraft/mc-mods/canvas-renderer "Canvas Renderer CurseForge page"

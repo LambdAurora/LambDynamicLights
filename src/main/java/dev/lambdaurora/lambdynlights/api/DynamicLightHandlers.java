@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2020-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *
@@ -44,11 +44,11 @@ public final class DynamicLightHandlers {
 		registerDynamicLightHandler(EntityType.ITEM,
 				entity -> LambDynLights.getLuminanceFromItemStack(entity.getStack(), entity.isSubmergedInWater()));
 		registerDynamicLightHandler(EntityType.ITEM_FRAME, entity -> {
-			var world = entity.getEntityWorld();
+			var world = entity.getWorld();
 			return LambDynLights.getLuminanceFromItemStack(entity.getHeldItemStack(), !world.getFluidState(entity.getBlockPos()).isEmpty());
 		});
 		registerDynamicLightHandler(EntityType.GLOW_ITEM_FRAME, entity -> {
-			var world = entity.getEntityWorld();
+			var world = entity.getWorld();
 			return Math.max(14, LambDynLights.getLuminanceFromItemStack(entity.getHeldItemStack(),
 					!world.getFluidState(entity.getBlockPos()).isEmpty()));
 		});
@@ -156,7 +156,7 @@ public final class DynamicLightHandlers {
 		if (!canLightUp(entity))
 			return 0;
 		if (handler.isWaterSensitive(entity)
-				&& !entity.getEntityWorld().getFluidState(new BlockPos(entity.getX(), entity.getEyeY(), entity.getZ())).isEmpty())
+				&& !entity.getWorld().getFluidState(new BlockPos(entity.getX(), entity.getEyeY(), entity.getZ())).isEmpty())
 			return 0;
 		return handler.getLuminance(entity);
 	}

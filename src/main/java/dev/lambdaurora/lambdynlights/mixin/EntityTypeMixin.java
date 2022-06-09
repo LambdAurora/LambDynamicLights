@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2020-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *
@@ -16,7 +16,6 @@ import dev.lambdaurora.lambdynlights.config.LightSourceSettingEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -65,7 +64,7 @@ public abstract class EntityTypeMixin<T extends Entity> implements DynamicLightH
 	public Text lambdynlights$getName() {
 		var name = this.getName();
 		if (name == null) {
-			return new TranslatableText("lambdynlights.dummy");
+			return Text.translatable("lambdynlights.dummy");
 		}
 		return name;
 	}

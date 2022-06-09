@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2020-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *
@@ -30,7 +30,7 @@ public abstract class AbstractDecorationEntityMixin extends Entity implements Dy
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void onTick(CallbackInfo ci) {
 		// We do not want to update the entity on the server.
-		if (this.getEntityWorld().isClient()) {
+		if (this.getWorld().isClient()) {
 			if (this.isRemoved()) {
 				this.setDynamicLightEnabled(false);
 			} else {

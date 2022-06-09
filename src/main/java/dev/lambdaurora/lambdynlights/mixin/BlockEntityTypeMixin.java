@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2020-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *
@@ -15,7 +15,6 @@ import dev.lambdaurora.lambdynlights.api.DynamicLightHandler;
 import dev.lambdaurora.lambdynlights.config.LightSourceSettingEntry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
@@ -62,8 +61,8 @@ public class BlockEntityTypeMixin<T extends BlockEntity> implements DynamicLight
 		var self = (BlockEntityType<?>) (Object) this;
 		var id = Registry.BLOCK_ENTITY_TYPE.getId(self);
 		if (id == null) {
-			return LiteralText.EMPTY;
+			return Text.empty();
 		}
-		return new LiteralText(id.getNamespace() + ':' + id.getPath());
+		return Text.literal(id.getNamespace() + ':' + id.getPath());
 	}
 }

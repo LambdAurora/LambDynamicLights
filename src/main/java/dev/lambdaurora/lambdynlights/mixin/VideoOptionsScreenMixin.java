@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2020-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *
@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(VideoOptionsScreen.class)
 public class VideoOptionsScreenMixin extends GameOptionsScreen {
 	@Unique
-	private Option lambdynlights$option;
+	private Option<?> lambdynlights$option;
 
 	public VideoOptionsScreenMixin(Screen parent, GameOptions gameOptions, Text title) {
 		super(parent, gameOptions, title);
@@ -36,19 +36,19 @@ public class VideoOptionsScreenMixin extends GameOptionsScreen {
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void onConstruct(Screen parent, GameOptions gameOptions, CallbackInfo ci) {
-		this.lambdynlights$option = new DynamicLightsOptionsOption(this);
+		this.lambdynlights$option = DynamicLightsOptionsOption.getOption(this);
 	}
 
 	@ModifyArg(
 			method = "init",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/widget/ButtonListWidget;addAll([Lnet/minecraft/client/option/Option;)V"
+					target = "Lnet/minecraft/client/gui/widget/ButtonListWidget;method_20408([Lnet/minecraft/client/option/Option;)V"
 			),
 			index = 0
 	)
-	private Option[] addOptionButton(Option[] old) {
-		Option[] options = new Option[old.length + 1];
+	private Option<?>[] addOptionButton(Option<?>[] old) {
+		var options = new Option<?>[old.length + 1];
 		System.arraycopy(old, 0, options, 0, old.length);
 		options[options.length - 1] = this.lambdynlights$option;
 		return options;

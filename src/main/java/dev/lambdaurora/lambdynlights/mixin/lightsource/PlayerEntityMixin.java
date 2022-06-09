@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2020-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *
@@ -61,8 +61,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
 		if (this.isSpectator())
 			this.lambdynlights$luminance = 0;
 
-		if (this.lambdynlights$lastWorld != this.getEntityWorld()) {
-			this.lambdynlights$lastWorld = this.getEntityWorld();
+		if (this.lambdynlights$lastWorld != this.getWorld()) {
+			this.lambdynlights$lastWorld = this.getWorld();
 			this.lambdynlights$luminance = 0;
 		}
 	}

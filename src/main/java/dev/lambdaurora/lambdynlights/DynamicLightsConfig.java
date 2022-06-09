@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2020-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *
@@ -14,8 +14,7 @@ import dev.lambdaurora.lambdynlights.config.BooleanSettingEntry;
 import dev.lambdaurora.lambdynlights.config.SettingEntry;
 import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -25,7 +24,7 @@ import java.nio.file.Paths;
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 1.3.4
+ * @version 2.1.1
  * @since 1.0.0
  */
 public class DynamicLightsConfig {
@@ -49,28 +48,28 @@ public class DynamicLightsConfig {
 	public final SpruceOption dynamicLightsModeOption = new SpruceCyclingOption("lambdynlights.option.mode",
 			amount -> this.setDynamicLightsMode(this.dynamicLightsMode.next()),
 			option -> option.getDisplayText(this.dynamicLightsMode.getTranslatedText()),
-			new TranslatableText("lambdynlights.tooltip.mode.1")
-					.append(new LiteralText("\n"))
-					.append(new TranslatableText("lambdynlights.tooltip.mode.2", DynamicLightsMode.FASTEST.getTranslatedText(), DynamicLightsMode.FAST.getTranslatedText()))
-					.append(new LiteralText("\n"))
-					.append(new TranslatableText("lambdynlights.tooltip.mode.3", DynamicLightsMode.FANCY.getTranslatedText())));
+			Text.translatable("lambdynlights.tooltip.mode.1")
+					.append(Text.literal("\n"))
+					.append(Text.translatable("lambdynlights.tooltip.mode.2", DynamicLightsMode.FASTEST.getTranslatedText(), DynamicLightsMode.FAST.getTranslatedText()))
+					.append(Text.literal("\n"))
+					.append(Text.translatable("lambdynlights.tooltip.mode.3", DynamicLightsMode.FANCY.getTranslatedText())));
 
 	public DynamicLightsConfig(@NotNull LambDynLights mod) {
 		this.mod = mod;
 
 		this.config = FileConfig.builder(CONFIG_FILE_PATH).concurrent().defaultResource("/lambdynlights.toml").autosave().build();
 		this.entitiesLightSource = new BooleanSettingEntry("light_sources.entities", DEFAULT_ENTITIES_LIGHT_SOURCE, this.config,
-				new TranslatableText("lambdynlights.tooltip.entities"))
+				Text.translatable("lambdynlights.tooltip.entities"))
 				.withOnSet(value -> {
 					if (!value) this.mod.removeEntitiesLightSource();
 				});
 		this.blockEntitiesLightSource = new BooleanSettingEntry("light_sources.block_entities", DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE, this.config,
-				new TranslatableText("lambdynlights.tooltip.block_entities"))
+				Text.translatable("lambdynlights.tooltip.block_entities"))
 				.withOnSet(value -> {
 					if (!value) this.mod.removeBlockEntitiesLightSource();
 				});
 		this.waterSensitiveCheck = new BooleanSettingEntry("light_sources.water_sensitive_check", DEFAULT_WATER_SENSITIVE_CHECK, this.config,
-				new TranslatableText("lambdynlights.tooltip.water_sensitive"));
+				Text.translatable("lambdynlights.tooltip.water_sensitive"));
 	}
 
 	/**

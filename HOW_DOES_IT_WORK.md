@@ -70,10 +70,10 @@ If we can update, then we get the current dynamic light source position and get 
 After that we get the surrounding affect chunks and build a new Set of chunk coordinates which
 need to be updated.
 
-## Shader based method
+## Shader-based method
 
 This would be more ideal performance-wise as it would give the smoothness of the second method
 and avoid too many chunk rebuilding.
 
 Note: the shader-based method will break in the case of any other renderer registered.
-For compatibility it's the less ideal.
+For compatibility, it's the less ideal.

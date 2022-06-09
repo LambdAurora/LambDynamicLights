@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2020-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *
@@ -9,11 +9,12 @@
 
 package dev.lambdaurora.lambdynlights;
 
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -21,11 +22,11 @@ import java.util.Set;
  * LambDynamicLights mixin plugin for conditional mixins.
  *
  * @author LambdAurora
- * @version 2.0.1
+ * @version 2.1.1
  * @since 1.0.0
  */
 public class LambDynLightsMixinPlugin implements IMixinConfigPlugin {
-	private final HashMap<String, Boolean> conditionalMixins = new HashMap<>();
+	private final Object2BooleanMap<String> conditionalMixins = new Object2BooleanOpenHashMap<>();
 
 	public LambDynLightsMixinPlugin() {
 		boolean ltrInstalled = LambDynLightsCompat.isLilTaterReloadedInstalled();
@@ -44,7 +45,7 @@ public class LambDynLightsMixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return this.conditionalMixins.getOrDefault(mixinClassName, Boolean.TRUE);
+		return this.conditionalMixins.getOrDefault(mixinClassName, true);
 	}
 
 	@Override
