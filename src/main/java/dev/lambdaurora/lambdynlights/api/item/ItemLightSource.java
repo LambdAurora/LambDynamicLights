@@ -11,6 +11,7 @@ package dev.lambdaurora.lambdynlights.api.item;
 
 import com.google.gson.JsonObject;
 import dev.lambdaurora.lambdynlights.LambDynLights;
+import dev.lambdaurora.lambdynlights.LambDynLightsCompat;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
@@ -66,6 +67,9 @@ public abstract class ItemLightSource {
 	 * @return the luminance value between {@code 0} and {@code 15}
 	 */
 	public int getLuminance(ItemStack stack, boolean submergedInWater) {
+		if (LambDynLightsCompat.isIrisInstalled() && !LambDynLights.get().config.getShouldEnableItemsWithShaders().get())
+			return 0; // Don't emit light when shaders are installed and the "Enable Items in Shaders" option is disabled
+
 		if (this.waterSensitive() && LambDynLights.get().config.getWaterSensitiveCheck().get() && submergedInWater)
 			return 0; // Don't emit light with water sensitive items while submerged in water.
 

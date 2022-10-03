@@ -29,6 +29,15 @@ public final class LambDynLightsCompat {
 	}
 
 	/**
+	 * Returns whether Iris is installed.
+	 *
+	 * @return {@code true} if Iris is installed, else {@code false}
+	 */
+	public static boolean isIrisInstalled() {
+		return FabricLoader.getInstance().isModLoaded("iris");
+	}
+
+	/**
 	 * Returns whether Lil Tater Reloaded is installed.
 	 *
 	 * @return {@code true} if LTR is installed, else {@code false}
