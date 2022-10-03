@@ -7,6 +7,7 @@
   "lambdynlights.option.light_sources.block_entities": "Block Entities",
   "lambdynlights.option.light_sources.entities": "Entities",
   "lambdynlights.option.light_sources.water_sensitive_check": "Water Sensitivity Check",
+  "lambdynlights.option.compat.enable_items_with_shaders": "Enable Items in Shaders",
   "lambdynlights.option.mode": "Dynamic Lights",
   "lambdynlights.tooltip.block_entities": "Enables block entities dynamic lighting.",
   "lambdynlights.tooltip.creeper_lighting": "Sets the Creeper dynamic lighting mode.\n- %s disables Creeper dynamic lighting.\n- %s sets a constant luminance.\n- %s sets a dynamic luminance.",
@@ -15,5 +16,6 @@
   "lambdynlights.tooltip.mode.2": "%s and %s will lag a bit behind but minimizes light updates.",
   "lambdynlights.tooltip.mode.3": "%s is smooth dynamic lighting.",
   "lambdynlights.tooltip.tnt_lighting": "Sets the TNT dynamic lighting mode.\n- %s disables TNT dynamic lighting.\n- %s sets a constant luminance.\n- %s sets a dynamic luminance.",
-  "lambdynlights.tooltip.water_sensitive": "Enables the water-sensitive light sources check. This means that some items will not emit light while being submerged in water."
+  "lambdynlights.tooltip.water_sensitive": "Enables the water-sensitive light sources check. This means that some items will not emit light while being submerged in water.",
+  "lambdynlights.tooltip.enable_items_with_shaders": "Controls whether items that would typically emit light will continue to do so if a shader mod is installed."
 }

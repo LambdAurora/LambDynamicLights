@@ -55,6 +55,7 @@ public class SettingsScreen extends SpruceScreen {
 	private final SpruceOption entitiesOption;
 	private final SpruceOption blockEntitiesOption;
 	private final SpruceOption waterSensitiveOption;
+	private final SpruceOption enableItemsWithShadersOption;
 	private final SpruceOption creeperLightingOption;
 	private final SpruceOption tntLightingOption;
 	private final SpruceOption resetOption;
@@ -68,6 +69,7 @@ public class SettingsScreen extends SpruceScreen {
 		this.entitiesOption = this.config.getEntitiesLightSource().getOption();
 		this.blockEntitiesOption = this.config.getBlockEntitiesLightSource().getOption();
 		this.waterSensitiveOption = this.config.getWaterSensitiveCheck().getOption();
+		this.enableItemsWithShadersOption = this.config.getShouldEnableItemsWithShaders().getOption();
 		this.creeperLightingOption = new SpruceCyclingOption("entity.minecraft.creeper",
 				amount -> this.config.setCreeperLightingMode(this.config.getCreeperLightingMode().next()),
 				option -> option.getDisplayText(this.config.getCreeperLightingMode().getTranslatedText()),
@@ -177,6 +179,7 @@ public class SettingsScreen extends SpruceScreen {
 		list.addSingleOptionEntry(new SpruceSeparatorOption(DYNAMIC_LIGHT_SOURCES_KEY, true, null));
 		list.addOptionEntry(this.entitiesOption, this.blockEntitiesOption);
 		list.addSingleOptionEntry(this.waterSensitiveOption);
+		list.addSingleOptionEntry(this.enableItemsWithShadersOption);
 		list.addOptionEntry(this.creeperLightingOption, this.tntLightingOption);
 		return list;
 	}
