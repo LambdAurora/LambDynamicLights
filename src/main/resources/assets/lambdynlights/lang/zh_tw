@@ -1,0 +1,18 @@
+{
+  "lambdynlights.menu.light_sources": "動態光照",
+  "lambdynlights.menu.title": "LambDynamicLights設定",
+  "lambdynlights.menu.canvas.1": "建議在使用Canvas模組的時候禁用實體動態光照！",
+  "lambdynlights.menu.canvas.2": "目前動態光照與Canvas模組同時使用會非常地吃性能！",
+  "lambdynlights.option.light_sources.block_entities": "方塊實體",
+  "lambdynlights.option.light_sources.entities": "實體",
+  "lambdynlights.option.light_sources.water_sensitive_check": "水敏光源檢查",
+  "lambdynlights.option.mode": "動態光照",
+  "lambdynlights.tooltip.block_entities": "啟用方塊實體的動態光照。",
+  "lambdynlights.tooltip.creeper_lighting": "設定苦力怕的動態光照模式。\n- %s 禁用苦力怕動態光照。\n- %s 會設定一個恆定的亮度。\n- %s 會設定動態的亮度。",
+  "lambdynlights.tooltip.entities": "啟用實體的動態光照。注：與玩家的設定相獨立。",
+  "lambdynlights.tooltip.mode.1": "啟用動態光照。若啟用，手持光源的玩家將照亮其附近。",
+  "lambdynlights.tooltip.mode.2": "%s 和 %s 會略有延遲，以減少光照更新。",
+  "lambdynlights.tooltip.mode.3": "%s 則是平滑的動態光照。",
+  "lambdynlights.tooltip.tnt_lighting": "設定TNT的動態光照模式。\n- %s 禁用TNT動態光照。\n- %s 會設定一個恆定的亮度。\n- %s 會設定動態的亮度。",
+  "lambdynlights.tooltip.water_sensitive": "啟用水敏光源檢查。這意味著某些物品被浸沒在水中時將不會發光。"
+}
