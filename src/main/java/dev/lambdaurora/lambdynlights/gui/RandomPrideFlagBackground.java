@@ -77,13 +77,13 @@ public class RandomPrideFlagBackground implements Background {
 			for (int i = 1; i < this.flag.getColors().size() - 1; i++) {
 				color = ColorUtil.unpackARGBColor(this.flag.getColors().getInt(i));
 
-				vertices.vertex(model, x + width, rightY + partHeight, 0).color(color[0], color[1], color[2], color[3]).next();
-				vertices.vertex(model, x + width, rightY, 0).color(color[0], color[1], color[2], color[3]).next();
-				vertices.vertex(model, x, leftY, 0).color(color[0], color[1], color[2], color[3]).next();
+				vertex(vertices, model, x + width, rightY + partHeight, 0).color(color[0], color[1], color[2], color[3]).next();
+				vertex(vertices, model, x + width, rightY, 0).color(color[0], color[1], color[2], color[3]).next();
+				vertex(vertices, model, x, leftY, 0).color(color[0], color[1], color[2], color[3]).next();
 
-				vertices.vertex(model, x + width, rightY + partHeight, 0).color(color[0], color[1], color[2], color[3]).next();
-				vertices.vertex(model, x, leftY, 0).color(color[0], color[1], color[2], color[3]).next();
-				vertices.vertex(model, x, leftY + partHeight, 0).color(color[0], color[1], color[2], color[3]).next();
+				vertex(vertices, model, x + width, rightY + partHeight, 0).color(color[0], color[1], color[2], color[3]).next();
+				vertex(vertices, model, x, leftY, 0).color(color[0], color[1], color[2], color[3]).next();
+				vertex(vertices, model, x, leftY + partHeight, 0).color(color[0], color[1], color[2], color[3]).next();
 
 				rightY += partHeight;
 				leftY += partHeight;
@@ -91,9 +91,9 @@ public class RandomPrideFlagBackground implements Background {
 
 			// Last one
 			color = ColorUtil.unpackARGBColor(this.flag.getColors().getInt(this.flag.getColors().size() - 1));
-			vertices.vertex(model, x + width, rightY, 0).color(color[0], color[1], color[2], color[3]).next();
-			vertices.vertex(model, x, leftY, 0).color(color[0], color[1], color[2], color[3]).next();
-			vertices.vertex(model, x, y + height, 0).color(color[0], color[1], color[2], color[3]).next();
+			vertex(vertices, model, x + width, rightY, 0).color(color[0], color[1], color[2], color[3]).next();
+			vertex(vertices, model, x, leftY, 0).color(color[0], color[1], color[2], color[3]).next();
+			vertex(vertices, model, x, y + height, 0).color(color[0], color[1], color[2], color[3]).next();
 
 			tessellator.draw();
 			RenderSystem.enableTexture();
