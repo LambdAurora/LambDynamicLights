@@ -53,7 +53,7 @@ public class RandomPrideFlagBackground implements Background {
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		if (this.flag.getShape() == PrideFlagShapes.get(new Identifier("pride", "horizontal_stripes"))) {
 			RenderSystem.disableTexture();
-			var model = matrices.peek().getPosition();
+			var model = matrices.peek().getPositionMatrix();
 			var tessellator = Tessellator.getInstance();
 			var vertices = tessellator.getBufferBuilder();
 			vertices.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
