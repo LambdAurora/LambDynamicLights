@@ -1,6 +1,6 @@
 plugins {
 	id 'fabric-loom' version '1.0-SNAPSHOT'
-	id 'io.github.juuxel.loom-quiltflower' version '1.7.+'
+	id 'io.github.juuxel.loom-quiltflower' version '1.8.+'
 	id 'org.quiltmc.quilt-mappings-on-loom' version '4.2.3'
 	id 'org.quiltmc.gradle.licenser' version '1.1.+'
 	id 'java-library'
@@ -69,7 +69,7 @@ loom {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings variantOf(libs.quilt.mappings) { classifier 'intermediary-v2' }
+	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
