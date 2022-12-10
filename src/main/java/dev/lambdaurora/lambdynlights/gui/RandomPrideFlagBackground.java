@@ -68,9 +68,9 @@ public class RandomPrideFlagBackground implements Background {
 			float leftY = y;
 
 			int[] color = ColorUtil.unpackARGBColor(this.flag.getColors().getInt(0));
-			vertices.vertex(model, x + width, rightY + partHeight, 0).color(color[0], color[1], color[2], color[3]).next();
-			vertices.vertex(model, x + width, rightY, 0).color(color[0], color[1], color[2], color[3]).next();
-			vertices.vertex(model, x, leftY, 0).color(color[0], color[1], color[2], color[3]).next();
+			vertices.vertex(model, (float)x + width, rightY + partHeight, (float)0).color(color[0], color[1], color[2], color[3]).next();
+			vertices.vertex(model, (float)x + width, rightY, (float)0).color(color[0], color[1], color[2], color[3]).next();
+			vertices.vertex(model, (float)x, leftY, (float)0).color(color[0], color[1], color[2], color[3]).next();
 
 			rightY += partHeight;
 
