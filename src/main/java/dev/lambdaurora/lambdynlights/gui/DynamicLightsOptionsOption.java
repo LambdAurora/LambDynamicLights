@@ -22,6 +22,7 @@ import net.minecraft.text.Text;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public final class DynamicLightsOptionsOption {
 	private static final String KEY = "lambdynlights.menu.title";
