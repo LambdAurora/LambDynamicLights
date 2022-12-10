@@ -41,7 +41,7 @@ public final class DynamicLightsOptionsOption {
 		                                                                int x, int y, int width, Consumer<Unit> changeCallback) {
 			return option -> new ButtonWidget(x, y, width, 20, Text.translatable(KEY), 
 							  button -> MinecraftClient.getInstance().setScreen(new SettingsScreen(this.parent), 
-													    (ButtonWidget.NarrationSupplier)Supplier::get));
+													    (ButtonWidget.NarrationFactory)Supplier::get));
 		}
 
 		@Override
