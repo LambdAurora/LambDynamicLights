@@ -17,6 +17,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.text.Text;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -42,7 +43,7 @@ public class BlockEntityTypeMixin<T extends BlockEntity> implements DynamicLight
 	public LightSourceSettingEntry lambdynlights$getSetting() {
 		if (this.lambdynlights$setting == null) {
 			var self = (BlockEntityType<?>) (Object) this;
-			var id = Registry.BLOCK_ENTITY_TYPE.getId(self);
+			var id = Registries.BLOCK_ENTITY_TYPE.getId(self);
 			if (id == null) {
 				return null;
 			}
