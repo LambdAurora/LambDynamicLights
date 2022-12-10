@@ -35,6 +35,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -182,11 +183,11 @@ public class SettingsScreen extends SpruceScreen {
 	}
 
 	private LightSourceListWidget buildEntitiesTab(int width, int height) {
-		return this.buildLightSourcesTab(width, height, Registry.ENTITY_TYPE.stream().map(DynamicLightHandlerHolder::cast).collect(Collectors.toList()));
+		return this.buildLightSourcesTab(width, height, Registries.ENTITY_TYPE.stream().map(DynamicLightHandlerHolder::cast).collect(Collectors.toList()));
 	}
 
 	private LightSourceListWidget buildBlockEntitiesTab(int width, int height) {
-		return this.buildLightSourcesTab(width, height, Registry.BLOCK_ENTITY_TYPE.stream().map(DynamicLightHandlerHolder::cast).collect(Collectors.toList()));
+		return this.buildLightSourcesTab(width, height, Registries.BLOCK_ENTITY_TYPE.stream().map(DynamicLightHandlerHolder::cast).collect(Collectors.toList()));
 	}
 
 	private LightSourceListWidget buildLightSourcesTab(int width, int height, List<DynamicLightHandlerHolder<?>> entries) {
