@@ -10,9 +10,7 @@
 package dev.lambdaurora.lambdynlights.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.Tessellator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormats;
+import com.mojang.blaze3d.vertex.*;
 import dev.lambdaurora.spruceui.background.Background;
 import dev.lambdaurora.spruceui.background.SimpleColorBackground;
 import dev.lambdaurora.spruceui.util.ColorUtil;
@@ -23,6 +21,8 @@ import io.github.queerbric.pride.PrideFlags;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
 import java.util.Random;
 
@@ -68,9 +68,9 @@ public class RandomPrideFlagBackground implements Background {
 			float leftY = y;
 
 			int[] color = ColorUtil.unpackARGBColor(this.flag.getColors().getInt(0));
-			vertices.vertex(model, (float)x + width, rightY + partHeight, (float)0).color(color[0], color[1], color[2], color[3]).next();
-			vertices.vertex(model, (float)x + width, rightY, (float)0).color(color[0], color[1], color[2], color[3]).next();
-			vertices.vertex(model, (float)x, leftY, (float)0).color(color[0], color[1], color[2], color[3]).next();
+			vertex(vertices, model, x + width, rightY + partHeight, 0).color(color[0], color[1], color[2], color[3]).next();
+			vertex(vertices, model, x + width, rightY, 0).color(color[0], color[1], color[2], color[3]).next();
+			vertex(vertices, model, x, leftY, 0).color(color[0], color[1], color[2], color[3]).next();
 
 			rightY += partHeight;
 
@@ -111,5 +111,10 @@ public class RandomPrideFlagBackground implements Background {
 	 */
 	public static Background random() {
 		return new RandomPrideFlagBackground(PrideFlags.getRandomFlag(RANDOM));
+	}
+	
+	private static VertexConsumer vertex(BufferBuilder builder, Matrix4f matrix, float x, float y, float z) {
+		Vector4f vector4f = matrix.transform(new Vector4f(x, y, z, 1.0f));
+		return builder.vertex(vector4f.x(), vector4f.y(), vector4f.z());
 	}
 }
