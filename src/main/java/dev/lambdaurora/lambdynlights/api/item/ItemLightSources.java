@@ -17,6 +17,7 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -74,7 +75,7 @@ public final class ItemLightSources {
 		for (var other : ITEM_LIGHT_SOURCES) {
 			if (other.item() == data.item()) {
 				LambDynLights.get().warn("Failed to register item light source \"" + data.id() + "\", duplicates item \""
-						+ Registry.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
+						+ Registries.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
 				return;
 			}
 		}
@@ -91,7 +92,7 @@ public final class ItemLightSources {
 		for (var other : STATIC_ITEM_LIGHT_SOURCES) {
 			if (other.item() == data.item()) {
 				LambDynLights.get().warn("Failed to register item light source \"" + data.id() + "\", duplicates item \""
-						+ Registry.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
+						+ Registries.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
 				return;
 			}
 		}
