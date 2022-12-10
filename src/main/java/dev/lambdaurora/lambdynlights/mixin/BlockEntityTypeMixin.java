@@ -60,7 +60,7 @@ public class BlockEntityTypeMixin<T extends BlockEntity> implements DynamicLight
 	@Override
 	public Text lambdynlights$getName() {
 		var self = (BlockEntityType<?>) (Object) this;
-		var id = Registry.BLOCK_ENTITY_TYPE.getId(self);
+		var id = Registries.BLOCK_ENTITY_TYPE.getId(self);
 		if (id == null) {
 			return Text.empty();
 		}
