@@ -1,7 +1,7 @@
 #
 # LambdAurora's ignore file
 #
-# v0.20
+# v0.21
 
 # JetBrains
 .idea/
@@ -37,6 +37,8 @@ CMakeFiles/
 .gradle/
 ## Node.JS
 node_modules/
+## PHP composer
+vendor/
 
 # Editors
 ## VSCode

@@ -30,9 +30,9 @@
   ],
   "depends": {
     "fabricloader": ">=0.12.12",
-    "fabric": ">=0.55.3+1.19",
-    "minecraft": ">=1.19",
-    "spruceui": ">=4.0.0",
+    "fabric": ">=0.68.0+1.19.2",
+    "minecraft": ">=1.19 <=1.19.2",
+    "spruceui": ">=4.1.0",
     "java": ">=17"
   },
   "recommends": {

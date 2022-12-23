@@ -13,6 +13,7 @@ import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.accessor.DynamicLightHandlerHolder;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.1.0
  */
 public final class DynamicLightHandlers {
@@ -123,6 +124,9 @@ public final class DynamicLightHandlers {
 	 * @return {@code true} if the entity can light up, otherwise {@code false}
 	 */
 	public static <T extends Entity> boolean canLightUp(T entity) {
+		if (entity == MinecraftClient.getInstance().player && !LambDynLights.get().config.getSelfLightSource().get())
+			return false;
+
 		var setting = DynamicLightHandlerHolder.cast(entity.getType()).lambdynlights$getSetting();
 		return !(setting == null || !setting.get());
 	}
@@ -149,6 +153,8 @@ public final class DynamicLightHandlers {
 	@SuppressWarnings("unchecked")
 	public static <T extends Entity> int getLuminanceFrom(T entity) {
 		if (!LambDynLights.get().config.getEntitiesLightSource().get())
+			return 0;
+		if (entity == MinecraftClient.getInstance().player && !LambDynLights.get().config.getSelfLightSource().get())
 			return 0;
 		var handler = (DynamicLightHandler<T>) getDynamicLightHandler(entity.getType());
 		if (handler == null)
