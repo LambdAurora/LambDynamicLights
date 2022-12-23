@@ -20,7 +20,9 @@ import net.minecraft.client.option.Option;
 import net.minecraft.text.Text;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public final class DynamicLightsOptionsOption {
 	private static final String KEY = "lambdynlights.menu.title";
@@ -31,18 +33,16 @@ public final class DynamicLightsOptionsOption {
 				(title, object) -> title,
 				new DummyValueSet(parent),
 				Unit.INSTANCE,
-				unit -> {
-				}
-		);
+				unit -> {});
 	}
 
 	private record DummyValueSet(Screen parent) implements Option.ValueSet<Unit> {
+		
 		@Override
 		public Function<Option<Unit>, ClickableWidget> getButtonCreator(Option.TooltipSupplier<Unit> tooltipSupplier, GameOptions options,
-		                                                                int x, int y, int width) {
-			return option -> new ButtonWidget(x, y, width, 20, Text.translatable(KEY),
-					btn -> MinecraftClient.getInstance().setScreen(new SettingsScreen(this.parent))
-			);
+		                                                                int x, int y, int width, Consumer<Unit> changeCallback) {
+			return option -> ButtonWidget.builder(Text.translatable(KEY), button -> MinecraftClient.getInstance()
+							      .setScreen(new SettingsScreen(this.parent))).positionAndSize(x, y, width, 20).build();
 		}
 
 		@Override

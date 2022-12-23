@@ -30,13 +30,13 @@
   ],
   "depends": {
     "fabricloader": ">=0.12.12",
-    "fabric": ">=0.68.0+1.19.2",
-    "minecraft": ">=1.19 <=1.19.2",
+    "fabric": ">=0.68.1+1.19.3",
+    "minecraft": "1.19.3",
     "spruceui": ">=4.1.0",
     "java": ">=17"
   },
   "recommends": {
-    "modmenu": ">=4.0.0"
+    "modmenu": ">=5.0.2"
   },
   "suggests": {
     "ears": "*",
