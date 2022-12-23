@@ -1,18 +1,18 @@
 plugins {
-	id 'fabric-loom' version '1.0-SNAPSHOT'
+	id 'fabric-loom' version '1.+'
 	id 'io.github.juuxel.loom-quiltflower' version '1.8.+'
-	id 'org.quiltmc.quilt-mappings-on-loom' version '4.2.3'
 	id 'org.quiltmc.gradle.licenser' version '1.1.+'
 	id 'java-library'
 	id 'maven-publish'
 	id 'com.github.johnrengelman.shadow' version '7.1.2'
 	id 'com.modrinth.minotaur' version '2.+'
+	id 'com.matthewprenger.cursegradle' version '1.4.+'
 }
 
 import com.modrinth.minotaur.dependencies.ModDependency
 
 group = project.maven_group
-version = "${project.mod_version}+${getMCVersionString()}"
+version = "${project.mod_version}+${project.minecraft_version}"
 archivesBaseName = project.archives_base_name
 
 // This field defines the Java version your mod target.
@@ -31,19 +31,56 @@ String getMCVersionString() {
 	return version[0] + '.' + version[1]
 }
 
+String getVersionType() {
+	if (isMCVersionNonRelease() || version.contains("-alpha.")) {
+		return "alpha"
+	} else if (version.contains("-beta.")) {
+		return "beta"
+	} else {
+		return "release"
+	}
+}
+
 String parseReadme() {
 	def excludeRegex = /(?m)<!-- modrinth_exclude\.start -->(.|\n)*?<!-- modrinth_exclude\.end -->/
 	def linkRegex = /!\[([A-z_ ]+)]\((images\/[A-z.\/_]+)\)/
 
 	def readme = (String) file('README.md').text
 	readme = readme.replaceAll(excludeRegex, '')
-	readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.17/$2)')
+	readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.19/$2)')
 	return readme
+}
+
+String fetchChangelog() {
+	def changelogText = file('CHANGELOG.md').text
+	def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
+	def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
+	def matcher = changelogText =~ changelogRegex
+
+	if (matcher.find()) {
+		def changelogContent = matcher.group(1)
+
+		def changelogLines = changelogText.split('\n')
+		def linkRefRegex = ~'^\\[([A-z\\d _\\-/+.]+)]: '
+		for (int i = changelogLines.length - 1; i > 0; i--) {
+			def line = changelogLines[i]
+			if ((line =~ linkRefRegex).find())
+				changelogContent += '\n' + line
+			else break
+		}
+		return changelogContent
+	} else {
+		return null;
+	}
 }
 
 repositories {
 	mavenLocal()
 	mavenCentral()
+	maven {
+		name "Quilt"
+		url "https://maven.quiltmc.org/repository/release"
+	}
 	maven {
 		name 'Terraformers'
 		url 'https://maven.terraformersmc.com/releases/'
@@ -69,7 +106,7 @@ loom {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2"
+	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${project.quilt_mappings}:intermediary-v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
@@ -141,22 +178,9 @@ modrinth {
 	]
 
 	// Changelog fetching
-	def changelogText = file('CHANGELOG.md').text
-	def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
-	def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
-	def matcher = changelogText =~ changelogRegex
+	def changelogContent = fetchChangelog()
 
-	if (matcher.find()) {
-		def changelogContent = matcher.group(1)
-
-		def changelogLines = changelogText.split('\n')
-		def linkRefRegex = ~'^\\[([A-z0-9 _\\-/+.]+)]: '
-		for (int i = changelogLines.length - 1; i > 0; i--) {
-			def line = changelogLines[i]
-			if ((line =~ linkRefRegex).find())
-				changelogContent += '\n' + line
-			else break
-		}
+	if (changelogContent) {
 		changelog = changelogContent
 	} else {
 		afterEvaluate {
@@ -164,6 +188,51 @@ modrinth {
 		}
 	}
 }
+tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
+
+curseforge {
+	if (System.getenv("CURSEFORGE_TOKEN")) {
+		apiKey = System.getenv("CURSEFORGE_TOKEN")
+	}
+
+	project {
+		id = project.curseforge_id
+		releaseType = this.getVersionType()
+		addGameVersion project.minecraft_version
+		addGameVersion "Fabric"
+		addGameVersion "Quilt"
+		addGameVersion "Java 17"
+		addGameVersion "Java 18"
+
+		// Changelog fetching
+		def changelogContent = fetchChangelog()
+
+		if (changelogContent) {
+			changelogType = "markdown"
+			changelog = "Changelog:\n\n${changelogContent}"
+		} else {
+			afterEvaluate {
+				uploadTask.setEnabled(false)
+			}
+		}
+
+		mainArtifact(remapJar) {
+			displayName = "LambDynamicLights ${project.mod_version} (${project.minecraft_version})"
+
+			relations {
+				requiredDependency "fabric-api"
+				optionalDependency "modmenu"
+				incompatible "optifabric"
+			}
+		}
+
+		afterEvaluate {
+			uploadTask.setGroup("publishing")
+			uploadTask.dependsOn("remapJar")
+		}
+	}
+}
+tasks.curseforge.setGroup("publishing")
 
 // configure the maven publication
 publishing {

@@ -129,6 +129,12 @@
 
  - Fixed dependencies declaration.
 
+## 2.2.0
+
+ - Added option to disable self dynamic lighting.
+ - Updated Russian translations ([#116](https://github.com/LambdAurora/LambDynamicLights/pull/116), [#121](https://github.com/LambdAurora/LambDynamicLights/pull/121)).
+ - Added Ukrainian translations ([#120](https://github.com/LambdAurora/LambDynamicLights/pull/120)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"

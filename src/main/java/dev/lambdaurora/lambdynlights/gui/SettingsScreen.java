@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 2.1.1
+ * @version 2.2.0
  * @since 1.0.0
  */
 public class SettingsScreen extends SpruceScreen {
@@ -54,6 +54,7 @@ public class SettingsScreen extends SpruceScreen {
 	private final DynamicLightsConfig config;
 	private final Screen parent;
 	private final SpruceOption entitiesOption;
+	private final SpruceOption selfOption;
 	private final SpruceOption blockEntitiesOption;
 	private final SpruceOption waterSensitiveOption;
 	private final SpruceOption creeperLightingOption;
@@ -67,6 +68,7 @@ public class SettingsScreen extends SpruceScreen {
 		this.config = LambDynLights.get().config;
 
 		this.entitiesOption = this.config.getEntitiesLightSource().getOption();
+		this.selfOption = this.config.getSelfLightSource().getOption();
 		this.blockEntitiesOption = this.config.getBlockEntitiesLightSource().getOption();
 		this.waterSensitiveOption = this.config.getWaterSensitiveCheck().getOption();
 		this.creeperLightingOption = new SpruceCyclingOption("entity.minecraft.creeper",
@@ -177,7 +179,7 @@ public class SettingsScreen extends SpruceScreen {
 		list.addSingleOptionEntry(this.config.dynamicLightsModeOption);
 		list.addSingleOptionEntry(new SpruceSeparatorOption(DYNAMIC_LIGHT_SOURCES_KEY, true, null));
 		list.addOptionEntry(this.entitiesOption, this.blockEntitiesOption);
-		list.addSingleOptionEntry(this.waterSensitiveOption);
+		list.addOptionEntry(this.selfOption, this.waterSensitiveOption);
 		list.addOptionEntry(this.creeperLightingOption, this.tntLightingOption);
 		return list;
 	}
