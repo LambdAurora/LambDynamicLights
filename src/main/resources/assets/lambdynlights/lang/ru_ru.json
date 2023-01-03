@@ -6,6 +6,7 @@
   "lambdynlights.menu.tabs.general": "Основные",
   "lambdynlights.option.light_sources.block_entities": "Блоки",
   "lambdynlights.option.light_sources.entities": "Сущности",
+  "lambdynlights.option.light_sources.self": "От первого лица",
   "lambdynlights.option.light_sources.water_sensitive_check": "Угасание в воде",
   "lambdynlights.option.mode": "Динамическое освещение",
   "lambdynlights.tooltip.block_entities": "Включает динамическое освещение сущностей.",
@@ -14,6 +15,7 @@
   "lambdynlights.tooltip.mode.1": "Включает динамическое освещение. Например, игрок с факелом в руке будет подсвечивать область вокруг.",
   "lambdynlights.tooltip.mode.2": "%s и %s будут немного отставать, но сводят к минимуму обновление освещения.",
   "lambdynlights.tooltip.mode.3": "%s - плавное динамическое освещение.",
+  "lambdynlights.tooltip.self_light_source": "Включает динамическое освещение от первого лица. Рекомендуется отключить это, если вы используете шейдеры с собственным динамическим освещением.",
   "lambdynlights.tooltip.tnt_lighting": "Устанавливает режим динамического освещения для динамита.\n- %s отключает динамическое освещение динамита.\n- %s устанавливает постоянную яркость.\n- %s устанавливает динамическую яркость.",
   "lambdynlights.tooltip.water_sensitive": "Включает проверку источников света на нахождение в воде. Это означает, что некоторые предметы не будут излучать свет при погружении в воду.",
 
