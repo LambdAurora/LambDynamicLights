@@ -1,8 +1,8 @@
 {
   "lambdynlights.menu.light_sources": "动态光照",
-  "lambdynlights.menu.title": "LambDynamicLights 设置",
-  "lambdynlights.menu.canvas.1": "建议在使用 Canvas 时禁用实体动态光照！",
-  "lambdynlights.menu.canvas.2": "目前动态光照与 Canvas 同时使用会非常地吃性能！",
+  "lambdynlights.menu.title": "LambDynamicLights设置",
+  "lambdynlights.menu.canvas.1": "建议在使用Canvas时禁用实体动态光照！",
+  "lambdynlights.menu.canvas.2": "目前动态光照与Canvas同时使用会非常地吃性能！",
   "lambdynlights.menu.tabs.general": "通用",
   "lambdynlights.option.light_sources.block_entities": "方块实体",
   "lambdynlights.option.light_sources.entities": "实体",
