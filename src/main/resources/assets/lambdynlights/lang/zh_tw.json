@@ -1,0 +1,21 @@
+{
+  "lambdynlights.menu.light_sources": "動態光源",
+  "lambdynlights.menu.title": "LambDynamicLights 設定",
+  "lambdynlights.menu.canvas.1": "建議在使用 Canvas 模組時禁用實體動態光源！",
+  "lambdynlights.menu.canvas.2": "同時使用動態光源和 Canvas 模組會十分影響效能！",
+  "lambdynlights.menu.tabs.general": "一般",
+  "lambdynlights.option.light_sources.block_entities": "方塊實體",
+  "lambdynlights.option.light_sources.entities": "實體",
+  "lambdynlights.option.light_sources.self": "第一人稱",
+  "lambdynlights.option.light_sources.water_sensitive_check": "水下照明檢查",
+  "lambdynlights.option.mode": "動態光源",
+  "lambdynlights.tooltip.block_entities": "啟用方塊實體動態光源。",
+  "lambdynlights.tooltip.creeper_lighting": "設定苦力怕動態光源模式。\n- %s 禁用苦力怕動態光源模式\n- %s 設定恆定的亮度。\n- %s 設定動態亮度。",
+  "lambdynlights.tooltip.entities": "啟用實體動態光源。注：玩家總是活躍的。",
+  "lambdynlights.tooltip.mode.1": "啟用動態光源。若啟用，玩家拿著火把時會照亮附近。",
+  "lambdynlights.tooltip.mode.2": "%s 和 %s 略有延遲，以減少光照更新。",
+  "lambdynlights.tooltip.mode.3": "%s 是平滑的動態光源",
+  "lambdynlights.tooltip.self_light_source": "啟用第一人稱動態光源。若你正在使用具有自己的動態照明的光影，建議禁用此選項。",
+  "lambdynlights.tooltip.tnt_lighting": "設定 TNT 的動態光源模式。\n- %s 禁用 TNT 動態光源\n- %s 設定恆定的亮度。\n- %s 設定動態亮度。",
+  "lambdynlights.tooltip.water_sensitive": "啟用水下照明檢查。這意味著某些物品在浸入水中時將不會發出光。"
+  }
