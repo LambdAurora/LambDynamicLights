@@ -48,7 +48,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
 		} else {
 			int luminance = DynamicLightHandlers.getLuminanceFrom((Entity) this);
 
-			var eyePos = new BlockPos(this.getX(), this.getEyeY(), this.getZ());
+			var eyePos = BlockPos.create(this.getX(), this.getEyeY() - 0.1111111119389534, this.getZ());
 			boolean submergedInFluid = !this.world.getFluidState(eyePos).isEmpty();
 			for (var equipped : this.getItemsEquipped()) {
 				if (!equipped.isEmpty())
