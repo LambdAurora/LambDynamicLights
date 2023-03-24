@@ -29,10 +29,10 @@
     "lambdynlights.lightsource.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.12.12",
-    "fabric": ">=0.68.1+1.19.3",
-    "minecraft": "1.19.3",
-    "spruceui": ">=4.1.0",
+    "fabricloader": ">=0.14.11",
+    "fabric": ">=0.76.0+1.19.4",
+    "minecraft": "1.19.4",
+    "spruceui": ">=4.2.0",
     "java": ">=17"
   },
   "recommends": {

@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.2.1
  * @since 1.0.0
  */
 public class SettingsScreen extends SpruceScreen {

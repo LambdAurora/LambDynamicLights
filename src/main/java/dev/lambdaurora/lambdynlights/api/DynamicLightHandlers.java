@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.2.1
  * @since 1.1.0
  */
 public final class DynamicLightHandlers {
@@ -162,7 +162,7 @@ public final class DynamicLightHandlers {
 		if (!canLightUp(entity))
 			return 0;
 		if (handler.isWaterSensitive(entity)
-				&& !entity.getWorld().getFluidState(new BlockPos(entity.getX(), entity.getEyeY(), entity.getZ())).isEmpty())
+				&& !entity.getWorld().getFluidState(BlockPos.create(entity.getX(), entity.getEyeY(), entity.getZ())).isEmpty())
 			return 0;
 		return handler.getLuminance(entity);
 	}
