@@ -1,6 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.+'
-	id 'io.github.juuxel.loom-quiltflower' version '1.8.+'
+	id 'org.quiltmc.loom' version '1.1.+'
 	id 'org.quiltmc.gradle.licenser' version '1.1.+'
 	id 'java-library'
 	id 'maven-publish'
@@ -14,6 +13,25 @@ import com.modrinth.minotaur.dependencies.ModDependency
 group = project.maven_group
 version = "${project.mod_version}+${project.minecraft_version}"
 archivesBaseName = project.archives_base_name
+Set<String[]> modules = [
+		["core", "crash_info"],
+		["core", "lifecycle_events"],
+		["core", "resource_loader"],
+		["block", "block_extensions"],
+		["gui", "screen"],
+		["gui", "tooltip"]
+]
+Set<String> fabricModules = [
+		'fabric-renderer-api-v1',
+		'fabric-renderer-indigo'
+]
+Set<String> runtimeModules = [
+		'fabric-lifecycle-events-v1',
+		'fabric-key-binding-api-v1',
+		'fabric-rendering-v1',
+		'fabric-resource-loader-v0',
+		'fabric-screen-api-v1'
+]
 
 // This field defines the Java version your mod target.
 def targetJavaVersion = 17
@@ -84,10 +102,17 @@ repositories {
 	maven {
 		name 'Terraformers'
 		url 'https://maven.terraformersmc.com/releases/'
+		content {
+			includeGroup 'com.terraformersmc'
+		}
 	}
 	maven {
 		name 'Gegy'
 		url 'https://maven.gegy.dev'
+		content {
+			includeGroup 'dev.lambdaurora'
+			includeGroup 'io.github.queerbric'
+		}
 	}
 	maven {
 		name 'grondag'
@@ -107,10 +132,30 @@ loom {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${project.quilt_mappings}:intermediary-v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	modules.stream().map { "org.quiltmc.qsl.${it[0]}:${it[1]}:${project.qsl_version}+${project.minecraft_version}" }
+			.forEach {
+				modImplementation(it) {
+					exclude module: "quilt-loader"
+				}
+			}
+	// Fabric API.
+	fabricModules.stream().map { "org.quiltmc.quilted-fabric-api:${it}:${project.fabric_api_version}-${project.minecraft_version}" }
+			.forEach {
+				modImplementation(it) {
+					exclude module: "quilt-loader"
+				}
+			}
+	runtimeModules.stream().map { "org.quiltmc.quilted-fabric-api:${it}:${project.fabric_api_version}-${project.minecraft_version}" }
+			.forEach {
+				modImplementation(it) {
+					exclude module: "quilt-loader"
+				}
+			}
+	modLocalRuntime("org.quiltmc.qsl.entity:entity_events:${project.qsl_version}+${project.minecraft_version}") {
+		exclude module: "quilt-loader"
+	}
 
 	modImplementation include("dev.lambdaurora:spruceui:${project.spruceui_version}")
 	modImplementation include("io.github.queerbric:pridelib:${project.pridelib_version}")
@@ -132,7 +177,8 @@ java {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = 'UTF-8'
-
+	it.options.deprecation(true)
+	it.options.incremental(true)
 	it.options.release.set(targetJavaVersion)
 }
 
@@ -140,6 +186,9 @@ processResources {
 	inputs.property 'version', project.version
 
 	filesMatching('fabric.mod.json') {
+		expand 'version': project.version
+	}
+	filesMatching('quilt.mod.json') {
 		expand 'version': project.version
 	}
 }
@@ -163,13 +212,13 @@ shadowJar {
 
 	relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdynlights.shadow.nightconfig'
 }
-prepareRemapJar.dependsOn(shadowJar)
+remapJar.dependsOn(shadowJar)
 
 modrinth {
 	projectId = project.modrinth_id
 	versionName = "LambDynamicLights ${project.mod_version} (${getMCVersionString()})"
 	uploadFile = tasks.remapJar
-	loaders = ["fabric", "quilt"]
+	loaders = ["quilt"]
 	gameVersions = [project.minecraft_version]
 	versionType = isMCVersionNonRelease() ? "beta" : "release"
 	syncBodyFrom = parseReadme()
@@ -199,7 +248,6 @@ curseforge {
 		id = project.curseforge_id
 		releaseType = this.getVersionType()
 		addGameVersion project.minecraft_version
-		addGameVersion "Fabric"
 		addGameVersion "Quilt"
 		addGameVersion "Java 17"
 		addGameVersion "Java 18"
@@ -220,9 +268,10 @@ curseforge {
 			displayName = "LambDynamicLights ${project.mod_version} (${project.minecraft_version})"
 
 			relations {
-				requiredDependency "fabric-api"
+				requiredDependency "qsl"
 				optionalDependency "modmenu"
 				incompatible "optifabric"
+				incompatible "fabric-api"
 			}
 		}
 

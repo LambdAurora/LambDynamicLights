@@ -27,7 +27,7 @@ import java.nio.file.Paths;
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.2.1
  * @since 1.0.0
  */
 public class DynamicLightsConfig {
