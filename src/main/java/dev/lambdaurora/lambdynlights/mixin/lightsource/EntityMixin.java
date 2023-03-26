@@ -177,7 +177,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 				LambDynLights.updateTrackedChunks(chunkPos, this.lambdynlights$trackedLitChunkPos, newPos);
 
 				var directionX = (this.getBlockPos().getX() & 15) >= 8 ? Direction.EAST : Direction.WEST;
-				var directionY = (MathHelper.fastFloor(this.getEyeY()) & 15) >= 8 ? Direction.UP : Direction.DOWN;
+				var directionY = (MathHelper.floor(this.getEyeY()) & 15) >= 8 ? Direction.UP : Direction.DOWN;
 				var directionZ = (this.getBlockPos().getZ() & 15) >= 8 ? Direction.SOUTH : Direction.NORTH;
 
 				for (int i = 0; i < 7; i++) {

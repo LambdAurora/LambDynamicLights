@@ -13,11 +13,10 @@ import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.Registries;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
