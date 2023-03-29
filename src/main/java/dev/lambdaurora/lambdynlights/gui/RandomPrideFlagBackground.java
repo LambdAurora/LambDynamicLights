@@ -110,7 +110,7 @@ public class RandomPrideFlagBackground implements Background {
 	public static Background random() {
 		return new RandomPrideFlagBackground(PrideFlags.getRandomFlag(RANDOM));
 	}
-	
+
 	private static VertexConsumer vertex(BufferBuilder builder, Matrix4f matrix, float x, float y, float z) {
 		Vector4f vector4f = matrix.transform(new Vector4f(x, y, z, 1.0f));
 		return builder.vertex(vector4f.x(), vector4f.y(), vector4f.z());

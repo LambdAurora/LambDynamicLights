@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author LambdAurora
- * @version 2.2.1
+ * @version 2.3.0
  * @since 1.1.0
  */
 public final class DynamicLightHandlers {

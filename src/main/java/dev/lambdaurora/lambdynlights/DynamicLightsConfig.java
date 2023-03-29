@@ -16,7 +16,6 @@ import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +26,7 @@ import java.nio.file.Paths;
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 2.2.1
+ * @version 2.2.0
  * @since 1.0.0
  */
 public class DynamicLightsConfig {
