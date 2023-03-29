@@ -135,6 +135,10 @@
  - Updated Russian translations ([#116](https://github.com/LambdAurora/LambDynamicLights/pull/116), [#121](https://github.com/LambdAurora/LambDynamicLights/pull/121)).
  - Added Ukrainian translations ([#120](https://github.com/LambdAurora/LambDynamicLights/pull/120)).
 
+## 2.2.1
+
+ - Updated to Minecraft 1.19.4 ([#144](https://github.com/LambdAurora/LambDynamicLights/pull/144)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
