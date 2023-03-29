@@ -1,11 +1,13 @@
 {
   "lambdynlights.menu.light_sources": "Fontes de luz dinâmicas",
-  "lambdynlights.menu.title": "Configurações do LambDynamicLights",
+  "lambdynlights.menu.title": "Config. LambDynamicLights",
   "lambdynlights.menu.canvas.1": "Recomenda-se desativar a iluminação dinâmica de entidades ao usar o mod Canvas!",
   "lambdynlights.menu.canvas.2": "Usar a iluminação dinâmica com o Canvas irá afetar o desempenho!",
+  "lambdynlights.menu.tabs.general": "Geral",
   "lambdynlights.option.light_sources.block_entities": "Entidades de Blocos",
   "lambdynlights.option.light_sources.entities": "Entidades",
-  "lambdynlights.option.light_sources.water_sensitive_check": "Verificação de sensibilidade à água",
+  "lambdynlights.option.light_sources.self": "Primeira pessoa",
+  "lambdynlights.option.light_sources.water_sensitive_check": "Submersos na água",
   "lambdynlights.option.mode": "Luzes dinâmicas",
   "lambdynlights.tooltip.block_entities": "Habilita a iluminação dinâmica em entidades de blocos.",
   "lambdynlights.tooltip.creeper_lighting": "Define o modo de iluminação dinâmica do Creeper.\n- %s desativa a iluminação dinâmica do Creeper.\n- %s aplica uma luminância constante.\n- %s aplica uma luminância dinâmica.",
@@ -13,6 +15,7 @@
   "lambdynlights.tooltip.mode.1": "Habilita a iluminação dinâmica. Se ativo, um jogador segurando uma tocha irá iluminar a área, por exemplo.",
   "lambdynlights.tooltip.mode.2": "%s e %s não acompanham bem o movimento, mas minimizam atualizações de luz.",
   "lambdynlights.tooltip.mode.3": "%s é a iluminação dinâmica suave.",
+  "lambdynlights.tooltip.self_light_source": "Permite iluminação dinâmica em primeira pessoa. É recomendável desativar isso se você estiver usando sombreadores com iluminação dinâmica própria.",
   "lambdynlights.tooltip.tnt_lighting": "Define o modo da iluminação dinâmica da Dinamite. \n- %s desativa a iluminação dinâmica da Dinamite.\n- %s aplica uma luminância constante.\n- %s aplica uma luminância dinâmica.",
   "lambdynlights.tooltip.water_sensitive": "Habilita a verificação de fontes de luz sensíveis à água. Isso significa que alguns itens não irão emitir luz enquanto estiverem submersos em água."
 }
