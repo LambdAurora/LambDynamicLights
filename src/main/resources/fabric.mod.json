@@ -29,14 +29,14 @@
     "lambdynlights.lightsource.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.11",
-    "fabric": ">=0.76.0+1.19.4",
-    "minecraft": "1.19.4",
-    "spruceui": ">=4.2.0",
+    "fabricloader": ">=0.14.21",
+    "fabric": ">=0.83.0+1.20",
+    "minecraft": "1.20",
+    "spruceui": ">=5.0.0",
     "java": ">=17"
   },
   "recommends": {
-    "modmenu": ">=5.0.2"
+    "modmenu": ">=7.0.1"
   },
   "suggests": {
     "ears": "*",

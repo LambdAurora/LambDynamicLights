@@ -31,7 +31,6 @@ import dev.lambdaurora.spruceui.widget.container.SpruceOptionListWidget;
 import dev.lambdaurora.spruceui.widget.container.tabbed.SpruceTabbedWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -136,12 +135,14 @@ public class SettingsScreen extends SpruceScreen {
 
 		container.setBackground((matrices, widget, vOffset, mouseX, mouseY, delta) -> {
 			if (this.client.world != null) {
-				this.fillGradient(matrices, widget.getX(), widget.getY(),
-						widget.getX() + widget.getWidth(), innerWidget.getY(),
-						0xc0101010, 0xd0101010);
-				this.fillGradient(matrices, widget.getX(), innerWidget.getY() + innerWidget.getHeight(),
-						widget.getX() + widget.getWidth(), widget.getY() + widget.getHeight(),
-						0xc0101010, 0xd0101010);
+				// Commented because i can't find a solution
+
+//				this.fillGradient(matrices, widget.getX(), widget.getY(),
+//						widget.getX() + widget.getWidth(), innerWidget.getY(),
+//						0xc0101010, 0xd0101010);
+//				this.fillGradient(matrices, widget.getX(), innerWidget.getY() + innerWidget.getHeight(),
+//						widget.getX() + widget.getWidth(), widget.getY() + widget.getHeight(),
+//						0xc0101010, 0xd0101010);
 			} else {
 				var bg = (DirtTexturedBackground) DirtTexturedBackground.NORMAL;
 				RenderUtil.renderBackgroundTexture(widget.getX(), widget.getY(),
@@ -196,9 +197,5 @@ public class SettingsScreen extends SpruceScreen {
 		list.setBackground(INNER_BACKGROUND);
 		list.addAll(entries);
 		return list;
-	}
-
-	@Override
-	public void renderBackground(MatrixStack matrices) {
 	}
 }

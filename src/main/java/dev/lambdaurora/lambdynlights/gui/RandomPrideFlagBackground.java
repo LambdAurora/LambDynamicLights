@@ -18,8 +18,8 @@ import dev.lambdaurora.spruceui.widget.SpruceWidget;
 import io.github.queerbric.pride.PrideFlag;
 import io.github.queerbric.pride.PrideFlagShapes;
 import io.github.queerbric.pride.PrideFlags;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
@@ -46,13 +46,13 @@ public class RandomPrideFlagBackground implements Background {
 	}
 
 	@Override
-	public void render(MatrixStack matrices, SpruceWidget widget, int vOffset, int mouseX, int mouseY, float delta) {
+	public void render(GuiGraphics graphics, SpruceWidget widget, int vOffset, int mouseX, int mouseY, float delta) {
 		int x = widget.getX();
 		int y = widget.getY();
 
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		if (this.flag.getShape() == PrideFlagShapes.get(new Identifier("pride", "horizontal_stripes"))) {
-			var model = matrices.peek().getModel();
+			var model = graphics.getMatrices().peek().getModel();
 			var tessellator = Tessellator.getInstance();
 			var vertices = tessellator.getBufferBuilder();
 			vertices.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
@@ -96,10 +96,10 @@ public class RandomPrideFlagBackground implements Background {
 
 			tessellator.draw();
 		} else {
-			this.flag.render(matrices, x, y, widget.getWidth(), widget.getHeight());
+			this.flag.render(graphics.getMatrices(), x, y, widget.getWidth(), widget.getHeight());
 		}
 
-		SECOND_LAYER.render(matrices, widget, vOffset, mouseX, mouseY, delta);
+		SECOND_LAYER.render(graphics, widget, vOffset, mouseX, mouseY, delta);
 	}
 
 	/**
