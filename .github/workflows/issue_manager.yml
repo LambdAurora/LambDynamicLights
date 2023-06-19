@@ -1,0 +1,90 @@
+name: Issue Manager
+
+on:
+  issues:
+    types:
+      - labeled
+
+jobs:
+  on_duplicate:
+    if: github.event.label.name == 'duplicate'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Add comment
+        uses: peter-evans/create-or-update-comment@5f728c3dae25f329afbe34ee4d08eef25569d79f
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            This issue is a duplicate!
+
+            Please make sure to check for existing issues in this repository before submitting an issue.  
+            If you believe this is a mistake, feel free to reply.
+      - name: Close issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: "closed",
+              state_reason: "not_planned"
+            });
+
+  on_port:
+    if: github.event.label.name == 'port'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Add comment
+        uses: peter-evans/create-or-update-comment@5f728c3dae25f329afbe34ee4d08eef25569d79f
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Thanks for raising attention towards the need for a port to a Minecraft version.
+
+            Though, the author is already aware of such version, there isn't much need for further comments.  
+            Given an annoying increase in "new version when" comments on diverse platforms, such issues won't allow comment anymore
+            as it does not help making a faster release.
+
+            Thank you for your understanding.
+      - name: Lock issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.lock({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              lock_reason: "too heated"
+            });
+
+  on_port_done:
+    if: github.event.label.name == 'fixed' && github.event.issue.active_lock_reason == 'too heated' && contains(github.event.issue.labels.*.name, 'port')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Unlock issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.unlock({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+      - name: Close issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: "closed",
+              state_reason: "completed"
+            });

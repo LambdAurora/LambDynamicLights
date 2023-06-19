@@ -21,7 +21,9 @@ jobs:
       # The USERNAME and PASSWORD need to correspond to the credentials environment variables used in
       # the publishing section of your build.gradle
       - name: Publish to GitHub Packages and other Mavens
-        run: ./gradlew publish
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publish --parallel --stacktrace
         env:
           BRANCH_NAME: ${{ github.ref }}
           RUN_COUNT: ${{ github.run_number }}

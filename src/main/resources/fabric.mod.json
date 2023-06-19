@@ -36,13 +36,13 @@
     "java": ">=17"
   },
   "recommends": {
-    "modmenu": ">=7.0.1"
+    "modmenu": ">=7.0.1",
+    "quilt_loader": ">=0.19.1"
   },
   "suggests": {
     "ears": "*",
     "ltr": "*",
-    "sodium": "*",
-    "canvas": "*"
+    "sodium": "*"
   },
   "breaks": {
     "optifabric": "*"

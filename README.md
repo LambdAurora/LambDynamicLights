@@ -9,7 +9,7 @@
 [![CurseForge](http://cf.way2muchnoise.eu/title/393442.svg)](https://www.curseforge.com/minecraft/mc-mods/lambdynamiclights)
 <!-- modrinth_exclude.end -->
 
-A dynamic lights mod for Fabric.
+A dynamic lights mod for Quilt and Fabric.
 
 ## 📖 What's this mod?
 
@@ -94,7 +94,7 @@ Need help? Come check out [my Discord server][LambdAurora Discord].
 <!-- modrinth_exclude.start -->
 ### Build
 
-Just do `./gradlew shadowRemapJar` and everything should build just fine!
+Just do `./gradlew build` and everything should build just fine!
 <!-- modrinth_exclude.end -->
 
 ## 📖 How does it work internally?

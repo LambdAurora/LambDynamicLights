@@ -19,12 +19,14 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Gradle
-        run: ./gradlew build modrinth curseforge --parallel --stacktrace
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build modrinth curseforge --parallel --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: Artifacts
           path: ./build/libs/

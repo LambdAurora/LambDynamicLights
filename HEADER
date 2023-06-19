@@ -6,4 +6,4 @@ Licensed under the MIT license. For more information,
 see the LICENSE file.
 
 ;;year_selection: file
-;;year_display: lenient_range
+;;year_display: creation_only
