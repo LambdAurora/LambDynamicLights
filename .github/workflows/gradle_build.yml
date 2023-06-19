@@ -12,7 +12,7 @@ jobs:
   build:
     strategy:
       matrix:
-        java: [ 17, 19 ]
+        java: [ 17, 20 ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,7 +26,10 @@ jobs:
           cache: 'gradle'
 
       - name: Build with Gradle
-        run: ./gradlew build --parallel --stacktrace
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build --parallel --stacktrace
+          cache-read-only: ${{ !startsWith(github.ref, 'refs/heads/1.') && !startsWith(github.ref, 'refs/heads/dev/') && !startsWith(github.ref, 'refs/tags/v') }}
 
       - uses: actions/upload-artifact@v2
         with:
