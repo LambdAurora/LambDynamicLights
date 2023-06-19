@@ -31,7 +31,7 @@ jobs:
           arguments: build --parallel --stacktrace
           cache-read-only: ${{ !startsWith(github.ref, 'refs/heads/1.') && !startsWith(github.ref, 'refs/heads/dev/') && !startsWith(github.ref, 'refs/tags/v') }}
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: Artifacts
           path: ./build/libs/
