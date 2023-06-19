@@ -63,7 +63,7 @@ jobs:
             });
 
   on_port_done:
-    if: github.event.label.name == "fixed" && github.event.issue.active_lock_reason == "too heated" && contains(github.event.issue.labels.*.name, "port")
+    if: github.event.label.name == 'fixed' && github.event.issue.active_lock_reason == 'too heated' && contains(github.event.issue.labels.*.name, 'port')
     runs-on: ubuntu-latest
     permissions:
       issues: write
