@@ -14,20 +14,19 @@ import dev.lambdaurora.lambdynlights.config.BooleanSettingEntry;
 import dev.lambdaurora.lambdynlights.config.SettingEntry;
 import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
-import net.fabricmc.loader.api.FabricLoader;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.3.1
  * @since 1.0.0
  */
 public class DynamicLightsConfig {

@@ -144,6 +144,10 @@
  - Updated [SpruceUI].
  - Updated [pridelib].
 
+### 2.3.1
+
+ - Fixed ATLauncher configuration somehow ([#152](https://github.com/LambdAurora/LambDynamicLights/pull/152)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"

@@ -119,8 +119,8 @@ dependencies {
 		transitive = false
 	}
 
-	shadow 'com.electronwill.night-config:core:3.6.3'
-	shadow 'com.electronwill.night-config:toml:3.6.3'
+	shadow 'com.electronwill.night-config:core:3.6.6'
+	shadow 'com.electronwill.night-config:toml:3.6.6'
 }
 
 java {
