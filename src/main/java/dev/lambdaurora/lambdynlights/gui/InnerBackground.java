@@ -13,18 +13,18 @@ import dev.lambdaurora.spruceui.background.Background;
 import dev.lambdaurora.spruceui.background.DirtTexturedBackground;
 import dev.lambdaurora.spruceui.widget.SpruceWidget;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.GuiGraphics;
 
-public class InnerBackground extends DrawableHelper implements Background {
+public class InnerBackground implements Background {
+
 	@Override
-	public void render(MatrixStack matrices, SpruceWidget widget, int vOffset, int mouseX, int mouseY, float delta) {
+	public void render(GuiGraphics graphics, SpruceWidget widget, int vOffset, int mouseX, int mouseY, float delta) {
 		if (MinecraftClient.getInstance().world != null) {
-			this.fillGradient(matrices, widget.getX(), widget.getY(),
+			graphics.fillGradient(widget.getX(), widget.getY(),
 					widget.getX() + widget.getWidth(), widget.getY() + widget.getHeight(),
 					0xc0060606, 0xd0060606);
 		} else {
-			DirtTexturedBackground.DARKENED.render(matrices, widget, vOffset, mouseX, mouseY, delta);
+			DirtTexturedBackground.DARKENED.render(graphics, widget, vOffset, mouseX, mouseY, delta);
 		}
 	}
 }

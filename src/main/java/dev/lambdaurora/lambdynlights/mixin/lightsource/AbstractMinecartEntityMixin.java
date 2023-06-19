@@ -46,7 +46,7 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Dyna
 	@Inject(method = "tick", at = @At("HEAD"))
 	private void onTick(CallbackInfo ci) {
 		// We do not want to update the entity on the server.
-		if (this.world.isClient()) {
+		if (this.getWorld().isClient()) {
 			if (this.isRemoved()) {
 				this.setDynamicLightEnabled(false);
 			} else {
