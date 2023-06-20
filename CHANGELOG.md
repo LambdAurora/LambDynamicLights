@@ -144,7 +144,6 @@
  - Updated [SpruceUI].
  - Updated [pridelib].
 
-
 ### 2.3.1
 
  - Fixed ATLauncher configuration somehow ([#152](https://github.com/LambdAurora/LambDynamicLights/pull/152)).
