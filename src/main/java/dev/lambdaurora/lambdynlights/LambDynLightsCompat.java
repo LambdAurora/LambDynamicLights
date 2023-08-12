@@ -49,7 +49,10 @@ public final class LambDynLightsCompat {
 	}
 
 	public static boolean isSodium05XInstalled() {
-		return FabricLoader.getInstance().getModContainer("sodium").map(mod -> mod.getMetadata().getVersion().getFriendlyString().startsWith("0.5."))
+		return FabricLoader.getInstance().getModContainer("sodium").map(mod -> {
+			var split = mod.getMetadata().getVersion().getFriendlyString().split("\\.");
+			return Integer.parseInt(split[0]) == 0 && Integer.parseInt(split[1]) >= 5;
+		})
 				.orElse(false);
 	}
 }
