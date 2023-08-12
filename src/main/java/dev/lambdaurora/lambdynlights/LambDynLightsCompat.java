@@ -10,6 +10,8 @@
 package dev.lambdaurora.lambdynlights;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.Version;
+import net.fabricmc.loader.api.VersionParsingException;
 
 /**
  * Represents a utility class for compatibility.
@@ -50,9 +52,11 @@ public final class LambDynLightsCompat {
 
 	public static boolean isSodium05XInstalled() {
 		return FabricLoader.getInstance().getModContainer("sodium").map(mod -> {
-			var split = mod.getMetadata().getVersion().getFriendlyString().split("\\.");
-			return Integer.parseInt(split[0]) == 0 && Integer.parseInt(split[1]) >= 5;
-		})
-				.orElse(false);
+			try {
+				return mod.getMetadata().getVersion().compareTo(Version.parse("0.5.0")) >= 0;
+			} catch (VersionParsingException e) {
+				throw new RuntimeException(e);
+			}
+		}).orElse(false);
 	}
 }
