@@ -1,3 +1,12 @@
+/*
+ * Copyright � 2023 LambdAurora <email@lambdaurora.dev>
+ *
+ * This file is part of LambDynamicLights.
+ *
+ * Licensed under the MIT license. For more information,
+ * see the LICENSE file.
+ */
+
 package dev.lambdaurora.lambdynlights.mixin.sodium;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
@@ -18,7 +27,7 @@ public class LightDataAccessMixin {
     // Unfortunately, this breaks LambDynLights, and as a result is forced to mixin to Sodium.
     @Dynamic
     @Redirect(method = "compute", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/BlockRenderView;getLightLevel(Lnet/minecraft/world/LightType;Lnet/minecraft/util/math/BlockPos;)I", ordinal = 0, remap = true), remap = false)
-    private int lambdynlights$modifyBlockLight(BlockRenderView world, LightType type, BlockPos pos, int x, int y, int z) {
+    private int lambdynlights$modifyBlockLight(BlockRenderView world, LightType type, BlockPos pos) {
         int original = world.getLightLevel(type, pos);
 
         if (!world.getBlockState(pos).isOpaqueFullCube(world, pos) && LambDynLights.get().config.getDynamicLightsMode().isEnabled()) {
