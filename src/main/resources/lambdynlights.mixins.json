@@ -15,7 +15,7 @@
     "WorldMixin",
     "ltr.LilTaterBlockEntityMixin",
     "ltr.LilTaterBlocksMixin",
-    "sodium.LightDataAccessMixin"
+    "sodium.ArrayLightDataCacheMixin"
   ],
   "injectors": {
     "defaultRequire": 1

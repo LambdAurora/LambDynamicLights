@@ -93,6 +93,17 @@ repositories {
 		name 'grondag'
 		url 'https://maven.dblsaiko.net/'
 	}
+	exclusiveContent {
+		forRepository {
+			maven {
+				name "Modrinth"
+				url "https://api.modrinth.com/maven"
+			}
+		}
+		filter {
+			includeGroup "maven.modrinth"
+		}
+	}
 }
 
 configurations {
@@ -118,6 +129,8 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		transitive = false
 	}
+
+	modImplementation "maven.modrinth:sodium:${project.sodium_version}"
 
 	shadow 'com.electronwill.night-config:core:3.6.6'
 	shadow 'com.electronwill.night-config:toml:3.6.6'
