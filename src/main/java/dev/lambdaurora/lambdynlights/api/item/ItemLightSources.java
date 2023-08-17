@@ -11,7 +11,9 @@ package dev.lambdaurora.lambdynlights.api.item;
 
 import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdynlights.LambDynLights;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.resource.Resource;
@@ -20,19 +22,18 @@ import net.minecraft.util.Identifier;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Represents an item light sources manager.
  *
  * @author LambdAurora
- * @version 2.1.1
+ * @version 2.3.2
  * @since 1.3.0
  */
 public final class ItemLightSources {
-	private static final List<ItemLightSource> ITEM_LIGHT_SOURCES = new ArrayList<>();
-	private static final List<ItemLightSource> STATIC_ITEM_LIGHT_SOURCES = new ArrayList<>();
+	private static final Map<Item, ItemLightSource> ITEM_LIGHT_SOURCES = new Reference2ObjectOpenHashMap<>();
+	private static final Map<Item, ItemLightSource> STATIC_ITEM_LIGHT_SOURCES = new Reference2ObjectOpenHashMap<>();
 
 	private ItemLightSources() {
 		throw new UnsupportedOperationException("ItemLightSources only contains static definitions.");
@@ -46,9 +47,10 @@ public final class ItemLightSources {
 	public static void load(ResourceManager resourceManager) {
 		ITEM_LIGHT_SOURCES.clear();
 
-		resourceManager.findResources("dynamiclights/item", path -> path.getPath().endsWith(".json")).forEach(ItemLightSources::load);
+		resourceManager.findResources("dynamiclights/item", path -> path.getPath().endsWith(".json"))
+				.forEach(ItemLightSources::load);
 
-		ITEM_LIGHT_SOURCES.addAll(STATIC_ITEM_LIGHT_SOURCES);
+		ITEM_LIGHT_SOURCES.putAll(STATIC_ITEM_LIGHT_SOURCES);
 	}
 
 	private static void load(Identifier resourceId, Resource resource) {
@@ -57,7 +59,7 @@ public final class ItemLightSources {
 			var json = JsonParser.parseReader(reader).getAsJsonObject();
 
 			ItemLightSource.fromJson(id, json).ifPresent(data -> {
-				if (!STATIC_ITEM_LIGHT_SOURCES.contains(data))
+				if (!STATIC_ITEM_LIGHT_SOURCES.containsKey(data.item()))
 					register(data);
 			});
 		} catch (IOException | IllegalStateException e) {
@@ -71,15 +73,15 @@ public final class ItemLightSources {
 	 * @param data The item light source data.
 	 */
 	private static void register(ItemLightSource data) {
-		for (var other : ITEM_LIGHT_SOURCES) {
-			if (other.item() == data.item()) {
-				LambDynLights.get().warn("Failed to register item light source \"" + data.id() + "\", duplicates item \""
-						+ Registries.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
-				return;
-			}
+		var other = ITEM_LIGHT_SOURCES.get(data.item());
+
+		if (other != null) {
+			LambDynLights.get().warn("Failed to register item light source \"" + data.id() + "\", duplicates item \""
+					+ Registries.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
+			return;
 		}
 
-		ITEM_LIGHT_SOURCES.add(data);
+		ITEM_LIGHT_SOURCES.put(data.item(), data);
 	}
 
 	/**
@@ -88,15 +90,15 @@ public final class ItemLightSources {
 	 * @param data the item light source data
 	 */
 	public static void registerItemLightSource(ItemLightSource data) {
-		for (var other : STATIC_ITEM_LIGHT_SOURCES) {
-			if (other.item() == data.item()) {
-				LambDynLights.get().warn("Failed to register item light source \"" + data.id() + "\", duplicates item \""
-						+ Registries.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
-				return;
-			}
+		var other = STATIC_ITEM_LIGHT_SOURCES.get(data.item());
+
+		if (other != null) {
+			LambDynLights.get().warn("Failed to register item light source \"" + data.id() + "\", duplicates item \""
+					+ Registries.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
+			return;
 		}
 
-		STATIC_ITEM_LIGHT_SOURCES.add(data);
+		STATIC_ITEM_LIGHT_SOURCES.put(data.item(), data);
 	}
 
 	/**
@@ -107,12 +109,11 @@ public final class ItemLightSources {
 	 * @return a luminance value
 	 */
 	public static int getLuminance(ItemStack stack, boolean submergedInWater) {
-		for (var data : ITEM_LIGHT_SOURCES) {
-			if (data.item() == stack.getItem()) {
-				return data.getLuminance(stack, submergedInWater);
-			}
-		}
-		if (stack.getItem() instanceof BlockItem blockItem)
+		var data = ITEM_LIGHT_SOURCES.get(stack.getItem());
+
+		if (data != null) {
+			return data.getLuminance(stack, submergedInWater);
+		} else if (stack.getItem() instanceof BlockItem blockItem)
 			return ItemLightSource.BlockItemLightSource.getLuminance(stack, blockItem.getBlock().getDefaultState());
 		else return 0;
 	}

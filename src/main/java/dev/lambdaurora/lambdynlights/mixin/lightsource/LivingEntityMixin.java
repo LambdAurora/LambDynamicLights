@@ -15,7 +15,6 @@ import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -39,15 +38,7 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
 		if (this.isOnFire() || this.isGlowing()) {
 			this.lambdynlights$luminance = 15;
 		} else {
-			int luminance = 0;
-			var eyePos = BlockPos.create(this.getX(), this.getEyeY(), this.getZ());
-			boolean submergedInFluid = !this.getWorld().getFluidState(eyePos).isEmpty();
-			for (var equipped : this.getItemsEquipped()) {
-				if (!equipped.isEmpty())
-					luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
-			}
-
-			this.lambdynlights$luminance = luminance;
+			this.lambdynlights$luminance = LambDynLights.getLivingEntityLuminanceFromItems((LivingEntity) (Object) this);
 		}
 
 		int luminance = DynamicLightHandlers.getLuminanceFrom(this);

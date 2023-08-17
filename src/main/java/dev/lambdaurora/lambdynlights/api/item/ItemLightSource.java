@@ -163,6 +163,7 @@ public abstract class ItemLightSource {
 
 		static int getLuminance(ItemStack stack, BlockState state) {
 			var nbt = stack.getNbt();
+
 			if (nbt != null) {
 				var blockStateTag = nbt.getCompound("BlockStateTag");
 				var stateManager = state.getBlock().getStateManager();
@@ -175,6 +176,7 @@ public abstract class ItemLightSource {
 					}
 				}
 			}
+
 			return state.getLuminance();
 		}
 

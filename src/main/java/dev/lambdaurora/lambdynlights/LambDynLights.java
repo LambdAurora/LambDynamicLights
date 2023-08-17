@@ -25,6 +25,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -48,7 +49,7 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.3.2
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer {
@@ -442,6 +443,27 @@ public class LambDynLights implements ClientModInitializer {
 		} else if (enabled && luminance < 1) {
 			lightSource.setDynamicLightEnabled(false);
 		}
+	}
+
+	private static boolean isEyeSubmergedInFluid(LivingEntity entity) {
+		if (!LambDynLights.get().config.getWaterSensitiveCheck().get()) {
+			return false;
+		}
+
+		var eyePos = BlockPos.create(entity.getX(), entity.getEyeY(), entity.getZ());
+		return !entity.getWorld().getFluidState(eyePos).isEmpty();
+	}
+
+	public static int getLivingEntityLuminanceFromItems(LivingEntity entity) {
+		boolean submergedInFluid = isEyeSubmergedInFluid(entity);
+		int luminance = 0;
+
+		for (var equipped : entity.getItemsEquipped()) {
+			if (!equipped.isEmpty())
+				luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
+		}
+
+		return luminance;
 	}
 
 	/**

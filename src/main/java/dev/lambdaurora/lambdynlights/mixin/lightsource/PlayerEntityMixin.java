@@ -12,11 +12,9 @@ package dev.lambdaurora.lambdynlights.mixin.lightsource;
 import dev.lambdaurora.lambdynlights.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -46,16 +44,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DynamicL
 		if (this.isOnFire() || this.isGlowing()) {
 			this.lambdynlights$luminance = 15;
 		} else {
-			int luminance = DynamicLightHandlers.getLuminanceFrom((Entity) this);
-
-			var eyePos = BlockPos.create(this.getX(), this.getEyeY(), this.getZ());
-			boolean submergedInFluid = !this.getWorld().getFluidState(eyePos).isEmpty();
-			for (var equipped : this.getItemsEquipped()) {
-				if (!equipped.isEmpty())
-					luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
-			}
-
-			this.lambdynlights$luminance = luminance;
+			this.lambdynlights$luminance = Math.max(
+					DynamicLightHandlers.getLuminanceFrom(this),
+					LambDynLights.getLivingEntityLuminanceFromItems(this)
+			);
 		}
 
 		if (this.isSpectator())
