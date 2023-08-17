@@ -1,0 +1,21 @@
+{
+  "lambdynlights.menu.light_sources": "Nguồn sáng động",
+  "lambdynlights.menu.title": "Cài đặt LambDynamicLights",
+  "lambdynlights.menu.canvas.1": "Bạn nên tắt ánh sáng động của thực thể với Canvas!",
+  "lambdynlights.menu.canvas.2": "Ánh sáng động với Canvas hiện đòi hỏi hiệu suất cao!",
+  "lambdynlights.menu.tabs.general": "Chung",
+  "lambdynlights.option.light_sources.block_entities": "Thực thể khối",
+  "lambdynlights.option.light_sources.entities": "Thực thể",
+  "lambdynlights.option.light_sources.self": "Góc nhìn thứ nhất",
+  "lambdynlights.option.light_sources.water_sensitive_check": "Kiểm tra độ nhạy của nước",
+  "lambdynlights.option.mode": "Nguồn sáng động",
+  "lambdynlights.tooltip.block_entities": "Cho phép khối thực thể chiếu sáng động.",
+  "lambdynlights.tooltip.creeper_lighting": "Đặt chế độ chiếu sáng động Creeper.\n- %s tắt chiếu sáng động Creeper.\n- %s đặt độ sáng không đổi.\n- %s đặt độ chói động.",
+  "lambdynlights.tooltip.entities": "Cho phép thực thể chiếu sáng động. Lưu ý: người chơi luôn hoạt động.",
+  "lambdynlights.tooltip.mode.1": "Bật nguồn sáng động. Ví dụ, nếu được bật, một người chơi cầm đuốc sẽ thắp sáng khu vực đó.",
+  "lambdynlights.tooltip.mode.2": "%s và %s sẽ chậm hơn một chút nhưng giảm thiểu các cập nhật nhẹ.",
+  "lambdynlights.tooltip.mode.3": "%s là nguồn sáng động mượt mà.",
+  "lambdynlights.tooltip.self_light_source": "Cho phép nguồn sáng động ở góc nhìn thứ nhất. Bạn nên tắt tính năng này nếu đang sử dụng shader có nguồn sáng động riêng.",
+  "lambdynlights.tooltip.tnt_lighting": "Đặt chế độ chiếu sáng động TNT.\n- %s tắt chiếu sáng động TNT.\n- %s đặt độ chói không đổi.\n- %s đặt độ chói động.",
+  "lambdynlights.tooltip.water_sensitive": "Cho phép kiểm tra nguồn sáng nhạy cảm với nước. Điều này có nghĩa là một số vật phẩm sẽ không phát ra ánh sáng khi chìm trong nước."
+}
