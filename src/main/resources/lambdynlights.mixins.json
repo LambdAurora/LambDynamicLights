@@ -7,14 +7,17 @@
     "BlockEntityTypeMixin",
     "ClientWorldMixin",
     "CommonWorldRendererMixin",
-    "EntityTypeMixin",
     "DebugHudMixin",
     "EntityRendererMixin",
+    "EntityTypeMixin",
     "MinecraftClientMixin",
     "VideoOptionsScreenMixin",
     "WorldMixin",
     "ltr.LilTaterBlockEntityMixin",
-    "ltr.LilTaterBlocksMixin"
+    "ltr.LilTaterBlocksMixin",
+    "sodium.ArrayLightDataCacheMixin",
+    "sodium.FlatLightPipelineMixin",
+    "sodium.LightDataAccessMixin"
   ],
   "injectors": {
     "defaultRequire": 1
