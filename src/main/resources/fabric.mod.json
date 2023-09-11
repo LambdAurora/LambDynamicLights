@@ -48,6 +48,15 @@
     "optifabric": "*"
   },
   "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/lambdynamiclights",
+        "modmenu.discord": "https://discord.lambdaurora.dev/",
+        "modmenu.github_releases": "https://github.com/LambdAurora/LambDynamicLights/releases",
+        "modmenu.modrinth": "https://modrinth.com/mod/lambdynamiclights",
+        "modmenu.twitter": "https://twitter.com/LambdAurora"
+      }
+    },
     "modupdater": {
       "strategy": "curseforge",
       "projectID": 393442

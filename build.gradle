@@ -1,10 +1,10 @@
 plugins {
-	id 'fabric-loom' version '1.2.+'
+	id 'fabric-loom' version '1.3.+'
 	id 'io.github.juuxel.loom-quiltflower' version '1.8.+'
 	id 'org.quiltmc.gradle.licenser' version '2.0.+'
 	id 'java-library'
 	id 'maven-publish'
-	id 'com.github.johnrengelman.shadow' version '7.1.2'
+	id 'com.github.johnrengelman.shadow' version '8.1.1'
 	id 'com.modrinth.minotaur' version '2.+'
 	id 'com.matthewprenger.cursegradle' version '1.4.+'
 }
@@ -13,10 +13,15 @@ import com.modrinth.minotaur.dependencies.ModDependency
 
 group = project.maven_group
 version = "${project.mod_version}+${project.minecraft_version}"
-archivesBaseName = project.archives_base_name
+base.archivesName = project.archives_base_name
 
 // This field defines the Java version your mod target.
 def targetJavaVersion = 17
+
+if (!(System.getenv("CURSEFORGE_TOKEN") || System.getenv("MODRINTH_TOKEN"))) {
+	version += "-local"
+}
+logger.lifecycle("Preparing version ${version}...")
 
 boolean isMCVersionNonRelease() {
 	return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
@@ -130,7 +135,7 @@ dependencies {
 		transitive = false
 	}
 
-	modImplementation "maven.modrinth:sodium:${project.sodium_version}"
+	modRuntimeOnly "maven.modrinth:sodium:${project.sodium_version}"
 
 	shadow 'com.electronwill.night-config:core:3.6.6'
 	shadow 'com.electronwill.night-config:toml:3.6.6'
@@ -159,7 +164,7 @@ processResources {
 
 jar {
 	from('LICENSE') {
-		rename { "${it}_${project.archivesBaseName}" }
+		rename { "${it}_${base.archivesName}" }
 	}
 }
 
@@ -171,7 +176,7 @@ license {
 shadowJar {
 	dependsOn jar
 	configurations = [project.configurations.shadow]
-	destinationDirectory.set(file("${project.buildDir}/devlibs"))
+	destinationDirectory.set(file("${project.layout.buildDirectory.get()}/devlibs"))
 	archiveClassifier.set('dev')
 
 	relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdynlights.shadow.nightconfig'

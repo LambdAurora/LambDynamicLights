@@ -20,10 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Pseudo
 @Mixin(targets = "me.jellysquid.mods.sodium.client.model.light.data.LightDataAccess", remap = false)
 public abstract class LightDataAccessMixin {
-    @Dynamic
-    @Inject(method = "getLightmap", at = @At("RETURN"), remap = false, cancellable = true)
-    private static void lambdynlights$getLightmap(int word, CallbackInfoReturnable<Integer> cir) {
-        int lightmap = SodiumDynamicLightHandler.lambdynlights$getLightmap(SodiumDynamicLightHandler.lambdynlights$pos.get(), word, cir.getReturnValueI());
-        cir.setReturnValue(lightmap);
-    }
+	@Dynamic
+	@Inject(method = "getLightmap", at = @At("RETURN"), remap = false, require = 0, cancellable = true)
+	private static void lambdynlights$getLightmap(int word, CallbackInfoReturnable<Integer> cir) {
+		int lightmap = SodiumDynamicLightHandler.getLightmap(SodiumDynamicLightHandler.pos.get(), word, cir.getReturnValueI());
+		cir.setReturnValue(lightmap);
+	}
 }

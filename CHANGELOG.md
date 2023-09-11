@@ -153,6 +153,13 @@
 
 ### 2.3.2
 
+- Fixed Fabric API (Indigo Renderer) compatibility
+  (by [#182](https://github.com/LambdAurora/LambDynamicLights/pull/182),
+  issue [#172](https://github.com/LambdAurora/LambDynamicLights/issues/172)).
+- Fixed Sodium compatibility
+  (by [#178](https://github.com/LambdAurora/LambDynamicLights/pull/178), 
+  issue [#175](https://github.com/LambdAurora/LambDynamicLights/issues/175)).
+- Fixed Minecraft version restriction.
 - Cleaned up some item light source code.
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
