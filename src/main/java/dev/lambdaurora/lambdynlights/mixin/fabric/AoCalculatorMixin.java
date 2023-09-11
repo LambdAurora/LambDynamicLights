@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2023 LambdAurora <email@lambdaurora.dev>
+ *
+ * This file is part of LambDynamicLights.
+ *
+ * Licensed under the MIT license. For more information,
+ * see the LICENSE file.
+ */
+
 package dev.lambdaurora.lambdynlights.mixin.fabric;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
