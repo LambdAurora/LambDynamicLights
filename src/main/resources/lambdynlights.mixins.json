@@ -17,7 +17,8 @@
     "ltr.LilTaterBlocksMixin",
     "sodium.ArrayLightDataCacheMixin",
     "sodium.FlatLightPipelineMixin",
-    "sodium.LightDataAccessMixin"
+    "sodium.LightDataAccessMixin",
+    "fabric.AoCalculatorMixin"
   ],
   "injectors": {
     "defaultRequire": 1

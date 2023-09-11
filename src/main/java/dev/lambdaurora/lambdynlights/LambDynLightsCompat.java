@@ -59,4 +59,14 @@ public final class LambDynLightsCompat {
 			}
 		}).orElse(false);
 	}
+
+	public static boolean isFabricApi086OrLaterInstalled() {
+		return FabricLoader.getInstance().getModContainer("fabric-api").map(mod -> {
+			try {
+				return mod.getMetadata().getVersion().compareTo(Version.parse("0.86.0")) >= 0;
+			} catch (VersionParsingException e) {
+				throw new RuntimeException(e);
+			}
+		}).orElse(false);
+	}
 }
