@@ -217,8 +217,6 @@ tasks.register('curseforge', TaskPublishCurseForge) {
 		return
 	}
 
-	projectId = project.curseforge_id
-
 	// Changelog fetching
 	def changelogContent = fetchChangelog()
 
@@ -229,7 +227,7 @@ tasks.register('curseforge', TaskPublishCurseForge) {
 		return
 	}
 
-	def mainFile = upload(projectId, tasks.remapJar)
+	def mainFile = upload(project.curseforge_id, tasks.remapJar)
 	mainFile.releaseType = this.getVersionType()
 	mainFile.addGameVersion(project.minecraft_version)
 	mainFile.addModLoader("Fabric", "Quilt")
