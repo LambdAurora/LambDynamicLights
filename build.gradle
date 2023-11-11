@@ -1,15 +1,15 @@
 plugins {
-	id 'fabric-loom' version '1.3.+'
-	id 'io.github.juuxel.loom-quiltflower' version '1.8.+'
-	id 'org.quiltmc.gradle.licenser' version '2.0.+'
+	id 'fabric-loom' version '1.4.+'
+	id 'dev.yumi.gradle.licenser' version '1.0.+'
 	id 'java-library'
 	id 'maven-publish'
 	id 'com.github.johnrengelman.shadow' version '8.1.1'
 	id 'com.modrinth.minotaur' version '2.+'
-	id 'com.matthewprenger.cursegradle' version '1.4.+'
+	id 'net.darkhax.curseforgegradle' version '1.1.+'
 }
 
 import com.modrinth.minotaur.dependencies.ModDependency
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 group = project.maven_group
 version = "${project.mod_version}+${project.minecraft_version}"
@@ -170,7 +170,6 @@ jar {
 
 license {
 	rule file('HEADER')
-	include '**/*.java'
 }
 
 shadowJar {
@@ -208,49 +207,42 @@ modrinth {
 }
 tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 
-curseforge {
+tasks.register('curseforge', TaskPublishCurseForge) {
+	setGroup("publishing")
+
 	if (System.getenv("CURSEFORGE_TOKEN")) {
 		apiKey = System.getenv("CURSEFORGE_TOKEN")
+	} else {
+		setEnabled(false)
+		return
 	}
 
-	project {
-		id = project.curseforge_id
-		releaseType = this.getVersionType()
-		addGameVersion project.minecraft_version
-		addGameVersion "Fabric"
-		addGameVersion "Quilt"
-		addGameVersion "Java 17"
-		addGameVersion "Java 18"
+	projectId = project.curseforge_id
 
-		// Changelog fetching
-		def changelogContent = fetchChangelog()
+	// Changelog fetching
+	def changelogContent = fetchChangelog()
 
-		if (changelogContent) {
-			changelogType = "markdown"
-			changelog = "Changelog:\n\n${changelogContent}"
-		} else {
-			afterEvaluate {
-				uploadTask.setEnabled(false)
-			}
-		}
-
-		mainArtifact(remapJar) {
-			displayName = "LambDynamicLights ${project.mod_version} (${project.minecraft_version})"
-
-			relations {
-				requiredDependency "fabric-api"
-				optionalDependency "modmenu"
-				incompatible "optifabric"
-			}
-		}
-
-		afterEvaluate {
-			uploadTask.setGroup("publishing")
-			uploadTask.dependsOn("remapJar")
-		}
+	if (changelogContent) {
+		changelogContent = "Changelog:\n\n${changelogContent}"
+	} else {
+		setEnabled(false)
+		return
 	}
+
+	def mainFile = upload(projectId, tasks.remapJar)
+	mainFile.releaseType = this.getVersionType()
+	mainFile.addGameVersion(project.minecraft_version)
+	mainFile.addModLoader("Fabric", "Quilt")
+	mainFile.addJavaVersion("Java 17", "Java 18")
+
+	mainFile.displayName = "LambDynamicLights ${project.mod_version} (${project.minecraft_version})"
+	mainFile.addRequirement("fabric-api")
+	mainFile.addOptional("modmenu")
+	mainFile.addIncompatibility("optifabric")
+
+	mainFile.changelogType = "markdown"
+	mainFile.changelog = changelogContent
 }
-tasks.curseforge.setGroup("publishing")
 
 // configure the maven publication
 publishing {
@@ -269,7 +261,7 @@ publishing {
 		mavenLocal()
 		maven {
 			name = 'BuildDirLocal'
-			url = "$buildDir/repo"
+			url = "${project.layout.buildDirectory.get()}/repo"
 		}
 
 		def ldlMaven = System.getenv('LDL_MAVEN')

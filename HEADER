@@ -1,9 +1,8 @@
-Copyright © ${YEAR} LambdAurora <email@lambdaurora.dev>
+Copyright © ${CREATION_YEAR} LambdAurora <email@lambdaurora.dev>
 
 This file is part of LambDynamicLights.
 
 Licensed under the MIT license. For more information,
 see the LICENSE file.
 
-;;year_selection: file
-;;year_display: creation_only
+#year_selection file
