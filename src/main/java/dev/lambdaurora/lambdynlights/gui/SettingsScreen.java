@@ -115,7 +115,7 @@ public class SettingsScreen extends SpruceScreen {
 				null, this.tabContainerBuilder(this::buildEntitiesTab));
 		this.tabbedWidget.addTabEntry(Text.empty().append(dynamicLightSources).append(": ").append(this.blockEntitiesOption.getPrefix()),
 				null, this.tabContainerBuilder(this::buildBlockEntitiesTab));
-		this.addDrawableChild(this.tabbedWidget);
+		this.addSelectableElement(this.tabbedWidget);
 	}
 
 	private SpruceTabbedWidget.ContainerFactory tabContainerBuilder(SpruceTabbedWidget.ContainerFactory innerFactory) {
