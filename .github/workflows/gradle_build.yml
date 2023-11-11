@@ -3,17 +3,13 @@ name: Gradle Build
 on:
   workflow_dispatch:
   push:
-    branches:
-      - '*'
   pull_request:
-    branches:
-      - '*'
 
 jobs:
   build:
     strategy:
       matrix:
-        java: [ 17, 20 ]
+        java: [ 17, 21 ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

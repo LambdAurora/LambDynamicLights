@@ -211,7 +211,7 @@ tasks.register('curseforge', TaskPublishCurseForge) {
 	setGroup("publishing")
 
 	if (System.getenv("CURSEFORGE_TOKEN")) {
-		apiKey = System.getenv("CURSEFORGE_TOKEN")
+		apiToken = System.getenv("CURSEFORGE_TOKEN")
 	} else {
 		setEnabled(false)
 		return
