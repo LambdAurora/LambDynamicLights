@@ -25,7 +25,7 @@ item which makes light as a block, or created by an entity on fire, etc.
 
 [Trailer](https://www.youtube.com/embed/r8r1TNG45tM?wmode=transparent)
 
-Searching other mods to replace OptiFine? [Check out this list!](https://lambdaurora.dev/optifine_alternatives)
+Searching other mods to replace OptiFine? [Check out this list!](https://optifine.alternatives.lambdaurora.dev/)
 
 ## ✅ Features:
 

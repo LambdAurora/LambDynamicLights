@@ -162,6 +162,10 @@
 - Fixed Minecraft version restriction.
 - Cleaned up some item light source code.
 
+### 2.3.3
+
+- Added Japanese translations ([#187](https://github.com/LambdAurora/LambDynamicLights/pull/187)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
