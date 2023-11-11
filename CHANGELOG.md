@@ -165,6 +165,9 @@
 ### 2.3.3
 
 - Added Japanese translations ([#187](https://github.com/LambdAurora/LambDynamicLights/pull/187)).
+- Updated to Minecraft 1.20.2 ([#194](https://github.com/LambdAurora/LambDynamicLights/pull/194)).
+  - Fixed settings screen crash ([#186](https://github.com/LambdAurora/LambDynamicLights/issues/186)).
+- Fixed usage of the Fabric mod identifier ([#188](https://github.com/LambdAurora/LambDynamicLights/issues/188)).
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"

@@ -8,7 +8,7 @@
     "LambdAurora"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lambdynamiclights",
+    "homepage": "https://modrinth.com/mod/lambdynamiclights",
     "sources": "https://github.com/LambdAurora/LambDynamicLights.git",
     "issues": "https://github.com/LambdAurora/LambDynamicLights/issues"
   },
@@ -30,14 +30,13 @@
   ],
   "depends": {
     "fabricloader": ">=0.14.20",
-    "fabric": ">=0.83.0+1.20",
-    "minecraft": "~1.20",
-    "spruceui": ">=5.0.0",
+    "fabric-api": ">=0.90.7+1.20.2",
+    "minecraft": "~1.20.2",
+    "spruceui": ">=5.0.3",
     "java": ">=17"
   },
   "recommends": {
-    "modmenu": ">=7.0.1",
-    "quilt_loader": ">=0.19.1"
+    "modmenu": ">=8.0.0"
   },
   "suggests": {
     "ears": "*",
