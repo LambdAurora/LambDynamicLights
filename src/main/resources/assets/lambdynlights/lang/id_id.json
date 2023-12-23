@@ -1,0 +1,21 @@
+{
+  "lambdynlights.menu.light_sources": "Sumber Cahaya Dinamis",
+  "lambdynlights.menu.title": "Pengaturan LambDynamicLights",
+  "lambdynlights.menu.canvas.1": "Disarankan untuk menonaktifkan pencahayaan dinamis entitas dengan Canvas!",
+  "lambdynlights.menu.canvas.2": "Pencahayaan dinamis dengan Canvas saat ini membutuhkan kinerja yang berat!",
+  "lambdynlights.menu.tabs.general": "Umum",
+  "lambdynlights.option.light_sources.block_entities": "Entitas Blok",
+  "lambdynlights.option.light_sources.entities": "Entitas",
+  "lambdynlights.option.light_sources.self": "Sudut pandang orang pertama",
+  "lambdynlights.option.light_sources.water_sensitive_check": "Pemeriksaan Sensitivitas Air",
+  "lambdynlights.option.mode": "Cahaya Dinamis",
+  "lambdynlights.tooltip.block_entities": "Mengaktifkan pencahayaan dinamis blok entitas",
+  "lambdynlights.tooltip.creeper_lighting": "Mengatur mode pencahayaan dinamis Creeper.\n- %s menonaktifkan pencahayaan dinamis Creeper.\n- %s mengaktifkan pencahayaan konstan.\n- %s mengatur pencahayaan dinamis.",
+  "lambdynlights.tooltip.entities": "Mengaktifkan pencahayaan dinamis entitas. Catatan: pemain selalu aktif.",
+  "lambdynlights.tooltip.mode.1": "Mengaktifkan lampu dinamis. Jika diaktifkan, pemain yang memegang obor akan menerangi area tersebut",
+  "lambdynlights.tooltip.mode.2": "%s dan %s akan sedikit lag tetapi meminimalkan pembaruan ringan.",
+  "lambdynlights.tooltip.mode.3": "%s adalah pencahayaan dinamis yang mulus.",
+  "lambdynlights.tooltip.self_light_source": "Mengaktifkan pencahayaan dinamis orang pertama. Sebaiknya nonaktifkan ini jika kamu menggunakan shader yang memiliki pencahayaan dinamis sendiri.",
+  "lambdynlights.tooltip.tnt_lighting": "Mengatur mode pencahayaan dinamis TNT.\n- %s menonaktifkan pencahayaan dinamis TNT.\n- %s menetapkan luminansi konstan.\n- %s menetapkan pencahayaan dinamis.",
+  "lambdynlights.tooltip.water_sensitive": "Mengaktifkan pemeriksaan sumber cahaya yang sensitif terhadap air. Ini berarti beberapa item tidak akan memancarkan cahaya ketika terendam di dalam air."
+}
