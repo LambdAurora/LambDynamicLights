@@ -173,7 +173,7 @@
 
 - Added Indonesian translations ([#203](https://github.com/LambdAurora/LambDynamicLights/pull/203)).
 - Updated Ukrainian translations ([#195](https://github.com/LambdAurora/LambDynamicLights/pull/195)).
-- Updated to Minecraft 1.20.4.
+- Updated to Minecraft 1.20.4 ([#202](https://github.com/LambdAurora/LambDynamicLights/pull/202)).
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
