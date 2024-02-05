@@ -169,6 +169,12 @@
   - Fixed settings screen crash ([#186](https://github.com/LambdAurora/LambDynamicLights/issues/186)).
 - Fixed usage of the Fabric mod identifier ([#188](https://github.com/LambdAurora/LambDynamicLights/issues/188)).
 
+### 2.3.4
+
+- Added Indonesian translations ([#203](https://github.com/LambdAurora/LambDynamicLights/pull/203)).
+- Updated Ukrainian translations ([#195](https://github.com/LambdAurora/LambDynamicLights/pull/195)).
+- Updated to Minecraft 1.20.4.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
