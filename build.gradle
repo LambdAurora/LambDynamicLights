@@ -1,11 +1,11 @@
 plugins {
-	id 'fabric-loom' version '1.4.+'
-	id 'dev.yumi.gradle.licenser' version '1.1.+'
-	id 'java-library'
-	id 'maven-publish'
-	id 'com.github.johnrengelman.shadow' version '8.1.1'
-	id 'com.modrinth.minotaur' version '2.+'
-	id 'net.darkhax.curseforgegradle' version '1.1.+'
+    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'dev.yumi.gradle.licenser' version '1.1.+'
+    id 'java-library'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'com.modrinth.minotaur' version '2.+'
+    id 'net.darkhax.curseforgegradle' version '1.1.+'
 }
 
 import com.modrinth.minotaur.dependencies.ModDependency
@@ -16,262 +16,262 @@ version = "${project.mod_version}+${project.minecraft_version}"
 base.archivesName = project.archives_base_name
 
 // This field defines the Java version your mod target.
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 
 if (!(System.getenv("CURSEFORGE_TOKEN") || System.getenv("MODRINTH_TOKEN"))) {
-	version += "-local"
+    version += "-local"
 }
 logger.lifecycle("Preparing version ${version}...")
 
 boolean isMCVersionNonRelease() {
-	return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
-			|| project.minecraft_version.matches('\\d+\\.\\d+-(pre|rc)(\\d+)')
+    return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
+            || project.minecraft_version.matches('\\d+\\.\\d+-(pre|rc)(\\d+)')
 }
 
 String getMCVersionString() {
-	if (isMCVersionNonRelease()) {
-		return project.minecraft_version
-	}
-	def version = project.minecraft_version.split('\\.')
-	return version[0] + '.' + version[1]
+    if (isMCVersionNonRelease()) {
+        return project.minecraft_version
+    }
+    def version = project.minecraft_version.split('\\.')
+    return version[0] + '.' + version[1]
 }
 
 String getVersionType() {
-	if (isMCVersionNonRelease() || version.contains("-alpha.")) {
-		return "alpha"
-	} else if (version.contains("-beta.")) {
-		return "beta"
-	} else {
-		return "release"
-	}
+    if (isMCVersionNonRelease() || version.contains("-alpha.")) {
+        return "alpha"
+    } else if (version.contains("-beta.")) {
+        return "beta"
+    } else {
+        return "release"
+    }
 }
 
 String parseReadme() {
-	def excludeRegex = /(?m)<!-- modrinth_exclude\.start -->(.|\n)*?<!-- modrinth_exclude\.end -->/
-	def linkRegex = /!\[([A-z_ ]+)]\((images\/[A-z.\/_]+)\)/
+    def excludeRegex = /(?m)<!-- modrinth_exclude\.start -->(.|\n)*?<!-- modrinth_exclude\.end -->/
+    def linkRegex = /!\[([A-z_ ]+)]\((images\/[A-z.\/_]+)\)/
 
-	def readme = (String) file('README.md').text
-	readme = readme.replaceAll(excludeRegex, '')
-	readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.19/$2)')
-	return readme
+    def readme = (String) file('README.md').text
+    readme = readme.replaceAll(excludeRegex, '')
+    readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.19/$2)')
+    return readme
 }
 
 String fetchChangelog() {
-	def changelogText = file('CHANGELOG.md').text
-	def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
-	def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
-	def matcher = changelogText =~ changelogRegex
+    def changelogText = file('CHANGELOG.md').text
+    def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
+    def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
+    def matcher = changelogText =~ changelogRegex
 
-	if (matcher.find()) {
-		def changelogContent = matcher.group(1)
+    if (matcher.find()) {
+        def changelogContent = matcher.group(1)
 
-		def changelogLines = changelogText.split('\n')
-		def linkRefRegex = ~'^\\[([A-z\\d _\\-/+.]+)]: '
-		for (int i = changelogLines.length - 1; i > 0; i--) {
-			def line = changelogLines[i]
-			if ((line =~ linkRefRegex).find())
-				changelogContent += '\n' + line
-			else break
-		}
-		return changelogContent
-	} else {
-		return null;
-	}
+        def changelogLines = changelogText.split('\n')
+        def linkRefRegex = ~'^\\[([A-z\\d _\\-/+.]+)]: '
+        for (int i = changelogLines.length - 1; i > 0; i--) {
+            def line = changelogLines[i]
+            if ((line =~ linkRefRegex).find())
+                changelogContent += '\n' + line
+            else break
+        }
+        return changelogContent
+    } else {
+        return null;
+    }
 }
 
 repositories {
-	mavenLocal()
-	mavenCentral()
-	maven {
-		name "Quilt"
-		url "https://maven.quiltmc.org/repository/release"
-	}
-	maven {
-		name 'Terraformers'
-		url 'https://maven.terraformersmc.com/releases/'
-	}
-	maven {
-		name 'Gegy'
-		url 'https://maven.gegy.dev'
-	}
-	maven {
-		name 'grondag'
-		url 'https://maven.dblsaiko.net/'
-	}
-	exclusiveContent {
-		forRepository {
-			maven {
-				name "Modrinth"
-				url "https://api.modrinth.com/maven"
-			}
-		}
-		filter {
-			includeGroup "maven.modrinth"
-		}
-	}
+    mavenLocal()
+    mavenCentral()
+    maven {
+        name "Quilt"
+        url "https://maven.quiltmc.org/repository/release"
+    }
+    maven {
+        name 'Terraformers'
+        url 'https://maven.terraformersmc.com/releases/'
+    }
+    maven {
+        name 'Gegy'
+        url 'https://maven.gegy.dev'
+    }
+    maven {
+        name 'grondag'
+        url 'https://maven.dblsaiko.net/'
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name "Modrinth"
+                url "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 configurations {
-	shadow
-	api.extendsFrom shadow
+    shadow
+    api.extendsFrom shadow
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/lambdynlights.accesswidener")
+    accessWidenerPath = file("src/main/resources/lambdynlights.accesswidener")
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${project.quilt_mappings}:intermediary-v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "org.quiltmc:quilt-mappings:${minecraft_version}-rc1+build.${project.quilt_mappings}:intermediary-v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation include("dev.lambdaurora:spruceui:${project.spruceui_version}")
-	modImplementation include("io.github.queerbric:pridelib:${project.pridelib_version}")
+    modImplementation include("dev.lambdaurora:spruceui:${project.spruceui_version}")
+    modImplementation include("io.github.queerbric:pridelib:${project.pridelib_version}")
 
-	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
-		transitive = false
-	}
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
+        transitive = false
+    }
 
-	modRuntimeOnly "maven.modrinth:sodium:${project.sodium_version}"
+    modRuntimeOnly "maven.modrinth:sodium:${project.sodium_version}"
 
-	shadow 'com.electronwill.night-config:core:3.6.6'
-	shadow 'com.electronwill.night-config:toml:3.6.6'
+    shadow 'com.electronwill.night-config:core:3.6.6'
+    shadow 'com.electronwill.night-config:toml:3.6.6'
 }
 
 java {
-	sourceCompatibility = JavaVersion.toVersion(targetJavaVersion)
-	targetCompatibility = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = JavaVersion.toVersion(targetJavaVersion)
+    targetCompatibility = JavaVersion.toVersion(targetJavaVersion)
 
-	withSourcesJar()
+    withSourcesJar()
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = 'UTF-8'
+    it.options.encoding = 'UTF-8'
 
-	it.options.release.set(targetJavaVersion)
+    it.options.release.set(targetJavaVersion)
 }
 
 processResources {
-	inputs.property 'version', project.version
+    inputs.property 'version', project.version
 
-	filesMatching('fabric.mod.json') {
-		expand 'version': project.version
-	}
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
 }
 
 jar {
-	from('LICENSE') {
-		rename { "${it}_${base.archivesName}" }
-	}
+    from('LICENSE') {
+        rename { "${it}_${base.archivesName}" }
+    }
 }
 
 license {
-	rule file('HEADER')
+    rule file('HEADER')
 }
 
 shadowJar {
-	dependsOn jar
-	configurations = [project.configurations.shadow]
-	destinationDirectory.set(file("${project.layout.buildDirectory.get()}/devlibs"))
-	archiveClassifier.set('dev')
+    dependsOn jar
+    configurations = [project.configurations.shadow]
+    destinationDirectory.set(file("${project.layout.buildDirectory.get()}/devlibs"))
+    archiveClassifier.set('dev')
 
-	relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdynlights.shadow.nightconfig'
+    relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdynlights.shadow.nightconfig'
 }
 remapJar.dependsOn(shadowJar)
 
 modrinth {
-	projectId = project.modrinth_id
-	versionName = "LambDynamicLights ${project.mod_version} (${getMCVersionString()})"
-	uploadFile = tasks.remapJar
-	loaders = ["fabric", "quilt"]
-	gameVersions = [project.minecraft_version]
-	versionType = isMCVersionNonRelease() ? "beta" : "release"
-	syncBodyFrom = parseReadme()
-	dependencies = [
-			new ModDependency("P7dR8mSH", "required")
-	]
+    projectId = project.modrinth_id
+    versionName = "LambDynamicLights ${project.mod_version} (${getMCVersionString()})"
+    uploadFile = tasks.remapJar
+    loaders = ["fabric", "quilt"]
+    gameVersions = [project.minecraft_version]
+    versionType = isMCVersionNonRelease() ? "beta" : "release"
+    syncBodyFrom = parseReadme()
+    dependencies = [
+            new ModDependency("P7dR8mSH", "required")
+    ]
 
-	// Changelog fetching
-	def changelogContent = fetchChangelog()
+    // Changelog fetching
+    def changelogContent = fetchChangelog()
 
-	if (changelogContent) {
-		changelog = changelogContent
-	} else {
-		afterEvaluate {
-			tasks.modrinth.setEnabled(false)
-		}
-	}
+    if (changelogContent) {
+        changelog = changelogContent
+    } else {
+        afterEvaluate {
+            tasks.modrinth.setEnabled(false)
+        }
+    }
 }
 tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 
 tasks.register('curseforge', TaskPublishCurseForge) {
-	setGroup("publishing")
+    setGroup("publishing")
 
-	if (System.getenv("CURSEFORGE_TOKEN")) {
-		apiToken = System.getenv("CURSEFORGE_TOKEN")
-	} else {
-		setEnabled(false)
-		return
-	}
+    if (System.getenv("CURSEFORGE_TOKEN")) {
+        apiToken = System.getenv("CURSEFORGE_TOKEN")
+    } else {
+        setEnabled(false)
+        return
+    }
 
-	// Changelog fetching
-	def changelogContent = fetchChangelog()
+    // Changelog fetching
+    def changelogContent = fetchChangelog()
 
-	if (changelogContent) {
-		changelogContent = "Changelog:\n\n${changelogContent}"
-	} else {
-		setEnabled(false)
-		return
-	}
+    if (changelogContent) {
+        changelogContent = "Changelog:\n\n${changelogContent}"
+    } else {
+        setEnabled(false)
+        return
+    }
 
-	def mainFile = upload(project.curseforge_id, tasks.remapJar)
-	mainFile.releaseType = this.getVersionType()
-	mainFile.addGameVersion(project.minecraft_version)
-	mainFile.addModLoader("Fabric", "Quilt")
-	mainFile.addJavaVersion("Java 17", "Java 18")
+    def mainFile = upload(project.curseforge_id, tasks.remapJar)
+    mainFile.releaseType = this.getVersionType()
+    mainFile.addGameVersion(project.minecraft_version)
+    mainFile.addModLoader("Fabric", "Quilt")
+    mainFile.addJavaVersion("Java 17", "Java 18")
 
-	mainFile.displayName = "LambDynamicLights ${project.mod_version} (${project.minecraft_version})"
-	mainFile.addRequirement("fabric-api")
-	mainFile.addOptional("modmenu")
-	mainFile.addIncompatibility("optifabric")
+    mainFile.displayName = "LambDynamicLights ${project.mod_version} (${project.minecraft_version})"
+    mainFile.addRequirement("fabric-api")
+    mainFile.addOptional("modmenu")
+    mainFile.addIncompatibility("optifabric")
 
-	mainFile.changelogType = "markdown"
-	mainFile.changelog = changelogContent
+    mainFile.changelogType = "markdown"
+    mainFile.changelog = changelogContent
 }
 
 // configure the maven publication
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
 
-			pom {
-				name = "LambDynamicLights"
-				description = "Adds dynamic lights to the game."
-			}
-		}
-	}
+            pom {
+                name = "LambDynamicLights"
+                description = "Adds dynamic lights to the game."
+            }
+        }
+    }
 
-	repositories {
-		mavenLocal()
-		maven {
-			name = 'BuildDirLocal'
-			url = "${project.layout.buildDirectory.get()}/repo"
-		}
+    repositories {
+        mavenLocal()
+        maven {
+            name = 'BuildDirLocal'
+            url = "${project.layout.buildDirectory.get()}/repo"
+        }
 
-		def ldlMaven = System.getenv('LDL_MAVEN')
-		if (ldlMaven) {
-			maven {
-				name = 'LambDynamicLightsMaven'
-				url = uri(ldlMaven)
-				credentials {
-					username = project.findProperty('gpr.user') ?: System.getenv('MAVEN_USERNAME')
-					password = project.findProperty('gpr.key') ?: System.getenv('MAVEN_PASSWORD')
-				}
-			}
-		}
-	}
+        def ldlMaven = System.getenv('LDL_MAVEN')
+        if (ldlMaven) {
+            maven {
+                name = 'LambDynamicLightsMaven'
+                url = uri(ldlMaven)
+                credentials {
+                    username = project.findProperty('gpr.user') ?: System.getenv('MAVEN_USERNAME')
+                    password = project.findProperty('gpr.key') ?: System.getenv('MAVEN_PASSWORD')
+                }
+            }
+        }
+    }
 }

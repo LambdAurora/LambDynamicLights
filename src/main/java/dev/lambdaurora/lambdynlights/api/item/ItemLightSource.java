@@ -13,6 +13,8 @@ import com.google.gson.JsonObject;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.DataComponentType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,156 +34,157 @@ import java.util.Optional;
  * @since 1.3.0
  */
 public abstract class ItemLightSource {
-	private final Identifier id;
-	private final Item item;
-	private final boolean waterSensitive;
+    private final Identifier id;
+    private final Item item;
+    private final boolean waterSensitive;
 
-	public ItemLightSource(Identifier id, Item item, boolean waterSensitive) {
-		this.id = id;
-		this.item = item;
-		this.waterSensitive = waterSensitive;
-	}
+    public ItemLightSource(Identifier id, Item item, boolean waterSensitive) {
+        this.id = id;
+        this.item = item;
+        this.waterSensitive = waterSensitive;
+    }
 
-	public ItemLightSource(Identifier id, Item item) {
-		this(id, item, false);
-	}
+    public ItemLightSource(Identifier id, Item item) {
+        this(id, item, false);
+    }
 
-	public Identifier id() {
-		return this.id;
-	}
+    public Identifier id() {
+        return this.id;
+    }
 
-	public Item item() {
-		return this.item;
-	}
+    public Item item() {
+        return this.item;
+    }
 
-	public boolean waterSensitive() {
-		return this.waterSensitive;
-	}
+    public boolean waterSensitive() {
+        return this.waterSensitive;
+    }
 
-	/**
-	 * Gets the luminance of the item.
-	 *
-	 * @param stack the item stack
-	 * @param submergedInWater {@code true} if submerged in water, else {@code false}.
-	 * @return the luminance value between {@code 0} and {@code 15}
-	 */
-	public int getLuminance(ItemStack stack, boolean submergedInWater) {
-		if (this.waterSensitive() && LambDynLights.get().config.getWaterSensitiveCheck().get() && submergedInWater)
-			return 0; // Don't emit light with water sensitive items while submerged in water.
+    /**
+     * Gets the luminance of the item.
+     *
+     * @param stack            the item stack
+     * @param submergedInWater {@code true} if submerged in water, else {@code false}.
+     * @return the luminance value between {@code 0} and {@code 15}
+     */
+    public int getLuminance(ItemStack stack, boolean submergedInWater) {
+        if (this.waterSensitive() && LambDynLights.get().config.getWaterSensitiveCheck().get() && submergedInWater)
+            return 0; // Don't emit light with water sensitive items while submerged in water.
 
-		return this.getLuminance(stack);
-	}
+        return this.getLuminance(stack);
+    }
 
-	/**
-	 * Gets the luminance of the item.
-	 *
-	 * @param stack the item stack
-	 * @return the luminance value between {@code 0} and {@code 15}
-	 */
-	public abstract int getLuminance(ItemStack stack);
+    /**
+     * Gets the luminance of the item.
+     *
+     * @param stack the item stack
+     * @return the luminance value between {@code 0} and {@code 15}
+     */
+    public abstract int getLuminance(ItemStack stack);
 
-	@Override
-	public String toString() {
-		return "ItemLightSource{" +
-				"id=" + this.id() +
-				"item=" + this.item() +
-				", water_sensitive=" + this.waterSensitive() +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "ItemLightSource{" +
+                "id=" + this.id() +
+                "item=" + this.item() +
+                ", water_sensitive=" + this.waterSensitive() +
+                '}';
+    }
 
-	public static @NotNull Optional<ItemLightSource> fromJson(@NotNull Identifier id, @NotNull JsonObject json) {
-		if (!json.has("item") || !json.has("luminance")) {
-			LambDynLights.get().warn("Failed to parse item light source \"" + id + "\", invalid format: missing required fields.");
-			return Optional.empty();
-		}
+    public static @NotNull Optional<ItemLightSource> fromJson(@NotNull Identifier id, @NotNull JsonObject json) {
+        if (!json.has("item") || !json.has("luminance")) {
+            LambDynLights.get().warn("Failed to parse item light source \"" + id + "\", invalid format: missing required fields.");
+            return Optional.empty();
+        }
 
-		var affectId = new Identifier(json.get("item").getAsString());
-		var item = Registries.ITEM.get(affectId);
+        var affectId = new Identifier(json.get("item").getAsString());
+        var item = Registries.ITEM.get(affectId);
 
-		if (item == Items.AIR)
-			return Optional.empty();
+        if (item == Items.AIR)
+            return Optional.empty();
 
-		boolean waterSensitive = false;
-		if (json.has("water_sensitive"))
-			waterSensitive = json.get("water_sensitive").getAsBoolean();
+        boolean waterSensitive = false;
+        if (json.has("water_sensitive"))
+            waterSensitive = json.get("water_sensitive").getAsBoolean();
 
-		var luminanceElement = json.get("luminance").getAsJsonPrimitive();
-		if (luminanceElement.isNumber()) {
-			return Optional.of(new StaticItemLightSource(id, item, luminanceElement.getAsInt(), waterSensitive));
-		} else if (luminanceElement.isString()) {
-			var luminanceStr = luminanceElement.getAsString();
-			if (luminanceStr.equals("block")) {
-				if (item instanceof BlockItem blockItem) {
-					return Optional.of(new BlockItemLightSource(id, item, blockItem.getBlock().getDefaultState(), waterSensitive));
-				}
-			} else {
-				var blockId = Identifier.tryParse(luminanceStr);
-				if (blockId != null) {
-					var block = Registries.BLOCK.get(blockId);
-					if (block != Blocks.AIR)
-						return Optional.of(new BlockItemLightSource(id, item, block.getDefaultState(), waterSensitive));
-				}
-			}
-		} else {
-			LambDynLights.get().warn("Failed to parse item light source \"" + id + "\", invalid format: \"luminance\" field value isn't string or integer.");
-		}
+        var luminanceElement = json.get("luminance").getAsJsonPrimitive();
+        if (luminanceElement.isNumber()) {
+            return Optional.of(new StaticItemLightSource(id, item, luminanceElement.getAsInt(), waterSensitive));
+        } else if (luminanceElement.isString()) {
+            var luminanceStr = luminanceElement.getAsString();
+            if (luminanceStr.equals("block")) {
+                if (item instanceof BlockItem blockItem) {
+                    return Optional.of(new BlockItemLightSource(id, item, blockItem.getBlock().getDefaultState(), waterSensitive));
+                }
+            } else {
+                var blockId = Identifier.tryParse(luminanceStr);
+                if (blockId != null) {
+                    var block = Registries.BLOCK.get(blockId);
+                    if (block != Blocks.AIR)
+                        return Optional.of(new BlockItemLightSource(id, item, block.getDefaultState(), waterSensitive));
+                }
+            }
+        } else {
+            LambDynLights.get().warn("Failed to parse item light source \"" + id + "\", invalid format: \"luminance\" field value isn't string or integer.");
+        }
 
-		return Optional.empty();
-	}
+        return Optional.empty();
+    }
 
-	public static class StaticItemLightSource extends ItemLightSource {
-		private final int luminance;
+    public static class StaticItemLightSource extends ItemLightSource {
+        private final int luminance;
 
-		public StaticItemLightSource(Identifier id, Item item, int luminance, boolean waterSensitive) {
-			super(id, item, waterSensitive);
-			this.luminance = luminance;
-		}
+        public StaticItemLightSource(Identifier id, Item item, int luminance, boolean waterSensitive) {
+            super(id, item, waterSensitive);
+            this.luminance = luminance;
+        }
 
-		public StaticItemLightSource(Identifier id, Item item, int luminance) {
-			super(id, item);
-			this.luminance = luminance;
-		}
+        public StaticItemLightSource(Identifier id, Item item, int luminance) {
+            super(id, item);
+            this.luminance = luminance;
+        }
 
-		@Override
-		public int getLuminance(ItemStack stack) {
-			return this.luminance;
-		}
-	}
+        @Override
+        public int getLuminance(ItemStack stack) {
+            return this.luminance;
+        }
+    }
 
-	public static class BlockItemLightSource extends ItemLightSource {
-		private final BlockState mimic;
+    public static class BlockItemLightSource extends ItemLightSource {
+        private final BlockState mimic;
 
-		public BlockItemLightSource(Identifier id, Item item, BlockState block, boolean waterSensitive) {
-			super(id, item, waterSensitive);
-			this.mimic = block;
-		}
+        public BlockItemLightSource(Identifier id, Item item, BlockState block, boolean waterSensitive) {
+            super(id, item, waterSensitive);
+            this.mimic = block;
+        }
 
-		@Override
-		public int getLuminance(ItemStack stack) {
-			return getLuminance(stack, this.mimic);
-		}
+        @Override
+        public int getLuminance(ItemStack stack) {
+            return getLuminance(stack, this.mimic);
+        }
 
-		static int getLuminance(ItemStack stack, BlockState state) {
-			var nbt = stack.getNbt();
+        static int getLuminance(ItemStack stack, BlockState state) {
+            var nbt = stack.getComponents();
 
-			if (nbt != null) {
-				var blockStateTag = nbt.getCompound("BlockStateTag");
-				var stateManager = state.getBlock().getStateManager();
+            if (nbt != null) {
+                var blockStateTag = nbt.get(DataComponentTypes.BLOCK_STATE);
+                var stateManager = state.getBlock().getStateManager();
+                if (blockStateTag != null) {
+                    for (var key : blockStateTag.properties().keySet()) {
+                        var property = stateManager.getProperty(key);
+                        if (property != null) {
+                            var value = blockStateTag.properties().get(key);
+                            state = with(state, property, value);
+                        }
+                    }
+                }
+            }
 
-				for (var key : blockStateTag.getKeys()) {
-					var property = stateManager.getProperty(key);
-					if (property != null) {
-						var value = blockStateTag.get(key).asString();
-						state = with(state, property, value);
-					}
-				}
-			}
+            return state.getLuminance();
+        }
 
-			return state.getLuminance();
-		}
-
-		private static <T extends Comparable<T>> BlockState with(BlockState state, Property<T> property, String name) {
-			return property.parse(name).map(value -> state.with(property, value)).orElse(state);
-		}
-	}
+        private static <T extends Comparable<T>> BlockState with(BlockState state, Property<T> property, String name) {
+            return property.parse(name).map(value -> state.with(property, value)).orElse(state);
+        }
+    }
 }
