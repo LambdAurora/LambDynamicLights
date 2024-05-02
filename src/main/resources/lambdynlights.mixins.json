@@ -11,14 +11,15 @@
     "EntityRendererMixin",
     "EntityTypeMixin",
     "MinecraftClientMixin",
+    "ScreenMixin",
     "VideoOptionsScreenMixin",
     "WorldMixin",
+    "fabric.AoCalculatorMixin",
     "ltr.LilTaterBlockEntityMixin",
     "ltr.LilTaterBlocksMixin",
     "sodium.ArrayLightDataCacheMixin",
     "sodium.FlatLightPipelineMixin",
-    "sodium.LightDataAccessMixin",
-    "fabric.AoCalculatorMixin"
+    "sodium.LightDataAccessMixin"
   ],
   "injectors": {
     "defaultRequire": 1
