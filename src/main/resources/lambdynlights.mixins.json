@@ -12,6 +12,7 @@
     "EntityTypeMixin",
     "MinecraftClientMixin",
     "VideoOptionsScreenMixin",
+    "ScreenMixin",
     "WorldMixin",
     "ltr.LilTaterBlockEntityMixin",
     "ltr.LilTaterBlocksMixin",

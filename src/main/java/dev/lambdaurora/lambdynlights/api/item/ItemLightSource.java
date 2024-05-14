@@ -11,13 +11,18 @@ package dev.lambdaurora.lambdynlights.api.item;
 
 import com.google.gson.JsonObject;
 import dev.lambdaurora.lambdynlights.LambDynLights;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.DataComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BlockStateComponent;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -162,17 +167,19 @@ public abstract class ItemLightSource {
 		}
 
 		static int getLuminance(ItemStack stack, BlockState state) {
-			var nbt = stack.getNbt();
+			DataComponentMap nbt = stack.getComponents();
 
 			if (nbt != null) {
-				var blockStateTag = nbt.getCompound("BlockStateTag");
+				var blockStateTag = nbt.get(DataComponentTypes.BLOCK_STATE);
 				var stateManager = state.getBlock().getStateManager();
 
-				for (var key : blockStateTag.getKeys()) {
-					var property = stateManager.getProperty(key);
-					if (property != null) {
-						var value = blockStateTag.get(key).asString();
-						state = with(state, property, value);
+				if (blockStateTag != null) {
+					for (var key : blockStateTag.properties().keySet()) {
+						var property = stateManager.getProperty(key);
+						if (property != null) {
+							var value = blockStateTag.properties().get(key);
+							state = with(state, property, value);
+						}
 					}
 				}
 			}

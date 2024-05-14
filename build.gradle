@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.4.+'
+	id 'fabric-loom' version '1.6.+'
 	id 'dev.yumi.gradle.licenser' version '1.1.+'
 	id 'java-library'
 	id 'maven-publish'
@@ -16,7 +16,7 @@ version = "${project.mod_version}+${project.minecraft_version}"
 base.archivesName = project.archives_base_name
 
 // This field defines the Java version your mod target.
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 
 if (!(System.getenv("CURSEFORGE_TOKEN") || System.getenv("MODRINTH_TOKEN"))) {
 	version += "-local"
@@ -231,7 +231,7 @@ tasks.register('curseforge', TaskPublishCurseForge) {
 	mainFile.releaseType = this.getVersionType()
 	mainFile.addGameVersion(project.minecraft_version)
 	mainFile.addModLoader("Fabric", "Quilt")
-	mainFile.addJavaVersion("Java 17", "Java 18")
+	mainFile.addJavaVersion("Java 21")
 
 	mainFile.displayName = "LambDynamicLights ${project.mod_version} (${project.minecraft_version})"
 	mainFile.addRequirement("fabric-api")
