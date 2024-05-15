@@ -1,7 +1,7 @@
 # LambDynamicLights
 
 <!-- modrinth_exclude.start -->
-![Java 17](https://img.shields.io/badge/language-Java%2017-9B599A.svg?style=flat-square) <!-- modrinth_exclude.end -->
+[![Java 21](https://img.shields.io/badge/language-Java%2021-9B599A.svg?style=flat-square)](https://adoptium.net/temurin/releases/?os=any&arch=x64&package=jdk&version=21) <!-- modrinth_exclude.end -->
 [![GitHub license](https://img.shields.io/github/license/LambdAurora/LambDynamicLights?style=flat-square)](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.19/LICENSE)
 ![Environment: Client](https://img.shields.io/badge/environment-client-1976d2?style=flat-square)
 [![Mod loader: Fabric]][fabric] <!-- modrinth_exclude.start -->

@@ -11,18 +11,14 @@ package dev.lambdaurora.lambdynlights.api.item;
 
 import com.google.gson.JsonObject;
 import dev.lambdaurora.lambdynlights.LambDynLights;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.component.DataComponentMap;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BlockStateComponent;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
-import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -167,7 +163,7 @@ public abstract class ItemLightSource {
 		}
 
 		static int getLuminance(ItemStack stack, BlockState state) {
-			DataComponentMap nbt = stack.getComponents();
+			var nbt = stack.getComponents();
 
 			if (nbt != null) {
 				var blockStateTag = nbt.get(DataComponentTypes.BLOCK_STATE);
