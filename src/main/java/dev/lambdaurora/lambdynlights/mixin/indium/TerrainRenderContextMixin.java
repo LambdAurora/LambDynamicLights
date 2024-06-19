@@ -15,6 +15,7 @@ import dev.lambdaurora.lambdynlights.LambDynLights;
 import link.infra.indium.renderer.mesh.MutableQuadViewImpl;
 import link.infra.indium.renderer.render.AbstractBlockRenderContext;
 import link.infra.indium.renderer.render.TerrainRenderContext;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Pseudo
 @Mixin(value = TerrainRenderContext.class, remap = false)
 public abstract class TerrainRenderContextMixin extends AbstractBlockRenderContext {
+	@Dynamic
 	@WrapOperation(method = "bufferQuad", at = @At(value = "INVOKE", target = "Llink/infra/indium/renderer/mesh/MutableQuadViewImpl;lightmap(I)I"), require = 0)
 	private int lambdynlights$getLightmap(MutableQuadViewImpl instance, int i, Operation<Integer> original) {
 		return LambDynLights.get().getLightmapWithDynamicLight(this.blockInfo.blockPos, original.call(instance, i));
