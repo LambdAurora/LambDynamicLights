@@ -37,6 +37,9 @@ public class LambDynLightsMixinPlugin implements IMixinConfigPlugin {
 		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.sodium.ArrayLightDataCacheMixin", sodium05XInstalled);
 		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.sodium.FlatLightPipelineMixin", sodium05XInstalled);
 		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.sodium.LightDataAccessMixin", sodium05XInstalled);
+
+		boolean indiumInstalled = LambDynLightsCompat.isIndiumInstalled();
+		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.indium.TerrainRenderContextMixin", indiumInstalled);
 	}
 
 	@Override
