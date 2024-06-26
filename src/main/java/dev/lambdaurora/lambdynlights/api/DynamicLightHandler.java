@@ -76,7 +76,7 @@ public interface DynamicLightHandler<T> {
 	static <T extends LivingEntity> @NotNull DynamicLightHandler<T> makeLivingEntityHandler(@NotNull DynamicLightHandler<T> handler) {
 		return entity -> {
 			int luminance = 0;
-			for (var equipped : entity.getItemsEquipped()) {
+			for (var equipped : entity.getEquippedItems()) {
 				luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, entity.isSubmergedInWater()));
 			}
 			return Math.max(luminance, handler.getLuminance(entity));

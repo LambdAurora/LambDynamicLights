@@ -13,6 +13,8 @@ import com.google.gson.JsonObject;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BlockStateComponent;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -95,7 +97,7 @@ public abstract class ItemLightSource {
 			return Optional.empty();
 		}
 
-		var affectId = new Identifier(json.get("item").getAsString());
+		var affectId = Identifier.tryParse(json.get("item").getAsString());
 		var item = Registries.ITEM.get(affectId);
 
 		if (item == Items.AIR)
@@ -162,19 +164,10 @@ public abstract class ItemLightSource {
 		}
 
 		static int getLuminance(ItemStack stack, BlockState state) {
-			var nbt = stack.getNbt();
+			var nbt = stack.getComponents().getOrDefault(DataComponentTypes.BLOCK_STATE, BlockStateComponent.DEFAULT);
 
-			if (nbt != null) {
-				var blockStateTag = nbt.getCompound("BlockStateTag");
-				var stateManager = state.getBlock().getStateManager();
-
-				for (var key : blockStateTag.getKeys()) {
-					var property = stateManager.getProperty(key);
-					if (property != null) {
-						var value = blockStateTag.get(key).asString();
-						state = with(state, property, value);
-					}
-				}
+			if (!nbt.isEmpty()) {
+				state = nbt.applyToState(state);
 			}
 
 			return state.getLuminance();

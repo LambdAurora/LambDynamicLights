@@ -162,7 +162,7 @@ public final class DynamicLightHandlers {
 		if (!canLightUp(entity))
 			return 0;
 		if (handler.isWaterSensitive(entity)
-				&& !entity.getWorld().getFluidState(BlockPos.create(entity.getX(), entity.getEyeY(), entity.getZ())).isEmpty())
+				&& !entity.getWorld().getFluidState(BlockPos.ofFloored(entity.getX(), entity.getEyeY(), entity.getZ())).isEmpty())
 			return 0;
 		return handler.getLuminance(entity);
 	}

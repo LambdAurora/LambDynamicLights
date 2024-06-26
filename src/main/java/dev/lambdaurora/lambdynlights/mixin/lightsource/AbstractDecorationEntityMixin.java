@@ -27,8 +27,9 @@ public abstract class AbstractDecorationEntityMixin extends Entity implements Dy
 		super(type, world);
 	}
 
-	@Inject(method = "tick", at = @At("TAIL"))
-	private void onTick(CallbackInfo ci) {
+	@Override
+	public void tick() {
+		super.tick();
 		// We do not want to update the entity on the server.
 		if (this.getWorld().isClient()) {
 			if (this.isRemoved()) {

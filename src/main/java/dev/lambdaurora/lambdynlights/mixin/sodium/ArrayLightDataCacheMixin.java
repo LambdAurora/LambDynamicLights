@@ -19,7 +19,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Pseudo
-@Mixin(targets = "me.jellysquid.mods.sodium.client.model.light.data.ArrayLightDataCache", remap = false)
+@Mixin(targets = {
+		"me.jellysquid.mods.sodium.client.model.light.data.ArrayLightDataCache",
+		"net.caffeinemc.mods.sodium.client.model.light.data.ArrayLightDataCache"
+	}, remap = false)
 public abstract class ArrayLightDataCacheMixin {
 	@Dynamic
 	@Inject(method = "get(III)I", at = @At("HEAD"), require = 0)

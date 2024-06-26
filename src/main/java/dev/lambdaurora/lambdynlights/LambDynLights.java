@@ -78,7 +78,7 @@ public class LambDynLights implements ClientModInitializer {
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 			@Override
 			public Identifier getFabricId() {
-				return new Identifier(NAMESPACE, "dynamiclights_resources");
+				return Identifier.of(NAMESPACE, "dynamiclights_resources");
 			}
 
 			@Override
@@ -450,7 +450,7 @@ public class LambDynLights implements ClientModInitializer {
 			return false;
 		}
 
-		var eyePos = BlockPos.create(entity.getX(), entity.getEyeY(), entity.getZ());
+		var eyePos = BlockPos.ofFloored(entity.getX(), entity.getEyeY(), entity.getZ());
 		return !entity.getWorld().getFluidState(eyePos).isEmpty();
 	}
 
@@ -458,7 +458,7 @@ public class LambDynLights implements ClientModInitializer {
 		boolean submergedInFluid = isEyeSubmergedInFluid(entity);
 		int luminance = 0;
 
-		for (var equipped : entity.getItemsEquipped()) {
+		for (var equipped : entity.getEquippedItems()) {
 			if (!equipped.isEmpty())
 				luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
 		}

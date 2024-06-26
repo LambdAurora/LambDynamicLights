@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.4.+'
+	id 'fabric-loom' version '1.7.+'
 	id 'dev.yumi.gradle.licenser' version '1.1.+'
 	id 'java-library'
 	id 'maven-publish'
@@ -83,10 +83,6 @@ repositories {
 	mavenLocal()
 	mavenCentral()
 	maven {
-		name "Quilt"
-		url "https://maven.quiltmc.org/repository/release"
-	}
-	maven {
 		name 'Terraformers'
 		url 'https://maven.terraformersmc.com/releases/'
 	}
@@ -122,7 +118,7 @@ loom {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${project.quilt_mappings}:intermediary-v2"
+	mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
