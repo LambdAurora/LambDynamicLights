@@ -165,7 +165,7 @@ public abstract class ItemLightSource {
 
 		static int getLuminance(ItemStack stack, BlockState state) {
 			var blockState = stack.getComponents().getOrDefault(DataComponentTypes.BLOCK_STATE, BlockStateComponent.DEFAULT);
-			if (!blockState.isEmpty()){
+			if (!blockState.isEmpty()) {
 				state = blockState.apply(state);
 			}
 			return state.getLuminance();
