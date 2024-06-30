@@ -14,6 +14,7 @@ import dev.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BlockStateComponent;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -163,26 +164,11 @@ public abstract class ItemLightSource {
 		}
 
 		static int getLuminance(ItemStack stack, BlockState state) {
-			var blockStates = stack.get(DataComponentTypes.BLOCK_STATE);
-
-			if (blockStates != null) {
-				var properties = blockStates.properties();
-				var stateManager = state.getBlock().getStateManager();
-
-				for (var key : properties.keySet()) {
-					var property = stateManager.getProperty(key);
-					if (property != null) {
-						var value = properties.get(key);
-						state = with(state, property, value);
-					}
-				}
+			var blockState = stack.getComponents().getOrDefault(DataComponentTypes.BLOCK_STATE, BlockStateComponent.DEFAULT);
+			if (!blockState.isEmpty()){
+				state = blockState.apply(state);
 			}
-
 			return state.getLuminance();
-		}
-
-		private static <T extends Comparable<T>> BlockState with(BlockState state, Property<T> property, String name) {
-			return property.parse(name).map(value -> state.with(property, value)).orElse(state);
 		}
 	}
 }
