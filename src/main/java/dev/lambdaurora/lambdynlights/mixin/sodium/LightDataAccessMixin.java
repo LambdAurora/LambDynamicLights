@@ -18,7 +18,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Pseudo
-@Mixin(targets = "me.jellysquid.mods.sodium.client.model.light.data.LightDataAccess", remap = false)
+@Mixin(targets = {
+		"me.jellysquid.mods.sodium.client.model.light.data.LightDataAccess",
+		"net.caffeinemc.mods.sodium.client.model.light.data.LightDataAccess"
+}, remap = false)
 public abstract class LightDataAccessMixin {
 	@Dynamic
 	@Inject(method = "getLightmap", at = @At("RETURN"), remap = false, require = 0, cancellable = true)

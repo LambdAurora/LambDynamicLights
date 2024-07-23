@@ -22,7 +22,7 @@ import dev.lambdaurora.spruceui.widget.SpruceWidget;
 import dev.lambdaurora.spruceui.widget.WithBackground;
 import dev.lambdaurora.spruceui.widget.container.SpruceEntryListWidget;
 import dev.lambdaurora.spruceui.widget.container.SpruceParentWidget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.screen.narration.NarrationPart;
 import net.minecraft.text.Text;
@@ -203,12 +203,12 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 
 		/* Rendering */
 
-		protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-			this.forEach(widget -> widget.render(graphics, mouseX, mouseY, delta));
+		protected void renderWidget(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+			this.forEach(widget -> widget.render(drawContext, mouseX, mouseY, delta));
 		}
 
-		protected void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-			this.background.render(graphics, this, 0, mouseX, mouseY, delta);
+		protected void renderBackground(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+			this.background.render(drawContext, this, 0, mouseX, mouseY, delta);
 		}
 
 		/* Narration */
