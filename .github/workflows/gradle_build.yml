@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        java: [ 17, 21 ]
+        java: [ 21 ]
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
