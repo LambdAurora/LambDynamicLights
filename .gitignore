@@ -1,7 +1,7 @@
 #
 # LambdAurora's ignore file
 #
-# v0.21
+# v0.23
 
 # JetBrains
 .idea/
@@ -59,7 +59,7 @@ venv/
 # OS
 ## Windows
 desktop.ini
-# MacOS
+## MacOS
 .DS_Store
 
 # File types
@@ -83,8 +83,10 @@ bin/
 build/
 dist/
 lib/
+!/lib/
 !src/lib/
 !src/**/lib/
 obj/
 run/
 target/
+/local.properties
