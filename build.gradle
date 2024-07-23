@@ -1,5 +1,5 @@
 plugins {
-	id "fabric-loom" version "1.4.+"
+	id "fabric-loom" version "1.6.+"
 	id "dev.yumi.gradle.licenser" version "1.1.+"
 	id "java-library"
 	id "maven-publish"
@@ -135,7 +135,8 @@ dependencies {
 		transitive = false
 	}
 
-	modRuntimeOnly "maven.modrinth:sodium:${project.sodium_version}"
+	modImplementation "maven.modrinth:sodium:${project.sodium_version}"
+	modImplementation "maven.modrinth:indium:${project.indium_version}"
 
 	shadow "com.electronwill.night-config:core:3.6.6"
 	shadow "com.electronwill.night-config:toml:3.6.6"

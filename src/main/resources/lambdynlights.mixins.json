@@ -13,12 +13,13 @@
     "MinecraftClientMixin",
     "VideoOptionsScreenMixin",
     "WorldMixin",
+    "fabric.AoCalculatorMixin",
+    "indium.TerrainRenderContextMixin",
     "ltr.LilTaterBlockEntityMixin",
     "ltr.LilTaterBlocksMixin",
     "sodium.ArrayLightDataCacheMixin",
     "sodium.FlatLightPipelineMixin",
-    "sodium.LightDataAccessMixin",
-    "fabric.AoCalculatorMixin"
+    "sodium.LightDataAccessMixin"
   ],
   "injectors": {
     "defaultRequire": 1

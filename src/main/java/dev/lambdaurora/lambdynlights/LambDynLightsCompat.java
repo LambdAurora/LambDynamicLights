@@ -59,4 +59,8 @@ public final class LambDynLightsCompat {
 			}
 		}).orElse(false);
 	}
+
+	public static boolean isIndiumInstalled() {
+		return FabricLoader.getInstance().isModLoaded("indium");
+	}
 }
