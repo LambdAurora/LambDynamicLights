@@ -9,20 +9,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: "Checkout"
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Set up JDK 17
+      - name: "Set up Java"
         uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: 'temurin'
-      - name: Set up Gradle
+      - name: "Set up Gradle"
         uses: gradle/actions/setup-gradle@v3
 
       # The USERNAME and PASSWORD need to correspond to the credentials environment variables used in
       # the publishing section of your build.gradle
-      - name: Publish to GitHub Packages and other Mavens
+      - name: "Publish to GitHub Packages and other Mavens"
         run: ./gradlew publish --parallel --stacktrace
         env:
           BRANCH_NAME: ${{ github.ref }}

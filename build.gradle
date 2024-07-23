@@ -1,11 +1,11 @@
 plugins {
-	id 'fabric-loom' version '1.7.+'
-	id 'dev.yumi.gradle.licenser' version '1.1.+'
-	id 'java-library'
-	id 'maven-publish'
-	id 'com.github.johnrengelman.shadow' version '8.1.1'
-	id 'com.modrinth.minotaur' version '2.+'
-	id 'net.darkhax.curseforgegradle' version '1.1.+'
+	id "fabric-loom" version "1.7.+"
+	id "dev.yumi.gradle.licenser" version "1.1.+"
+	id "java-library"
+	id "maven-publish"
+	id "com.github.johnrengelman.shadow" version "8.1.1"
+	id "com.modrinth.minotaur" version "2.+"
+	id "net.darkhax.curseforgegradle" version "1.1.+"
 }
 
 import com.modrinth.minotaur.dependencies.ModDependency
@@ -18,22 +18,22 @@ base.archivesName = project.archives_base_name
 // This field defines the Java version your mod target.
 def targetJavaVersion = 17
 
-if (!(System.getenv("CURSEFORGE_TOKEN") || System.getenv("MODRINTH_TOKEN"))) {
+if (!(System.getenv("CURSEFORGE_TOKEN") || System.getenv("MODRINTH_TOKEN") || System.getenv("LDL_MAVEN"))) {
 	version += "-local"
 }
 logger.lifecycle("Preparing version ${version}...")
 
 boolean isMCVersionNonRelease() {
 	return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
-			|| project.minecraft_version.matches('\\d+\\.\\d+-(pre|rc)(\\d+)')
+			|| project.minecraft_version.matches("\\d+\\.\\d+-(pre|rc)(\\d+)")
 }
 
 String getMCVersionString() {
 	if (isMCVersionNonRelease()) {
 		return project.minecraft_version
 	}
-	def version = project.minecraft_version.split('\\.')
-	return version[0] + '.' + version[1]
+	def version = project.minecraft_version.split("\\.")
+	return version[0] + "." + version[1]
 }
 
 String getVersionType() {
@@ -50,27 +50,27 @@ String parseReadme() {
 	def excludeRegex = /(?m)<!-- modrinth_exclude\.start -->(.|\n)*?<!-- modrinth_exclude\.end -->/
 	def linkRegex = /!\[([A-z_ ]+)]\((images\/[A-z.\/_]+)\)/
 
-	def readme = (String) file('README.md').text
-	readme = readme.replaceAll(excludeRegex, '')
-	readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.19/$2)')
+	def readme = (String) file("README.md").text
+	readme = readme.replaceAll(excludeRegex, "")
+	readme = readme.replaceAll(linkRegex, "![\$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.19/\$2)")
 	return readme
 }
 
 String fetchChangelog() {
-	def changelogText = file('CHANGELOG.md').text
-	def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
+	def changelogText = file("CHANGELOG.md").text
+	def regexVersion = ((String) project.mod_version).replaceAll("\\.", /\\./).replaceAll("\\+", "\\+")
 	def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
 	def matcher = changelogText =~ changelogRegex
 
 	if (matcher.find()) {
 		def changelogContent = matcher.group(1)
 
-		def changelogLines = changelogText.split('\n')
-		def linkRefRegex = ~'^\\[([A-z\\d _\\-/+.]+)]: '
+		def changelogLines = changelogText.split("\n")
+		def linkRefRegex = ~"^\\[([A-z\\d _\\-/+.]+)]: "
 		for (int i = changelogLines.length - 1; i > 0; i--) {
 			def line = changelogLines[i]
 			if ((line =~ linkRefRegex).find())
-				changelogContent += '\n' + line
+				changelogContent += "\n" + line
 			else break
 		}
 		return changelogContent
@@ -83,16 +83,16 @@ repositories {
 	mavenLocal()
 	mavenCentral()
 	maven {
-		name 'Terraformers'
-		url 'https://maven.terraformersmc.com/releases/'
+		name "Terraformers"
+		url "https://maven.terraformersmc.com/releases/"
 	}
 	maven {
-		name 'Gegy'
-		url 'https://maven.gegy.dev'
+		name "Gegy"
+		url "https://maven.gegy.dev"
 	}
 	maven {
-		name 'grondag'
-		url 'https://maven.dblsaiko.net/'
+		name "grondag"
+		url "https://maven.dblsaiko.net/"
 	}
 	exclusiveContent {
 		forRepository {
@@ -133,8 +133,8 @@ dependencies {
 
 	modRuntimeOnly "maven.modrinth:sodium:${project.sodium_version}"
 
-	shadow 'com.electronwill.night-config:core:3.6.6'
-	shadow 'com.electronwill.night-config:toml:3.6.6'
+	shadow "com.electronwill.night-config:core:3.6.6"
+	shadow "com.electronwill.night-config:toml:3.6.6"
 }
 
 java {
@@ -145,36 +145,36 @@ java {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = 'UTF-8'
+	it.options.encoding = "UTF-8"
 
 	it.options.release.set(targetJavaVersion)
 }
 
 processResources {
-	inputs.property 'version', project.version
+	inputs.property "version", project.version
 
-	filesMatching('fabric.mod.json') {
-		expand 'version': project.version
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
 	}
 }
 
 jar {
-	from('LICENSE') {
+	from("LICENSE") {
 		rename { "${it}_${base.archivesName}" }
 	}
 }
 
 license {
-	rule file('HEADER')
+	rule file("HEADER")
 }
 
 shadowJar {
 	dependsOn jar
 	configurations = [project.configurations.shadow]
 	destinationDirectory.set(file("${project.layout.buildDirectory.get()}/devlibs"))
-	archiveClassifier.set('dev')
+	archiveClassifier.set("dev")
 
-	relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdynlights.shadow.nightconfig'
+	relocate "com.electronwill.nightconfig", "dev.lambdaurora.lambdynlights.shadow.nightconfig"
 }
 remapJar.dependsOn(shadowJar)
 
@@ -203,7 +203,7 @@ modrinth {
 }
 tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 
-tasks.register('curseforge', TaskPublishCurseForge) {
+tasks.register("curseforge", TaskPublishCurseForge) {
 	setGroup("publishing")
 
 	if (System.getenv("CURSEFORGE_TOKEN")) {
@@ -254,18 +254,18 @@ publishing {
 	repositories {
 		mavenLocal()
 		maven {
-			name = 'BuildDirLocal'
+			name = "BuildDirLocal"
 			url = "${project.layout.buildDirectory.get()}/repo"
 		}
 
-		def ldlMaven = System.getenv('LDL_MAVEN')
+		def ldlMaven = System.getenv("LDL_MAVEN")
 		if (ldlMaven) {
 			maven {
-				name = 'LambDynamicLightsMaven'
+				name = "LambDynamicLightsMaven"
 				url = uri(ldlMaven)
 				credentials {
-					username = project.findProperty('gpr.user') ?: System.getenv('MAVEN_USERNAME')
-					password = project.findProperty('gpr.key') ?: System.getenv('MAVEN_PASSWORD')
+					username = project.findProperty("gpr.user") ?: System.getenv("MAVEN_USERNAME")
+					password = project.findProperty("gpr.key") ?: System.getenv("MAVEN_PASSWORD")
 				}
 			}
 		}
