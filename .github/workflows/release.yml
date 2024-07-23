@@ -1,4 +1,4 @@
-name: Release
+name: "Release"
 
 on:
   release:
@@ -9,24 +9,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: "Checkout"
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Set up JDK 17
+      - name: "Set up Java"
         uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: 'temurin'
-      - name: Set up Gradle
+      - name: "Set up Gradle"
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Build with Gradle
+      - name: "Build with Gradle"
         run: ./gradlew build modrinth curseforge --parallel --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
 
-      - uses: actions/upload-artifact@v4
+      - name: "Upload artifacts"
+        uses: actions/upload-artifact@v4
         with:
           name: Artifacts
           path: ./build/libs/
