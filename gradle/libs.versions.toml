@@ -1,0 +1,28 @@
+[versions]
+minecraft = "1.21"
+fabric-loader = "0.15.11"
+fabric-api = "0.100.4+1.21"
+
+# Dependencies
+spruceui = "5.1.0+1.21"
+pridelib = "1.2.1+1.21"
+modmenu = "11.0.1"
+sodium = "mc1.21-0.5.9"
+
+# Configuration
+nightconfig = "3.6.6"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+
+# Dependencies
+spruceui = { module = "dev.lambdaurora:spruceui", version.ref = "spruceui" }
+pridelib = { module = "io.github.queerbric:pridelib", version.ref = "pridelib" }
+modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
+sodium = { module = "maven.modrinth:sodium", version.ref = "sodium" }
+
+# Configuration
+nightconfig-core = { module = "com.electronwill.night-config:core", version.ref = "nightconfig" }
+nightconfig-toml = { module = "com.electronwill.night-config:toml", version.ref = "nightconfig" }

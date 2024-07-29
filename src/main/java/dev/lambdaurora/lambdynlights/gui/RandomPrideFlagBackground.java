@@ -3,7 +3,7 @@
  *
  * This file is part of LambDynamicLights.
  *
- * Licensed under the MIT license. For more information,
+ * Licensed under the Lambda License. For more information,
  * see the LICENSE file.
  */
 

@@ -3,7 +3,7 @@
  *
  * This file is part of LambDynamicLights.
  *
- * Licensed under the MIT license. For more information,
+ * Licensed under the Lambda License. For more information,
  * see the LICENSE file.
  */
 
@@ -35,10 +35,10 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -57,7 +57,7 @@ public class LambDynLights implements ClientModInitializer {
 	private static final double MAX_RADIUS = 7.75;
 	private static final double MAX_RADIUS_SQUARED = MAX_RADIUS * MAX_RADIUS;
 	private static LambDynLights INSTANCE;
-	public final Logger logger = LogManager.getLogger(NAMESPACE);
+	public final Logger logger = LoggerFactory.getLogger(NAMESPACE);
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
 	private final Set<DynamicLightSource> dynamicLightSources = new HashSet<>();
 	private final ReentrantReadWriteLock lightSourcesLock = new ReentrantReadWriteLock();
