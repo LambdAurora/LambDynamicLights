@@ -11,13 +11,13 @@ package dev.lambdaurora.lambdynlights.api;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.accessor.DynamicLightHandlerHolder;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -39,21 +39,21 @@ public final class DynamicLightHandlers {
 		registerDynamicLightHandler(EntityType.ENDERMAN, entity -> {
 			int luminance = 0;
 			if (entity.getCarriedBlock() != null)
-				luminance = entity.getCarriedBlock().getLuminance();
+				luminance = entity.getCarriedBlock().getLightEmission();
 			return luminance;
 		});
 		registerDynamicLightHandler(EntityType.ITEM,
-				entity -> LambDynLights.getLuminanceFromItemStack(entity.getStack(), entity.isSubmergedInWater()));
+				entity -> LambDynLights.getLuminanceFromItemStack(entity.getItem(), entity.isSubmergedInWater()));
 		registerDynamicLightHandler(EntityType.ITEM_FRAME, entity -> {
-			var world = entity.getWorld();
-			return LambDynLights.getLuminanceFromItemStack(entity.getHeldItemStack(), !world.getFluidState(entity.getBlockPos()).isEmpty());
+			var world = entity.level();
+			return LambDynLights.getLuminanceFromItemStack(entity.getItem(), !world.getFluidState(entity.getBlockPos()).isEmpty());
 		});
 		registerDynamicLightHandler(EntityType.GLOW_ITEM_FRAME, entity -> {
-			var world = entity.getWorld();
-			return Math.max(14, LambDynLights.getLuminanceFromItemStack(entity.getHeldItemStack(),
+			var world = entity.level();
+			return Math.max(14, LambDynLights.getLuminanceFromItemStack(entity.getItem(),
 					!world.getFluidState(entity.getBlockPos()).isEmpty()));
 		});
-		registerDynamicLightHandler(EntityType.MAGMA_CUBE, entity -> (entity.stretch > 0.6) ? 11 : 8);
+		registerDynamicLightHandler(EntityType.MAGMA_CUBE, entity -> (entity.squish > 0.6) ? 11 : 8);
 		registerDynamicLightHandler(EntityType.SPECTRAL_ARROW, entity -> 8);
 		registerDynamicLightHandler(EntityType.GLOW_SQUID,
 				entity -> (int) MathHelper.clampedLerp(0.f, 12.f, 1.f - entity.getDarkTicksRemaining() / 10.f)
@@ -124,7 +124,7 @@ public final class DynamicLightHandlers {
 	 * @return {@code true} if the entity can light up, otherwise {@code false}
 	 */
 	public static <T extends Entity> boolean canLightUp(T entity) {
-		if (entity == MinecraftClient.getInstance().player && !LambDynLights.get().config.getSelfLightSource().get())
+		if (entity == Minecraft.getInstance().player && !LambDynLights.get().config.getSelfLightSource().get())
 			return false;
 
 		var setting = DynamicLightHandlerHolder.cast(entity.getType()).lambdynlights$getSetting();
@@ -154,7 +154,7 @@ public final class DynamicLightHandlers {
 	public static <T extends Entity> int getLuminanceFrom(T entity) {
 		if (!LambDynLights.get().config.getEntitiesLightSource().get())
 			return 0;
-		if (entity == MinecraftClient.getInstance().player && !LambDynLights.get().config.getSelfLightSource().get())
+		if (entity == Minecraft.getInstance().player && !LambDynLights.get().config.getSelfLightSource().get())
 			return 0;
 		var handler = (DynamicLightHandler<T>) getDynamicLightHandler(entity.getType());
 		if (handler == null)
@@ -162,7 +162,7 @@ public final class DynamicLightHandlers {
 		if (!canLightUp(entity))
 			return 0;
 		if (handler.isWaterSensitive(entity)
-				&& !entity.getWorld().getFluidState(BlockPos.ofFloored(entity.getX(), entity.getEyeY(), entity.getZ())).isEmpty())
+				&& !entity.level().getFluidState(BlockPos.ofFloored(entity.getX(), entity.getEyeY(), entity.getZ())).isEmpty())
 			return 0;
 		return handler.getLuminance(entity);
 	}
@@ -183,7 +183,7 @@ public final class DynamicLightHandlers {
 			return 0;
 		if (!canLightUp(entity))
 			return 0;
-		if (handler.isWaterSensitive(entity) && entity.getWorld() != null && !entity.getWorld().getFluidState(entity.getPos()).isEmpty())
+		if (handler.isWaterSensitive(entity) && entity.getLevel() != null && !entity.getLevel().getFluidState(entity.getPos()).isEmpty())
 			return 0;
 		return handler.getLuminance(entity);
 	}

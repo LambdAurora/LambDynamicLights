@@ -11,13 +11,13 @@ package dev.lambdaurora.lambdynlights.gui;
 
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.SimpleOption;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.Options;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Text;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -26,26 +26,26 @@ import java.util.function.Function;
 public final class DynamicLightsOptionsOption {
 	private static final String KEY = "lambdynlights.menu.title";
 
-	public static SimpleOption<Unit> getOption(Screen parent) {
-		return new SimpleOption<>(
-				KEY, SimpleOption.emptyTooltip(),
+	public static OptionInstance<Unit> getOption(Screen parent) {
+		return new OptionInstance<>(
+				KEY, OptionInstance.noTooltip(),
 				(title, object) -> title,
 				new DummyValueSet(parent),
 				Unit.INSTANCE,
 				unit -> {});
 	}
 
-	private record DummyValueSet(Screen parent) implements SimpleOption.Callbacks<Unit> {
-
+	private record DummyValueSet(Screen parent) implements OptionInstance.ValueSet<Unit> {
 		@Override
-		public Function<SimpleOption<Unit>, ClickableWidget> getWidgetCreator(SimpleOption.TooltipFactory<Unit> tooltipSupplier, GameOptions options,
+		public Function<OptionInstance<Unit>, AbstractWidget> createButton(
+				OptionInstance.TooltipSupplier<Unit> tooltipSupplier, Options options,
 				int x, int y, int width, Consumer<Unit> changeCallback) {
-			return option -> ButtonWidget.builder(Text.translatable(KEY), button -> MinecraftClient.getInstance()
-					.setScreen(new SettingsScreen(this.parent))).dimensions(x, y, width, 20).build();
+			return option -> Button.builder(Text.translatable(KEY), button -> Minecraft.getInstance()
+					.setScreen(new SettingsScreen(this.parent))).bounds(x, y, width, 20).build();
 		}
 
 		@Override
-		public Optional<Unit> validate(Unit value) {
+		public Optional<Unit> validateValue(Unit value) {
 			return Optional.of(Unit.INSTANCE);
 		}
 

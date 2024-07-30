@@ -12,10 +12,10 @@ package dev.lambdaurora.lambdynlights.mixin.lightsource;
 import dev.lambdaurora.lambdynlights.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -24,8 +24,8 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
 	@Unique
 	protected int lambdynlights$luminance;
 
-	public LivingEntityMixin(EntityType<?> type, World world) {
-		super(type, world);
+	public LivingEntityMixin(EntityType<?> type, Level level) {
+		super(type, level);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public abstract class LivingEntityMixin extends Entity implements DynamicLightSo
 			return;
 		}
 
-		if (this.isOnFire() || this.isGlowing()) {
+		if (this.isOnFire() || this.isCurrentlyGlowing()) {
 			this.lambdynlights$luminance = 15;
 		} else {
 			this.lambdynlights$luminance = LambDynLights.getLivingEntityLuminanceFromItems((LivingEntity) (Object) this);

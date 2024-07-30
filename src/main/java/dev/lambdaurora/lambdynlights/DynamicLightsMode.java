@@ -11,8 +11,8 @@ package dev.lambdaurora.lambdynlights;
 
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.util.Nameable;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.TextFormatting;
+import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -26,17 +26,17 @@ import java.util.Optional;
  * @since 1.0.0
  */
 public enum DynamicLightsMode implements Nameable {
-	OFF(0, Formatting.RED, SpruceTexts.OPTIONS_OFF),
-	FASTEST(500, Formatting.GOLD, SpruceTexts.OPTIONS_GENERIC_FASTEST),
-	FAST(250, Formatting.YELLOW, SpruceTexts.OPTIONS_GENERIC_FAST),
-	FANCY(0, Formatting.GREEN, SpruceTexts.OPTIONS_GENERIC_FANCY);
+	OFF(0, TextFormatting.RED, SpruceTexts.OPTIONS_OFF),
+	FASTEST(500, TextFormatting.GOLD, SpruceTexts.OPTIONS_GENERIC_FASTEST),
+	FAST(250, TextFormatting.YELLOW, SpruceTexts.OPTIONS_GENERIC_FAST),
+	FANCY(0, TextFormatting.GREEN, SpruceTexts.OPTIONS_GENERIC_FANCY);
 
 	private final int delay;
 	private final Text translatedText;
 
-	DynamicLightsMode(int delay, @NotNull Formatting formatting, @NotNull Text translatedText) {
+	DynamicLightsMode(int delay, @NotNull TextFormatting formatting, @NotNull Text translatedText) {
 		this.delay = delay;
-		this.translatedText = translatedText.copy().formatted(formatting);
+		this.translatedText = translatedText.copy().withStyle(formatting);
 	}
 
 	/**

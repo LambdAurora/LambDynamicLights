@@ -11,8 +11,8 @@ package dev.lambdaurora.lambdynlights;
 
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.util.Nameable;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.TextFormatting;
+import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -26,14 +26,14 @@ import java.util.Optional;
  * @since 1.2.1
  */
 public enum ExplosiveLightingMode implements Nameable {
-	OFF(Formatting.RED, SpruceTexts.OPTIONS_OFF),
-	SIMPLE(Formatting.YELLOW, SpruceTexts.OPTIONS_GENERIC_SIMPLE),
-	FANCY(Formatting.GREEN, SpruceTexts.OPTIONS_GENERIC_FANCY);
+	OFF(TextFormatting.RED, SpruceTexts.OPTIONS_OFF),
+	SIMPLE(TextFormatting.YELLOW, SpruceTexts.OPTIONS_GENERIC_SIMPLE),
+	FANCY(TextFormatting.GREEN, SpruceTexts.OPTIONS_GENERIC_FANCY);
 
 	private final Text translatedText;
 
-	ExplosiveLightingMode(@NotNull Formatting formatting, @NotNull Text translatedText) {
-		this.translatedText = translatedText.copy().formatted(formatting);
+	ExplosiveLightingMode(@NotNull TextFormatting formatting, @NotNull Text translatedText) {
+		this.translatedText = translatedText.copy().withStyle(formatting);
 	}
 
 	/**

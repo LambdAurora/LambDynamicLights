@@ -13,10 +13,10 @@ import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.accessor.DynamicLightHandlerHolder;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandler;
 import dev.lambdaurora.lambdynlights.config.LightSourceSettingEntry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Text;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(EntityType.class)
 public abstract class EntityTypeMixin<T extends Entity> implements DynamicLightHandlerHolder<T> {
 	@Shadow
-	public abstract Text getName();
+	public abstract Text getDescription();
 
 	@Unique
 	private DynamicLightHandler<T> lambdynlights$lightHandler;
@@ -46,13 +46,13 @@ public abstract class EntityTypeMixin<T extends Entity> implements DynamicLightH
 	public LightSourceSettingEntry lambdynlights$getSetting() {
 		if (this.lambdynlights$setting == null) {
 			var self = (EntityType<?>) (Object) this;
-			var id = Registries.ENTITY_TYPE.getId(self);
-			if (id.getNamespace().equals("minecraft") && id.getPath().equals("pig") && self != EntityType.PIG) {
+			var id = BuiltInRegistries.ENTITY_TYPE.getId(self);
+			if (id.namespace().equals("minecraft") && id.path().equals("pig") && self != EntityType.PIG) {
 				return null;
 			}
 
 			this.lambdynlights$setting = new LightSourceSettingEntry("light_sources.settings.entities."
-					+ id.getNamespace() + '.' + id.getPath().replace('/', '.'),
+					+ id.namespace() + '.' + id.path().replace('/', '.'),
 					true, null, null);
 			LambDynLights.get().config.load(this.lambdynlights$setting);
 		}
@@ -62,7 +62,7 @@ public abstract class EntityTypeMixin<T extends Entity> implements DynamicLightH
 
 	@Override
 	public Text lambdynlights$getName() {
-		var name = this.getName();
+		var name = this.getDescription();
 		if (name == null) {
 			return Text.translatable("lambdynlights.dummy");
 		}

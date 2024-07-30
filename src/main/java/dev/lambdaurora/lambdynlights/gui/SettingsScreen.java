@@ -29,11 +29,11 @@ import dev.lambdaurora.spruceui.widget.SpruceLabelWidget;
 import dev.lambdaurora.spruceui.widget.container.SpruceContainerWidget;
 import dev.lambdaurora.spruceui.widget.container.SpruceOptionListWidget;
 import dev.lambdaurora.spruceui.widget.container.tabbed.SpruceTabbedWidget;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.TextFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -85,8 +85,8 @@ public class SettingsScreen extends SpruceScreen {
 						ExplosiveLightingMode.FANCY.getTranslatedText()));
 		this.resetOption = SpruceSimpleActionOption.reset(btn -> {
 			this.config.reset();
-			MinecraftClient client = MinecraftClient.getInstance();
-			this.init(client, client.getWindow().getScaledWidth(), client.getWindow().getScaledHeight());
+			var client = Minecraft.getInstance();
+			this.init(client, client.getWindow().getGuiScaledWidth(), client.getWindow().getGuiScaledHeight());
 		});
 	}
 
@@ -97,7 +97,7 @@ public class SettingsScreen extends SpruceScreen {
 	}
 
 	private int getTextHeight() {
-		return (5 + this.textRenderer.fontHeight) * 3 + 5;
+		return (5 + this.font.lineHeight) * 3 + 5;
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class SettingsScreen extends SpruceScreen {
 				null, this.tabContainerBuilder(this::buildEntitiesTab));
 		this.tabbedWidget.addTabEntry(Text.empty().append(dynamicLightSources).append(": ").append(this.blockEntitiesOption.getPrefix()),
 				null, this.tabContainerBuilder(this::buildBlockEntitiesTab));
-		this.addSelectableChild(this.tabbedWidget);
+		this.addWidget(this.tabbedWidget);
 	}
 
 	private SpruceTabbedWidget.ContainerFactory tabContainerBuilder(SpruceTabbedWidget.ContainerFactory innerFactory) {
@@ -124,7 +124,7 @@ public class SettingsScreen extends SpruceScreen {
 
 	private SpruceContainerWidget buildTabContainer(int width, int height, SpruceTabbedWidget.ContainerFactory factory) {
 		var container = new SpruceContainerWidget(Position.origin(), width, height);
-		var label = new SpruceLabelWidget(Position.of(0, 18), this.title.copy().formatted(Formatting.WHITE), width);
+		var label = new SpruceLabelWidget(Position.of(0, 18), this.title.copy().withStyle(TextFormatting.WHITE), width);
 		label.setCentered(true);
 		container.addChild(label);
 
@@ -134,7 +134,7 @@ public class SettingsScreen extends SpruceScreen {
 		container.addChild(innerWidget);
 
 		container.setBackground((graphics, widget, vOffset, mouseX, mouseY, delta) -> {
-			if (this.client.world != null) {
+			if (this.client.level != null) {
 				graphics.fillGradient(widget.getX(), widget.getY(),
 						widget.getX() + widget.getWidth(), innerWidget.getY(),
 						0xc0101010, 0xd0101010);
@@ -153,7 +153,7 @@ public class SettingsScreen extends SpruceScreen {
 		});
 
 		if (LambDynLightsCompat.isCanvasInstalled()) {
-			var firstLine = new SpruceLabelWidget(Position.of(0, height - 29 - (5 + this.textRenderer.fontHeight) * 3),
+			var firstLine = new SpruceLabelWidget(Position.of(0, height - 29 - (5 + this.font.lineHeight) * 3),
 					Text.translatable("lambdynlights.menu.canvas.1"), width);
 			firstLine.setCentered(true);
 			container.addChild(firstLine);
@@ -183,11 +183,11 @@ public class SettingsScreen extends SpruceScreen {
 	}
 
 	private LightSourceListWidget buildEntitiesTab(int width, int height) {
-		return this.buildLightSourcesTab(width, height, Registries.ENTITY_TYPE.stream().map(DynamicLightHandlerHolder::cast).collect(Collectors.toList()));
+		return this.buildLightSourcesTab(width, height, BuiltInRegistries.ENTITY_TYPE.stream().map(DynamicLightHandlerHolder::cast).collect(Collectors.toList()));
 	}
 
 	private LightSourceListWidget buildBlockEntitiesTab(int width, int height) {
-		return this.buildLightSourcesTab(width, height, Registries.BLOCK_ENTITY_TYPE.stream().map(DynamicLightHandlerHolder::cast).collect(Collectors.toList()));
+		return this.buildLightSourcesTab(width, height, BuiltInRegistries.BLOCK_ENTITY_TYPE.stream().map(DynamicLightHandlerHolder::cast).collect(Collectors.toList()));
 	}
 
 	private LightSourceListWidget buildLightSourcesTab(int width, int height, List<DynamicLightHandlerHolder<?>> entries) {

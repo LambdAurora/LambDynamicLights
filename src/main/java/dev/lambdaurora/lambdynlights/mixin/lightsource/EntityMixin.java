@@ -13,12 +13,16 @@ import dev.lambdaurora.lambdynlights.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.*;
-import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.ChunkSectionPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Entity.class)
 public abstract class EntityMixin implements DynamicLightSource {
 	@Shadow
-	public World world;
+	public Level level;
 
 	@Shadow
 	public abstract double getX();
@@ -57,7 +61,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 	public abstract boolean isRemoved();
 
 	@Shadow
-	public abstract ChunkPos getChunkPos();
+	public abstract ChunkPos chunkPosition();
 
 	@Unique
 	protected int lambdynlights$luminance = 0;
@@ -77,7 +81,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void onTick(CallbackInfo ci) {
 		// We do not want to update the entity on the server.
-		if (this.world.isClient()) {
+		if (this.level.isClientSide()) {
 			if (this.isRemoved()) {
 				this.setDynamicLightEnabled(false);
 			} else {
@@ -92,7 +96,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 
 	@Inject(method = "remove", at = @At("TAIL"))
 	public void onRemove(CallbackInfo ci) {
-		if (this.world.isClient())
+		if (this.level.isClientSide())
 			this.setDynamicLightEnabled(false);
 	}
 
@@ -112,8 +116,8 @@ public abstract class EntityMixin implements DynamicLightSource {
 	}
 
 	@Override
-	public World getDynamicLightWorld() {
-		return this.world;
+	public Level getDynamicLightLevel() {
+		return this.level;
 	}
 
 	@Override
@@ -152,7 +156,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 	}
 
 	@Override
-	public boolean lambdynlights$updateDynamicLight(@NotNull WorldRenderer renderer) {
+	public boolean lambdynlights$updateDynamicLight(@NotNull LevelRenderer renderer) {
 		if (!this.shouldUpdateDynamicLight())
 			return false;
 		double deltaX = this.getX() - this.lambdynlights$prevX;
@@ -170,8 +174,8 @@ public abstract class EntityMixin implements DynamicLightSource {
 			var newPos = new LongOpenHashSet();
 
 			if (luminance > 0) {
-				var entityChunkPos = this.getChunkPos();
-				var chunkPos = new BlockPos.Mutable(entityChunkPos.x, ChunkSectionPos.getSectionCoord(this.getEyeY()), entityChunkPos.z);
+				var entityChunkPos = this.chunkPosition();
+				var chunkPos = new BlockPos.Mutable(entityChunkPos.x, ChunkSectionPos.blockToSectionCoord(this.getEyeY()), entityChunkPos.z);
 
 				LambDynLights.scheduleChunkRebuild(renderer, chunkPos);
 				LambDynLights.updateTrackedChunks(chunkPos, this.lambdynlights$trackedLitChunkPos, newPos);
@@ -206,8 +210,8 @@ public abstract class EntityMixin implements DynamicLightSource {
 	}
 
 	@Override
-	public void lambdynlights$scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer) {
-		if (MinecraftClient.getInstance().world == this.world)
+	public void lambdynlights$scheduleTrackedChunksRebuild(@NotNull LevelRenderer renderer) {
+		if (Minecraft.getInstance().level == this.level)
 			for (long pos : this.lambdynlights$trackedLitChunkPos) {
 				LambDynLights.scheduleChunkRebuild(renderer, pos);
 			}

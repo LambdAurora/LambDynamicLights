@@ -22,10 +22,10 @@ import dev.lambdaurora.spruceui.widget.SpruceWidget;
 import dev.lambdaurora.spruceui.widget.WithBackground;
 import dev.lambdaurora.spruceui.widget.container.SpruceEntryListWidget;
 import dev.lambdaurora.spruceui.widget.container.SpruceParentWidget;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.screen.narration.NarrationPart;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.narration.NarratedElementType;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
@@ -65,25 +65,25 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 	/* Narration */
 
 	@Override
-	public void appendNarrations(NarrationMessageBuilder builder) {
+	public void updateNarration(NarrationElementOutput builder) {
 		this.children()
 				.stream()
 				.filter(AbstractSpruceWidget::isMouseHovered)
 				.findFirst()
 				.ifPresentOrElse(
 						hoveredEntry -> {
-							hoveredEntry.appendNarrations(builder.nextMessage());
+							hoveredEntry.updateNarration(builder.nest());
 							this.appendPositionNarrations(builder, hoveredEntry);
 						}, () -> {
 							var focusedEntry = this.getFocused();
 							if (focusedEntry != null) {
-								focusedEntry.appendNarrations(builder.nextMessage());
+								focusedEntry.updateNarration(builder.nest());
 								this.appendPositionNarrations(builder, focusedEntry);
 							}
 						}
 				);
 
-		builder.put(NarrationPart.USAGE, Text.translatable("narration.component_list.usage"));
+		builder.add(NarratedElementType.USAGE, Text.translatable("narration.component_list.usage"));
 	}
 
 	public static class LightSourceEntry extends Entry implements SpruceParentWidget<SpruceWidget>, WithBackground {
@@ -203,20 +203,20 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 
 		/* Rendering */
 
-		protected void renderWidget(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-			this.forEach(widget -> widget.render(drawContext, mouseX, mouseY, delta));
+		protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+			this.forEach(widget -> widget.render(graphics, mouseX, mouseY, delta));
 		}
 
-		protected void renderBackground(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-			this.background.render(drawContext, this, 0, mouseX, mouseY, delta);
+		protected void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+			this.background.render(graphics, this, 0, mouseX, mouseY, delta);
 		}
 
 		/* Narration */
 
 		@Override
-		public void appendNarrations(NarrationMessageBuilder builder) {
+		public void updateNarration(NarrationElementOutput builder) {
 			var focused = this.getFocused();
-			if (focused != null) focused.appendNarrations(builder);
+			if (focused != null) focused.updateNarration(builder);
 		}
 
 		/* Navigation */

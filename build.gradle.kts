@@ -1,5 +1,21 @@
 import com.modrinth.minotaur.dependencies.ModDependency
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import net.fabricmc.loom.api.mappings.layered.MappingContext
+import net.fabricmc.loom.api.mappings.layered.MappingLayer
+import net.fabricmc.loom.api.mappings.layered.MappingsNamespace
+import net.fabricmc.loom.api.mappings.layered.spec.MappingsSpec
+import net.fabricmc.loom.configuration.providers.mappings.intermediary.IntermediaryMappingLayer
+import net.fabricmc.loom.configuration.providers.mappings.utils.DstNameFilterMappingVisitor
+import net.fabricmc.loom.util.download.DownloadException
+import net.fabricmc.mappingio.MappingVisitor
+import net.fabricmc.mappingio.adapter.MappingDstNsReorder
+import net.fabricmc.mappingio.adapter.MappingSourceNsSwitch
+import net.fabricmc.mappingio.format.proguard.ProGuardFileReader
+import net.fabricmc.mappingio.tree.MemoryMappingTree
+import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.regex.Pattern
 
 plugins {
 	id("fabric-loom").version("1.7.+")
@@ -98,6 +114,10 @@ repositories {
 		name = "grondag"
 		url = uri("https://maven.dblsaiko.net/")
 	}
+	maven {
+		name = "ParchmentMC"
+		url = uri("https://maven.parchmentmc.org")
+	}
 	exclusiveContent {
 		forRepository {
 			maven {
@@ -116,9 +136,109 @@ loom {
 	runtimeOnlyLog4j = true
 }
 
+// Based off Loom, this is required as the releases at the time of writing this buildscript have
+// a flaw with the mapping layering preventing the usage of the usual MojangMappingLayer.
+@Suppress("UnstableApiUsage")
+internal data class MojangMappingLayer(
+	val clientMappings: Path, val serverMappings: Path, val nameSyntheticMembers: Boolean,
+	val intermediaryMappings: MemoryMappingTree, val logger: Logger
+) : MappingLayer {
+	@Throws(IOException::class)
+	override fun visit(mappingVisitor: MappingVisitor) {
+		val mojmap = MemoryMappingTree()
+
+		// Filter out field names matching the pattern
+		val nameFilter = DstNameFilterMappingVisitor(mojmap, SYNTHETIC_NAME_PATTERN)
+
+		// Make official the source namespace
+		val nsSwitch = MappingSourceNsSwitch(if (nameSyntheticMembers) mojmap else nameFilter, MappingsNamespace.OFFICIAL.toString())
+
+		Files.newBufferedReader(clientMappings).use { clientBufferedReader ->
+			Files.newBufferedReader(serverMappings).use { serverBufferedReader ->
+				ProGuardFileReader.read(
+					clientBufferedReader,
+					MappingsNamespace.NAMED.toString(),
+					MappingsNamespace.OFFICIAL.toString(),
+					nsSwitch
+				)
+				ProGuardFileReader.read(
+					serverBufferedReader,
+					MappingsNamespace.NAMED.toString(),
+					MappingsNamespace.OFFICIAL.toString(),
+					nsSwitch
+				)
+			}
+		}
+
+		intermediaryMappings.accept(MappingDstNsReorder(mojmap, MappingsNamespace.INTERMEDIARY.toString()))
+
+		val switch = MappingSourceNsSwitch(MappingDstNsReorder(mappingVisitor, MappingsNamespace.NAMED.toString()), MappingsNamespace.INTERMEDIARY.toString(), true)
+		mojmap.accept(switch)
+	}
+
+	override fun getSourceNamespace(): MappingsNamespace {
+		return MappingsNamespace.INTERMEDIARY
+	}
+
+	override fun dependsOn(): List<Class<out MappingLayer?>> {
+		return listOf(IntermediaryMappingLayer::class.java)
+	}
+
+	companion object {
+		private val SYNTHETIC_NAME_PATTERN: Pattern = Pattern.compile("^(access|this|val\\\$this|lambda\\$.*)\\$[0-9]+$")
+	}
+}
+
+@Suppress("UnstableApiUsage")
+internal data class MojangMappingsSpec(val nameSyntheticMembers: Boolean) : MappingsSpec<MojangMappingLayer?> {
+	override fun createLayer(context: MappingContext): MojangMappingLayer {
+		val versionInfo = context.minecraftProvider().versionInfo
+		val clientDownload = versionInfo.download(MANIFEST_CLIENT_MAPPINGS)
+		val serverDownload = versionInfo.download(MANIFEST_SERVER_MAPPINGS)
+
+		if (clientDownload == null) {
+			throw RuntimeException("Failed to find official mojang mappings for " + context.minecraftVersion())
+		}
+
+		val clientMappings = context.workingDirectory("mojang").resolve("client.txt")
+		val serverMappings = context.workingDirectory("mojang").resolve("server.txt")
+
+		try {
+			context.download(clientDownload.url())
+				.sha1(clientDownload.sha1())
+				.downloadPath(clientMappings)
+
+			context.download(serverDownload.url())
+				.sha1(serverDownload.sha1())
+				.downloadPath(serverMappings)
+		} catch (e: DownloadException) {
+			throw UncheckedIOException("Failed to download mappings", e)
+		}
+
+		return MojangMappingLayer(
+			clientMappings,
+			serverMappings,
+			nameSyntheticMembers,
+			context.intermediaryTree().get(),
+			context.logger
+		)
+	}
+
+	companion object {
+		// Keys in dependency manifest
+		private const val MANIFEST_CLIENT_MAPPINGS = "client_mappings"
+		private const val MANIFEST_SERVER_MAPPINGS = "server_mappings"
+	}
+}
+
 dependencies {
 	minecraft(libs.minecraft)
-	mappings("net.fabricmc:yarn:${minecraftVersion}+build.${project.property("yarn_mappings")}:v2")
+	@Suppress("UnstableApiUsage")
+	mappings(loom.layered {
+		addLayer(MojangMappingsSpec(false))
+		parchment("org.parchmentmc.data:parchment-$minecraftVersion:${libs.versions.mappings.parchment.get()}@zip")
+		mappings("dev.lambdaurora:yalmm:$minecraftVersion+build.${libs.versions.mappings.yalmm.get()}")
+	})
 	modImplementation(libs.fabric.loader)
 
 	modImplementation(libs.fabric.api)

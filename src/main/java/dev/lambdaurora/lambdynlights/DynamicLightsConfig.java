@@ -15,9 +15,9 @@ import dev.lambdaurora.lambdynlights.config.SettingEntry;
 import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -71,7 +71,7 @@ public class DynamicLightsConfig {
 				Text.translatable("lambdynlights.tooltip.self_light_source"))
 				.withOnSet(value -> {
 					if (!value) this.mod.removeLightSources(source ->
-							source instanceof ClientPlayerEntity && source == MinecraftClient.getInstance().player
+							source instanceof LocalPlayer && source == Minecraft.getInstance().player
 					);
 				});
 		this.blockEntitiesLightSource = new BooleanSettingEntry("light_sources.block_entities", DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE, this.config,

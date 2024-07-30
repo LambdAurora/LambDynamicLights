@@ -10,7 +10,7 @@
 package dev.lambdaurora.lambdynlights.util;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
@@ -18,7 +18,7 @@ public interface SodiumDynamicLightHandler {
 	// Stores the current light position being used by ArrayLightDataCache#get
 	// We use ThreadLocal because Sodium's chunk builder is multithreaded, otherwise it will break
 	// catastrophically.
-	ThreadLocal<BlockPos.Mutable> pos = ThreadLocal.withInitial(BlockPos.Mutable::new);
+	ThreadLocal<BlockPos.Mutable> POS = ThreadLocal.withInitial(BlockPos.Mutable::new);
 
 	static int getLightmap(BlockPos pos, int word, int lightmap) {
 		if (!LambDynLights.get().config.getDynamicLightsMode().isEnabled())

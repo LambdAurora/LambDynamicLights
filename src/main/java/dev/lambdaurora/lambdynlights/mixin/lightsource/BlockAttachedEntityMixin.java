@@ -12,26 +12,23 @@ package dev.lambdaurora.lambdynlights.mixin.lightsource;
 import dev.lambdaurora.lambdynlights.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.AbstractDecorationEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.BlockAttachedEntity;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(AbstractDecorationEntity.class)
-public abstract class AbstractDecorationEntityMixin extends Entity implements DynamicLightSource {
-	public AbstractDecorationEntityMixin(EntityType<?> type, World world) {
-		super(type, world);
+@Mixin(BlockAttachedEntity.class)
+public abstract class BlockAttachedEntityMixin extends Entity implements DynamicLightSource {
+	public BlockAttachedEntityMixin(EntityType<?> type, Level level) {
+		super(type, level);
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
 		// We do not want to update the entity on the server.
-		if (this.getWorld().isClient()) {
+		if (this.level().isClientSide()) {
 			if (this.isRemoved()) {
 				this.setDynamicLightEnabled(false);
 			} else {

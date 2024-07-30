@@ -13,10 +13,10 @@ import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.accessor.DynamicLightHandlerHolder;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandler;
 import dev.lambdaurora.lambdynlights.config.LightSourceSettingEntry;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Text;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -42,13 +42,13 @@ public class BlockEntityTypeMixin<T extends BlockEntity> implements DynamicLight
 	public LightSourceSettingEntry lambdynlights$getSetting() {
 		if (this.lambdynlights$setting == null) {
 			var self = (BlockEntityType<?>) (Object) this;
-			var id = Registries.BLOCK_ENTITY_TYPE.getId(self);
+			var id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getId(self);
 			if (id == null) {
 				return null;
 			}
 
 			this.lambdynlights$setting = new LightSourceSettingEntry("light_sources.settings.block_entities."
-					+ id.getNamespace() + '.' + id.getPath().replace('/', '.'),
+					+ id.namespace() + '.' + id.path().replace('/', '.'),
 					true, null, null);
 			LambDynLights.get().config.load(this.lambdynlights$setting);
 		}
@@ -59,10 +59,10 @@ public class BlockEntityTypeMixin<T extends BlockEntity> implements DynamicLight
 	@Override
 	public Text lambdynlights$getName() {
 		var self = (BlockEntityType<?>) (Object) this;
-		var id = Registries.BLOCK_ENTITY_TYPE.getId(self);
+		var id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getId(self);
 		if (id == null) {
 			return Text.empty();
 		}
-		return Text.literal(id.getNamespace() + ':' + id.getPath());
+		return Text.literal(id.namespace() + ':' + id.path());
 	}
 }

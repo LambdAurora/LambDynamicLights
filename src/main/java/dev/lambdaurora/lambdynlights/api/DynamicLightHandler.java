@@ -10,8 +10,8 @@
 package dev.lambdaurora.lambdynlights.api;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.CreeperEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +52,9 @@ public interface DynamicLightHandler<T> {
 	 * @param <T> The type of the entity.
 	 * @return The completed handler.
 	 */
-	static <T extends LivingEntity> @NotNull DynamicLightHandler<T> makeHandler(Function<T, Integer> luminance, Function<T, Boolean> waterSensitive) {
+	static <T extends LivingEntity> @NotNull DynamicLightHandler<T> makeHandler(
+			Function<T, Integer> luminance, Function<T, Boolean> waterSensitive
+	) {
 		return new DynamicLightHandler<>() {
 			@Override
 			public int getLuminance(T lightSource) {
@@ -76,7 +78,7 @@ public interface DynamicLightHandler<T> {
 	static <T extends LivingEntity> @NotNull DynamicLightHandler<T> makeLivingEntityHandler(@NotNull DynamicLightHandler<T> handler) {
 		return entity -> {
 			int luminance = 0;
-			for (var equipped : entity.getEquippedItems()) {
+			for (var equipped : entity.getAllSlots()) {
 				luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, entity.isSubmergedInWater()));
 			}
 			return Math.max(luminance, handler.getLuminance(entity));
@@ -90,17 +92,17 @@ public interface DynamicLightHandler<T> {
 	 * @param <T> The type of Creeper entity.
 	 * @return The completed handler.
 	 */
-	static <T extends CreeperEntity> @NotNull DynamicLightHandler<T> makeCreeperEntityHandler(@Nullable DynamicLightHandler<T> handler) {
+	static <T extends Creeper> @NotNull DynamicLightHandler<T> makeCreeperEntityHandler(@Nullable DynamicLightHandler<T> handler) {
 		return new DynamicLightHandler<>() {
 			@Override
 			public int getLuminance(T entity) {
 				int luminance = 0;
 
-				if (entity.getClientFuseTime(0.f) > 0.001) {
+				if (entity.getSwelling(0.f) > 0.001) {
 					luminance = switch (LambDynLights.get().config.getCreeperLightingMode()) {
 						case OFF -> 0;
 						case SIMPLE -> 10;
-						case FANCY -> (int) (entity.getClientFuseTime(0.f) * 10.0);
+						case FANCY -> (int) (entity.getSwelling(0.f) * 10.0);
 					};
 				}
 

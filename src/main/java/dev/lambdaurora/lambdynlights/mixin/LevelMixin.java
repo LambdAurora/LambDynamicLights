@@ -11,11 +11,11 @@ package dev.lambdaurora.lambdynlights.mixin;
 
 import dev.lambdaurora.lambdynlights.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.LambDynLights;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.profiler.Profiler;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.BlockEntityTickInvoker;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.profiling.Profiler;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,21 +26,28 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Iterator;
 
-@Mixin(World.class)
-public abstract class WorldMixin {
+@Mixin(Level.class)
+public abstract class LevelMixin {
 	@Shadow
-	public abstract boolean isClient();
+	public abstract boolean isClientSide();
 
 	@Shadow
 	public abstract @Nullable BlockEntity getBlockEntity(BlockPos pos);
 
 	@Inject(
 			method = "tickBlockEntities",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/BlockEntityTickInvoker;tick()V", shift = At.Shift.BEFORE),
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraft/world/level/block/entity/TickingBlockEntity;tick()V",
+					shift = At.Shift.BEFORE
+			),
 			locals = LocalCapture.CAPTURE_FAILEXCEPTION
 	)
-	private void onBlockEntityTick(CallbackInfo ci, Profiler profiler, Iterator<BlockEntity> iterator, boolean isRemoved, BlockEntityTickInvoker blockEntityTickInvoker) {
-		if (this.isClient() && LambDynLights.get().config.getBlockEntitiesLightSource().get() && !isRemoved) {
+	private void onBlockEntityTick(
+			CallbackInfo ci,
+			Profiler profiler, Iterator<BlockEntity> iterator, boolean isRemoved, TickingBlockEntity blockEntityTickInvoker
+	) {
+		if (this.isClientSide() && LambDynLights.get().config.getBlockEntitiesLightSource().get() && !isRemoved) {
 			var blockEntity = this.getBlockEntity(blockEntityTickInvoker.getPos());
 			if (blockEntity != null)
 				((DynamicLightSource) blockEntity).dynamicLightTick();

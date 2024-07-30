@@ -9,8 +9,8 @@
 
 package dev.lambdaurora.lambdynlights;
 
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents a dynamic light source.
  *
  * @author LambdAurora
- * @version 1.3.3
+ * @version 3.0.0
  * @since 1.0.0
  */
 public interface DynamicLightSource {
@@ -48,7 +48,7 @@ public interface DynamicLightSource {
 	 *
 	 * @return the world instance
 	 */
-	World getDynamicLightWorld();
+	Level getDynamicLightLevel();
 
 	/**
 	 * Returns whether the dynamic light is enabled or not.
@@ -97,7 +97,7 @@ public interface DynamicLightSource {
 	 */
 	boolean shouldUpdateDynamicLight();
 
-	boolean lambdynlights$updateDynamicLight(@NotNull WorldRenderer renderer);
+	boolean lambdynlights$updateDynamicLight(@NotNull LevelRenderer renderer);
 
-	void lambdynlights$scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer);
+	void lambdynlights$scheduleTrackedChunksRebuild(@NotNull LevelRenderer renderer);
 }

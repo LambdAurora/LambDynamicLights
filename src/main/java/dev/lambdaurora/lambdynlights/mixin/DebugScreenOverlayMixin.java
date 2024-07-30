@@ -10,8 +10,8 @@
 package dev.lambdaurora.lambdynlights.mixin;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
-import net.minecraft.client.gui.hud.DebugHud;
-import net.minecraft.util.Formatting;
+import net.minecraft.TextFormatting;
+import net.minecraft.client.gui.components.DebugScreenOverlay;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,9 +26,9 @@ import java.util.List;
  * @version 1.3.2
  * @since 1.3.2
  */
-@Mixin(DebugHud.class)
-public class DebugHudMixin {
-	@Inject(method = "getLeftText", at = @At("RETURN"))
+@Mixin(DebugScreenOverlay.class)
+public class DebugScreenOverlayMixin {
+	@Inject(method = "getGameInformation", at = @At("RETURN"))
 	private void onGetLeftText(CallbackInfoReturnable<List<String>> cir) {
 		var list = cir.getReturnValue();
 		var ldl = LambDynLights.get();
@@ -39,9 +39,9 @@ public class DebugHudMixin {
 
 		if (!ldl.config.getDynamicLightsMode().isEnabled()) {
 			builder.append(" ; ");
-			builder.append(Formatting.RED);
+			builder.append(TextFormatting.RED);
 			builder.append("Disabled");
-			builder.append(Formatting.RESET);
+			builder.append(TextFormatting.RESET);
 		}
 
 		builder.append(')');

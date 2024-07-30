@@ -10,8 +10,8 @@
 package dev.lambdaurora.lambdynlights.mixin.sodium;
 
 import dev.lambdaurora.lambdynlights.util.SodiumDynamicLightHandler;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;

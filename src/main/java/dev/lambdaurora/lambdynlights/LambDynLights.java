@@ -20,21 +20,21 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.TntEntity;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceManager;
+import net.minecraft.resources.io.ResourceType;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -88,7 +88,7 @@ public class LambDynLights implements ClientModInitializer {
 		});
 
 		WorldRenderEvents.START.register(context -> {
-			MinecraftClient.getInstance().getProfiler().swap("dynamic_lighting");
+			Minecraft.getInstance().getProfiler().swap("dynamic_lighting");
 			this.updateAll(context.worldRenderer());
 		});
 
@@ -100,7 +100,7 @@ public class LambDynLights implements ClientModInitializer {
 	 *
 	 * @param renderer the renderer
 	 */
-	public void updateAll(@NotNull WorldRenderer renderer) {
+	public void updateAll(@NotNull LevelRenderer renderer) {
 		if (!this.config.getDynamicLightsMode().isEnabled())
 			return;
 
@@ -145,7 +145,7 @@ public class LambDynLights implements ClientModInitializer {
 	 * @return the modified lightmap coordinates
 	 */
 	public int getLightmapWithDynamicLight(@NotNull Entity entity, int lightmap) {
-		int posLightLevel = (int) this.getDynamicLightLevel(entity.getBlockPos());
+		int posLightLevel = (int) this.getDynamicLightLevel(entity.getOnPos());
 		int entityLuminance = ((DynamicLightSource) entity).getLuminance();
 
 		return this.getLightmapWithDynamicLight(Math.max(posLightLevel, entityLuminance), lightmap);
@@ -163,7 +163,7 @@ public class LambDynLights implements ClientModInitializer {
 			// lightmap is (skyLevel << 20 | blockLevel << 4)
 
 			// Get vanilla block light level.
-			int blockLevel = LightmapTextureManager.getBlockLightCoordinates(lightmap);
+			int blockLevel = LightTexture.block(lightmap);
 			if (dynamicLightLevel > blockLevel) {
 				// Equivalent to a << 4 bitshift with a little quirk: this one ensure more precision (more decimals are saved).
 				int luminance = (int) (dynamicLightLevel * 16.0);
@@ -228,7 +228,7 @@ public class LambDynLights implements ClientModInitializer {
 	 * @param lightSource the light source to add
 	 */
 	public void addLightSource(@NotNull DynamicLightSource lightSource) {
-		if (!lightSource.getDynamicLightWorld().isClient())
+		if (!lightSource.getDynamicLightLevel().isClientSide())
 			return;
 		if (!this.config.getDynamicLightsMode().isEnabled())
 			return;
@@ -246,7 +246,7 @@ public class LambDynLights implements ClientModInitializer {
 	 * @return {@code true} if the light source is tracked, else {@code false}
 	 */
 	public boolean containsLightSource(@NotNull DynamicLightSource lightSource) {
-		if (!lightSource.getDynamicLightWorld().isClient())
+		if (!lightSource.getDynamicLightLevel().isClientSide())
 			return false;
 
 		boolean result;
@@ -285,8 +285,7 @@ public class LambDynLights implements ClientModInitializer {
 			it = dynamicLightSources.next();
 			if (it.equals(lightSource)) {
 				dynamicLightSources.remove();
-				if (MinecraftClient.getInstance().worldRenderer != null)
-					lightSource.lambdynlights$scheduleTrackedChunksRebuild(MinecraftClient.getInstance().worldRenderer);
+				lightSource.lambdynlights$scheduleTrackedChunksRebuild(Minecraft.getInstance().levelRenderer);
 				break;
 			}
 		}
@@ -305,11 +304,9 @@ public class LambDynLights implements ClientModInitializer {
 		while (dynamicLightSources.hasNext()) {
 			it = dynamicLightSources.next();
 			dynamicLightSources.remove();
-			if (MinecraftClient.getInstance().worldRenderer != null) {
-				if (it.getLuminance() > 0)
-					it.resetDynamicLight();
-				it.lambdynlights$scheduleTrackedChunksRebuild(MinecraftClient.getInstance().worldRenderer);
-			}
+			if (it.getLuminance() > 0)
+				it.resetDynamicLight();
+			it.lambdynlights$scheduleTrackedChunksRebuild(Minecraft.getInstance().levelRenderer);
 		}
 
 		this.lightSourcesLock.writeLock().unlock();
@@ -329,11 +326,9 @@ public class LambDynLights implements ClientModInitializer {
 			it = dynamicLightSources.next();
 			if (filter.test(it)) {
 				dynamicLightSources.remove();
-				if (MinecraftClient.getInstance().worldRenderer != null) {
-					if (it.getLuminance() > 0)
-						it.resetDynamicLight();
-					it.lambdynlights$scheduleTrackedChunksRebuild(MinecraftClient.getInstance().worldRenderer);
-				}
+				if (it.getLuminance() > 0)
+					it.resetDynamicLight();
+				it.lambdynlights$scheduleTrackedChunksRebuild(Minecraft.getInstance().levelRenderer);
 				break;
 			}
 		}
@@ -345,21 +340,21 @@ public class LambDynLights implements ClientModInitializer {
 	 * Removes entities light source from tracked light sources.
 	 */
 	public void removeEntitiesLightSource() {
-		this.removeLightSources(lightSource -> (lightSource instanceof Entity && !(lightSource instanceof PlayerEntity)));
+		this.removeLightSources(lightSource -> (lightSource instanceof Entity && !(lightSource instanceof Player)));
 	}
 
 	/**
 	 * Removes Creeper light sources from tracked light sources.
 	 */
 	public void removeCreeperLightSources() {
-		this.removeLightSources(entity -> entity instanceof CreeperEntity);
+		this.removeLightSources(entity -> entity instanceof Creeper);
 	}
 
 	/**
 	 * Removes TNT light sources from tracked light sources.
 	 */
 	public void removeTntLightSources() {
-		this.removeLightSources(entity -> entity instanceof TntEntity);
+		this.removeLightSources(entity -> entity instanceof PrimedTnt);
 	}
 
 	/**
@@ -393,7 +388,7 @@ public class LambDynLights implements ClientModInitializer {
 	 * @param renderer the renderer
 	 * @param chunkPos the chunk position
 	 */
-	public static void scheduleChunkRebuild(@NotNull WorldRenderer renderer, @NotNull BlockPos chunkPos) {
+	public static void scheduleChunkRebuild(@NotNull LevelRenderer renderer, @NotNull BlockPos chunkPos) {
 		scheduleChunkRebuild(renderer, chunkPos.getX(), chunkPos.getY(), chunkPos.getZ());
 	}
 
@@ -403,12 +398,12 @@ public class LambDynLights implements ClientModInitializer {
 	 * @param renderer the renderer
 	 * @param chunkPos the packed chunk position
 	 */
-	public static void scheduleChunkRebuild(@NotNull WorldRenderer renderer, long chunkPos) {
+	public static void scheduleChunkRebuild(@NotNull LevelRenderer renderer, long chunkPos) {
 		scheduleChunkRebuild(renderer, BlockPos.unpackLongX(chunkPos), BlockPos.unpackLongY(chunkPos), BlockPos.unpackLongZ(chunkPos));
 	}
 
-	public static void scheduleChunkRebuild(@NotNull WorldRenderer renderer, int x, int y, int z) {
-		if (MinecraftClient.getInstance().world != null)
+	public static void scheduleChunkRebuild(@NotNull LevelRenderer renderer, int x, int y, int z) {
+		if (Minecraft.getInstance().level != null)
 			((WorldRendererAccessor) renderer).lambdynlights$scheduleChunkRebuild(x, y, z, false);
 	}
 
@@ -451,14 +446,14 @@ public class LambDynLights implements ClientModInitializer {
 		}
 
 		var eyePos = BlockPos.ofFloored(entity.getX(), entity.getEyeY(), entity.getZ());
-		return !entity.getWorld().getFluidState(eyePos).isEmpty();
+		return !entity.level().getFluidState(eyePos).isEmpty();
 	}
 
 	public static int getLivingEntityLuminanceFromItems(LivingEntity entity) {
 		boolean submergedInFluid = isEyeSubmergedInFluid(entity);
 		int luminance = 0;
 
-		for (var equipped : entity.getEquippedItems()) {
+		for (var equipped : entity.getAllSlots()) {
 			if (!equipped.isEmpty())
 				luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
 		}

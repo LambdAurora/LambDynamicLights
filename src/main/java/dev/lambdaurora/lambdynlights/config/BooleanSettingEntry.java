@@ -12,7 +12,7 @@ package dev.lambdaurora.lambdynlights.config;
 import com.electronwill.nightconfig.core.Config;
 import dev.lambdaurora.spruceui.option.SpruceBooleanOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;

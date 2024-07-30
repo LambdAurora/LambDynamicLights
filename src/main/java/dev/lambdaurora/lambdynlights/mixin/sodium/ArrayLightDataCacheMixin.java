@@ -33,6 +33,6 @@ public abstract class ArrayLightDataCacheMixin {
 		// Store the current light position.
 		// This is possible under smooth lighting scenarios, because AoFaceData in Sodium runs a get() call
 		// before getting the lightmap.
-		SodiumDynamicLightHandler.pos.get().set(x, y, z);
+		SodiumDynamicLightHandler.POS.get().set(x, y, z);
 	}
 }

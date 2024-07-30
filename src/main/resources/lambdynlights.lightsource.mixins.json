@@ -1,16 +1,16 @@
 {
   "required": true,
   "package": "dev.lambdaurora.lambdynlights.mixin.lightsource",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
   "client": [
-    "AbstractDecorationEntityMixin",
+    "AbstractHurtingProjectileEntityMixin",
     "AbstractMinecartEntityMixin",
+    "BlockAttachedEntityMixin",
     "BlockEntityMixin",
     "EntityMixin",
-    "ExplosiveProjectileEntityMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
-    "TntEntityMixin"
+    "PrimedTntEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

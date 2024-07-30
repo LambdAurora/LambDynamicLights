@@ -11,8 +11,8 @@ package dev.lambdaurora.lambdynlights.api;
 
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSource;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSources;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 /**
  * Represents the entrypoint for LambDynamicLights API.

@@ -32,15 +32,14 @@
     "fabricloader": ">=0.15.11",
     "fabric-api": ">=0.100.4+1.21",
     "minecraft": "~1.21",
-    "spruceui": ">=5.0.3",
+    "spruceui": ">=5.1.0",
     "java": ">=21"
   },
   "recommends": {
-    "modmenu": ">=8.0.0"
+    "modmenu": ">=11.0.0"
   },
   "suggests": {
     "ears": "*",
-    "ltr": "*",
     "sodium": "*"
   },
   "breaks": {

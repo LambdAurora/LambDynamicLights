@@ -13,13 +13,13 @@ import dev.lambdaurora.lambdynlights.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -38,7 +38,7 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 
 	@Shadow
 	@Nullable
-	protected World world;
+	protected Level level;
 
 	@Shadow
 	protected boolean removed;
@@ -68,8 +68,8 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 	}
 
 	@Override
-	public World getDynamicLightWorld() {
-		return this.world;
+	public Level getDynamicLightLevel() {
+		return this.level;
 	}
 
 	@Inject(method = "markRemoved", at = @At("TAIL"))
@@ -85,7 +85,7 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 	@Override
 	public void dynamicLightTick() {
 		// We do not want to update the entity on the server.
-		if (this.world == null || !this.world.isClient())
+		if (this.level == null || !this.level.isClientSide())
 			return;
 		if (!this.removed) {
 			this.luminance = DynamicLightHandlers.getLuminanceFrom((BlockEntity) (Object) this);
@@ -119,7 +119,7 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 	}
 
 	@Override
-	public boolean lambdynlights$updateDynamicLight(@NotNull WorldRenderer renderer) {
+	public boolean lambdynlights$updateDynamicLight(@NotNull LevelRenderer renderer) {
 		if (!this.shouldUpdateDynamicLight())
 			return false;
 
@@ -162,8 +162,8 @@ public abstract class BlockEntityMixin implements DynamicLightSource {
 	}
 
 	@Override
-	public void lambdynlights$scheduleTrackedChunksRebuild(@NotNull WorldRenderer renderer) {
-		if (this.world == MinecraftClient.getInstance().world)
+	public void lambdynlights$scheduleTrackedChunksRebuild(@NotNull LevelRenderer renderer) {
+		if (this.level == Minecraft.getInstance().level)
 			for (long pos : this.lambdynlights$trackedLitChunkPos) {
 				LambDynLights.scheduleChunkRebuild(renderer, pos);
 			}

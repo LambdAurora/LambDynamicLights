@@ -11,17 +11,16 @@ package dev.lambdaurora.lambdynlights.api.item;
 
 import com.google.gson.JsonObject;
 import dev.lambdaurora.lambdynlights.LambDynLights;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BlockStateComponent;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.BlockItemStateProperties;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -30,7 +29,7 @@ import java.util.Optional;
  * Represents an item light source.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 3.0.0
  * @since 1.3.0
  */
 public abstract class ItemLightSource {
@@ -98,7 +97,7 @@ public abstract class ItemLightSource {
 		}
 
 		var affectId = Identifier.tryParse(json.get("item").getAsString());
-		var item = Registries.ITEM.get(affectId);
+		var item = BuiltInRegistries.ITEM.get(affectId);
 
 		if (item == Items.AIR)
 			return Optional.empty();
@@ -114,14 +113,14 @@ public abstract class ItemLightSource {
 			var luminanceStr = luminanceElement.getAsString();
 			if (luminanceStr.equals("block")) {
 				if (item instanceof BlockItem blockItem) {
-					return Optional.of(new BlockItemLightSource(id, item, blockItem.getBlock().getDefaultState(), waterSensitive));
+					return Optional.of(new BlockItemLightSource(id, item, blockItem.getBlock().defaultState(), waterSensitive));
 				}
 			} else {
 				var blockId = Identifier.tryParse(luminanceStr);
 				if (blockId != null) {
-					var block = Registries.BLOCK.get(blockId);
+					var block = BuiltInRegistries.BLOCK.get(blockId);
 					if (block != Blocks.AIR)
-						return Optional.of(new BlockItemLightSource(id, item, block.getDefaultState(), waterSensitive));
+						return Optional.of(new BlockItemLightSource(id, item, block.defaultState(), waterSensitive));
 				}
 			}
 		} else {
@@ -164,17 +163,13 @@ public abstract class ItemLightSource {
 		}
 
 		static int getLuminance(ItemStack stack, BlockState state) {
-			var nbt = stack.getComponents().getOrDefault(DataComponentTypes.BLOCK_STATE, BlockStateComponent.DEFAULT);
+			var nbt = stack.getComponents().getOrDefault(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY);
 
 			if (!nbt.isEmpty()) {
-				state = nbt.applyToState(state);
+				state = nbt.apply(state);
 			}
 
-			return state.getLuminance();
-		}
-
-		private static <T extends Comparable<T>> BlockState with(BlockState state, Property<T> property, String name) {
-			return property.parse(name).map(value -> state.with(property, value)).orElse(state);
+			return state.getLightEmission();
 		}
 	}
 }
