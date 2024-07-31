@@ -2,20 +2,20 @@
 # The dynamic lights mode
 mode = "fancy"
 
- # Light sources settings.
+# Light sources settings.
 [light_sources]
-    # Enable entities light source.
-    entities = true
-    # Enable first-person player light source.
-    self = true
-    # Enable block entities light source.
-    block_entities = true
-    # Enables water-sensitive light sources check. This means that water-sensitive items will not light up when submerged in water.
-    water_sensitive_check = true
-    # Creeper lighting mode. May be off, simple or fancy.
-    creeper = "simple"
-    # TNT lighting mode. May be off, simple or fancy.
-    tnt = "off"
+	# Enable entities light source.
+	entities = true
+	# Enable first-person player light source.
+	self = true
+	# Enable block entities light source.
+	block_entities = true
+	# Enables water-sensitive light sources check. This means that water-sensitive items will not light up when submerged in water.
+	water_sensitive_check = true
+	# Creeper lighting mode. May be off, simple or fancy.
+	creeper = "simple"
+	# TNT lighting mode. May be off, simple or fancy.
+	tnt = "off"
 
 [light_sources.settings.entities.minecraft]
-    glow_item_frame = false
+	glow_item_frame = false

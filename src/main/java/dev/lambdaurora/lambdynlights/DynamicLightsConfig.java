@@ -10,6 +10,7 @@
 package dev.lambdaurora.lambdynlights;
 
 import com.electronwill.nightconfig.core.file.FileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
 import dev.lambdaurora.lambdynlights.config.BooleanSettingEntry;
 import dev.lambdaurora.lambdynlights.config.SettingEntry;
 import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
@@ -61,7 +62,11 @@ public class DynamicLightsConfig {
 	public DynamicLightsConfig(@NotNull LambDynLights mod) {
 		this.mod = mod;
 
-		this.config = FileConfig.builder(CONFIG_FILE_PATH).concurrent().defaultResource("/lambdynlights.toml").autosave().build();
+		this.config = FileConfig.builder(CONFIG_FILE_PATH)
+				.defaultResource("/lambdynlights.toml")
+				.autosave()
+				.writingMode(WritingMode.REPLACE_ATOMIC)
+				.build();
 		this.entitiesLightSource = new BooleanSettingEntry("light_sources.entities", DEFAULT_ENTITIES_LIGHT_SOURCE, this.config,
 				Text.translatable("lambdynlights.tooltip.entities"))
 				.withOnSet(value -> {

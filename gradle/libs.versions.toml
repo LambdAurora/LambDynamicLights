@@ -12,7 +12,7 @@ modmenu = "11.0.1"
 sodium = "mc1.21-0.5.9"
 
 # Configuration
-nightconfig = "3.6.6"
+nightconfig = "3.8.1"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
