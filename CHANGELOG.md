@@ -177,10 +177,12 @@
 
 ## 3.0.0
 
-- Updated to Minecraft 1.21 ([#227](https://github.com/LambdAurora/LambDynamicLights/pull/227))
+- Updated to Minecraft 1.21 ([#227](https://github.com/LambdAurora/LambDynamicLights/pull/227)).
 - Updated configuration library.
   - Configuration corruption should now be fixed.
 - Updated Mexican Spanish translations ([#214](https://github.com/LambdAurora/LambDynamicLights/pull/214)).
+- Updated Italian translations ([#232](https://github.com/LambdAurora/LambDynamicLights/pull/232)).
+- Updated Polish translations ([#235](https://github.com/LambdAurora/LambDynamicLights/pull/235)).
 - Switched license to [Lambda License](https://github.com/LambdAurora/LambDynamicLights/blob/bbefb8860bca2e797f8a2ba8a59d1120b6e1c7b4/LICENSE).
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"

@@ -14,6 +14,11 @@ sodium = "mc1.21-0.5.9"
 # Configuration
 nightconfig = "3.8.1"
 
+# Gradle
+gradle-licenser = "1.2.+"
+gradle-loom = "1.7.+"
+mappingio = "0.6.1"
+
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
@@ -28,3 +33,8 @@ sodium = { module = "maven.modrinth:sodium", version.ref = "sodium" }
 # Configuration
 nightconfig-core = { module = "com.electronwill.night-config:core", version.ref = "nightconfig" }
 nightconfig-toml = { module = "com.electronwill.night-config:toml", version.ref = "nightconfig" }
+
+# Gradle
+gradle-licenser = { module = "dev.yumi:yumi-gradle-licenser", version.ref = "gradle-licenser" }
+gradle-loom = { module = "net.fabricmc:fabric-loom", version.ref = "gradle-loom" }
+mappingio = { module = "net.fabricmc:mapping-io", version.ref = "mappingio" }

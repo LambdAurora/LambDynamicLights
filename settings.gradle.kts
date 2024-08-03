@@ -1,3 +1,5 @@
+rootProject.name = "lambdynamiclights"
+
 pluginManagement {
 	repositories {
 		maven {
@@ -8,4 +10,5 @@ pluginManagement {
 	}
 }
 
-rootProject.name = "lambdynamiclights"
+includeBuild("build_logic")
+include("api")
