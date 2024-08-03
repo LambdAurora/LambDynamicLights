@@ -1,4 +1,6 @@
 {
-  "item": "minecraft:glowstone_dust",
-  "luminance": 8
+	"match": {
+		"items": "minecraft:glowstone_dust"
+	},
+	"luminance": 8
 }

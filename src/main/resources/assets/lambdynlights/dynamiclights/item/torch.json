@@ -1,5 +1,13 @@
 {
-  "item": "minecraft:torch",
-  "luminance": "block",
-  "water_sensitive": true
+	"match": {
+		"items": [
+			"minecraft:torch",
+			"minecraft:redstone_torch",
+			"minecraft:soul_torch"
+		]
+	},
+	"luminance": {
+		"type": "block_self"
+	},
+	"water_sensitive": true
 }

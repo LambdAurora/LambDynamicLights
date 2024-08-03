@@ -1,5 +1,12 @@
 {
-  "item": "minecraft:campfire",
-  "luminance": "block",
-  "water_sensitive": true
+	"match": {
+		"items": [
+			"minecraft:campfire",
+			"minecraft:soul_campfire"
+		]
+	},
+	"luminance": {
+		"type": "block_self"
+	},
+	"water_sensitive": true
 }

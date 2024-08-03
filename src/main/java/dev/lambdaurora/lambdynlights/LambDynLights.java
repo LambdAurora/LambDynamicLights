@@ -12,7 +12,7 @@ package dev.lambdaurora.lambdynlights;
 import dev.lambdaurora.lambdynlights.accessor.WorldRendererAccessor;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
-import dev.lambdaurora.lambdynlights.api.item.ItemLightSources;
+import dev.lambdaurora.lambdynlights.resource.item.ItemLightSources;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;

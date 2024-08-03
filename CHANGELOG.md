@@ -177,6 +177,10 @@
 
 ## 3.0.0
 
+- Changed how item light sources are defined in resource packs:
+  - Now item light sources support a wide-range of selection predicates thanks to data-driven improvements in the base game.
+    - This means enchanted items can now selectively light up, this should mostly address ([#89](https://github.com/LambdAurora/LambDynamicLights/issues/89)).
+  - Please refer yourself to the documentation for more details.
 - Updated to Minecraft 1.21 ([#227](https://github.com/LambdAurora/LambDynamicLights/pull/227)).
 - Updated configuration library.
   - Configuration corruption should now be fixed.

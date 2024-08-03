@@ -1,0 +1,26 @@
+{
+	"match": {
+		"items": [
+			"adorn:black_table_lamp",
+			"adorn:blue_table_lamp",
+			"adorn:brown_table_lamp",
+			"adorn:cyan_table_lamp",
+			"adorn:gray_table_lamp",
+			"adorn:green_table_lamp",
+			"adorn:light_blue_table_lamp",
+			"adorn:light_gray_table_lamp",
+			"adorn:lime_table_lamp",
+			"adorn:magenta_table_lamp",
+			"adorn:orange_table_lamp",
+			"adorn:pink_table_lamp",
+			"adorn:purple_table_lamp",
+			"adorn:red_table_lamp",
+			"adorn:white_table_lamp",
+			"adorn:yellow_table_lamp"
+		]
+	},
+	"luminance": {
+		"type": "block_self"
+	},
+	"water_sensitive": true
+}

@@ -1,4 +1,6 @@
 {
-  "item": "minecraft:spectral_arrow",
-  "luminance": 10
+	"match": {
+		"items": "minecraft:spectral_arrow"
+	},
+	"luminance": 10
 }

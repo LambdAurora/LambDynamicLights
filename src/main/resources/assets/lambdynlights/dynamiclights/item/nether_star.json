@@ -1,4 +1,6 @@
 {
-  "item": "minecraft:nether_star",
-  "luminance": 8
+	"match": {
+		"items": "minecraft:nether_star"
+	},
+	"luminance": 8
 }

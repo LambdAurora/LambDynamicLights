@@ -1,5 +1,9 @@
 {
-  "item": "adorn:stone_torch",
-  "luminance": "block",
+  "match": {
+    "items":"adorn:stone_torch"
+  },
+  "luminance": {
+    "type": "block_self"
+  },
   "water_sensitive": true
 }

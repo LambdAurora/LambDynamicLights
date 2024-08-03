@@ -1,5 +1,10 @@
 {
-  "item": "minecraft:lava_bucket",
-  "luminance": "minecraft:lava",
-  "water_sensitive": true
+	"match": {
+		"items": "minecraft:lava_bucket"
+	},
+	"luminance": {
+		"type": "block",
+		"block": "minecraft:lava"
+	},
+	"water_sensitive": true
 }

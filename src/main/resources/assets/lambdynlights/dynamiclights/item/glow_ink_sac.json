@@ -1,4 +1,6 @@
 {
-  "item": "minecraft:glow_ink_sac",
-  "luminance": 12
+	"match": {
+		"items": "minecraft:glow_ink_sac"
+	},
+	"luminance": 12
 }
