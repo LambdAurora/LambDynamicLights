@@ -49,16 +49,17 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 2.3.2
+ * @version 3.0.0
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer {
 	public static final String NAMESPACE = "lambdynlights";
+	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights");
 	private static final double MAX_RADIUS = 7.75;
 	private static final double MAX_RADIUS_SQUARED = MAX_RADIUS * MAX_RADIUS;
 	private static LambDynLights INSTANCE;
-	public final Logger logger = LoggerFactory.getLogger(NAMESPACE);
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
+	public final ItemLightSources itemLightSources = new ItemLightSources();
 	private final Set<DynamicLightSource> dynamicLightSources = new HashSet<>();
 	private final ReentrantReadWriteLock lightSourcesLock = new ReentrantReadWriteLock();
 	private long lastUpdate = System.currentTimeMillis();
@@ -67,7 +68,7 @@ public class LambDynLights implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		INSTANCE = this;
-		this.log("Initializing LambDynamicLights...");
+		log(LOGGER, "Initializing LambDynamicLights...");
 
 		this.config.load();
 
@@ -83,7 +84,7 @@ public class LambDynLights implements ClientModInitializer {
 
 			@Override
 			public void reload(ResourceManager manager) {
-				ItemLightSources.load(manager);
+				LambDynLights.this.itemLightSources.load(manager);
 			}
 		});
 
@@ -365,21 +366,45 @@ public class LambDynLights implements ClientModInitializer {
 	}
 
 	/**
-	 * Prints a message to the terminal.
+	 * Logs an informational message.
 	 *
-	 * @param info the message to print
+	 * @param logger the logger to use
+	 * @param msg the message to log
 	 */
-	public void log(String info) {
-		this.logger.info("[LambDynLights] " + info);
+	public static void log(Logger logger, String msg) {
+		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			msg = "[LambDynLights] " + msg;
+		}
+
+		logger.info(msg);
 	}
 
 	/**
-	 * Prints a warning message to the terminal.
+	 * Logs a warning message.
 	 *
-	 * @param info the message to print
+	 * @param logger the logger to use
+	 * @param msg the message to log
 	 */
-	public void warn(String info) {
-		this.logger.warn("[LambDynLights] " + info);
+	public static void warn(Logger logger, String msg) {
+		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			msg = "[LambDynLights] " + msg;
+		}
+
+		logger.warn(msg);
+	}
+
+	/**
+	 * Logs a warning message.
+	 *
+	 * @param logger the logger to use
+	 * @param msg the message to log
+	 */
+	public static void warn(Logger logger, String msg, Object... args) {
+		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			msg = "[LambDynLights] " + msg;
+		}
+
+		logger.warn(msg, args);
 	}
 
 	/**
@@ -462,14 +487,13 @@ public class LambDynLights implements ClientModInitializer {
 	}
 
 	/**
-	 * Returns the luminance from an item stack.
+	 * {@return the luminance value of the item stack}
 	 *
 	 * @param stack the item stack
 	 * @param submergedInWater {@code true} if the stack is submerged in water, else {@code false}
-	 * @return the luminance of the item
 	 */
 	public static int getLuminanceFromItemStack(@NotNull ItemStack stack, boolean submergedInWater) {
-		return ItemLightSources.getLuminance(stack, submergedInWater);
+		return INSTANCE.itemLightSources.getLuminance(stack, submergedInWater);
 	}
 
 	/**

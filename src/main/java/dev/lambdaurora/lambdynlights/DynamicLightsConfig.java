@@ -20,6 +20,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
@@ -27,10 +29,11 @@ import java.nio.file.Path;
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 2.3.1
+ * @version 3.0.0
  * @since 1.0.0
  */
 public class DynamicLightsConfig {
+	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights|Config");
 	private static final DynamicLightsMode DEFAULT_DYNAMIC_LIGHTS_MODE = DynamicLightsMode.FANCY;
 	private static final boolean DEFAULT_ENTITIES_LIGHT_SOURCE = true;
 	private static final boolean DEFAULT_SELF_LIGHT_SOURCE = true;
@@ -106,7 +109,7 @@ public class DynamicLightsConfig {
 		this.tntLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.tnt", DEFAULT_TNT_LIGHTING_MODE.getName()))
 				.orElse(DEFAULT_TNT_LIGHTING_MODE);
 
-		this.mod.log("Configuration loaded.");
+		LambDynLights.log(LOGGER, "Configuration loaded.");
 	}
 
 	/**

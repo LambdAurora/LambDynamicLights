@@ -5,5 +5,6 @@
   "luminance": {
     "type": "block_self"
   },
-  "water_sensitive": true
+  "water_sensitive": true,
+  "silence_error": true
 }

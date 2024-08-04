@@ -6,6 +6,7 @@ mappings-yalmm = "8"
 mappings-parchment = "2024.07.07"
 
 # Dependencies
+yumi-commons = "1.0.0-alpha.1"
 spruceui = "5.1.0+1.21"
 pridelib = "1.2.1+1.21"
 modmenu = "11.0.1"
@@ -25,6 +26,7 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
 # Dependencies
+yumi-commons-core = { module = "dev.yumi.commons:yumi-commons-core", version.ref = "yumi-commons" }
 spruceui = { module = "dev.lambdaurora:spruceui", version.ref = "spruceui" }
 pridelib = { module = "io.github.queerbric:pridelib", version.ref = "pridelib" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }

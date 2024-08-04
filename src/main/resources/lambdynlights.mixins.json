@@ -12,6 +12,7 @@
     "EntityTypeMixin",
     "LevelMixin",
     "MinecraftClientMixin",
+    "TagCollectorMixin",
     "VideoSettingsScreenMixin",
     "sodium.ArrayLightDataCacheMixin",
     "sodium.FlatLightPipelineMixin",

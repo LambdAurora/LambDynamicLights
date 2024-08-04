@@ -18,8 +18,6 @@ if (!(System.getenv("CURSEFORGE_TOKEN") != null || System.getenv("MODRINTH_TOKEN
 }
 logger.lifecycle("Preparing version ${version}...")
 
-configurations["api"].extendsFrom(configurations["shadow"])
-
 repositories {
 	mavenLocal()
 	mavenCentral()
@@ -57,10 +55,13 @@ loom {
 }
 
 dependencies {
-	shadow(project(":api"))
+	implementation(project(":api", configuration = "namedElements"))
+	implementation(libs.yumi.commons.core)
 
 	modImplementation(libs.fabric.api)
 
+	implementation(libs.nightconfig.core)
+	implementation(libs.nightconfig.toml)
 	modImplementation(libs.spruceui)
 	include(libs.spruceui)
 	modImplementation(libs.pridelib)
@@ -72,6 +73,8 @@ dependencies {
 
 	modRuntimeOnly(libs.sodium)
 
+	shadow(project(":api", configuration = "namedElements"))
+	shadow(libs.yumi.commons.core)
 	shadow(libs.nightconfig.core)
 	shadow(libs.nightconfig.toml)
 }

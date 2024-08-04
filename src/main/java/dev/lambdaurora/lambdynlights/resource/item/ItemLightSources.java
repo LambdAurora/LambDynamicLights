@@ -9,11 +9,19 @@
 
 package dev.lambdaurora.lambdynlights.resource.item;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSource;
+import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
+import dev.yumi.commons.TriState;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.io.Resource;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.world.item.ItemStack;
@@ -33,40 +41,79 @@ import java.util.List;
  * @version 3.0.0
  * @since 1.3.0
  */
-public final class ItemLightSources {
-	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynLights|ItemLightSources");
-	private static final List<ItemLightSource> LIGHT_SOURCES = new ArrayList<>();
+public final class ItemLightSources implements ItemLightSourceManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights|ItemLightSources");
+	private static final String SILENCE_ERROR_KEY = "silence_error";
+	private static final boolean FORCE_LOG_ERRORS = TriState.fromProperty("lambdynamiclights.resource.force_log_errors")
+			.toBooleanOrElse(FabricLoader.getInstance().isDevelopmentEnvironment());
 
-	private ItemLightSources() {
-		throw new UnsupportedOperationException("ItemLightSources only contains static definitions.");
-	}
+	private final List<LoadedItemLightSource> loadedLightSources = new ArrayList<>();
+	private final List<ItemLightSource> lightSources = new ArrayList<>();
 
 	/**
 	 * Loads the item light source data from resource pack.
 	 *
 	 * @param resourceManager The resource manager.
 	 */
-	public static void load(ResourceManager resourceManager) {
-		LIGHT_SOURCES.clear();
+	public void load(ResourceManager resourceManager) {
+		this.loadedLightSources.clear();
 
 		resourceManager.findResources("dynamiclights/item", path -> path.path().endsWith(".json"))
-				.forEach(ItemLightSources::load);
+				.forEach(this::load);
 	}
 
-	private static void load(Identifier resourceId, Resource resource) {
+	/**
+	 * Applies the loaded item light source data to the given registry state.
+	 * <p>
+	 * The codecs cannot be fully loaded right on resource load as registry state is not known at this time.
+	 *
+	 * @param registryAccess the registry access
+	 */
+	public void apply(RegistryAccess registryAccess) {
+		var ops = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
+
+		this.lightSources.clear();
+		this.loadedLightSources.forEach(data -> apply(ops, data));
+	}
+
+	private void load(Identifier resourceId, Resource resource) {
 		var id = Identifier.of(resourceId.namespace(), resourceId.path().replace(".json", ""));
+
 		try (var reader = new InputStreamReader(resource.open())) {
-			var json = JsonParser.parseReader(reader).getAsJsonObject();
+			var rawJson = JsonParser.parseReader(reader);
 
-			var loaded = ItemLightSource.CODEC.parse(JsonOps.INSTANCE, json);
+			if (!rawJson.isJsonObject()) {
+				LambDynLights.warn(LOGGER, "Failed to load item light source \"{}\". Expected JSON object in file.", id);
+				return;
+			}
 
-			loaded.ifError(error -> {
-				LOGGER.warn("[LambDynamicLights] Failed to load item light source \"{}\" due to error: {}", id, error.message());
-			});
-			loaded.ifSuccess(LIGHT_SOURCES::add);
+			var json = rawJson.getAsJsonObject();
+			boolean silentError = false;
+
+			if (json.has(SILENCE_ERROR_KEY)) {
+				silentError = json.get(SILENCE_ERROR_KEY).getAsBoolean();
+				json.remove(SILENCE_ERROR_KEY);
+			}
+
+			this.loadedLightSources.add(new LoadedItemLightSource(id, json, silentError));
 		} catch (IOException | IllegalStateException e) {
-			LOGGER.warn("[LambDynamicLights] Failed to load item light source \"{}\".", id, e);
+			LambDynLights.warn(LOGGER, "Failed to load item light source \"{}\".", id, e);
 		}
+	}
+
+	private void apply(DynamicOps<JsonElement> ops, LoadedItemLightSource loadedData) {
+		var loaded = ItemLightSource.CODEC.parse(ops, loadedData.data());
+
+		if (!loadedData.silenceError() || FORCE_LOG_ERRORS) {
+			// Some files may choose to silence errors, especially if it's expected for some data to not always be present.
+			// This should be used rarely to avoid issues.
+			// Errors may be forced to be logged if the property "lambdynamiclights.resource.force_log_errors" is true
+			// or if the environment is a development environment.
+			loaded.ifError(error -> {
+				LambDynLights.warn(LOGGER, "Failed to load item light source \"{}\" due to error: {}", loadedData.id(), error.message());
+			});
+		}
+		loaded.ifSuccess(this.lightSources::add);
 	}
 
 	/**
@@ -90,32 +137,27 @@ public final class ItemLightSources {
 	 * Registers an item light source data.
 	 *
 	 * @param data the item light source data
-	 *
-	public static void registerItemLightSource(ItemLightSource data) {
-	var other = STATIC_ITEM_LIGHT_SOURCES.get(data.item());
-
-	if (other != null) {
-	LambDynLights.get().warn("Failed to register item light source \"" + data.id() + "\", duplicates item \""
-	+ BuiltInRegistries.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
-	return;
-	}
-
-	STATIC_ITEM_LIGHT_SOURCES.put(data.item(), data);
-	}*/
-
-	/**
-	 * Returns the luminance of the item in the stack.
-	 *
-	 * @param stack the item stack
-	 * @param submergedInWater {@code true} if the stack is submerged in water, else {@code false}
-	 * @return a luminance value
+	 * <p>
+	 * public static void registerItemLightSource(ItemLightSource data) {
+	 * var other = STATIC_ITEM_LIGHT_SOURCES.get(data.item());
+	 * <p>
+	 * if (other != null) {
+	 * LambDynLights.get().warn("Failed to register item light source \"" + data.id() + "\", duplicates item \""
+	 * + BuiltInRegistries.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
+	 * return;
+	 * }
+	 * <p>
+	 * STATIC_ITEM_LIGHT_SOURCES.put(data.item(), data);
+	 * }
 	 */
-	public static int getLuminance(ItemStack stack, boolean submergedInWater) {
+
+	@Override
+	public int getLuminance(ItemStack stack, boolean submergedInWater) {
 		boolean shouldCareAboutWater = submergedInWater && LambDynLights.get().config.getWaterSensitiveCheck().get();
 
 		int luminance = Block.byItem(stack.getItem()).defaultState().getLightEmission();
 
-		for (var data : LIGHT_SOURCES) {
+		for (var data : lightSources) {
 			if (shouldCareAboutWater && data.waterSensitive()) continue;
 
 			luminance = Math.max(luminance, data.getLuminance(stack));
@@ -123,4 +165,13 @@ public final class ItemLightSources {
 
 		return luminance;
 	}
+
+	/**
+	 * Represents a partially loaded item light source awaiting full load once registries are known.
+	 *
+	 * @param id the identifier of the item light source
+	 * @param data the data to fully load
+	 * @param silenceError {@code true} if load errors should be silenced, or {@code false} otherwise
+	 */
+	record LoadedItemLightSource(Identifier id, JsonObject data, boolean silenceError) {}
 }

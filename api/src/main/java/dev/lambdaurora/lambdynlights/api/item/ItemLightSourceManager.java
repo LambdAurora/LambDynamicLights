@@ -12,9 +12,20 @@ package dev.lambdaurora.lambdynlights.api.item;
 import net.minecraft.world.item.ItemStack;
 
 public interface ItemLightSourceManager {
+	/**
+	 * {@return the luminance value of the item stack}
+	 *
+	 * @param stack the item stack
+	 */
+	default int getLuminance(ItemStack stack) {
+		return this.getLuminance(stack, false);
+	}
 
-
-	int getLuminance(ItemStack stack);
-
+	/**
+	 * {@return the luminance value of the item stack}
+	 *
+	 * @param stack the item stack
+	 * @param submergedInWater {@code true} if the stack is submerged in water, else {@code false}
+	 */
 	int getLuminance(ItemStack stack, boolean submergedInWater);
 }
