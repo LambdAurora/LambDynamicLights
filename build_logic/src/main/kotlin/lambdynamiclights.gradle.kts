@@ -29,6 +29,8 @@ dependencies {
 		mappings("dev.lambdaurora:yalmm:${Constants.mcVersion()}+build.${libs.versions.mappings.yalmm.get()}")
 	})
 	modImplementation(libs.fabric.loader)
+
+	api(libs.yumi.commons.event)
 }
 
 java {

@@ -13,6 +13,7 @@ import dev.lambdaurora.lambdynlights.accessor.WorldRendererAccessor;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
 import dev.lambdaurora.lambdynlights.resource.item.ItemLightSources;
+import dev.yumi.commons.event.EventManager;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -57,6 +58,7 @@ public class LambDynLights implements ClientModInitializer {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights");
 	private static final double MAX_RADIUS = 7.75;
 	private static final double MAX_RADIUS_SQUARED = MAX_RADIUS * MAX_RADIUS;
+	public static final EventManager<Identifier> EVENT_MANAGER = new EventManager<>(Identifier.of(NAMESPACE, "default"), Identifier::parse);
 	private static LambDynLights INSTANCE;
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
 	public final ItemLightSources itemLightSources = new ItemLightSources();
@@ -73,8 +75,9 @@ public class LambDynLights implements ClientModInitializer {
 		this.config.load();
 
 		FabricLoader.getInstance().getEntrypointContainers("dynamiclights", DynamicLightsInitializer.class)
-				.stream().map(EntrypointContainer::getEntrypoint)
-				.forEach(DynamicLightsInitializer::onInitializeDynamicLights);
+				.stream()
+				.map(EntrypointContainer::getEntrypoint)
+				.forEach(initializer -> initializer.onInitializeDynamicLights(this.itemLightSources));
 
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 			@Override
@@ -94,6 +97,12 @@ public class LambDynLights implements ClientModInitializer {
 		});
 
 		DynamicLightHandlers.registerDefaultHandlers();
+	}
+
+	public static boolean isDevMode() {
+		return FabricLoader.getInstance().getModContainer(NAMESPACE)
+				.map(modContainer -> modContainer.getMetadata().getVersion().getFriendlyString().endsWith("-local"))
+				.orElse(true);
 	}
 
 	/**

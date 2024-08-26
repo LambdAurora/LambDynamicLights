@@ -9,6 +9,8 @@
 
 package dev.lambdaurora.lambdynlights.api;
 
+import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
+
 /**
  * Represents the entrypoint for LambDynamicLights API.
  *
@@ -20,5 +22,5 @@ public interface DynamicLightsInitializer {
 	/**
 	 * Called when LambDynamicLights is initialized to register custom dynamic light handlers and item light sources.
 	 */
-	void onInitializeDynamicLights();
+	void onInitializeDynamicLights(ItemLightSourceManager itemLightSourceManager);
 }

@@ -56,7 +56,6 @@ loom {
 
 dependencies {
 	implementation(project(":api", configuration = "namedElements"))
-	implementation(libs.yumi.commons.core)
 
 	modImplementation(libs.fabric.api)
 
@@ -75,6 +74,8 @@ dependencies {
 
 	shadow(project(":api", configuration = "namedElements"))
 	shadow(libs.yumi.commons.core)
+	shadow(libs.yumi.commons.collections)
+	shadow(libs.yumi.commons.event)
 	shadow(libs.nightconfig.core)
 	shadow(libs.nightconfig.toml)
 }

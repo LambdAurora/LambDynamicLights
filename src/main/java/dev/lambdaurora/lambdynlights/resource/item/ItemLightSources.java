@@ -18,6 +18,7 @@ import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSource;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import dev.yumi.commons.TriState;
+import dev.yumi.commons.event.Event;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
@@ -47,6 +48,8 @@ public final class ItemLightSources implements ItemLightSourceManager {
 	private static final boolean FORCE_LOG_ERRORS = TriState.fromProperty("lambdynamiclights.resource.force_log_errors")
 			.toBooleanOrElse(FabricLoader.getInstance().isDevelopmentEnvironment());
 
+	private final Event<Identifier, OnRegister> onRegisterEvent = LambDynLights.EVENT_MANAGER.create(OnRegister.class);
+
 	private final List<LoadedItemLightSource> loadedLightSources = new ArrayList<>();
 	private final List<ItemLightSource> lightSources = new ArrayList<>();
 
@@ -73,7 +76,18 @@ public final class ItemLightSources implements ItemLightSourceManager {
 		var ops = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 
 		this.lightSources.clear();
-		this.loadedLightSources.forEach(data -> apply(ops, data));
+		this.loadedLightSources.forEach(data -> this.apply(ops, data));
+		this.onRegisterEvent.invoker().onRegister(new RegisterContext() {
+			@Override
+			public RegistryAccess registryAccess() {
+				return registryAccess;
+			}
+
+			@Override
+			public void register(ItemLightSource itemLightSource) {
+				ItemLightSources.this.lightSources.add(itemLightSource);
+			}
+		});
 	}
 
 	private void load(Identifier resourceId, Resource resource) {
@@ -116,40 +130,10 @@ public final class ItemLightSources implements ItemLightSourceManager {
 		loaded.ifSuccess(this.lightSources::add);
 	}
 
-	/**
-	 * Registers an item light source data.
-	 *
-	 * @param data The item light source data.
-	 *
-	private static void register(ItemLightSource data) {
-	var other = ITEM_LIGHT_SOURCES.get(data.item());
-
-	if (other != null) {
-	LambDynLights.get().warn("Failed to register item light source \"" + data.id() + "\", duplicates item \""
-	+ BuiltInRegistries.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
-	return;
+	@Override
+	public Event<Identifier, OnRegister> onRegisterEvent() {
+		return this.onRegisterEvent;
 	}
-
-	ITEM_LIGHT_SOURCES.put(data.item(), data);
-	}*/
-
-	/**
-	 * Registers an item light source data.
-	 *
-	 * @param data the item light source data
-	 * <p>
-	 * public static void registerItemLightSource(ItemLightSource data) {
-	 * var other = STATIC_ITEM_LIGHT_SOURCES.get(data.item());
-	 * <p>
-	 * if (other != null) {
-	 * LambDynLights.get().warn("Failed to register item light source \"" + data.id() + "\", duplicates item \""
-	 * + BuiltInRegistries.ITEM.getId(data.item()) + "\" found in \"" + other.id() + "\".");
-	 * return;
-	 * }
-	 * <p>
-	 * STATIC_ITEM_LIGHT_SOURCES.put(data.item(), data);
-	 * }
-	 */
 
 	@Override
 	public int getLuminance(ItemStack stack, boolean submergedInWater) {

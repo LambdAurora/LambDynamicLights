@@ -8,6 +8,7 @@
     "ClientLevelMixin",
     "CommonLevelRendererMixin",
     "DebugScreenOverlayMixin",
+    "DevModeMixin",
     "EntityRendererMixin",
     "EntityTypeMixin",
     "LevelMixin",

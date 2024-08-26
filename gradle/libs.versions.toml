@@ -27,6 +27,8 @@ fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fab
 
 # Dependencies
 yumi-commons-core = { module = "dev.yumi.commons:yumi-commons-core", version.ref = "yumi-commons" }
+yumi-commons-collections = { module = "dev.yumi.commons:yumi-commons-collections", version.ref = "yumi-commons" }
+yumi-commons-event = { module = "dev.yumi.commons:yumi-commons-event", version.ref = "yumi-commons" }
 spruceui = { module = "dev.lambdaurora:spruceui", version.ref = "spruceui" }
 pridelib = { module = "io.github.queerbric:pridelib", version.ref = "pridelib" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
