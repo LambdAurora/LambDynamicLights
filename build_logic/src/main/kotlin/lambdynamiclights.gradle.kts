@@ -5,6 +5,7 @@ import org.gradle.accessors.dm.LibrariesForLibs
 plugins {
 	id("fabric-loom")
 	`java-library`
+	`maven-publish`
 	id("dev.yumi.gradle.licenser")
 }
 
@@ -54,4 +55,26 @@ tasks.jar {
 
 license {
 	rule(rootProject.file("HEADER"))
+}
+
+publishing {
+	repositories {
+		mavenLocal()
+		maven {
+			name = "BuildDirLocal"
+			url = uri("${rootProject.layout.buildDirectory.get()}/repo")
+		}
+
+		val ldlMaven = System.getenv("LDL_MAVEN")
+		if (ldlMaven != null) {
+			maven {
+				name = "LambDynamicLightsMaven"
+				url = uri(ldlMaven)
+				credentials {
+					username = (project.findProperty("gpr.user") as? String) ?: System.getenv("MAVEN_USERNAME")
+					password = (project.findProperty("gpr.key") as? String) ?: System.getenv("MAVEN_PASSWORD")
+				}
+			}
+		}
+	}
 }

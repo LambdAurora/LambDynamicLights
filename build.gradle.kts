@@ -72,10 +72,18 @@ dependencies {
 
 	modRuntimeOnly(libs.sodium)
 
-	shadow(project(":api", configuration = "namedElements"))
-	shadow(libs.yumi.commons.core)
-	shadow(libs.yumi.commons.collections)
-	shadow(libs.yumi.commons.event)
+	shadow(project(":api", configuration = "namedElements")) {
+		isTransitive = false
+	}
+	shadow(libs.yumi.commons.core) {
+		isTransitive = false
+	}
+	shadow(libs.yumi.commons.collections) {
+		isTransitive = false
+	}
+	shadow(libs.yumi.commons.event) {
+		isTransitive = false
+	}
 	shadow(libs.nightconfig.core)
 	shadow(libs.nightconfig.toml)
 }
@@ -174,29 +182,12 @@ publishing {
 		create("mavenJava", MavenPublication::class) {
 			from(components["java"])
 
+			groupId = "$group.lambdynamiclights"
+			artifactId = "lambdynamiclights-runtime"
+
 			pom {
 				name.set("LambDynamicLights")
-				description.set("Adds dynamic lights to Minecraft.")
-			}
-		}
-	}
-
-	repositories {
-		mavenLocal()
-		maven {
-			name = "BuildDirLocal"
-			url = uri("${project.layout.buildDirectory.get()}/repo")
-		}
-
-		val ldlMaven = System.getenv("LDL_MAVEN")
-		if (ldlMaven != null) {
-			maven {
-				name = "LambDynamicLightsMaven"
-				url = uri(ldlMaven)
-				credentials {
-					username = (project.findProperty("gpr.user") as? String) ?: System.getenv("MAVEN_USERNAME")
-					password = (project.findProperty("gpr.key") as? String) ?: System.getenv("MAVEN_PASSWORD")
-				}
+				description.set("Adds dynamic lighting to Minecraft.")
 			}
 		}
 	}

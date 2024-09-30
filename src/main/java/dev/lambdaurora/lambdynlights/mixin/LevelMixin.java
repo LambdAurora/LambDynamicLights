@@ -45,7 +45,8 @@ public abstract class LevelMixin {
 	)
 	private void onBlockEntityTick(
 			CallbackInfo ci,
-			Profiler profiler, Iterator<BlockEntity> iterator, boolean isRemoved, TickingBlockEntity blockEntityTickInvoker
+			Profiler profiler, Iterator<TickingBlockEntity> iterator,
+			boolean isRemoved, TickingBlockEntity blockEntityTickInvoker
 	) {
 		if (this.isClientSide() && LambDynLights.get().config.getBlockEntitiesLightSource().get() && !isRemoved) {
 			var blockEntity = this.getBlockEntity(blockEntityTickInvoker.getPos());
