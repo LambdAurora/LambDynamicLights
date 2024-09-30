@@ -25,7 +25,7 @@ dependencies {
 	@Suppress("UnstableApiUsage")
 	mappings(loom.layered {
 		addLayer(MojangMappingsSpec(false))
-		parchment("org.parchmentmc.data:parchment-${Constants.mcVersion()}:${libs.versions.mappings.parchment.get()}@zip")
+		parchment("org.parchmentmc.data:parchment-${Constants.getMcVersionString()}:${libs.versions.mappings.parchment.get()}@zip")
 		mappings("dev.lambdaurora:yalmm:${Constants.mcVersion()}+build.${libs.versions.mappings.yalmm.get()}")
 	})
 	modImplementation(libs.fabric.loader)

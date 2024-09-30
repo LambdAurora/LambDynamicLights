@@ -88,21 +88,26 @@ registerDynamicLightHandler(EntityType.ITEM_FRAME, entity -> {
  
 ## Item light sources
 
-By default every items will emit the same amount of light as their assigned block if possible.
+By default, every item will emit the same amount of light as their assigned block if possible.
 
-But for items that are not assigned to a block, or for items that should not lit up underwater, there's JSON files to write!
+But for items that are not assigned to a block, or for items that should not light up underwater, there's JSON files to write!
 
-The JSONs are located in `<modid>:dynamiclights/item/<file>.json`.
+The JSONs are located in `<namespace>:dynamiclights/item/<file>.json`.
 
 ### JSON item light source
 
 The format is simple:
 
-- `item` - The identifier of the affected item.
-- `luminance` - Either a number between `0` and `15` and corresponds to the luminance value, 
-    or is a string with either a block identifier to get the luminance from 
-    or `"block"` to use the default assigned block luminance value.
-- `water_sensitive` *(Optional)* - `true` if the item doesn't emit light when submerged in water, else `false`.
+- `match` - The [item predicate](https://minecraft.wiki/w/Template:Nbt_inherit/conditions/item/template) to match the affected items.
+- `luminance` - Can either be:
+  - a number between `0` and `15`, which corresponds to the luminance value.
+  - an object with a type and arguments, which can be:
+    - `{ "type": "block", "block": "<block identifier>" }` to copy the luminance value of the specified block.
+    - `{ "type": "block_self" }` to copy the luminance value of the block already associated with the matched item.
+- `water_sensitive` *(Optional)* - `true` if the item doesn't emit light when submerged in water, or `false` otherwise.
+- `silence_error` *(Optional)* - `true` to silence any kind of runtime error from the item light source,
+  this is heavily discouraged unless you know what you're doing as you will not be made aware of errors!  
+  Errors will still be logged if in a development environment or if the `lambdynamiclights.resource.force_log_errors` property is set to `true`.
 
 #### Examples
 
@@ -110,9 +115,11 @@ The format is simple:
 
 ```json
 {
-  "item": "minecraft:fire_charge",
-  "luminance": 10,
-  "water_sensitive": true
+	"match": {
+		"items": "minecraft:fire_charge"
+	},
+	"luminance": 10,
+	"water_sensitive": true
 }
 ```
 
@@ -120,9 +127,14 @@ The format is simple:
 
 ```json
 {
-  "item": "minecraft:lava_bucket",
-  "luminance": "minecraft:lava",
-  "water_sensitive": true
+	"match": {
+		"items": "minecraft:lava_bucket"
+	},
+	"luminance": {
+		"type": "block",
+		"block": "minecraft:lava"
+	},
+	"water_sensitive": true
 }
 ```
 
@@ -130,8 +142,10 @@ The format is simple:
 
 ```json
 {
-  "item": "minecraft:nether_star",
-  "luminance": 8
+	"match": {
+		"items": "minecraft:nether_star"
+	},
+	"luminance": 8
 }
 ```
 
@@ -139,8 +153,16 @@ The format is simple:
 
 ```json
 {
-  "item": "minecraft:torch",
-  "luminance": "block",
-  "water_sensitive": true
+	"match": {
+		"items": [
+			"minecraft:torch",
+			"minecraft:redstone_torch",
+			"minecraft:soul_torch"
+		]
+	},
+	"luminance": {
+		"type": "block_self"
+	},
+	"water_sensitive": true
 }
 ```
