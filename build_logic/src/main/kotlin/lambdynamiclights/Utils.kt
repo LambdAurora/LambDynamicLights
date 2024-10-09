@@ -4,12 +4,32 @@ import org.gradle.api.Project
 
 object Utils {
 	fun parseReadme(project: Project): String {
-		val excludeRegex = "(?m)<!-- modrinth_exclude\\.start -->(.|\n)*?<!-- modrinth_exclude\\.end -->"
 		val linkRegex = "!\\[([A-z_ ]+)]\\((images\\/[A-z.\\/_]+)\\)"
 
 		var readme = project.rootProject.file("README.md").readText()
-		readme = readme.replace(excludeRegex.toRegex(), "")
-		readme = readme.replace(linkRegex.toRegex(), "![\$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.19/\$2)")
+		val lines = readme.split("\n").toMutableList()
+		val it = lines.listIterator()
+
+		var shouldRemove = false;
+		while (it.hasNext()) {
+			val line = it.next();
+
+			if (line == "<!-- modrinth_exclude.long_start -->") {
+				shouldRemove = true
+			}
+
+			if (shouldRemove) {
+				it.remove()
+			}
+
+			if (line == "<!-- modrinth_exclude.long_end -->") {
+				shouldRemove = false
+			}
+		}
+
+		readme = lines.joinToString("\n")
+		readme = readme.replace(linkRegex.toRegex(), "![\$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.21/\$2)")
+		project.logger.lifecycle("Readme: {}", readme)
 		return readme
 	}
 

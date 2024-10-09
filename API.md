@@ -12,6 +12,26 @@ Block entity dynamic lighting is non-recommended if avoidable with block states.
 
 If your entity re-implements tick without calling the super method the dynamic light handler will not work.
 
+## Gradle Setup
+
+To work with the mod you should add the following to your buildscript:
+
+```gradle
+repositories {
+	maven {
+		name = "Gegy"
+		url = uri("https://maven.gegy.dev")
+	}
+}
+
+dependencies {
+	/* Stuff */
+
+	// For now only this line is needed, in the future this should evolve into separate API and runtime JARs.
+	modImplementation("dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:<version>")
+}
+```
+
 ## LambDynamicLights entrypoint
 
 Any API calls should be done in the custom entrypoint.
