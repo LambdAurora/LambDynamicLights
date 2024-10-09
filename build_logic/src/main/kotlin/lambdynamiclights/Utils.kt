@@ -29,7 +29,6 @@ object Utils {
 
 		readme = lines.joinToString("\n")
 		readme = readme.replace(linkRegex.toRegex(), "![\$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.21/\$2)")
-		project.logger.lifecycle("Readme: {}", readme)
 		return readme
 	}
 

@@ -10,11 +10,9 @@
 package dev.lambdaurora.lambdynlights.mixin;
 
 import dev.lambdaurora.lambdynlights.gui.DynamicLightsOptionsOption;
-import dev.lambdaurora.spruceui.Tooltip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import net.minecraft.client.gui.screens.options.VideoSettingsScreen;
@@ -53,10 +51,5 @@ public abstract class VideoSettingsScreenMixin extends OptionsSubScreen {
 		System.arraycopy(old, 0, options, 0, old.length);
 		options[options.length - 1] = this.lambdynlights$option;
 		return options;
-	}
-
-	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		Tooltip.renderAll(graphics);
 	}
 }

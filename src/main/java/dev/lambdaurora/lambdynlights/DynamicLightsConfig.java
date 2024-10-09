@@ -48,7 +48,6 @@ public class DynamicLightsConfig {
 	private DynamicLightsMode dynamicLightsMode;
 	private final BooleanSettingEntry entitiesLightSource;
 	private final BooleanSettingEntry selfLightSource;
-	private final BooleanSettingEntry blockEntitiesLightSource;
 	private final BooleanSettingEntry waterSensitiveCheck;
 	private ExplosiveLightingMode creeperLightingMode;
 	private ExplosiveLightingMode tntLightingMode;
@@ -82,11 +81,6 @@ public class DynamicLightsConfig {
 							source instanceof LocalPlayer && source == Minecraft.getInstance().player
 					);
 				});
-		this.blockEntitiesLightSource = new BooleanSettingEntry("light_sources.block_entities", DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE, this.config,
-				Text.translatable("lambdynlights.tooltip.block_entities"))
-				.withOnSet(value -> {
-					if (!value) this.mod.removeBlockEntitiesLightSource();
-				});
 		this.waterSensitiveCheck = new BooleanSettingEntry("light_sources.water_sensitive_check", DEFAULT_WATER_SENSITIVE_CHECK, this.config,
 				Text.translatable("lambdynlights.tooltip.water_sensitive"));
 	}
@@ -102,7 +96,6 @@ public class DynamicLightsConfig {
 				.orElse(DEFAULT_DYNAMIC_LIGHTS_MODE);
 		this.entitiesLightSource.load(this.config);
 		this.selfLightSource.load(this.config);
-		this.blockEntitiesLightSource.load(this.config);
 		this.waterSensitiveCheck.load(this.config);
 		this.creeperLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.creeper", DEFAULT_CREEPER_LIGHTING_MODE.getName()))
 				.orElse(DEFAULT_CREEPER_LIGHTING_MODE);
@@ -135,7 +128,6 @@ public class DynamicLightsConfig {
 		this.setDynamicLightsMode(DEFAULT_DYNAMIC_LIGHTS_MODE);
 		this.getEntitiesLightSource().set(DEFAULT_ENTITIES_LIGHT_SOURCE);
 		this.getSelfLightSource().set(DEFAULT_SELF_LIGHT_SOURCE);
-		this.getBlockEntitiesLightSource().set(DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE);
 		this.getWaterSensitiveCheck().set(DEFAULT_WATER_SENSITIVE_CHECK);
 		this.setCreeperLightingMode(DEFAULT_CREEPER_LIGHTING_MODE);
 		this.setTntLightingMode(DEFAULT_TNT_LIGHTING_MODE);
@@ -176,13 +168,6 @@ public class DynamicLightsConfig {
 	 */
 	public BooleanSettingEntry getSelfLightSource() {
 		return this.selfLightSource;
-	}
-
-	/**
-	 * {@return the block entities as light source setting holder}
-	 */
-	public BooleanSettingEntry getBlockEntitiesLightSource() {
-		return this.blockEntitiesLightSource;
 	}
 
 	/**

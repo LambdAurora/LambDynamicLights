@@ -16,13 +16,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author LambdAurora
- * @version 2.3.0
+ * @version 3.0.0
  * @since 1.1.0
  */
 public final class DynamicLightHandlers {
@@ -72,18 +70,6 @@ public final class DynamicLightHandlers {
 		register((DynamicLightHandlerHolder<T>) type, handler);
 	}
 
-	/**
-	 * Registers a block entity dynamic light handler.
-	 *
-	 * @param type the block entity type
-	 * @param handler the dynamic light handler
-	 * @param <T> the type of the block entity
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends BlockEntity> void registerDynamicLightHandler(BlockEntityType<T> type, DynamicLightHandler<T> handler) {
-		register((DynamicLightHandlerHolder<T>) type, handler);
-	}
-
 	private static <T> void register(DynamicLightHandlerHolder<T> holder, DynamicLightHandler<T> handler) {
 		var registeredHandler = holder.lambdynlights$getDynamicLightHandler();
 		if (registeredHandler != null) {
@@ -106,17 +92,6 @@ public final class DynamicLightHandlers {
 	}
 
 	/**
-	 * Returns the registered dynamic light handler of the specified block entity.
-	 *
-	 * @param type the block entity type
-	 * @param <T> the type of the block entity
-	 * @return the registered dynamic light handler
-	 */
-	public static <T extends BlockEntity> @Nullable DynamicLightHandler<T> getDynamicLightHandler(BlockEntityType<T> type) {
-		return DynamicLightHandlerHolder.cast(type).lambdynlights$getDynamicLightHandler();
-	}
-
-	/**
 	 * Returns whether the given entity can light up.
 	 *
 	 * @param entity the entity
@@ -127,18 +102,6 @@ public final class DynamicLightHandlers {
 		if (entity == Minecraft.getInstance().player && !LambDynLights.get().config.getSelfLightSource().get())
 			return false;
 
-		var setting = DynamicLightHandlerHolder.cast(entity.getType()).lambdynlights$getSetting();
-		return !(setting == null || !setting.get());
-	}
-
-	/**
-	 * Returns whether the given block entity can light up.
-	 *
-	 * @param entity the entity
-	 * @param <T> the type of the block entity
-	 * @return {@code true} if the block entity can light up, otherwise {@code false}
-	 */
-	public static <T extends BlockEntity> boolean canLightUp(T entity) {
 		var setting = DynamicLightHandlerHolder.cast(entity.getType()).lambdynlights$getSetting();
 		return !(setting == null || !setting.get());
 	}
@@ -163,27 +126,6 @@ public final class DynamicLightHandlers {
 			return 0;
 		if (handler.isWaterSensitive(entity)
 				&& !entity.level().getFluidState(BlockPos.ofFloored(entity.getX(), entity.getEyeY(), entity.getZ())).isEmpty())
-			return 0;
-		return handler.getLuminance(entity);
-	}
-
-	/**
-	 * Returns the luminance from a block entity.
-	 *
-	 * @param entity the block entity
-	 * @param <T> the type of the block entity
-	 * @return the luminance
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends BlockEntity> int getLuminanceFrom(T entity) {
-		if (!LambDynLights.get().config.getBlockEntitiesLightSource().get())
-			return 0;
-		DynamicLightHandler<T> handler = (DynamicLightHandler<T>) getDynamicLightHandler(entity.getType());
-		if (handler == null)
-			return 0;
-		if (!canLightUp(entity))
-			return 0;
-		if (handler.isWaterSensitive(entity) && entity.getLevel() != null && !entity.getLevel().getFluidState(entity.getPos()).isEmpty())
 			return 0;
 		return handler.getLuminance(entity);
 	}

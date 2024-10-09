@@ -35,7 +35,6 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -365,13 +364,6 @@ public class LambDynLights implements ClientModInitializer {
 	 */
 	public void removeTntLightSources() {
 		this.removeLightSources(entity -> entity instanceof PrimedTnt);
-	}
-
-	/**
-	 * Removes block entities light source from tracked light sources.
-	 */
-	public void removeBlockEntitiesLightSource() {
-		this.removeLightSources(lightSource -> lightSource instanceof BlockEntity);
 	}
 
 	/**

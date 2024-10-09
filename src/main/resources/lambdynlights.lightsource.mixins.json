@@ -6,7 +6,6 @@
     "AbstractHurtingProjectileEntityMixin",
     "AbstractMinecartEntityMixin",
     "BlockAttachedEntityMixin",
-    "BlockEntityMixin",
     "EntityMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",

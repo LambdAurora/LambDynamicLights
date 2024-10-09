@@ -3,12 +3,12 @@
   "id": "lambdynlights",
   "name": "LambDynamicLights",
   "version": "${version}",
-  "description": "Adds dynamic lights to the game.",
+  "description": "Adds dynamic lighting to the game.",
   "authors": [
     "LambdAurora"
   ],
   "contact": {
-    "homepage": "https://modrinth.com/mod/lambdynamiclights",
+    "homepage": "https://lambdaurora.dev/projects/lambdynamiclights",
     "sources": "https://github.com/LambdAurora/LambDynamicLights.git",
     "issues": "https://github.com/LambdAurora/LambDynamicLights/issues"
   },
@@ -29,7 +29,7 @@
     "lambdynlights.lightsource.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.11",
+    "fabricloader": ">=0.16.5",
     "fabric-api": ">=0.100.4+1.21",
     "minecraft": "~1.21",
     "spruceui": ">=5.1.0",
