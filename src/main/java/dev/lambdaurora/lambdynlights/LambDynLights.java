@@ -49,15 +49,14 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 3.0.0
+ * @version 3.0.1
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer {
-	public static final String NAMESPACE = "lambdynlights";
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights");
 	private static final double MAX_RADIUS = 7.75;
 	private static final double MAX_RADIUS_SQUARED = MAX_RADIUS * MAX_RADIUS;
-	public static final EventManager<Identifier> EVENT_MANAGER = new EventManager<>(Identifier.of(NAMESPACE, "default"), Identifier::parse);
+	public static final EventManager<Identifier> EVENT_MANAGER = new EventManager<>(Identifier.of(LambDynLightsConstants.NAMESPACE, "default"), Identifier::parse);
 	private static LambDynLights INSTANCE;
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
 	public final ItemLightSources itemLightSources = new ItemLightSources();
@@ -81,7 +80,7 @@ public class LambDynLights implements ClientModInitializer {
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 			@Override
 			public Identifier getFabricId() {
-				return Identifier.of(NAMESPACE, "dynamiclights_resources");
+				return Identifier.of(LambDynLightsConstants.NAMESPACE, "dynamiclights_resources");
 			}
 
 			@Override
@@ -96,12 +95,6 @@ public class LambDynLights implements ClientModInitializer {
 		});
 
 		DynamicLightHandlers.registerDefaultHandlers();
-	}
-
-	public static boolean isDevMode() {
-		return FabricLoader.getInstance().getModContainer(NAMESPACE)
-				.map(modContainer -> modContainer.getMetadata().getVersion().getFriendlyString().endsWith("-local"))
-				.orElse(true);
 	}
 
 	/**

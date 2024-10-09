@@ -22,7 +22,7 @@ import java.util.Set;
  * LambDynamicLights mixin plugin for conditional mixins.
  *
  * @author LambdAurora
- * @version 3.0.0
+ * @version 3.0.1
  * @since 1.0.0
  */
 public class LambDynLightsMixinPlugin implements IMixinConfigPlugin {
@@ -34,7 +34,7 @@ public class LambDynLightsMixinPlugin implements IMixinConfigPlugin {
 		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.sodium.FlatLightPipelineMixin", sodium05XInstalled);
 		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.sodium.LightDataAccessMixin", sodium05XInstalled);
 
-		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.DevModeMixin", LambDynLights.isDevMode());
+		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.DevModeMixin", LambDynLightsConstants.isDevMode());
 	}
 
 	@Override

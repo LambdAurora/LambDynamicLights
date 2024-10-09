@@ -191,6 +191,10 @@
   - This may be re-introduced if a valid use-case is found.
 - Switched license to [Lambda License](https://github.com/LambdAurora/LambDynamicLights/blob/bbefb8860bca2e797f8a2ba8a59d1120b6e1c7b4/LICENSE).
 
+### 3.0.1
+
+- Fixed crash due to Mixin plugin ([#239](https://github.com/LambdAurora/LambDynamicLights/issues/239)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
