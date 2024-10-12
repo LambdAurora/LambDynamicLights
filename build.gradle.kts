@@ -30,10 +30,6 @@ repositories {
 		url = uri("https://maven.gegy.dev")
 	}
 	maven {
-		name = "grondag"
-		url = uri("https://maven.dblsaiko.net/")
-	}
-	maven {
 		name = "ParchmentMC"
 		url = uri("https://maven.parchmentmc.org")
 	}
@@ -130,7 +126,7 @@ modrinth {
 		changelog.set(changelogContent)
 	} else {
 		afterEvaluate {
-			tasks.modrinth.get().setEnabled(false)
+			tasks.modrinth.get().isEnabled = false
 		}
 	}
 }
@@ -139,8 +135,8 @@ tasks.modrinth {
 	dependsOn(tasks.modrinthSyncBody)
 }
 
-tasks.register("curseforge", TaskPublishCurseForge::class) {
-	this.setGroup("publishing")
+tasks.register<TaskPublishCurseForge>("curseforge") {
+	this.group = "publishing"
 
 	val token = System.getenv("CURSEFORGE_TOKEN")
 	if (token != null) {
@@ -179,7 +175,7 @@ tasks.register("curseforge", TaskPublishCurseForge::class) {
 // Configure the maven publication.
 publishing {
 	publications {
-		create("mavenJava", MavenPublication::class) {
+		create<MavenPublication>("mavenJava") {
 			from(components["java"])
 
 			groupId = "$group.lambdynamiclights"

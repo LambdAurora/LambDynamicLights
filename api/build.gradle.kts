@@ -9,7 +9,7 @@ base.archivesName.set(Constants.NAME + "-api")
 // Configure the maven publication.
 publishing {
 	publications {
-		create("mavenJava", MavenPublication::class) {
+		create<MavenPublication>("mavenJava") {
 			from(components["java"])
 
 			groupId = "$group.lambdynamiclights"
