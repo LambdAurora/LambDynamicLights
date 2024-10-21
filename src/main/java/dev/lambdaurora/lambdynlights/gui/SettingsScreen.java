@@ -12,38 +12,39 @@ package dev.lambdaurora.lambdynlights.gui;
 import dev.lambdaurora.lambdynlights.DynamicLightsConfig;
 import dev.lambdaurora.lambdynlights.ExplosiveLightingMode;
 import dev.lambdaurora.lambdynlights.LambDynLights;
-import dev.lambdaurora.lambdynlights.LambDynLightsCompat;
 import dev.lambdaurora.lambdynlights.accessor.DynamicLightHandlerHolder;
 import dev.lambdaurora.spruceui.Position;
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.background.Background;
-import dev.lambdaurora.spruceui.background.DirtTexturedBackground;
 import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
 import dev.lambdaurora.spruceui.option.SpruceSeparatorOption;
 import dev.lambdaurora.spruceui.option.SpruceSimpleActionOption;
 import dev.lambdaurora.spruceui.screen.SpruceScreen;
-import dev.lambdaurora.spruceui.util.RenderUtil;
 import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
 import dev.lambdaurora.spruceui.widget.SpruceLabelWidget;
 import dev.lambdaurora.spruceui.widget.container.SpruceContainerWidget;
 import dev.lambdaurora.spruceui.widget.container.SpruceOptionListWidget;
+import dev.lambdaurora.spruceui.widget.container.SpruceParentWidget;
 import dev.lambdaurora.spruceui.widget.container.tabbed.SpruceTabbedWidget;
+import dev.lambdaurora.spruceui.widget.text.SpruceTextFieldWidget;
 import net.minecraft.TextFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Text;
+import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 3.0.0
+ * @version 3.2.0
  * @since 1.0.0
  */
 public class SettingsScreen extends SpruceScreen {
@@ -58,6 +59,7 @@ public class SettingsScreen extends SpruceScreen {
 	private final SpruceOption tntLightingOption;
 	private final SpruceOption resetOption;
 	private SpruceTabbedWidget tabbedWidget;
+	private SpruceTextFieldWidget searchInput;
 
 	public SettingsScreen(@Nullable Screen parent) {
 		super(Text.translatable("lambdynlights.menu.title"));
@@ -104,7 +106,13 @@ public class SettingsScreen extends SpruceScreen {
 
 		var dynamicLightSources = Text.translatable(DYNAMIC_LIGHT_SOURCES_KEY);
 
-		this.tabbedWidget = new SpruceTabbedWidget(Position.origin(), this.width, this.height, null, Math.max(100, this.width / 8), 0);
+		int tabIndex = 0;
+		if (this.tabbedWidget != null) {
+			var oldEntry = this.tabbedWidget.getList().getCurrentTab();
+			tabIndex = this.tabbedWidget.getList().children().indexOf(oldEntry);
+		}
+
+		this.tabbedWidget = new SpruceTabbedWidget(Position.origin(), this.width, this.height, this.title.copy(), Math.max(100, this.width / 8));
 		this.tabbedWidget.getList().setBackground(RandomPrideFlagBackground.random());
 		this.tabbedWidget.addTabEntry(Text.translatable("lambdynlights.menu.tabs.general"), null,
 				this.tabContainerBuilder(this::buildGeneralTab));
@@ -112,80 +120,80 @@ public class SettingsScreen extends SpruceScreen {
 		this.tabbedWidget.addTabEntry(Text.empty().append(dynamicLightSources).append(": ").append(this.entitiesOption.getPrefix()),
 				null, this.tabContainerBuilder(this::buildEntitiesTab));
 		this.addWidget(this.tabbedWidget);
+
+		if (tabIndex > 0 && this.tabbedWidget.getList().children().get(tabIndex) instanceof SpruceTabbedWidget.TabEntry tabEntry) {
+			this.tabbedWidget.getList().setSelected(tabEntry);
+		}
 	}
 
-	private SpruceTabbedWidget.ContainerFactory tabContainerBuilder(SpruceTabbedWidget.ContainerFactory innerFactory) {
+	private SpruceTabbedWidget.ContainerFactory tabContainerBuilder(Consumer<TabContext> innerFactory) {
 		return (width, height) -> this.buildTabContainer(width, height, innerFactory);
 	}
 
-	private SpruceContainerWidget buildTabContainer(int width, int height, SpruceTabbedWidget.ContainerFactory factory) {
+	private SpruceContainerWidget buildTabContainer(int width, int height, Consumer<TabContext> tabConsumer) {
 		var container = new SpruceContainerWidget(Position.origin(), width, height);
-		var label = new SpruceLabelWidget(Position.of(0, 18), this.title.copy().withStyle(TextFormatting.WHITE), width);
-		label.setCentered(true);
-		container.addChild(label);
 
-		var innerWidget = factory.build(width, height - this.getTextHeight() - 29
-				- (LambDynLightsCompat.isCanvasInstalled() ? 43 : 0));
-		innerWidget.getPosition().setRelativeY(43);
-		container.addChild(innerWidget);
-
-		container.setBackground((graphics, widget, vOffset, mouseX, mouseY, delta) -> {
-			if (this.client.level != null) {
-				graphics.fillGradient(widget.getX(), widget.getY(),
-						widget.getX() + widget.getWidth(), innerWidget.getY(),
-						0xc0101010, 0xd0101010);
-				graphics.fillGradient(widget.getX(), innerWidget.getY() + innerWidget.getHeight(),
-						widget.getX() + widget.getWidth(), widget.getY() + widget.getHeight(),
-						0xc0101010, 0xd0101010);
-			} else {
-				var bg = (DirtTexturedBackground) DirtTexturedBackground.NORMAL;
-				RenderUtil.renderBackgroundTexture(widget.getX(), widget.getY(),
-						widget.getWidth(), innerWidget.getY() - widget.getY(),
-						vOffset / 32.f, bg.red(), bg.green(), bg.blue(), bg.alpha());
-				RenderUtil.renderBackgroundTexture(widget.getX(), innerWidget.getY() + innerWidget.getHeight(),
-						widget.getWidth(), widget.getHeight() - (innerWidget.getY() + innerWidget.getHeight()),
-						vOffset / 32.f, bg.red(), bg.green(), bg.blue(), bg.alpha());
-			}
-		});
-
-		if (LambDynLightsCompat.isCanvasInstalled()) {
-			var firstLine = new SpruceLabelWidget(Position.of(0, height - 29 - (5 + this.font.lineHeight) * 3),
-					Text.translatable("lambdynlights.menu.canvas.1"), width);
-			firstLine.setCentered(true);
-			container.addChild(firstLine);
-			label = new SpruceLabelWidget(Position.of(0, firstLine.getY() + firstLine.getHeight() + 5),
-					Text.translatable("lambdynlights.menu.canvas.2"), width);
-			label.setCentered(true);
-			container.addChild(label);
-		}
+		tabConsumer.accept(new TabContext(
+				this.tabbedWidget,
+				container,
+				height - this.tabbedWidget.getList().getPosition().getRelativeY() - 40
+		));
 
 		container.addChild(this.resetOption.createWidget(Position.of(this, width / 2 - 155, height - 29), 150));
 		container.addChild(new SpruceButtonWidget(Position.of(this, width / 2 - 155 + 160, height - 29), 150, 20,
 				SpruceTexts.GUI_DONE,
-				btn -> this.client.setScreen(this.parent)));
+				btn -> this.client.setScreen(this.parent)
+		));
 
 		return container;
 	}
 
-	private SpruceOptionListWidget buildGeneralTab(int width, int height) {
-		var list = new SpruceOptionListWidget(Position.of(0, 0), width, height);
-		list.setBackground(INNER_BACKGROUND);
+	private void buildGeneralTab(TabContext context) {
+		var list = new SpruceOptionListWidget(Position.of(0, 0), context.width(), context.height());
 		list.addSingleOptionEntry(this.config.dynamicLightsModeOption);
 		list.addSingleOptionEntry(new SpruceSeparatorOption(DYNAMIC_LIGHT_SOURCES_KEY, true, null));
 		list.addOptionEntry(this.entitiesOption, this.selfOption);
 		list.addOptionEntry(this.waterSensitiveOption, null);
 		list.addOptionEntry(this.creeperLightingOption, this.tntLightingOption);
-		return list;
+		context.addInnerWidget(list);
 	}
 
-	private LightSourceListWidget buildEntitiesTab(int width, int height) {
-		return this.buildLightSourcesTab(width, height, BuiltInRegistries.ENTITY_TYPE.stream().map(DynamicLightHandlerHolder::cast).collect(Collectors.toList()));
+	private void buildEntitiesTab(TabContext context) {
+		this.buildLightSourcesTab(context, BuiltInRegistries.ENTITY_TYPE.stream().map(DynamicLightHandlerHolder::cast).collect(Collectors.toList()));
 	}
 
-	private LightSourceListWidget buildLightSourcesTab(int width, int height, List<DynamicLightHandlerHolder<?>> entries) {
-		var list = new LightSourceListWidget(Position.of(0, 0), width, height);
-		list.setBackground(INNER_BACKGROUND);
+	private void buildLightSourcesTab(TabContext context, List<DynamicLightHandlerHolder<?>> entries) {
+		var oldSearch = this.searchInput != null ? this.searchInput.getText() : "";
+		this.searchInput = context.addSearchInput();
+		var list = new LightSourceListWidget(Position.of(0, 0), context.width(), context.height(), this.searchInput);
 		list.addAll(entries);
-		return list;
+		context.addInnerWidget(list);
+		this.searchInput.setText(oldSearch);
+	}
+
+	record TabContext(SpruceTabbedWidget tabbedWidget, SpruceContainerWidget container, int height) {
+		int width() {
+			return this.container().getWidth();
+		}
+
+		SpruceTextFieldWidget addSearchInput() {
+			var searchText = Text.translatable("lambdynlights.menu.search");
+			var textWidth = Minecraft.getInstance().font.width(searchText);
+			int searchInputX = this.width() - 140;
+
+			this.container.addChild(new SpruceLabelWidget(Position.of(searchInputX - 4 - textWidth, 8), searchText, textWidth));
+
+			var searchInput = SpruceTextFieldWidget.builder(Position.of(searchInputX, 4), 136, 20)
+					.title(Text.literal("Search"))
+					.placeholder(EntityType.BLAZE.getDescription().copy().withStyle(TextFormatting.GRAY, TextFormatting.ITALIC))
+					.build();
+			this.container().addChild(searchInput);
+			return searchInput;
+		}
+
+		void addInnerWidget(SpruceParentWidget<?> widget) {
+			widget.getPosition().setRelativeY(this.tabbedWidget.getList().getPosition().getRelativeY());
+			this.container().addChild(widget);
+		}
 	}
 }

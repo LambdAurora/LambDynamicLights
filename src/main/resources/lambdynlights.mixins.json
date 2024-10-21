@@ -12,9 +12,6 @@
     "EntityTypeMixin",
     "MinecraftClientMixin",
     "VideoSettingsScreenMixin",
-    "sodium.ArrayLightDataCacheMixin",
-    "sodium.FlatLightPipelineMixin",
-    "sodium.LightDataAccessMixin",
     "sodium.SodiumOptionsGuiMixin",
     "fabric.AoCalculatorMixin"
   ],

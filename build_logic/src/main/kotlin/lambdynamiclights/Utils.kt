@@ -28,7 +28,7 @@ object Utils {
 		}
 
 		readme = lines.joinToString("\n")
-		readme = readme.replace(linkRegex.toRegex(), "![\$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.21/\$2)")
+		readme = readme.replace(linkRegex.toRegex(), "![\$1](https://raw.githubusercontent.com/LambdAurora/LambDynamicLights/1.21.2/\$2)")
 		return readme
 	}
 

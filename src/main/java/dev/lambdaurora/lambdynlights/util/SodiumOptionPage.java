@@ -10,7 +10,6 @@
 package dev.lambdaurora.lambdynlights.util;
 
 import com.google.common.collect.ImmutableList;
-import dev.lambdaurora.lambdynlights.LambDynLightsCompat;
 import net.minecraft.network.chat.Text;
 
 import java.lang.invoke.MethodHandle;
@@ -36,9 +35,7 @@ public final class SodiumOptionPage {
 
 	static {
 		try {
-			Class<?> optionPage = LambDynLightsCompat.isSodium05XInstalled()
-					? Class.forName("me.jellysquid.mods.sodium.client.gui.options.OptionPage")
-					: Class.forName("net.caffeinemc.mods.sodium.client.gui.options.OptionPage");
+			Class<?> optionPage = Class.forName("net.caffeinemc.mods.sodium.client.gui.options.OptionPage");
 			CREATE_OPTION_PAGE = MethodHandles.lookup().unreflectConstructor(optionPage.getConstructor(Text.class, ImmutableList.class));
 		} catch (IllegalAccessException | NoSuchMethodException | ClassNotFoundException e) {
 			throw new RuntimeException(e);

@@ -1,16 +1,15 @@
 [versions]
-minecraft = "1.21.1"
-fabric-loader = "0.16.5"
-fabric-api = "0.105.0+1.21.1"
-mappings-yalmm = "2"
+minecraft = "1.21.2"
+fabric-loader = "0.16.7"
+fabric-api = "0.106.1+1.21.2"
+mappings-yalmm = "7"
 mappings-parchment = "2024.07.28"
 
 # Dependencies
 yumi-commons = "1.0.0-alpha.1"
-spruceui = "5.1.0+1.21"
-pridelib = "1.2.1+1.21"
-modmenu = "11.0.1"
-sodium = "mc1.21-0.5.9"
+spruceui = "6.1.0+1.21.2"
+pridelib = "1.3.0+1.21.2"
+modmenu = "12.0.0-beta.1"
 
 # Configuration
 nightconfig = "3.8.1"
@@ -32,7 +31,6 @@ yumi-commons-event = { module = "dev.yumi.commons:yumi-commons-event", version.r
 spruceui = { module = "dev.lambdaurora:spruceui", version.ref = "spruceui" }
 pridelib = { module = "io.github.queerbric:pridelib", version.ref = "pridelib" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
-sodium = { module = "maven.modrinth:sodium", version.ref = "sodium" }
 
 # Configuration
 nightconfig-core = { module = "com.electronwill.night-config:core", version.ref = "nightconfig" }

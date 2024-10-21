@@ -22,13 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Pseudo
-@Mixin(
-		targets = {
-				"me.jellysquid.mods.sodium.client.gui.SodiumOptionsGUI",
-				"net.caffeinemc.mods.sodium.client.gui.SodiumOptionsGUI"
-		},
-		remap = false
-)
+@Mixin(targets = "net.caffeinemc.mods.sodium.client.gui.SodiumOptionsGUI", remap = false)
 public class SodiumOptionsGuiMixin extends Screen {
 	@Shadow(remap = false)
 	@Final

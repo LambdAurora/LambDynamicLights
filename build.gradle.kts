@@ -20,29 +20,13 @@ logger.lifecycle("Preparing version ${version}...")
 
 repositories {
 	mavenLocal()
-	mavenCentral()
 	maven {
 		name = "Terraformers"
 		url = uri("https://maven.terraformersmc.com/releases/")
 	}
 	maven {
-		name = "Gegy"
-		url = uri("https://maven.gegy.dev")
-	}
-	maven {
 		name = "ParchmentMC"
 		url = uri("https://maven.parchmentmc.org")
-	}
-	exclusiveContent {
-		forRepository {
-			maven {
-				name = "Modrinth"
-				url = uri("https://api.modrinth.com/maven")
-			}
-		}
-		filter {
-			includeGroup("maven.modrinth")
-		}
 	}
 }
 
@@ -65,8 +49,6 @@ dependencies {
 	modImplementation(libs.modmenu) {
 		this.isTransitive = false
 	}
-
-	modRuntimeOnly(libs.sodium)
 
 	shadow(project(":api", configuration = "namedElements")) {
 		isTransitive = false

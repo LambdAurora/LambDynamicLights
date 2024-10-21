@@ -12,6 +12,7 @@ package dev.lambdaurora.lambdynlights.api.item;
 import dev.yumi.commons.event.Event;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -82,7 +83,12 @@ public interface ItemLightSourceManager {
 		 * @see #register(ItemLike, ItemLuminance)
 		 */
 		default void register(ItemLike item, int luminance) {
-			this.register(new ItemLightSource(ItemPredicate.Builder.item().of(item).build(), luminance));
+			this.register(new ItemLightSource(
+					ItemPredicate.Builder.item()
+							.of(this.registryAccess().lookupOrThrow(Registries.ITEM), item)
+							.build(),
+					luminance
+			));
 		}
 
 		/**
@@ -94,7 +100,12 @@ public interface ItemLightSourceManager {
 		 * @see #register(ItemLike, int)
 		 */
 		default void register(ItemLike item, ItemLuminance luminance) {
-			this.register(new ItemLightSource(ItemPredicate.Builder.item().of(item).build(), luminance));
+			this.register(new ItemLightSource(
+					ItemPredicate.Builder.item()
+							.of(this.registryAccess().lookupOrThrow(Registries.ITEM), item)
+							.build(),
+					luminance
+			));
 		}
 	}
 }

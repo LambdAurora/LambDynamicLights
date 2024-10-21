@@ -30,13 +30,13 @@
   ],
   "depends": {
     "fabricloader": ">=0.16.5",
-    "fabric-api": ">=0.100.4+1.21",
-    "minecraft": "~1.21",
-    "spruceui": ">=5.1.0",
+    "fabric-api": ">=0.106.1+1.21.2",
+    "minecraft": ">=1.21.2",
+    "spruceui": ">=6.1.0",
     "java": ">=21"
   },
   "recommends": {
-    "modmenu": ">=11.0.0"
+    "modmenu": ">=12.0.0-beta.1"
   },
   "suggests": {
     "ears": "*",
@@ -52,6 +52,7 @@
         "modmenu.discord": "https://discord.lambdaurora.dev/",
         "modmenu.github_releases": "https://github.com/LambdAurora/LambDynamicLights/releases",
         "modmenu.modrinth": "https://modrinth.com/mod/lambdynamiclights",
+        "modmenu.bluesky": "https://bsky.app/profile/lambdaurora.dev",
         "modmenu.twitter": "https://twitter.com/LambdAurora"
       }
     },

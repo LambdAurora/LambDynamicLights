@@ -29,13 +29,8 @@ public class LambDynLightsMixinPlugin implements IMixinConfigPlugin {
 	private final Object2BooleanMap<String> conditionalMixins = new Object2BooleanOpenHashMap<>();
 
 	public LambDynLightsMixinPlugin() {
-		boolean sodium05XInstalled = LambDynLightsCompat.isSodium05XInstalled();
-		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.sodium.ArrayLightDataCacheMixin", sodium05XInstalled);
-		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.sodium.FlatLightPipelineMixin", sodium05XInstalled);
-		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.sodium.LightDataAccessMixin", sodium05XInstalled);
-		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.sodium.SodiumOptionsGuiMixin", LambDynLightsCompat.isSodiumInstalled());
-
 		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.DevModeMixin", LambDynLightsConstants.isDevMode());
+		this.conditionalMixins.put("dev.lambdaurora.lambdynlights.mixin.sodium.SodiumOptionsGuiMixin", LambDynLightsCompat.isSodiumInstalled());
 	}
 
 	@Override

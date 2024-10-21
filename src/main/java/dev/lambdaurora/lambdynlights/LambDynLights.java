@@ -25,12 +25,14 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.resources.io.ResourceType;
+import net.minecraft.util.profiling.Profiler;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -107,7 +109,7 @@ public class LambDynLights implements ClientModInitializer {
 		});
 
 		WorldRenderEvents.START.register(context -> {
-			Minecraft.getInstance().getProfiler().swap("dynamic_lighting");
+			Profiler.get().swap("dynamic_lighting");
 			this.updateAll(context.worldRenderer());
 		});
 
@@ -152,21 +154,10 @@ public class LambDynLights implements ClientModInitializer {
 	 * @return the modified lightmap coordinates
 	 */
 	public int getLightmapWithDynamicLight(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, int lightmap) {
-		return this.getLightmapWithDynamicLight(this.getDynamicLightLevel(pos), lightmap);
-	}
-
-	/**
-	 * Returns the lightmap with combined light levels.
-	 *
-	 * @param entity the entity
-	 * @param lightmap the vanilla lightmap coordinates
-	 * @return the modified lightmap coordinates
-	 */
-	public int getLightmapWithDynamicLight(@NotNull Entity entity, int lightmap) {
-		int posLightLevel = (int) this.getDynamicLightLevel(entity.getOnPos());
-		int entityLuminance = ((DynamicLightSource) entity).getLuminance();
-
-		return this.getLightmapWithDynamicLight(Math.max(posLightLevel, entityLuminance), lightmap);
+		if (!(level instanceof ClientLevel)) this.lightSourcesLock.readLock().lock();
+		double light = this.getDynamicLightLevel(pos);
+		if (!(level instanceof ClientLevel)) this.lightSourcesLock.readLock().unlock();
+		return this.getLightmapWithDynamicLight(light, lightmap);
 	}
 
 	/**
@@ -200,10 +191,7 @@ public class LambDynLights implements ClientModInitializer {
 	 * @return the dynamic light level at the specified position
 	 */
 	public double getDynamicLightLevel(@NotNull BlockPos pos) {
-		this.lightSourcesLock.readLock().lock();
-		double light = this.engine.getDynamicLightLevel(pos);
-		this.lightSourcesLock.readLock().unlock();
-		return light;
+		return this.engine.getDynamicLightLevel(pos);
 	}
 
 	/**

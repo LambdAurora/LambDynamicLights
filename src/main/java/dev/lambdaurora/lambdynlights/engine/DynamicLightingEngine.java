@@ -30,7 +30,7 @@ public final class DynamicLightingEngine {
 	private static final double MAX_RADIUS = 7.75;
 	private static final double MAX_RADIUS_SQUARED = MAX_RADIUS * MAX_RADIUS;
 	private static final int CELL_SIZE = MathHelper.ceil(MAX_RADIUS);
-	private static final int MAX_LIGHT_SOURCES = 1024;
+	public static final int MAX_LIGHT_SOURCES = 1024;
 	private static final Vec3i[] CELL_OFFSETS;
 
 	private final SpatialLookupEntry[] spatialLookupEntries = new SpatialLookupEntry[MAX_LIGHT_SOURCES];

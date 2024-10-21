@@ -15,6 +15,7 @@ import dev.lambdaurora.lambdynlights.api.DynamicLightHandler;
 import dev.lambdaurora.lambdynlights.config.LightSourceSettingEntry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Text;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
@@ -67,5 +68,11 @@ public abstract class EntityTypeMixin<T extends Entity> implements DynamicLightH
 			return Text.translatable("lambdynlights.dummy");
 		}
 		return name;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Identifier lambdynlights$getId() {
+		return EntityType.getKey((EntityType) (Object) this);
 	}
 }

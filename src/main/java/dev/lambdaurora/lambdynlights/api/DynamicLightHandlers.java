@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author LambdAurora
- * @version 3.0.0
+ * @version 3.2.0
  * @since 1.1.0
  */
 public final class DynamicLightHandlers {
@@ -32,6 +32,7 @@ public final class DynamicLightHandlers {
 	 * Registers the default handlers.
 	 */
 	public static void registerDefaultHandlers() {
+		registerDynamicLightHandler(EntityType.ALLAY, DynamicLightHandler.makeHandler(blaze -> 8, blaze -> true));
 		registerDynamicLightHandler(EntityType.BLAZE, DynamicLightHandler.makeHandler(blaze -> 10, blaze -> true));
 		registerDynamicLightHandler(EntityType.CREEPER, DynamicLightHandler.makeCreeperEntityHandler(null));
 		registerDynamicLightHandler(EntityType.ENDERMAN, entity -> {

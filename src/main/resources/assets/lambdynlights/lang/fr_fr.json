@@ -4,6 +4,7 @@
   "lambdynlights.menu.canvas.1": "La désactivation de l'éclairage dynamique provenant des entités est recommendée avec Canvas !",
   "lambdynlights.menu.canvas.2": "L'éclairage dynamique avec Canvas est actuellement très demandant en ressources !",
   "lambdynlights.menu.tabs.general": "Général",
+  "lambdynlights.menu.search": "Recherche:",
   "lambdynlights.option.light_sources.block_entities": "Entités de blocs",
   "lambdynlights.option.light_sources.entities": "Entités",
   "lambdynlights.option.light_sources.self": "Première personne",

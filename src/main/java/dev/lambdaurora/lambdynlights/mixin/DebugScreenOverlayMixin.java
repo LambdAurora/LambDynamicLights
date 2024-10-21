@@ -10,6 +10,7 @@
 package dev.lambdaurora.lambdynlights.mixin;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
+import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import net.minecraft.TextFormatting;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +24,7 @@ import java.util.List;
  * Adds a debug string for dynamic light sources tracking and updates.
  *
  * @author LambdAurora
- * @version 1.3.2
+ * @version 3.2.0
  * @since 1.3.2
  */
 @Mixin(DebugScreenOverlay.class)
@@ -34,6 +35,8 @@ public class DebugScreenOverlayMixin {
 		var ldl = LambDynLights.get();
 		var builder = new StringBuilder("Dynamic Light Sources: ");
 		builder.append(ldl.getLightSourcesCount())
+				.append("/")
+				.append(DynamicLightingEngine.MAX_LIGHT_SOURCES)
 				.append(" (U: ")
 				.append(ldl.getLastUpdateCount());
 

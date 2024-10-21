@@ -21,6 +21,14 @@ loom {
 	runtimeOnlyLog4j = true
 }
 
+repositories {
+	mavenCentral()
+	maven {
+		name = "Gegy"
+		url = uri("https://maven.gegy.dev")
+	}
+}
+
 dependencies {
 	minecraft(libs.minecraft)
 	@Suppress("UnstableApiUsage")

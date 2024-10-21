@@ -4,6 +4,7 @@
   "lambdynlights.menu.canvas.1": "Wyłączenie dynamicznego oświetlenia dla bytów jest zalecane w przypadku użycia Canvas! ",
   "lambdynlights.menu.canvas.2": "Na tą chwilę dynamiczne oświetlenie użyte z Canvasem powoduje spadek wydajności!",
   "lambdynlights.menu.tabs.general": "Ogólne",
+  "lambdynlights.menu.search": "Szukaj:",
   "lambdynlights.option.light_sources.block_entities": "Byty bloków",
   "lambdynlights.option.light_sources.entities": "Byty",
   "lambdynlights.option.light_sources.self": "Pierwsza osoba",

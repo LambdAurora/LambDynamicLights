@@ -4,6 +4,7 @@
   "lambdynlights.menu.canvas.1": "Disabling entities dynamic lighting is recommended with Canvas!",
   "lambdynlights.menu.canvas.2": "Dynamic lighting with Canvas is currently performance heavy!",
   "lambdynlights.menu.tabs.general": "General",
+  "lambdynlights.menu.search": "Search:",
   "lambdynlights.option.light_sources.block_entities": "Block Entities",
   "lambdynlights.option.light_sources.entities": "Entities",
   "lambdynlights.option.light_sources.self": "First-person",
@@ -17,5 +18,6 @@
   "lambdynlights.tooltip.mode.3": "%s is smooth dynamic lighting.",
   "lambdynlights.tooltip.self_light_source": "Enables first-person dynamic lighting. It's recommended to disable this if you're using shaders that has their own dynamic lighting.",
   "lambdynlights.tooltip.tnt_lighting": "Sets the TNT dynamic lighting mode.\n- %s disables TNT dynamic lighting.\n- %s sets a constant luminance.\n- %s sets a dynamic luminance.",
-  "lambdynlights.tooltip.water_sensitive": "Enables the water-sensitive light sources check. This means that some items will not emit light while being submerged in water."
+  "lambdynlights.tooltip.water_sensitive": "Enables the water-sensitive light sources check. This means that some items will not emit light while being submerged in water.",
+  "modmenu.bluesky": "Bluesky"
 }

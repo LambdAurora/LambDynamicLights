@@ -22,44 +22,103 @@ import dev.lambdaurora.spruceui.widget.SpruceWidget;
 import dev.lambdaurora.spruceui.widget.WithBackground;
 import dev.lambdaurora.spruceui.widget.container.SpruceEntryListWidget;
 import dev.lambdaurora.spruceui.widget.container.SpruceParentWidget;
+import dev.lambdaurora.spruceui.widget.text.SpruceTextFieldWidget;
+import net.minecraft.TextFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.Text;
+import net.minecraft.util.FormattedCharSequence;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceListWidget.LightSourceEntry> {
 	private static final Background HIGHLIGHT_BACKGROUND = new SimpleColorBackground(128, 128, 128, 24);
+	private final List<LightSourceEntry> entries = new ArrayList<>();
 	private int lastIndex = 0;
 
-	public LightSourceListWidget(Position position, int width, int height) {
+	public LightSourceListWidget(Position position, int width, int height, SpruceTextFieldWidget searchBar) {
 		super(position, width, height, 4, LightSourceEntry.class);
+
+		searchBar.setChangedListener(this::update);
+		searchBar.setRenderTextProvider((input, firstCharacterIndex) -> {
+			if (this.children().isEmpty()) {
+				return FormattedCharSequence.forward(input, Style.EMPTY.withColor(TextFormatting.RED));
+			}
+
+			var list = Stream.of(input.split(" "))
+					.map(part -> part.startsWith("@")
+							? Text.literal(part + " ").withStyle(TextFormatting.AQUA)
+							: Text.literal(part + " ")
+					)
+					.map(Text::getVisualOrderText)
+					.toList();
+			return FormattedCharSequence.fromList(list);
+		});
+	}
+
+	private void update(@Nullable String filter) {
+		if (filter == null) {
+			this.replaceEntries(this.entries);
+		} else {
+			final var entryFilter = List.of(filter.toLowerCase().split("\\s"));
+			this.replaceEntries(this.entries.stream().filter(entry -> this.checkFilter(entry, entryFilter)).toList());
+		}
+
+		for (int i = 0; i < this.children().size(); i++) {
+			var entry = this.children().get(i);
+			if (i % 2 != 0)
+				entry.setBackground(HIGHLIGHT_BACKGROUND);
+			else
+				entry.setBackground(EmptyBackground.EMPTY_BACKGROUND);
+		}
+	}
+
+	private boolean checkFilter(LightSourceEntry entry, @NotNull List<String> filter) {
+		var name = entry.option.lambdynlights$getName().getString().toLowerCase();
+
+		for (var part : filter) {
+			if (part.startsWith("@")) {
+				// Namespace
+				if (!entry.option.lambdynlights$getId().namespace().startsWith(part.substring(1))) {
+					return false;
+				}
+
+				continue;
+			}
+
+			if (!name.contains(part)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
 	 * Adds a single option entry. The option will use all the width available.
 	 *
 	 * @param holder the option
-	 * @return the index of the added entry
 	 */
-	public int addEntry(DynamicLightHandlerHolder<?> holder) {
+	private void addEntry(DynamicLightHandlerHolder<?> holder) {
 		if (holder.lambdynlights$getSetting() != null) {
 			var entry = LightSourceEntry.create(this, holder);
-			int index = this.addEntry(entry);
-			if (index % 2 != 0)
-				entry.setBackground(HIGHLIGHT_BACKGROUND);
-			return index;
+			this.entries.add(entry);
 		}
-		return -1;
 	}
 
 	public void addAll(List<DynamicLightHandlerHolder<?>> types) {
-		for (var type : types)
-			this.addEntry(type);
+		types.stream()
+				.sorted(Comparator.comparing(handler -> handler.lambdynlights$getName().getString()))
+				.forEach(this::addEntry);
+		this.update(null);
 	}
 
 	/* Narration */
@@ -89,19 +148,21 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 	public static class LightSourceEntry extends Entry implements SpruceParentWidget<SpruceWidget>, WithBackground {
 		private final List<SpruceWidget> children = new ArrayList<>();
 		private final LightSourceListWidget parent;
+		private final DynamicLightHandlerHolder<?> option;
 		private @Nullable SpruceWidget focused;
 		private boolean dragging;
 		private Background background = EmptyBackground.EMPTY_BACKGROUND;
 
-		private LightSourceEntry(LightSourceListWidget parent) {
+		private LightSourceEntry(LightSourceListWidget parent, DynamicLightHandlerHolder<?> option) {
 			this.parent = parent;
+			this.option = option;
 		}
 
 		public static LightSourceEntry create(LightSourceListWidget parent, DynamicLightHandlerHolder<?> option) {
-			var entry = new LightSourceEntry(parent);
+			var entry = new LightSourceEntry(parent, option);
 			var setting = option.lambdynlights$getSetting();
-			entry.children.add(new SpruceLabelWidget(Position.of(entry, entry.getWidth() / 2 - 155, 7), option.lambdynlights$getName(), 175));
-			entry.children.add(setting.getOption().createWidget(Position.of(entry, entry.getWidth() / 2 + 60, 2), 75));
+			entry.children.add(new SpruceLabelWidget(Position.of(entry, entry.getWidth() / 2 - 145, 7), option.lambdynlights$getName(), 175));
+			entry.children.add(setting.getOption().createWidget(Position.of(entry, entry.getWidth() / 2 + 70, 2), 32));
 			return entry;
 		}
 

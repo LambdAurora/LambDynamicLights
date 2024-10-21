@@ -13,6 +13,7 @@ import com.electronwill.nightconfig.core.Config;
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.option.SpruceBooleanOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
+import dev.lambdaurora.spruceui.option.SpruceToggleBooleanOption;
 import net.minecraft.TextFormatting;
 import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.Nullable;
@@ -39,16 +40,14 @@ public final class LightSourceSettingEntry extends BooleanSettingEntry {
 		);
 	}
 
-	public static final class Option extends SpruceBooleanOption {
+	public static final class Option extends SpruceToggleBooleanOption {
 		public Option(String key, Supplier<Boolean> getter, Consumer<Boolean> setter, @Nullable Text tooltip) {
-			super(key, getter, setter, tooltip, true);
+			super(key, getter, setter, tooltip);
 		}
 
 		@Override
 		public Text getDisplayText() {
-			boolean value = this.get();
-			return SpruceTexts.getToggleText(value).copy()
-					.withStyle(value ? TextFormatting.GREEN : TextFormatting.RED);
+			return Text.empty();
 		}
 	}
 }

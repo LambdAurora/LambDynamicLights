@@ -202,6 +202,15 @@
 - Added settings access in Sodium.
 - Updated Simplified Chinese translations ([#242](https://github.com/LambdAurora/LambDynamicLights/pull/242)).
 
+## 3.2.0
+
+- Updated to Minecraft 1.21.2.
+- Added base light of 8 to allays.
+- Improved settings GUI, especially the entity dynamic light sources list.
+- Tweaked the new dynamic lighting engine introduced in 3.1.0.
+- Updated Estonian translations ([#243](https://github.com/LambdAurora/LambDynamicLights/pull/243)).
+- Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
