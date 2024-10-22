@@ -11,10 +11,8 @@ package dev.lambdaurora.lambdynlights.config;
 
 import com.electronwill.nightconfig.core.Config;
 import dev.lambdaurora.spruceui.SpruceTexts;
-import dev.lambdaurora.spruceui.option.SpruceBooleanOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
 import dev.lambdaurora.spruceui.option.SpruceToggleBooleanOption;
-import net.minecraft.TextFormatting;
 import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +31,7 @@ public final class LightSourceSettingEntry extends BooleanSettingEntry {
 	@Override
 	protected SpruceOption buildOption(@Nullable Text tooltip) {
 		return new Option(
-				this.getOptionKey(),
+				this.key(),
 				this::get,
 				this::set,
 				tooltip
@@ -42,12 +40,20 @@ public final class LightSourceSettingEntry extends BooleanSettingEntry {
 
 	public static final class Option extends SpruceToggleBooleanOption {
 		public Option(String key, Supplier<Boolean> getter, Consumer<Boolean> setter, @Nullable Text tooltip) {
-			super(key, getter, setter, tooltip);
+			super(key, getter, setter, tooltip, false);
 		}
 
 		@Override
 		public Text getDisplayText() {
-			return Text.empty();
+			boolean value = this.get();
+			Text toggleText = SpruceTexts.getToggleText(value);
+
+			return this.getDisplayText(toggleText);
+		}
+
+		@Override
+		public Text getDisplayText(Text value) {
+			return Text.translatable("spruceui.options.generic", this.getPrefix(), value);
 		}
 	}
 }

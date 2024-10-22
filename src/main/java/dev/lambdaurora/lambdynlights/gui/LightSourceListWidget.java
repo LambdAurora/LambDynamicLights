@@ -11,6 +11,7 @@ package dev.lambdaurora.lambdynlights.gui;
 
 import dev.lambdaurora.lambdynlights.accessor.DynamicLightHandlerHolder;
 import dev.lambdaurora.spruceui.Position;
+import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.background.Background;
 import dev.lambdaurora.spruceui.background.EmptyBackground;
 import dev.lambdaurora.spruceui.background.SimpleColorBackground;
@@ -23,6 +24,7 @@ import dev.lambdaurora.spruceui.widget.WithBackground;
 import dev.lambdaurora.spruceui.widget.container.SpruceEntryListWidget;
 import dev.lambdaurora.spruceui.widget.container.SpruceParentWidget;
 import dev.lambdaurora.spruceui.widget.text.SpruceTextFieldWidget;
+import dev.yumi.commons.TriState;
 import net.minecraft.TextFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarratedElementType;
@@ -54,10 +56,7 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 			}
 
 			var list = Stream.of(input.split(" "))
-					.map(part -> part.startsWith("@")
-							? Text.literal(part + " ").withStyle(TextFormatting.AQUA)
-							: Text.literal(part + " ")
-					)
+					.map(this::stylizeFilterPart)
 					.map(Text::getVisualOrderText)
 					.toList();
 			return FormattedCharSequence.fromList(list);
@@ -81,6 +80,24 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 		}
 	}
 
+	private TriState evaluateValueFilter(String filter) {
+		if (filter.isBlank()) {
+			return TriState.DEFAULT;
+		}
+
+		if (filter.equalsIgnoreCase(SpruceTexts.OPTIONS_ON.getString())) {
+			return TriState.TRUE;
+		} else if (filter.equalsIgnoreCase(SpruceTexts.OPTIONS_OFF.getString())) {
+			return TriState.FALSE;
+		}
+
+		return switch (filter) {
+			case "true", "1", "on" -> TriState.TRUE;
+			case "false", "0", "off" -> TriState.FALSE;
+			default -> TriState.DEFAULT;
+		};
+	}
+
 	private boolean checkFilter(LightSourceEntry entry, @NotNull List<String> filter) {
 		var name = entry.option.lambdynlights$getName().getString().toLowerCase();
 
@@ -88,6 +105,16 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 			if (part.startsWith("@")) {
 				// Namespace
 				if (!entry.option.lambdynlights$getId().namespace().startsWith(part.substring(1))) {
+					return false;
+				}
+
+				continue;
+			} else if (part.startsWith("$")) {
+				var valueFilter = this.evaluateValueFilter(part.substring(1));
+
+				if (valueFilter == TriState.DEFAULT) continue;
+
+				if (entry.option.lambdynlights$getSetting().get() != valueFilter.toBoolean()) {
 					return false;
 				}
 
@@ -100,6 +127,20 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 		}
 
 		return true;
+	}
+
+	private Text stylizeFilterPart(String filter) {
+		if (filter.startsWith("@")) {
+			return Text.literal(filter + " ").withStyle(TextFormatting.AQUA);
+		} else if (filter.startsWith("$")) {
+			var valueFilter = this.evaluateValueFilter(filter.substring(1));
+			return Text.literal(filter + " ").withStyle(switch (valueFilter) {
+				case TriState.TRUE, TriState.FALSE -> TextFormatting.GOLD;
+				default -> TextFormatting.RED;
+			});
+		} else {
+			return Text.literal(filter + " ");
+		}
 	}
 
 	/**

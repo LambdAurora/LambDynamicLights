@@ -28,6 +28,8 @@ public abstract class EntityTypeMixin<T extends Entity> implements DynamicLightH
 	@Shadow
 	public abstract Text getDescription();
 
+	@Shadow public abstract String getDescriptionId();
+
 	@Unique
 	private DynamicLightHandler<T> lambdynlights$lightHandler;
 	@Unique
@@ -52,9 +54,9 @@ public abstract class EntityTypeMixin<T extends Entity> implements DynamicLightH
 				return null;
 			}
 
-			this.lambdynlights$setting = new LightSourceSettingEntry("light_sources.settings.entities."
-					+ id.namespace() + '.' + id.path().replace('/', '.'),
-					true, null, null);
+			this.lambdynlights$setting = new LightSourceSettingEntry(this.getDescriptionId(),
+					true, null, null
+			);
 			LambDynLights.get().config.load(this.lambdynlights$setting);
 		}
 
