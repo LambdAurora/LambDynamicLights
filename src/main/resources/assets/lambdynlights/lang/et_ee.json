@@ -3,8 +3,10 @@
   "lambdynlights.menu.title": "LambDynamicLightsi seaded",
   "lambdynlights.menu.canvas.1": "Canvase puhul on soovitatav olemite dünaamiline valgustus keelata!",
   "lambdynlights.menu.canvas.2": "Dünaamiline valgustus nõuab hetkel Canvasega kasutades suurt jõudlust!",
+  "lambdynlights.menu.tabs.general": "Üldine",
   "lambdynlights.option.light_sources.block_entities": "Plokiolemid",
   "lambdynlights.option.light_sources.entities": "Olemid",
+  "lambdynlights.option.light_sources.self": "Mängija silme läbi",
   "lambdynlights.option.light_sources.water_sensitive_check": "Vee tundlikkuse kontroll",
   "lambdynlights.option.mode": "Dünaamiline valgustus",
   "lambdynlights.tooltip.block_entities": "Lubab dünaamilise valgustuse plokiolemitele.",
@@ -13,6 +15,9 @@
   "lambdynlights.tooltip.mode.1": "Lubab dünaamilise valgustuse. Lubamisel valgustab näiteks tõrvikut hoidev mängija teda ümbritsevat ala.",
   "lambdynlights.tooltip.mode.2": "%s ja %s on väikese viiteajaga, kuid minimeerivad valgusuuendusi.",
   "lambdynlights.tooltip.mode.3": "%s on sujuv dünaamiline valgustus.",
+  "lambdynlights.tooltip.self_light_source": "Lubab dünaamilise valgustuse, kui mänguvaade on läbi mängija silme. Kui kasutad varjutajaid, mis samuti pakuvad dünaamilist valgustust, on soovitatav see keelata.",
   "lambdynlights.tooltip.tnt_lighting": "Määrab dünamiidi dünaamilise valgustuse režiimi.\n- %s keelab dünamiidi dünaamilise valgustuse.\n- %s määrab püsiva ereduse.\n- %s määrab dünaamilise ereduse.",
-  "lambdynlights.tooltip.water_sensitive": "Lubab veetundliku valgusallikate kontrolli. See tähendab, et mõned esemed ei erita valgust vee all."
+  "lambdynlights.tooltip.water_sensitive": "Lubab veetundliku valgusallikate kontrolli. See tähendab, et mõned esemed ei erita vee all valgust."
 }
+
+ 
