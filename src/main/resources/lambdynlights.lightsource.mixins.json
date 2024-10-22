@@ -7,6 +7,7 @@
     "AbstractMinecartEntityMixin",
     "BlockAttachedEntityMixin",
     "EntityMixin",
+    "FallingBlockEntityMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
     "PrimedTntEntityMixin"

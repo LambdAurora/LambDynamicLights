@@ -195,6 +195,13 @@
 
 - Fixed crash due to Mixin plugin ([#239](https://github.com/LambdAurora/LambDynamicLights/issues/239)).
 
+## 3.1.0
+
+- Improved general performances, especially in worst-case scenarios.
+- Added support for falling block entities ([#93](https://github.com/LambdAurora/LambDynamicLights/issues/93)).
+- Added settings access in Sodium.
+- Updated Simplified Chinese translations ([#242](https://github.com/LambdAurora/LambDynamicLights/pull/242)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"

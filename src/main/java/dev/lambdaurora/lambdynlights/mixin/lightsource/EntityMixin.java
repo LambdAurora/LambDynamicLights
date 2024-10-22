@@ -34,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Entity.class)
 public abstract class EntityMixin implements DynamicLightSource {
 	@Shadow
-	public Level level;
+	public abstract Level level();
 
 	@Shadow
 	public abstract double getX();
@@ -81,7 +81,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void onTick(CallbackInfo ci) {
 		// We do not want to update the entity on the server.
-		if (this.level.isClientSide()) {
+		if (this.level().isClientSide()) {
 			if (this.isRemoved()) {
 				this.setDynamicLightEnabled(false);
 			} else {
@@ -96,7 +96,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 
 	@Inject(method = "remove", at = @At("TAIL"))
 	public void onRemove(CallbackInfo ci) {
-		if (this.level.isClientSide())
+		if (this.level().isClientSide())
 			this.setDynamicLightEnabled(false);
 	}
 
@@ -117,7 +117,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 
 	@Override
 	public Level getDynamicLightLevel() {
-		return this.level;
+		return this.level();
 	}
 
 	@Override
@@ -211,7 +211,7 @@ public abstract class EntityMixin implements DynamicLightSource {
 
 	@Override
 	public void lambdynlights$scheduleTrackedChunksRebuild(@NotNull LevelRenderer renderer) {
-		if (Minecraft.getInstance().level == this.level)
+		if (Minecraft.getInstance().level == this.level())
 			for (long pos : this.lambdynlights$trackedLitChunkPos) {
 				LambDynLights.scheduleChunkRebuild(renderer, pos);
 			}

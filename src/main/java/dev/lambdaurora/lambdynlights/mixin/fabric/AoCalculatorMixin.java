@@ -27,6 +27,6 @@ public abstract class AoCalculatorMixin {
 	@Inject(method = "getLightmapCoordinates", at = @At(value = "RETURN", ordinal = 0), require = 0, cancellable = true, remap = false)
 	private static void onGetLightmapCoordinates(BlockAndTintGetter level, BlockState state, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
 		if (!level.getBlockState(pos).isSolidRender(level, pos) && LambDynLights.get().config.getDynamicLightsMode().isEnabled())
-			cir.setReturnValue(LambDynLights.get().getLightmapWithDynamicLight(pos, cir.getReturnValue()));
+			cir.setReturnValue(LambDynLights.get().getLightmapWithDynamicLight(level, pos, cir.getReturnValue()));
 	}
 }

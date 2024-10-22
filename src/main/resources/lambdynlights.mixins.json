@@ -11,11 +11,11 @@
     "EntityRendererMixin",
     "EntityTypeMixin",
     "MinecraftClientMixin",
-    "TagCollectorMixin",
     "VideoSettingsScreenMixin",
     "sodium.ArrayLightDataCacheMixin",
     "sodium.FlatLightPipelineMixin",
     "sodium.LightDataAccessMixin",
+    "sodium.SodiumOptionsGuiMixin",
     "fabric.AoCalculatorMixin"
   ],
   "injectors": {

@@ -1,10 +1,10 @@
 {
-  "match": {
-    "items":"adorn:stone_torch"
-  },
-  "luminance": {
-    "type": "block_self"
-  },
-  "water_sensitive": true,
-  "silence_error": true
+	"match": {
+		"items": "adorn:stone_torch"
+	},
+	"luminance": {
+		"type": "block_self"
+	},
+	"water_sensitive": true,
+	"silence_error": true
 }

@@ -12,11 +12,14 @@ package dev.lambdaurora.lambdynlights;
 import dev.lambdaurora.lambdynlights.accessor.WorldRendererAccessor;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
+import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import dev.lambdaurora.lambdynlights.resource.item.ItemLightSources;
 import dev.yumi.commons.event.EventManager;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
@@ -28,19 +31,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.resources.io.ResourceType;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Predicate;
@@ -49,18 +54,18 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 3.0.1
+ * @version 3.1.0
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights");
-	private static final double MAX_RADIUS = 7.75;
-	private static final double MAX_RADIUS_SQUARED = MAX_RADIUS * MAX_RADIUS;
 	public static final EventManager<Identifier> EVENT_MANAGER = new EventManager<>(Identifier.of(LambDynLightsConstants.NAMESPACE, "default"), Identifier::parse);
 	private static LambDynLights INSTANCE;
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
 	public final ItemLightSources itemLightSources = new ItemLightSources();
+	private final DynamicLightingEngine engine = new DynamicLightingEngine();
 	private final Set<DynamicLightSource> dynamicLightSources = new HashSet<>();
+	private final List<DynamicLightSource> toClear = new ArrayList<>();
 	private final ReentrantReadWriteLock lightSourcesLock = new ReentrantReadWriteLock();
 	private long lastUpdate = System.currentTimeMillis();
 	private int lastUpdateCount = 0;
@@ -89,6 +94,18 @@ public class LambDynLights implements ClientModInitializer {
 			}
 		});
 
+		CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {
+			this.itemLightSources.apply(registries);
+		});
+
+		ClientTickEvents.END_WORLD_TICK.register(level -> {
+			this.lightSourcesLock.writeLock().lock();
+			this.engine.computeSpatialLookup(this.dynamicLightSources);
+			this.toClear.forEach(source -> source.lambdynlights$scheduleTrackedChunksRebuild(Minecraft.getInstance().levelRenderer));
+			this.toClear.clear();
+			this.lightSourcesLock.writeLock().unlock();
+		});
+
 		WorldRenderEvents.START.register(context -> {
 			Minecraft.getInstance().getProfiler().swap("dynamic_lighting");
 			this.updateAll(context.worldRenderer());
@@ -111,11 +128,9 @@ public class LambDynLights implements ClientModInitializer {
 			this.lastUpdate = now;
 			this.lastUpdateCount = 0;
 
-			this.lightSourcesLock.readLock().lock();
 			for (var lightSource : this.dynamicLightSources) {
 				if (lightSource.lambdynlights$updateDynamicLight(renderer)) this.lastUpdateCount++;
 			}
-			this.lightSourcesLock.readLock().unlock();
 		}
 	}
 
@@ -131,11 +146,12 @@ public class LambDynLights implements ClientModInitializer {
 	/**
 	 * Returns the lightmap with combined light levels.
 	 *
+	 * @param level the level in which the light is computed
 	 * @param pos the position
 	 * @param lightmap the vanilla lightmap coordinates
 	 * @return the modified lightmap coordinates
 	 */
-	public int getLightmapWithDynamicLight(@NotNull BlockPos pos, int lightmap) {
+	public int getLightmapWithDynamicLight(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, int lightmap) {
 		return this.getLightmapWithDynamicLight(this.getDynamicLightLevel(pos), lightmap);
 	}
 
@@ -184,44 +200,10 @@ public class LambDynLights implements ClientModInitializer {
 	 * @return the dynamic light level at the specified position
 	 */
 	public double getDynamicLightLevel(@NotNull BlockPos pos) {
-		double result = 0;
 		this.lightSourcesLock.readLock().lock();
-		for (var lightSource : this.dynamicLightSources) {
-			result = maxDynamicLightLevel(pos, lightSource, result);
-		}
+		double light = this.engine.getDynamicLightLevel(pos);
 		this.lightSourcesLock.readLock().unlock();
-
-		return MathHelper.clamp(result, 0, 15);
-	}
-
-	/**
-	 * Returns the dynamic light level generated by the light source at the specified position.
-	 *
-	 * @param pos the position
-	 * @param lightSource the light source
-	 * @param currentLightLevel the current surrounding dynamic light level
-	 * @return the dynamic light level at the specified position
-	 */
-	public static double maxDynamicLightLevel(@NotNull BlockPos pos, @NotNull DynamicLightSource lightSource, double currentLightLevel) {
-		int luminance = lightSource.getLuminance();
-		if (luminance > 0) {
-			// Can't use Entity#squaredDistanceTo because of eye Y coordinate.
-			double dx = pos.getX() - lightSource.getDynamicLightX() + 0.5;
-			double dy = pos.getY() - lightSource.getDynamicLightY() + 0.5;
-			double dz = pos.getZ() - lightSource.getDynamicLightZ() + 0.5;
-
-			double distanceSquared = dx * dx + dy * dy + dz * dz;
-			// 7.75 because else we would have to update more chunks and that's not a good idea.
-			// 15 (max range for blocks) would be too much and a bit cheaty.
-			if (distanceSquared <= MAX_RADIUS_SQUARED) {
-				double multiplier = 1.0 - Math.sqrt(distanceSquared) / MAX_RADIUS;
-				double lightLevel = multiplier * (double) luminance;
-				if (lightLevel > currentLightLevel) {
-					return lightLevel;
-				}
-			}
-		}
-		return currentLightLevel;
+		return light;
 	}
 
 	/**
@@ -236,9 +218,7 @@ public class LambDynLights implements ClientModInitializer {
 			return;
 		if (this.containsLightSource(lightSource))
 			return;
-		this.lightSourcesLock.writeLock().lock();
 		this.dynamicLightSources.add(lightSource);
-		this.lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
@@ -251,11 +231,7 @@ public class LambDynLights implements ClientModInitializer {
 		if (!lightSource.getDynamicLightLevel().isClientSide())
 			return false;
 
-		boolean result;
-		this.lightSourcesLock.readLock().lock();
-		result = this.dynamicLightSources.contains(lightSource);
-		this.lightSourcesLock.readLock().unlock();
-		return result;
+		return this.dynamicLightSources.contains(lightSource);
 	}
 
 	/**
@@ -264,13 +240,7 @@ public class LambDynLights implements ClientModInitializer {
 	 * @return the number of dynamic light sources emitting light
 	 */
 	public int getLightSourcesCount() {
-		int result;
-
-		this.lightSourcesLock.readLock().lock();
-		result = this.dynamicLightSources.size();
-		this.lightSourcesLock.readLock().unlock();
-
-		return result;
+		return this.dynamicLightSources.size();
 	}
 
 	/**
@@ -279,28 +249,22 @@ public class LambDynLights implements ClientModInitializer {
 	 * @param lightSource the light source to remove
 	 */
 	public void removeLightSource(@NotNull DynamicLightSource lightSource) {
-		this.lightSourcesLock.writeLock().lock();
-
 		var dynamicLightSources = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
 		while (dynamicLightSources.hasNext()) {
 			it = dynamicLightSources.next();
 			if (it.equals(lightSource)) {
 				dynamicLightSources.remove();
-				lightSource.lambdynlights$scheduleTrackedChunksRebuild(Minecraft.getInstance().levelRenderer);
+				this.toClear.add(lightSource);
 				break;
 			}
 		}
-
-		this.lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
 	 * Clears light sources.
 	 */
 	public void clearLightSources() {
-		this.lightSourcesLock.writeLock().lock();
-
 		var dynamicLightSources = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
 		while (dynamicLightSources.hasNext()) {
@@ -308,10 +272,8 @@ public class LambDynLights implements ClientModInitializer {
 			dynamicLightSources.remove();
 			if (it.getLuminance() > 0)
 				it.resetDynamicLight();
-			it.lambdynlights$scheduleTrackedChunksRebuild(Minecraft.getInstance().levelRenderer);
+			this.toClear.add(it);
 		}
-
-		this.lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
@@ -320,8 +282,6 @@ public class LambDynLights implements ClientModInitializer {
 	 * @param filter the removal filter
 	 */
 	public void removeLightSources(@NotNull Predicate<DynamicLightSource> filter) {
-		this.lightSourcesLock.writeLock().lock();
-
 		var dynamicLightSources = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
 		while (dynamicLightSources.hasNext()) {
@@ -330,12 +290,10 @@ public class LambDynLights implements ClientModInitializer {
 				dynamicLightSources.remove();
 				if (it.getLuminance() > 0)
 					it.resetDynamicLight();
-				it.lambdynlights$scheduleTrackedChunksRebuild(Minecraft.getInstance().levelRenderer);
+				this.toClear.add(it);
 				break;
 			}
 		}
-
-		this.lightSourcesLock.writeLock().unlock();
 	}
 
 	/**
