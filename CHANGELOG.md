@@ -202,6 +202,10 @@
 - Added settings access in Sodium.
 - Updated Simplified Chinese translations ([#242](https://github.com/LambdAurora/LambDynamicLights/pull/242)).
 
+### 3.1.1
+
+- Fixed in-world item light source data reload not applying.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"

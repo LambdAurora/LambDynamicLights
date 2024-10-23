@@ -21,7 +21,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.client.Minecraft;
@@ -29,7 +28,6 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.resources.io.ResourceType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -54,7 +52,7 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 3.1.0
+ * @version 3.1.1
  * @since 1.0.0
  */
 public class LambDynLights implements ClientModInitializer {
@@ -82,17 +80,7 @@ public class LambDynLights implements ClientModInitializer {
 				.map(EntrypointContainer::getEntrypoint)
 				.forEach(initializer -> initializer.onInitializeDynamicLights(this.itemLightSources));
 
-		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-			@Override
-			public Identifier getFabricId() {
-				return Identifier.of(LambDynLightsConstants.NAMESPACE, "dynamiclights_resources");
-			}
-
-			@Override
-			public void reload(ResourceManager manager) {
-				LambDynLights.this.itemLightSources.load(manager);
-			}
-		});
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(this.itemLightSources);
 
 		CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {
 			this.itemLightSources.apply(registries);
