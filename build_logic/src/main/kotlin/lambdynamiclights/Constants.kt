@@ -5,7 +5,7 @@ import org.gradle.accessors.dm.LibrariesForLibs
 object Constants {
 	const val GROUP = "dev.lambdaurora"
 	const val NAME = "lambdynamiclights"
-	const val VERSION = "3.2.0"
+	const val VERSION = "3.2.1"
 	const val JAVA_VERSION = 21
 
 	private var minecraftVersion: String? = null

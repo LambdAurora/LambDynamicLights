@@ -1,8 +1,8 @@
 [versions]
-minecraft = "1.21.2"
+minecraft = "1.21.3"
 fabric-loader = "0.16.7"
-fabric-api = "0.106.1+1.21.2"
-mappings-yalmm = "7"
+fabric-api = "0.106.1+1.21.3"
+mappings-yalmm = "1"
 mappings-parchment = "2024.07.28"
 
 # Dependencies
