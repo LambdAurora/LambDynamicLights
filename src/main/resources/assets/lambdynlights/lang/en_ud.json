@@ -26,13 +26,13 @@
  "lambdynlights.option.light_sources.water_sensitive_check": "ʞɔeɥƆ ʎtiʌitᴉsneS ɹǝʇɐM",
  "lambdynlights.option.mode": "sʇɥᵷiꞀ ɔᴉɯɐnʎᗡ",
  "lambdynlights.tooltip.block_entities": "˙gnitɥᵷil ciɯanʎd seitᴉʇne ʞɔolb sǝןbɐnƎ",
- "lambdynlights.tooltip.creeper_lighting": ".ecnanimul cimanyd a stes s% -\n.ecnanimul tnatsnoc a stes s% -\n.gnithgil cimanyd repeerC selbasid s% -\n˙edom gnithᵷiן ɔᴉɯɐnʎp redeeɹƆ eɥt sʇǝS",
+ "lambdynlights.tooltip.creeper_lighting": ".ecnanimul cimanyd a stes %s -\n.ecnanimul tnatsnoc a stes %s -\n.gnithgil cimanyd repeerC selbasid s% -\n˙edom gnithᵷiן ɔᴉɯɐnʎp redeeɹƆ eɥt sʇǝS",
  "lambdynlights.tooltip.entities": ".eʌitca syaʍla era sɹeyalp :etoN ˙gnitɥᵷil ɔiɯanʎd seitᴉʇne sǝןbɐnƎ",
  "lambdynlights.tooltip.mode.1": ".elpmaxe rof aera eht pu thgil lliʍ hcrot a gnidloh ɹeyalp a delbane ɟI ˙sʇɥᵷil ɔᴉɯanʎd sǝןbɐnƎ",
- "lambdynlights.tooltip.mode.2": "˙setadpu thgil seziminiɯ tub dniɥǝb ʇib a ᵷal lןᴉʍ s% dnɐ s%",
- "lambdynlights.tooltip.mode.3": "˙gnithᵷiן ɔimɐnʎd ɥʇooɯs sᴉ s%",
+ "lambdynlights.tooltip.mode.2": "˙setadpu thgil seziminiɯ tub dniɥǝb ʇib a ᵷal lןᴉʍ %s dnɐ %s",
+ "lambdynlights.tooltip.mode.3": "˙gnithᵷiן ɔimɐnʎd ɥʇooɯs sᴉ %s",
  "lambdynlights.tooltip.self_light_source": ".gnithgil cimanyd nʍo rieht sah taht sredahs gnisu er'uoy fi siht elbasid ot dednemmocer s'tI ˙gnitɥᵷil ɔiɯanʎp nosred-ʇsɹᴉɟ sǝןbɐnƎ",
- "lambdynlights.tooltip.tnt_lighting": ".ecnanimul cimanyd a stes s% -\n.ecnanimul tnatsnoc a stes s% -\n.gnithgil cimanyd TNT selbasid s% -\n˙edom gnithᵷiן ɔᴉɯɐnʎd TN⟘ eɥt sʇǝS",
+ "lambdynlights.tooltip.tnt_lighting": ".ecnanimul cimanyd a stes %s -\n.ecnanimul tnatsnoc a stes %s -\n.gnithgil cimanyd TNT selbasid s% -\n˙edom gnithᵷiן ɔᴉɯɐnʎd TN⟘ eɥt sʇǝS",
  "lambdynlights.tooltip.water_sensitive": ".retaw ni degrembus gnieb elihw thgil time ton lliw smeti emos taht snaeɯ sih⟘ ˙ʞcehc seɔruos thᵷil eʌitᴉsnes-ɹetaʍ eɥʇ sǝןbɐnƎ",
  "modmenu.bluesky": "ʎʞsǝnןᗺ"
 }
