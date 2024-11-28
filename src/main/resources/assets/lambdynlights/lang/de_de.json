@@ -16,6 +16,7 @@
 	"lambdynlights.option.debug.display_dynamic_lighting_chunk_rebuild.tooltip": "Zeigt in der Welt alle Chunk-Neuaufbauten, die durch Updates der dynamischen Beleuchtung verursacht wurden.",
 	"lambdynlights.option.debug.display_behavior_bounding_box": "Bounding-Box des Lichtverhaltens anzeigen",
 	"lambdynlights.option.debug.display_behavior_bounding_box.tooltip": "Zeigt die Bounding-Box für dynamische Lichtverhaltensmuster in der Welt an.",
+	"lambdynlights.option.debug.light_level_radius": "Anzeigeradius des dynamischen Lichtniveaus",
 	"lambdynlights.option.light_sources.block_entities": "Block-Entitäten",
 	"lambdynlights.option.light_sources.beam": "Leuchtfeuer Strahlen",
 	"lambdynlights.option.light_sources.beam.tooltip": "Aktiviert die dynamische Beleuchtung von Leuchtstrahlen, z. B. Leuchtfeuer- oder Endportalstrahlen. Diese aktualisieren sich nur selten.",
