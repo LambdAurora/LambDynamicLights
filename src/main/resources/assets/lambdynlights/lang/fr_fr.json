@@ -16,6 +16,7 @@
 	"lambdynlights.option.debug.display_dynamic_lighting_chunk_rebuild.tooltip": "Affiche dans le monde tous les chunks qui sont reconstruits dû à une mise à jour de la lumière dynamique.",
 	"lambdynlights.option.debug.display_behavior_bounding_box": "Affiche les délimitations des comportements de lumières",
 	"lambdynlights.option.debug.display_behavior_bounding_box.tooltip": "Affiche dans le monde toutes les délimitations de comportements de lumières.",
+	"lambdynlights.option.debug.light_level_radius": "Rayon d'affichage de la lumière dynamique",
 	"lambdynlights.option.light_sources.block_entities": "Entités de blocs",
 	"lambdynlights.option.light_sources.beam": "Faisceaux de balise",
 	"lambdynlights.option.light_sources.beam.tooltip": "Active la lumière dynamique des faisceaux des balises et des passerelles de l'End. Celles-ci devraient se mettre à jour rarement.",

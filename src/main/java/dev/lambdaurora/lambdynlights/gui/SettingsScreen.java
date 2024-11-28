@@ -57,6 +57,7 @@ public class SettingsScreen extends SpruceScreen {
 	private final SpruceOption creeperLightingOption;
 	private final SpruceOption tntLightingOption;
 	private final SpruceOption debugCellDisplayRadiusOption;
+	private final SpruceOption debugLightLevelRadiusOption;
 	private final SpruceOption resetOption;
 	private SpruceTabbedWidget tabbedWidget;
 	private SpruceTextFieldWidget searchInput;
@@ -89,6 +90,19 @@ public class SettingsScreen extends SpruceScreen {
 				1,
 				() -> (double) this.config.getDebugCellDisplayRadius(),
 				value -> this.config.setDebugCellDisplayRadius(value.intValue()),
+				option -> option.getDisplayText(
+						option.get() <= 0
+								? SpruceTexts.OPTIONS_OFF.copy().withStyle(TextFormatting.RED)
+								: Text.literal(String.format("%.0f", option.get()))
+				),
+				null
+		);
+		this.debugLightLevelRadiusOption = new SpruceDoubleOption("lambdynlights.option.debug.light_level_radius",
+				0,
+				10,
+				1,
+				() -> (double) this.config.getDebugLightLevelRadius(),
+				value -> this.config.setDebugLightLevelRadius(value.intValue()),
 				option -> option.getDisplayText(
 						option.get() <= 0
 								? SpruceTexts.OPTIONS_OFF.copy().withStyle(TextFormatting.RED)
@@ -185,6 +199,7 @@ public class SettingsScreen extends SpruceScreen {
 		list.addSingleOptionEntry(this.config.getDebugActiveDynamicLightingCells().getOption());
 		list.addSingleOptionEntry(this.debugCellDisplayRadiusOption);
 		list.addSingleOptionEntry(this.config.getDebugDisplayDynamicLightingChunkRebuilds().getOption());
+		list.addSingleOptionEntry(this.debugLightLevelRadiusOption);
 		list.addSingleOptionEntry(this.config.getDebugDisplayHandlerBoundingBox().getOption());
 		context.addInnerWidget(list);
 	}

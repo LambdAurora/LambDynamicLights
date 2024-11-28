@@ -42,6 +42,7 @@ public class DynamicLightsConfig {
 	private static final ExplosiveLightingMode DEFAULT_CREEPER_LIGHTING_MODE = ExplosiveLightingMode.SIMPLE;
 	private static final ExplosiveLightingMode DEFAULT_TNT_LIGHTING_MODE = ExplosiveLightingMode.OFF;
 	private static final int DEFAULT_DEBUG_CELL_DISPLAY_RADIUS = 0;
+	private static final int DEFAULT_DEBUG_LIGHT_LEVEL_RADIUS = 0;
 
 	public static final Path CONFIG_FILE_PATH = FabricLoader.getInstance().getConfigDir().resolve("lambdynlights.toml");
 	protected final FileConfig config;
@@ -59,6 +60,7 @@ public class DynamicLightsConfig {
 	private ExplosiveLightingMode creeperLightingMode;
 	private ExplosiveLightingMode tntLightingMode;
 	private int debugCellDisplayRadius;
+	private int debugLightLevelRadius;
 
 	public final SpruceOption dynamicLightsModeOption = new SpruceCyclingOption("lambdynlights.option.mode",
 			amount -> this.setDynamicLightsMode(this.dynamicLightsMode.next()),
@@ -136,6 +138,7 @@ public class DynamicLightsConfig {
 		this.tntLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.tnt", DEFAULT_TNT_LIGHTING_MODE.getName()))
 				.orElse(DEFAULT_TNT_LIGHTING_MODE);
 		this.debugCellDisplayRadius = this.config.getOrElse("debug.cell_display_radius", DEFAULT_DEBUG_CELL_DISPLAY_RADIUS);
+		this.debugLightLevelRadius = this.config.getOrElse("debug.light_level_radius", DEFAULT_DEBUG_LIGHT_LEVEL_RADIUS);
 
 		LambDynLights.log(LOGGER, "Configuration loaded.");
 	}
@@ -164,6 +167,8 @@ public class DynamicLightsConfig {
 		this.settingEntries.forEach(SettingEntry::reset);
 		this.setCreeperLightingMode(DEFAULT_CREEPER_LIGHTING_MODE);
 		this.setTntLightingMode(DEFAULT_TNT_LIGHTING_MODE);
+		this.setDebugCellDisplayRadius(DEFAULT_DEBUG_CELL_DISPLAY_RADIUS);
+		this.setDebugLightLevelRadius(DEFAULT_DEBUG_LIGHT_LEVEL_RADIUS);
 	}
 
 	/**
@@ -275,6 +280,7 @@ public class DynamicLightsConfig {
 
 	public void setDebugCellDisplayRadius(int debugCellDisplayRadius) {
 		this.debugCellDisplayRadius = debugCellDisplayRadius;
+		this.config.set("debug.cell_display_radius", debugCellDisplayRadius);
 	}
 
 	/**
@@ -286,5 +292,14 @@ public class DynamicLightsConfig {
 
 	public BooleanSettingEntry getDebugDisplayHandlerBoundingBox() {
 		return this.debugDisplayHandlerBoundingBox;
+	}
+
+	public int getDebugLightLevelRadius() {
+		return this.debugLightLevelRadius;
+	}
+
+	public void setDebugLightLevelRadius(int debugLightLevelRadius) {
+		this.debugLightLevelRadius = debugLightLevelRadius;
+		this.config.set("debug.light_level_radius", debugCellDisplayRadius);
 	}
 }

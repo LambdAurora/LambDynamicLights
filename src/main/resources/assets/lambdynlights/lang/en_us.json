@@ -16,6 +16,7 @@
 	"lambdynlights.option.debug.display_dynamic_lighting_chunk_rebuild.tooltip": "Show in the world every chunk rebuilds caused by dynamic lighting updates.",
 	"lambdynlights.option.debug.display_behavior_bounding_box": "Display Dynamic Light Behavior Bounding Box",
 	"lambdynlights.option.debug.display_behavior_bounding_box.tooltip": "Show in the world the bounding box of dynamic light behaviors.",
+	"lambdynlights.option.debug.light_level_radius": "Display Radius of Dynamic Light Level",
 	"lambdynlights.option.light_sources.block_entities": "Block Entities",
 	"lambdynlights.option.light_sources.beam": "Beacon Beams",
 	"lambdynlights.option.light_sources.beam.tooltip": "Enables the dynamic lighting of beacon or End gateway beams. They should rarely update.",
