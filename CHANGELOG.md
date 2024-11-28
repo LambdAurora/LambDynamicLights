@@ -253,13 +253,15 @@
   - Added dynamic lighting to End gateway beams ([#115]).
   - Added dynamic lighting to guardian lasers ([#115]).
 - Added debug settings and renderers to facilitate debugging.
-  - Added a debug renderer to active dynamic lighting cells.
+  - Added a debug renderer of active dynamic lighting cells.
   - Added a debug renderer to display chunk rebuilds.
-  - Added a debug renderer to display the bounding boxes of custom dynamic light sources.
+  - Added a debug renderer of dynamic light levels.
+  - Added a debug renderer of display the bounding boxes of custom dynamic light sources.
 - Updated the data displayed in the F3 HUD to show more information about dynamic lighting.
 - Refactored heavily the ticking of entity dynamic lighting to make it more abstract.
 - Refactored heavily how chunk rebuilds are queued and how dynamic light sources are represented.
 - Fixed API publication for loom-based setups.
+- Updated [SpruceUI].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"

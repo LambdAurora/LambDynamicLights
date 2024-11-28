@@ -11,6 +11,7 @@ package dev.lambdaurora.lambdynlights.mixin;
 
 import com.mojang.blaze3d.vertex.MatrixStack;
 import dev.lambdaurora.lambdynlights.LambDynLights;
+import dev.lambdaurora.lambdynlights.util.DynamicLightLevelDebugRenderer;
 import dev.lambdaurora.lambdynlights.util.DynamicLightSectionDebugRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -24,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(DebugRenderer.class)
 public class DebugRendererMixin {
 	@Unique
-	private final DynamicLightSectionDebugRenderer dynamicLightsSectionDebugRenderer = new DynamicLightSectionDebugRenderer();
+	private final DynamicLightSectionDebugRenderer dynamicLightSectionDebugRenderer = new DynamicLightSectionDebugRenderer();
 
 	@Inject(method = "render", at = @At("TAIL"))
 	private void lambdynlights$onRender(
@@ -34,8 +35,9 @@ public class DebugRendererMixin {
 	) {
 		var mod = LambDynLights.get();
 		mod.sectionRebuildDebugRenderer.render(matrices, bufferSource, x, y, z);
+		mod.dynamicLightLevelDebugRenderer.render(matrices, bufferSource, x, y, z);
 		mod.dynamicLightBehaviorDebugRenderer.render(matrices, bufferSource, x, y, z);
 
-		this.dynamicLightsSectionDebugRenderer.render(matrices, bufferSource, x, y, z);
+		this.dynamicLightSectionDebugRenderer.render(matrices, bufferSource, x, y, z);
 	}
 }

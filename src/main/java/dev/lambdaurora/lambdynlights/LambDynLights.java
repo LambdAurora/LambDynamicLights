@@ -25,6 +25,7 @@ import dev.lambdaurora.lambdynlights.resource.entity.EntityLightSources;
 import dev.lambdaurora.lambdynlights.resource.item.ItemLightSources;
 import dev.lambdaurora.lambdynlights.util.DynamicLightBehaviorDebugRenderer;
 import dev.lambdaurora.lambdynlights.util.DynamicLightDebugRenderer;
+import dev.lambdaurora.lambdynlights.util.DynamicLightLevelDebugRenderer;
 import dev.yumi.commons.event.EventManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -85,6 +86,7 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 	private final ReentrantReadWriteLock lightSourcesLock = new ReentrantReadWriteLock();
 
 	public final DynamicLightDebugRenderer.SectionRebuild sectionRebuildDebugRenderer = new DynamicLightDebugRenderer.SectionRebuild(this);
+	public final DynamicLightLevelDebugRenderer dynamicLightLevelDebugRenderer = new DynamicLightLevelDebugRenderer(this);
 	public final DynamicLightBehaviorDebugRenderer dynamicLightBehaviorDebugRenderer = new DynamicLightBehaviorDebugRenderer(this, this.dynamicLightSources);
 
 	private long lastUpdate = System.currentTimeMillis();
