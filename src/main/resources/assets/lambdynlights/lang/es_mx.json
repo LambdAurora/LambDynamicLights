@@ -1,9 +1,9 @@
 {
-	"lambdynlights.menu.light_sources": "Fuentes de luz dinámica",
-	"lambdynlights.menu.title": "Configuración de LambDynamicLights",
 	"lambdynlights.menu.canvas.1": "Se recomienda deshabilitar la iluminación dinámica de las entidades con Canvas!",
 	"lambdynlights.menu.canvas.2": "La iluminación dinámica con Canvas es pesado en rendimiento!",
+	"lambdynlights.menu.light_sources": "Fuentes de luz dinámica",
 	"lambdynlights.menu.tabs.general": "General",
+	"lambdynlights.menu.title": "Configuración de LambDynamicLights",
 	"lambdynlights.option.light_sources.block_entities": "Entidades de bloque",
 	"lambdynlights.option.light_sources.entities": "Entidades",
 	"lambdynlights.option.light_sources.self": "Primera persona",

@@ -1,9 +1,9 @@
 {
-	"lambdynlights.menu.light_sources": "動態光源",
-	"lambdynlights.menu.title": "LambDynamicLights 設定",
 	"lambdynlights.menu.canvas.1": "建議在使用 Canvas 時停用實體動態光源！",
 	"lambdynlights.menu.canvas.2": "在 Canvas 中開啟動態光源會大幅降低效能！",
+	"lambdynlights.menu.light_sources": "動態光源",
 	"lambdynlights.menu.tabs.general": "一般",
+	"lambdynlights.menu.title": "LambDynamicLights 設定",
 	"lambdynlights.option.light_sources.block_entities": "方塊實體",
 	"lambdynlights.option.light_sources.entities": "實體",
 	"lambdynlights.option.light_sources.self": "第一人稱",

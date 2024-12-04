@@ -1,9 +1,9 @@
 {
-	"lambdynlights.menu.light_sources": "Nguồn sáng động",
-	"lambdynlights.menu.title": "Cài đặt LambDynamicLights",
 	"lambdynlights.menu.canvas.1": "Bạn nên tắt ánh sáng động của thực thể với Canvas!",
 	"lambdynlights.menu.canvas.2": "Ánh sáng động với Canvas hiện đòi hỏi hiệu suất cao!",
+	"lambdynlights.menu.light_sources": "Nguồn sáng động",
 	"lambdynlights.menu.tabs.general": "Chung",
+	"lambdynlights.menu.title": "Cài đặt LambDynamicLights",
 	"lambdynlights.option.light_sources.block_entities": "Thực thể khối",
 	"lambdynlights.option.light_sources.entities": "Thực thể",
 	"lambdynlights.option.light_sources.self": "Góc nhìn thứ nhất",

@@ -1,9 +1,9 @@
 {
-	"lambdynlights.menu.light_sources": "Sumber Cahaya Dinamis",
-	"lambdynlights.menu.title": "Pengaturan LambDynamicLights",
 	"lambdynlights.menu.canvas.1": "Disarankan untuk menonaktifkan pencahayaan dinamis entitas dengan Canvas!",
 	"lambdynlights.menu.canvas.2": "Pencahayaan dinamis dengan Canvas saat ini membutuhkan kinerja yang berat!",
+	"lambdynlights.menu.light_sources": "Sumber Cahaya Dinamis",
 	"lambdynlights.menu.tabs.general": "Umum",
+	"lambdynlights.menu.title": "Pengaturan LambDynamicLights",
 	"lambdynlights.option.light_sources.block_entities": "Entitas Blok",
 	"lambdynlights.option.light_sources.entities": "Entitas",
 	"lambdynlights.option.light_sources.self": "Sudut pandang orang pertama",

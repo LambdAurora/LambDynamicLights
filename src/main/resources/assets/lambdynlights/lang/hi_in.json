@@ -1,8 +1,8 @@
 {
-	"lambdynlights.menu.light_sources": "गतिशील प्रकाश स्रोतो",
-	"lambdynlights.menu.title": "LambDynamicLights विन्यास",
 	"lambdynlights.menu.canvas.1": "कैनवस के साथ संस्थाओं के गतिशील प्रकाश को निष्क्रिय करने की सिफारिश किया गई है!",
 	"lambdynlights.menu.canvas.2": "कैनवास के साथ गतिशील प्रकाश का प्रदर्शन खराब है!",
+	"lambdynlights.menu.light_sources": "गतिशील प्रकाश स्रोतो",
+	"lambdynlights.menu.title": "LambDynamicLights विन्यास",
 	"lambdynlights.option.light_sources.block_entities": "प्रखंड अस्तित्व",
 	"lambdynlights.option.light_sources.entities": "अस्तित्व",
 	"lambdynlights.option.light_sources.water_sensitive_check": "जल संवेदनशीलता",

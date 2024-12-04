@@ -1,9 +1,9 @@
 {
-	"lambdynlights.menu.light_sources": "Fontes de luz dinâmicas",
-	"lambdynlights.menu.title": "Config. LambDynamicLights",
 	"lambdynlights.menu.canvas.1": "Recomenda-se desativar a iluminação dinâmica de entidades ao usar o mod Canvas!",
 	"lambdynlights.menu.canvas.2": "Usar a iluminação dinâmica com o Canvas irá afetar o desempenho!",
+	"lambdynlights.menu.light_sources": "Fontes de luz dinâmicas",
 	"lambdynlights.menu.tabs.general": "Geral",
+	"lambdynlights.menu.title": "Config. LambDynamicLights",
 	"lambdynlights.option.light_sources.block_entities": "Entidades de Blocos",
 	"lambdynlights.option.light_sources.entities": "Entidades",
 	"lambdynlights.option.light_sources.self": "Primeira pessoa",

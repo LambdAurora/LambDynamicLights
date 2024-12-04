@@ -1,8 +1,8 @@
 {
-	"lambdynlights.menu.light_sources": "Dinamik Işık Kaynakları",
-	"lambdynlights.menu.title": "LambDynamicLights (LambDinamikIşıklar) Ayarları",
 	"lambdynlights.menu.canvas.1": "Varlıkların dinamik ışıklandırmasını devre dışı bırakmanız Canvas'la beraber önerilir!",
 	"lambdynlights.menu.canvas.2": "Canvas'la beraber dinamik ışıklandırma şu an yavaş performansta!",
+	"lambdynlights.menu.light_sources": "Dinamik Işık Kaynakları",
+	"lambdynlights.menu.title": "LambDynamicLights (LambDinamikIşıklar) Ayarları",
 	"lambdynlights.option.light_sources.block_entities": "Varlıkları Engelle",
 	"lambdynlights.option.light_sources.entities": "Varlıklar",
 	"lambdynlights.option.light_sources.water_sensitive_check": "Suya Duyarlılık Kontrolü",

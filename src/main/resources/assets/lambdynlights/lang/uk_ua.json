@@ -1,9 +1,9 @@
 {
-	"lambdynlights.menu.light_sources": "Джерела динамічного освітлення",
-	"lambdynlights.menu.title": "Налаштування LambDynamicLights",
 	"lambdynlights.menu.canvas.1": "Рекомендовано відключати динамічне освітлення істот із модом Canvas!",
 	"lambdynlights.menu.canvas.2": "Динамічне освітлення із модом Canvas наразі має низьку продуктивність!",
+	"lambdynlights.menu.light_sources": "Джерела динамічного освітлення",
 	"lambdynlights.menu.tabs.general": "Загальні",
+	"lambdynlights.menu.title": "Налаштування LambDynamicLights",
 	"lambdynlights.option.light_sources.block_entities": "Блоки-істоти",
 	"lambdynlights.option.light_sources.entities": "Істоти",
 	"lambdynlights.option.light_sources.self": "Від першої особи",
