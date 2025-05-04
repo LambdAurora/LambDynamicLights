@@ -27,7 +27,7 @@
 	"lambdynlights.option.light_sources.guardian_laser.tooltip": "Habilita la iluminación dinámica de los láseres disparados por los Guardianes.",
 	"lambdynlights.option.light_sources.self": "Primera Persona",
 	"lambdynlights.option.light_sources.water_sensitive_check": "Comprobación de Sensibilidad al Agua",
-	"lambdynlights.option.mode": "Iluminación dinámica de Lamb",
+	"lambdynlights.option.mode": "Iluminación dinámica",
 	"lambdynlights.tooltip.block_entities": "Habilita la iluminación dinámica de entidades de bloques.",
 	"lambdynlights.tooltip.creeper_lighting": "Establece el modo de iluminación dinámica para los Creepers.\n- %s desactiva la iluminación dinámica de los Creepers.\n- %s establece una luminancia constante.\n- %s establece una luminancia dinámica.",
 	"lambdynlights.tooltip.entities": "Habilita la iluminación dinámica de entidades. Nota: siempre está activa para los jugadores.",
