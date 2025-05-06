@@ -1,4 +1,6 @@
 {
+	"modmenu.descriptionTranslation.lambdynlights": "為Fabric提供功能最完整的動態光源模組。",
+
 	"lambdynlights.menu.canvas.1": "建議在使用 Canvas 時停用實體動態光源！",
 	"lambdynlights.menu.canvas.2": "在 Canvas 中開啟動態光源會大幅降低效能！",
 	"lambdynlights.menu.light_sources": "動態光源",
@@ -35,4 +37,5 @@
 	"lambdynlights.tooltip.self_light_source": "啟用第一人稱動態光源。如果您使用的是具有自帶動態光源的光影包，建議停用此選項。",
 	"lambdynlights.tooltip.tnt_lighting": "設定 TNT 的動態光源模式。\n- %s 會停用 TNT 的動態光源。\n- %s 會設定恆定的亮度。\n- %s 會設定動態的亮度。",
 	"lambdynlights.tooltip.water_sensitive": "啟用水敏感光源檢查。這表示某些物品在浸入水中時不會發光。"
+	"modmenu.bluesky": "Bluesky"
 }
