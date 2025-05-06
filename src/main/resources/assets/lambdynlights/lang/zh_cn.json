@@ -1,5 +1,5 @@
 {
-	"modmenu.descriptionTranslation.lambdynlights": "为 Fabric 提供功能最完备的动态光源模组。",
+	"modmenu.descriptionTranslation.lambdynlights": "为Fabric提供功能最完备的动态光源模组。",
 
 	"lambdynlights.menu.canvas.1": "建议在使用Canvas时禁用实体动态光源！",
 	"lambdynlights.menu.canvas.2": "目前动态光源与Canvas同时使用会非常地吃性能！",
