@@ -2,8 +2,8 @@
 	"lambdynlights": "LambDynamicLights",
 	"modmenu.descriptionTranslation.lambdynlights": "為Fabric提供功能最完整的動態光源模組。",
 
-	"lambdynlights.menu.canvas.1": "建議在使用 Canvas 時停用實體動態光源！",
-	"lambdynlights.menu.canvas.2": "在 Canvas 中開啟動態光源會大幅降低效能！",
+	"lambdynlights.menu.canvas.1": "建議在使用Canvas時停用實體動態光源！",
+	"lambdynlights.menu.canvas.2": "在Canvas中開啟動態光源會大幅降低效能！",
 	"lambdynlights.menu.light_sources": "動態光源",
 	"lambdynlights.menu.light_sources.special": "特殊動態光源",
 	"lambdynlights.menu.search": "搜尋：",
@@ -12,7 +12,7 @@
 	"lambdynlights.menu.tabs.debug": "除錯",
 	"lambdynlights.menu.tabs.debug.description": "供模組開發者使用，以應對棘手的錯誤。",
 	"lambdynlights.menu.tabs.general": "一般",
-	"lambdynlights.menu.title": "%s 設定",
+	"lambdynlights.menu.title": "%s設定",
 	"lambdynlights.option.debug.active_dynamic_lighting_cells": "顯示動態光源的有效網格",
 	"lambdynlights.option.debug.active_dynamic_lighting_cells.tooltip": "在世界中顯示動態光源引擎中所有目前有效的網格。",
 	"lambdynlights.option.debug.cell_display_radius": "動態光源網格的顯示半徑",
@@ -31,13 +31,13 @@
 	"lambdynlights.option.light_sources.water_sensitive_check": "水敏感度檢查",
 	"lambdynlights.option.mode": "動態光源",
 	"lambdynlights.tooltip.block_entities": "啟用方塊實體動態光源。",
-	"lambdynlights.tooltip.creeper_lighting": "設定苦力怕的動態光源模式。\n- %s 會停用苦力怕的動態光源。\n- %s 會設定恆定的亮度。\n- %s 會設定動態的亮度。",
+	"lambdynlights.tooltip.creeper_lighting": "設定苦力怕的動態光源模式。\n- %s會停用苦力怕的動態光源。\n- %s會設定恆定的亮度。\n- %s會設定動態的亮度。",
 	"lambdynlights.tooltip.entities": "啟用實體動態光源。注意：玩家的光源永遠處於啟用狀態。",
 	"lambdynlights.tooltip.mode.1": "啟用動態光源。例如，如果啟用此選項，則玩家手持火把時會照亮周圍區域。",
-	"lambdynlights.tooltip.mode.2": "%s 和 %s 的延遲會稍微落後，但會盡量減少光線更新。",
-	"lambdynlights.tooltip.mode.3": "%s 是流暢的動態光源。",
+	"lambdynlights.tooltip.mode.2": "%s和 %s的延遲會稍微落後，但會盡量減少光線更新。",
+	"lambdynlights.tooltip.mode.3": "%s是流暢的動態光源。",
 	"lambdynlights.tooltip.self_light_source": "啟用第一人稱動態光源。如果您使用的是具有自帶動態光源的光影包，建議停用此選項。",
-	"lambdynlights.tooltip.tnt_lighting": "設定 TNT 的動態光源模式。\n- %s 會停用 TNT 的動態光源。\n- %s 會設定恆定的亮度。\n- %s 會設定動態的亮度。",
+	"lambdynlights.tooltip.tnt_lighting": "設定TNT的動態光源模式。\n- %s會停用TNT的動態光源。\n- %s會設定恆定的亮度。\n- %s會設定動態的亮度。",
 	"lambdynlights.tooltip.water_sensitive": "啟用水敏感光源檢查。這表示某些物品在浸入水中時不會發光。"
 	"modmenu.bluesky": "Bluesky"
 }
