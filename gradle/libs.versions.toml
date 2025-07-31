@@ -2,12 +2,12 @@
 minecraft = "1.21.1"
 fabric-loader = "0.16.9"
 fabric-api = "0.105.0+1.21.1"
-mappings-yalmm = "5"
+mappings-yalmm = "6"
 mappings-parchment = "2024.07.28"
 
 # Dependencies
-yumi-commons = "1.0.0-alpha.12"
-yumi-mc-foundation = "1.0.0-alpha.6+1.21.1"
+yumi-commons = "1.0.0-beta.1"
+yumi-mc-foundation = "1.0.0-alpha.7+1.21.1"
 spruceui = "6.2.1+1.21"
 pridelib = "1.2.1+1.21"
 modmenu = "11.0.3"

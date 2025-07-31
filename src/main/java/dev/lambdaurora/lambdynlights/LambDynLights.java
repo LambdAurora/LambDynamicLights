@@ -113,7 +113,7 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 			category.setDetail("Mode", this.config.getDynamicLightsMode().getName());
 			category.setDetail("Dynamic Light Sources", this.dynamicLightSourcesCount);
 			category.setDetail(
-					"Spatial Hashing Occupancy",
+					"Spatial Hash Occupancy",
 					"%d / %d".formatted(this.engine.getLastEntryCount(), DynamicLightingEngine.MAX_LIGHT_SOURCES)
 			);
 		});
