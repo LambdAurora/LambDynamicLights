@@ -24,7 +24,6 @@ import dev.lambdaurora.lambdynlights.resource.entity.luminance.DisplayEntityLumi
 import dev.lambdaurora.lambdynlights.resource.item.ItemLightSources;
 import dev.yumi.commons.event.Event;
 import dev.yumi.mc.core.api.YumiEvents;
-import dev.yumi.mc.core.api.YumiMods;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;

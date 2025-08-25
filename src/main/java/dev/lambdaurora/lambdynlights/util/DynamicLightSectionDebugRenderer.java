@@ -31,7 +31,7 @@ import java.time.Instant;
  * Represents a debug renderer for dynamic lighting.
  *
  * @author LambdAurora, Akarys
- * @version 4.0.0
+ * @version 4.3.3
  * @since 4.0.0
  */
 @Environment(EnvType.CLIENT)
@@ -47,9 +47,9 @@ public class DynamicLightSectionDebugRenderer extends DynamicLightDebugRenderer 
 	@Nullable
 	private DynamicLightSectionDebugRenderer.SectionData data;
 
-	public DynamicLightSectionDebugRenderer() {
-		super(LambDynLights.get());
-		this.lightingEngine = LambDynLights.get().engine;
+	public DynamicLightSectionDebugRenderer(LambDynLights mod) {
+		super(mod);
+		this.lightingEngine = mod.engine;
 	}
 
 	@Override

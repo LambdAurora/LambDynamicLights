@@ -324,6 +324,30 @@
   - Updated Chinese translations ([#281](https://github.com/LambdAurora/LambDynamicLights/pull/281)).
   - Made tab in Sodium GUI translatable ([#282](https://github.com/LambdAurora/LambDynamicLights/pull/282)).
 
+### 4.1.4
+
+- Backports some changes from the v4.3.1:
+  - Switched to [Yumi Minecraft Foundation Library] for entrypoint management and mod discovery.
+    - This allows to use entrypoints more reliably on NeoForge and with full support of Sinytra Connector.
+      Such entrypoints can be added through the `yumi:entrypoints` custom property.
+    - This is a step towards better and official support of NeoForge.
+  - Added debug information to crash reports.
+  - Updated Turkish translations ([#285](https://github.com/LambdAurora/LambDynamicLights/pull/285)).
+  - Updated Chinese translations ([#286](https://github.com/LambdAurora/LambDynamicLights/pull/286)).
+  - Updated Italian translations ([#287](https://github.com/LambdAurora/LambDynamicLights/pull/287)).
+  - Updated Polish translations ([#288](https://github.com/LambdAurora/LambDynamicLights/pull/288)).
+
+### 4.1.5
+
+- Backports some fixes from v4.3.2:
+  - Fixed various crashes due to early Minecraft classes being loaded ([#289](https://github.com/LambdAurora/LambDynamicLights/issues/289)).
+  - Updated [Yumi Minecraft Libraries: Foundation].
+
+### 4.1.6
+
+- Backports some changes from the v4.3.3:
+  - Fixed some crashes related to debug renderers.
+
 ## 4.2.0
 
 - Updated to Minecraft 1.21.5.
@@ -386,6 +410,11 @@
   - Fixed various crashes due to early Minecraft classes being loaded ([#289](https://github.com/LambdAurora/LambDynamicLights/issues/289)).
   - Updated [Yumi Minecraft Libraries: Foundation].
 
+### 4.2.10
+
+- Backports some changes from the v4.3.3:
+  - Fixed some crashes related to debug renderers.
+
 ## 4.3.0
 
 - Updated to Minecraft 1.21.6.
@@ -408,6 +437,10 @@
 
 - Fixed various crashes due to early Minecraft classes being loaded ([#289](https://github.com/LambdAurora/LambDynamicLights/issues/289)).
 - Updated [Yumi Minecraft Libraries: Foundation].
+
+### 4.3.3
+
+- Fixed some crashes related to debug renderers.
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"

@@ -1,8 +1,9 @@
 import com.modrinth.minotaur.dependencies.ModDependency
 import dev.lambdaurora.mcdev.api.McVersionLookup
+import dev.lambdaurora.mcdev.api.ModVersionDependency
+import dev.lambdaurora.mcdev.task.packaging.PackageModrinthTask
 import lambdynamiclights.Constants
 import lambdynamiclights.Utils
-import lambdynamiclights.task.PackageModrinthTask
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
@@ -31,6 +32,7 @@ tasks.generateFmj.configure {
 		.withMixins("lambdynlights.mixins.json", "lambdynlights.lightsource.mixins.json")
 		.withDepend("${Constants.NAMESPACE}_api", ">=${version}")
 		.withDepend("spruceui", ">=${libs.versions.spruceui.get()}")
+		.withDepend("yumi_mc_core", ">=${libs.versions.yumi.mc.foundation.get()}")
 		.withRecommend("modmenu", ">=${libs.versions.modmenu.get()}")
 		.withBreak("optifabric", "*")
 		.withBreak("sodiumdynamiclights", "*")
@@ -119,6 +121,17 @@ tasks.remapJar {
 
 val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	this.group = "publishing"
+	this.versionType.set(Constants.getVersionType())
+	this.versionName.set("${Constants.PRETTY_NAME} ${Constants.VERSION} (${McVersionLookup.getVersionTag(Constants.mcVersion())})")
+	this.gameVersions.set(listOf(Constants.mcVersion()) + Constants.COMPATIBLE_MC_VERSIONS)
+	this.loaders.set(listOf("fabric", "quilt"))
+	this.dependencies.set(listOf(
+		ModVersionDependency("P7dR8mSH", ModVersionDependency.Type.REQUIRED),
+		ModVersionDependency("reCfnRvJ", ModVersionDependency.Type.INCOMPATIBLE),
+		ModVersionDependency("PxQSWIcD", ModVersionDependency.Type.INCOMPATIBLE)
+	))
+	this.changelog.set(Utils.fetchChangelog(project))
+	this.readme.set(Utils.parseReadme(project))
 	this.files.setFrom(tasks.remapJar.get())
 }
 
@@ -128,7 +141,7 @@ modrinth {
 	uploadFile.set(tasks.remapJar.get())
 	loaders.set(listOf("fabric", "quilt"))
 	gameVersions.set(listOf(Constants.mcVersion()) + Constants.COMPATIBLE_MC_VERSIONS)
-	versionType.set(Constants.getVersionType())
+	versionType.set(Constants.getVersionType().toString())
 	syncBodyFrom.set(Utils.parseReadme(project))
 	dependencies.set(
 		listOf(
