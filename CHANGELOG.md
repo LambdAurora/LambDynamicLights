@@ -343,6 +343,11 @@
   - Fixed various crashes due to early Minecraft classes being loaded ([#289](https://github.com/LambdAurora/LambDynamicLights/issues/289)).
   - Updated [Yumi Minecraft Libraries: Foundation].
 
+### 4.1.6
+
+- Backports some changes from the v4.3.3:
+  - Fixed some crashes related to debug renderers.
+
 ## 4.2.0
 
 - Updated to Minecraft 1.21.5.
@@ -405,6 +410,11 @@
   - Fixed various crashes due to early Minecraft classes being loaded ([#289](https://github.com/LambdAurora/LambDynamicLights/issues/289)).
   - Updated [Yumi Minecraft Libraries: Foundation].
 
+### 4.2.10
+
+- Backports some changes from the v4.3.3:
+  - Fixed some crashes related to debug renderers.
+
 ## 4.3.0
 
 - Updated to Minecraft 1.21.6.
@@ -427,6 +437,10 @@
 
 - Fixed various crashes due to early Minecraft classes being loaded ([#289](https://github.com/LambdAurora/LambDynamicLights/issues/289)).
 - Updated [Yumi Minecraft Libraries: Foundation].
+
+### 4.3.3
+
+- Fixed some crashes related to debug renderers.
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"

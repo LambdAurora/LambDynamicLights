@@ -32,6 +32,7 @@ jobs:
         with:
           name: Modrinth
           path: ./build/modrinth.zip
+          retention-days: 1
 
   modrinth:
     runs-on: ubuntu-latest
@@ -58,8 +59,6 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - name: "Set up Java"
         uses: actions/setup-java@v4
         with:
