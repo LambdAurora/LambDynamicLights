@@ -21,7 +21,7 @@ logger.lifecycle("Preparing version ${version}...")
 val fabricApiModules = listOf(
 	fabricApi.module("fabric-lifecycle-events-v1", libs.versions.fabric.api.get())!!,
 	fabricApi.module("fabric-resource-loader-v0", libs.versions.fabric.api.get())!!,
-	fabricApi.module("fabric-rendering-v1", libs.versions.fabric.api.get())!!
+	fabricApi.module("fabric-resource-conditions-api-v1", libs.versions.fabric.api.get())!!
 )
 
 tasks.generateFmj.configure {
@@ -125,11 +125,13 @@ val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	this.versionName.set("${Constants.PRETTY_NAME} ${Constants.VERSION} (${McVersionLookup.getVersionTag(Constants.mcVersion())})")
 	this.gameVersions.set(listOf(Constants.mcVersion()) + Constants.COMPATIBLE_MC_VERSIONS)
 	this.loaders.set(listOf("fabric", "quilt"))
-	this.dependencies.set(listOf(
-		ModVersionDependency("P7dR8mSH", ModVersionDependency.Type.REQUIRED),
-		ModVersionDependency("reCfnRvJ", ModVersionDependency.Type.INCOMPATIBLE),
-		ModVersionDependency("PxQSWIcD", ModVersionDependency.Type.INCOMPATIBLE)
-	))
+	this.dependencies.set(
+		listOf(
+			ModVersionDependency("P7dR8mSH", ModVersionDependency.Type.REQUIRED),
+			ModVersionDependency("reCfnRvJ", ModVersionDependency.Type.INCOMPATIBLE),
+			ModVersionDependency("PxQSWIcD", ModVersionDependency.Type.INCOMPATIBLE)
+		)
+	)
 	this.changelog.set(Utils.fetchChangelog(project))
 	this.readme.set(Utils.parseReadme(project))
 	this.files.setFrom(tasks.remapJar.get())

@@ -19,7 +19,6 @@ import dev.lambdaurora.lambdynlights.resource.LightSourceLoader;
 import dev.lambdaurora.lambdynlights.resource.LoadedLightSourceResource;
 import dev.yumi.commons.event.Event;
 import dev.yumi.mc.core.api.YumiEvents;
-import dev.yumi.mc.core.api.YumiMods;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -35,12 +34,12 @@ import java.util.Optional;
  * Represents an item light sources manager.
  *
  * @author LambdAurora
- * @version 4.2.5
+ * @version 4.4.0
  * @since 1.3.0
  */
 public final class ItemLightSources extends LightSourceLoader<ItemLightSource> implements ItemLightSourceManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights|ItemLightSources");
-	public static final Identifier RESOURCE_RELOADER_ID = LambDynLightsConstants.id("item_dynamic_lights");
+	public static final Identifier RESOURCE_RELOADER_ID = LambDynLights.id("item_dynamic_lights");
 
 	private final Event<Identifier, OnRegister> onRegisterEvent = YumiEvents.EVENTS.create(OnRegister.class);
 

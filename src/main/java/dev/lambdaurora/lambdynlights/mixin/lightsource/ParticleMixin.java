@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2025 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambDynamicLights.
  *
@@ -9,43 +9,31 @@
 
 package dev.lambdaurora.lambdynlights.mixin.lightsource;
 
-import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSourceBehavior;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Entity.class)
-public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
+@Environment(EnvType.CLIENT)
+@Mixin(Particle.class)
+public class ParticleMixin implements EntityDynamicLightSourceBehavior {
 	@Shadow
-	public abstract Level level();
-
+	@Final
+	protected ClientLevel level;
 	@Shadow
-	public abstract double getX();
-
+	protected double x;
 	@Shadow
-	public abstract double getEyeY();
-
+	protected double y;
 	@Shadow
-	public abstract double getZ();
-
+	protected double z;
 	@Shadow
-	public abstract double getY();
-
-	@Shadow
-	public abstract boolean isOnFire();
-
-	@Shadow
-	public abstract boolean isCurrentlyGlowing();
-
-	@Shadow
-	public abstract boolean isInvisible();
+	protected boolean removed;
 
 	@Unique
 	protected int lambdynlights$luminance = 0;
@@ -60,25 +48,19 @@ public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
 	@Unique
 	private LongSet lambdynlights$trackedLitChunkPos = LongSet.of();
 
-	@Inject(method = "remove", at = @At("TAIL"))
-	public void onRemove(CallbackInfo ci) {
-		if (this.level().isClientSide())
-			this.setDynamicLightEnabled(false);
-	}
-
 	@Override
 	public double getDynamicLightX() {
-		return this.getX();
+		return this.x;
 	}
 
 	@Override
 	public double getDynamicLightY() {
-		return this.getEyeY();
+		return this.y;
 	}
 
 	@Override
 	public double getDynamicLightZ() {
-		return this.getZ();
+		return this.z;
 	}
 
 	@Override
@@ -109,19 +91,6 @@ public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
 	}
 
 	@Override
-	public void dynamicLightTick() {
-		if (this.isInvisible()) {
-			this.lambdynlights$luminance = 0;
-		} else {
-			this.lambdynlights$luminance = this.isOnFire() ? 15 : 0;
-
-			int luminance = LambDynLights.getLuminanceFrom((Entity) (Object) this);
-			if (luminance > this.lambdynlights$luminance)
-				this.lambdynlights$luminance = luminance;
-		}
-	}
-
-	@Override
 	public int getLuminance() {
 		return this.lambdynlights$luminance;
 	}
@@ -149,5 +118,9 @@ public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
 	@Override
 	public void lambdynlights$setTrackedLitChunkPos(LongSet trackedLitChunkPos) {
 		this.lambdynlights$trackedLitChunkPos = trackedLitChunkPos;
+	}
+
+	@Override
+	public void dynamicLightTick() {
 	}
 }

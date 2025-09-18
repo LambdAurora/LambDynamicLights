@@ -20,6 +20,10 @@ mode = "fancy"
 	firefly = true
 	# Enables dynamic lighting of Guardian's lasers. This also can be toggled off by disabling Guardian dynamic lighting.
 	guardian_laser = true
+	# Enables dynamic lighting of the Warden's sonic boom attack particles.
+	sonic_boom = true
+	# Enables dynamic lighting for entities that have the Glowing effect.
+	glowing_effect = true
 
 [light_sources.settings.entities.minecraft]
 	glow_item_frame = false

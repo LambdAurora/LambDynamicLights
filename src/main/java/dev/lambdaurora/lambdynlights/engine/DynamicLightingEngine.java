@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.lambdynlights.engine;
 
+import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdynlights.DynamicLightsConfig;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.accessor.DynamicLightHandlerHolder;
@@ -21,33 +22,39 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;
+import org.slf4j.Logger;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * Represents the dynamic lighting engine.
  *
  * @author LambdAurora, Akarys
- * @version 4.0.0
+ * @version 4.4.0
  * @since 3.1.0
  */
-public final class DynamicLightingEngine {
+public final class DynamicLightingEngine implements CellHasher {
+	private static final Logger LOGGER = LogUtils.getLogger();
+
 	public static final double MAX_RADIUS = 7.75;
 	public static final double MAX_RADIUS_SQUARED = MAX_RADIUS * MAX_RADIUS;
 	public static final int CELL_SIZE = MathHelper.ceil(MAX_RADIUS);
-	public static final int MAX_LIGHT_SOURCES = 4096;
+	public static final int DEFAULT_LIGHT_SOURCES = 1024;
 	private static final Vec3i[] CELL_OFFSETS;
 
-	private final SpatialLookupEntry[] spatialLookupEntries = new SpatialLookupEntry[MAX_LIGHT_SOURCES];
-	private final int[] startIndices = new int[MAX_LIGHT_SOURCES];
+	private SpatialLookupEntry[] spatialLookupEntries;
+	private int[] startIndices;
 	private final long[] computeSpatialLookupTimes = new long[40];
 	private int lastEntryCount = 0;
 	private final DynamicLightsConfig config;
 
 	public DynamicLightingEngine(DynamicLightsConfig config) {
 		this.config = config;
+
+		this.resize(DEFAULT_LIGHT_SOURCES);
 	}
 
 	/**
@@ -92,7 +99,7 @@ public final class DynamicLightingEngine {
 		for (var cellOffset : CELL_OFFSETS) {
 			currentCell.setWithOffset(cell, cellOffset);
 
-			int key = hashCell(currentCell.getX(), currentCell.getY(), currentCell.getZ());
+			int key = this.hashCell(currentCell.getX(), currentCell.getY(), currentCell.getZ());
 			int startIndex = this.startIndices[key];
 
 			for (int i = startIndex; i < this.spatialLookupEntries.length; i++) {
@@ -123,15 +130,9 @@ public final class DynamicLightingEngine {
 				.orElse(0);
 	}
 
-	/**
-	 * {@return the cell hash at the given block position}
-	 *
-	 * @param x the X block coordinate
-	 * @param y the Y block coordinate
-	 * @param z the Z block coordinate
-	 */
-	public static int hashAt(int x, int y, int z) {
-		return hashCell(
+	@Override
+	public int hashAt(int x, int y, int z) {
+		return this.hashCell(
 				positionToCell(x),
 				positionToCell(y),
 				positionToCell(z)
@@ -148,16 +149,30 @@ public final class DynamicLightingEngine {
 		return coordinate >> 3;
 	}
 
+	@Override
+	public int hashCell(int cellX, int cellY, int cellZ) {
+		return Math.abs(((cellX + 31) * 19 + cellY) * 41 + cellZ) * 83 & (this.spatialLookupEntries.length - 1);
+	}
+
 	/**
-	 * Hashes the given cell coordinates.
-	 *
-	 * @param cellX the cell X-coordinate
-	 * @param cellY the cell Y-coordinate
-	 * @param cellZ the cell Z-coordinate
-	 * @return the cell hash
+	 * {@return the size of the spatial lookup}
 	 */
-	public static int hashCell(int cellX, int cellY, int cellZ) {
-		return Math.abs(((cellX + 31) * 19 + cellY) * 41 + cellZ) * 83 & (MAX_LIGHT_SOURCES - 1);
+	public int getSize() {
+		return this.spatialLookupEntries.length;
+	}
+
+	/**
+	 * Resets the size of the spatial lookup back to its default size.
+	 */
+	public void resetSize() {
+		this.resize(DEFAULT_LIGHT_SOURCES);
+	}
+
+	private void resize(int newLength) {
+		if (this.spatialLookupEntries != null && this.spatialLookupEntries.length == newLength) return;
+
+		this.spatialLookupEntries = new SpatialLookupEntry[newLength];
+		this.startIndices = new int[newLength];
 	}
 
 	/**
@@ -170,14 +185,7 @@ public final class DynamicLightingEngine {
 	public void computeSpatialLookup(Collection<? extends DynamicLightSource> lightSources) {
 		long startTime = System.nanoTime();
 
-		Arrays.fill(this.spatialLookupEntries, null);
-		Arrays.fill(this.startIndices, Integer.MAX_VALUE);
-
-		var it = lightSources.stream()
-				.flatMap(DynamicLightSource::splitIntoDynamicLightEntries)
-				.limit(MAX_LIGHT_SOURCES)
-				.sorted(Comparator.comparingInt(SpatialLookupEntry::cellKey))
-				.iterator();
+		var it = this.computeSpatialEntries(lightSources);
 
 		int i = 0;
 		while (it.hasNext()) {
@@ -186,7 +194,7 @@ public final class DynamicLightingEngine {
 			i++;
 		}
 
-		for (i = 0; i < MAX_LIGHT_SOURCES; i++) {
+		for (i = 0; i < this.spatialLookupEntries.length; i++) {
 			if (this.spatialLookupEntries[i] == null) {
 				this.lastEntryCount = i;
 				break;
@@ -207,15 +215,44 @@ public final class DynamicLightingEngine {
 		this.computeSpatialLookupTimes[this.computeSpatialLookupTimes.length - 1] = endTime - startTime;
 	}
 
+	private Iterator<SpatialLookupEntry> computeSpatialEntries(
+			Collection<? extends DynamicLightSource> lightSources
+	) {
+		var spatialEntries = lightSources.stream()
+				.flatMap(lightSource ->
+						lightSource.splitIntoDynamicLightEntries(this)
+				)
+				.toList();
+
+		if (spatialEntries.size() > this.spatialLookupEntries.length * .95f) {
+			int newLength = this.spatialLookupEntries.length * 2;
+			LambDynLights.info(LOGGER,
+					"Resizing spatial lookup, capacity limit of {} reached. New capacity will be {}.",
+					this.spatialLookupEntries.length, newLength
+			);
+
+			this.resize(newLength);
+			return this.computeSpatialEntries(lightSources);
+		}
+
+		Arrays.fill(this.spatialLookupEntries, null);
+		Arrays.fill(this.startIndices, Integer.MAX_VALUE);
+
+		return spatialEntries.stream()
+				.limit(this.spatialLookupEntries.length)
+				.sorted(Comparator.comparingInt(SpatialLookupEntry::cellKey))
+				.iterator();
+	}
+
 	@VisibleForTesting
 	public boolean hasEntriesAt(int cellX, int cellY, int cellZ) {
-		int key = hashCell(cellX, cellY, cellZ);
-		return this.startIndices[key] < MAX_LIGHT_SOURCES;
+		int key = this.hashCell(cellX, cellY, cellZ);
+		return this.startIndices[key] < this.startIndices.length;
 	}
 
 	@VisibleForTesting
 	public int getEntryCountAt(int cellX, int cellY, int cellZ) {
-		int key = hashCell(cellX, cellY, cellZ);
+		int key = this.hashCell(cellX, cellY, cellZ);
 		int startIndex = this.startIndices[key];
 		int count = 0;
 		for (int i = startIndex; i < this.spatialLookupEntries.length; i++) {

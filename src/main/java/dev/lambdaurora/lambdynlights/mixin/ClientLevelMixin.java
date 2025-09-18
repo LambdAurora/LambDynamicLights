@@ -10,20 +10,26 @@
 package dev.lambdaurora.lambdynlights.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSourceBehavior;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.entity.LevelEntityGetter;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientLevel.class)
 public abstract class ClientLevelMixin {
-	@Shadow
-	protected abstract LevelEntityGetter<Entity> getEntities();
+	@Inject(method = "tickEntities", at = @At("HEAD"))
+	private void lambdynlights$onStartWorldTick(CallbackInfo ci) {
+		LambDynLights.get().onStartLevelTick();
+	}
+
+	@Inject(method = "tickEntities", at = @At("TAIL"))
+	private void lambdynlights$onEndWorldTick(CallbackInfo ci) {
+		LambDynLights.get().onEndLevelTick();
+	}
 
 	@Inject(
 			method = "tickNonPassenger",

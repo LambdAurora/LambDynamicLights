@@ -22,7 +22,7 @@ import org.jetbrains.annotations.ApiStatus;
  * Represents the behavior of a dynamic light source.
  *
  * @author LambdAurora
- * @version 4.0.0
+ * @version 4.4.0
  * @since 4.0.0
  */
 @ApiStatus.Internal
@@ -68,11 +68,6 @@ public interface EntityDynamicLightSourceBehavior extends EntityDynamicLightSour
 		else
 			LambDynLights.get().removeLightSource(this);
 	}
-
-	/**
-	 * {@return {@code true} if this dynamic light source should update, or {@code false} otherwise}
-	 */
-	boolean shouldUpdateDynamicLight();
 
 	/**
 	 * Ticks the given entity for dynamic lighting.
