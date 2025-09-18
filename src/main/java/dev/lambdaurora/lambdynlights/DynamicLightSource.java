@@ -38,9 +38,7 @@ public interface DynamicLightSource extends EntityDynamicLightSourceBehavior {
 	 *
 	 * @return the world instance
 	 */
-	default Level getDynamicLightLevel() {
-		return this.dynamicLightWorld();
-	}
+	Level getDynamicLightLevel();
 
 	default boolean lambdynlights$updateDynamicLight(@NotNull LevelRenderer renderer) {
 		return false;

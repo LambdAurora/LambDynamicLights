@@ -9,8 +9,10 @@
 		"FallingBlockEntityMixin",
 		"GuardianEntityMixin",
 		"LivingEntityMixin",
+		"ParticleMixin",
 		"PlayerEntityMixin",
 		"PrimedTntEntityMixin",
+		"SonicBoomParticleMixin",
 		"TheEndGatewayBlockEntityMixin"
 	],
 	"injectors": {

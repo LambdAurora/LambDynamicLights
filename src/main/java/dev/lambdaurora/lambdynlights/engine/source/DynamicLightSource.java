@@ -9,12 +9,14 @@
 
 package dev.lambdaurora.lambdynlights.engine.source;
 
+import dev.lambdaurora.lambdynlights.engine.CellHasher;
 import dev.lambdaurora.lambdynlights.engine.lookup.SpatialLookupEntry;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.ChunkSectionPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Stream;
 
@@ -22,16 +24,17 @@ import java.util.stream.Stream;
  * Represents a dynamic light source.
  *
  * @author LambdAurora
- * @version 4.0.0
+ * @version 4.4.0
  * @since 4.0.0
  */
 public interface DynamicLightSource {
 	/**
 	 * Splits this dynamic light source into spatial lookup entries.
 	 *
+	 * @param cellHasher the cell hasher
 	 * @return a stream of spatial lookup entries this source is made of
 	 */
-	Stream<SpatialLookupEntry> splitIntoDynamicLightEntries();
+	Stream<SpatialLookupEntry> splitIntoDynamicLightEntries(@NotNull CellHasher cellHasher);
 
 	/**
 	 * Computes the set of chunk sections to rebuild to display in-world the new light values.

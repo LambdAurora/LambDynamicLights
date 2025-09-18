@@ -13,6 +13,8 @@
 		"EntityTypeMixin",
 		"LevelRendererAccessor",
 		"MinecraftClientMixin",
+		"OptionsMixin",
+		"ParticleEngineMixin",
 		"VideoSettingsScreenMixin",
 		"fabric.AoCalculatorMixin",
 		"retrofit.DynamicLightHandlerMixin",

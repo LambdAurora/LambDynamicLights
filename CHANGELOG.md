@@ -333,6 +333,17 @@
   - Updated Italian translations ([#287](https://github.com/LambdAurora/LambDynamicLights/pull/287)).
   - Updated Polish translations ([#288](https://github.com/LambdAurora/LambDynamicLights/pull/288)).
 
+### 4.1.5
+
+- Backports some fixes from v4.3.2:
+  - Fixed various crashes due to early Minecraft classes being loaded ([#289](https://github.com/LambdAurora/LambDynamicLights/issues/289)).
+  - Updated [Yumi Minecraft Libraries: Foundation].
+
+### 4.1.6
+
+- Backports some changes from the v4.3.3:
+  - Fixed some crashes related to debug renderers.
+
 ## 4.2.0
 
 - Updated to Minecraft 1.21.5.
@@ -377,22 +388,77 @@
 - Updated Chinese translations ([#281](https://github.com/LambdAurora/LambDynamicLights/pull/281)).
 - Made tab in Sodium GUI translatable ([#282](https://github.com/LambdAurora/LambDynamicLights/pull/282)).
 
+### 4.2.8
+
+- Backports some changes from the v4.3.1:
+  - Switched to [Yumi Minecraft Foundation Library] for entrypoint management and mod discovery.
+    - This allows to use entrypoints more reliably on NeoForge and with full support of Sinytra Connector.
+      Such entrypoints can be added through the `yumi:entrypoints` custom property.
+    - This is a step towards better and official support of NeoForge.
+  - Updated Turkish translations ([#285](https://github.com/LambdAurora/LambDynamicLights/pull/285)).
+  - Updated Chinese translations ([#286](https://github.com/LambdAurora/LambDynamicLights/pull/286)).
+  - Updated Italian translations ([#287](https://github.com/LambdAurora/LambDynamicLights/pull/287)).
+  - Updated Polish translations ([#288](https://github.com/LambdAurora/LambDynamicLights/pull/288)).
+
+### 4.2.9
+
+- Backports some fixes from v4.3.2:
+  - Fixed various crashes due to early Minecraft classes being loaded ([#289](https://github.com/LambdAurora/LambDynamicLights/issues/289)).
+  - Updated [Yumi Minecraft Libraries: Foundation].
+
+### 4.2.10
+
+- Backports some changes from the v4.3.3:
+  - Fixed some crashes related to debug renderers.
+
 ## 4.3.0
 
 - Updated to Minecraft 1.21.6.
 - Updated [SpruceUI].
 - Updated [pridelib].
 
-### NEXT
+### 4.3.1
 
+- Switched to [Yumi Minecraft Libraries: Foundation] for entrypoint management and mod discovery.
+  - This allows to use entrypoints more reliably on NeoForge and with full support of Sinytra Connector.
+    Such entrypoints can be added through the `yumi:entrypoints` custom property.
+  - This is a step towards better and official support of NeoForge.
 - Updated Turkish translations ([#285](https://github.com/LambdAurora/LambDynamicLights/pull/285)).
 - Updated Chinese translations ([#286](https://github.com/LambdAurora/LambDynamicLights/pull/286)).
 - Updated Italian translations ([#287](https://github.com/LambdAurora/LambDynamicLights/pull/287)).
 - Updated Polish translations ([#288](https://github.com/LambdAurora/LambDynamicLights/pull/288)).
+- Updated [SpruceUI].
+
+### 4.3.2
+
+- Fixed various crashes due to early Minecraft classes being loaded ([#289](https://github.com/LambdAurora/LambDynamicLights/issues/289)).
+- Updated [Yumi Minecraft Libraries: Foundation].
+
+### 4.3.3
+
+- Fixed some crashes related to debug renderers.
+
+## 4.4.0
+
+- Added Warden Sonic Boom attack particles dynamic lighting ([#307](https://github.com/LambdAurora/LambDynamicLights/issues/307)).
+- Added option to control whether the Glowing effect gives dynamic lighting to entities ([#140](https://github.com/LambdAurora/LambDynamicLights/issues/140)).
+- Added a keybind to toggle ON/OFF first-person dynamic lighting.
+  - This may be useful to users who use shaders with first-person dynamic lighting included.
+    With the addition of an additional mod, or Vanilla in 1.21.9,
+    it is also possible to bind this to the same key which toggles shaders ([#248](https://github.com/LambdAurora/LambDynamicLights/issues/248)).
+- Added support for Fabric resource conditions in dynamic light source files.
+  - Fixed [#309](https://github.com/LambdAurora/LambDynamicLights/issues/309).
+- Improved handling of capacity limit of the spatial lookup, making it resize dynamically ([#292](https://github.com/LambdAurora/LambDynamicLights/issues/292)).
+  - If you had issues with too many light sources, this should at least fix the lack of light updates,
+    however this still can affect performances.
+- Fixed leak of the tracking of dynamic lighting of Firefly particles.
+- Updated Ukrainian translations ([#304](https://github.com/LambdAurora/LambDynamicLights/pull/304)).
+- Updated [Yumi Minecraft Libraries: Foundation].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"
+[Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
 [Canvas Renderer]: https://www.curseforge.com/minecraft/mc-mods/canvas-renderer "Canvas Renderer CurseForge page"
 [#115]: https://github.com/LambdAurora/LambDynamicLights/issues/115

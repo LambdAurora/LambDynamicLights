@@ -10,7 +10,6 @@
 package dev.lambdaurora.lambdynlights.mixin.retrofit;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
-import dev.lambdaurora.lambdynlights.LambDynLightsConstants;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandler;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
@@ -37,7 +36,7 @@ import java.util.Map;
 public final class DynamicLightHandlersMixin {
 	@Unique
 	private static final EntityLuminance.Type DUMMY_RETROFIT_TYPE = new EntityLuminance.Type(
-			LambDynLightsConstants.id("dummy/old_dynamic_light_handlers"), null
+			LambDynLights.id("dummy/old_dynamic_light_handlers"), null
 	);
 
 	@Accessor(remap = false)

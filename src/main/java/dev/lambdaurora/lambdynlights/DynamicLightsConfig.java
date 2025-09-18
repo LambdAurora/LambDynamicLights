@@ -28,15 +28,21 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 4.0.2
+ * @version 4.4.0
  * @since 1.0.0
  */
 public class DynamicLightsConfig {
@@ -50,6 +56,8 @@ public class DynamicLightsConfig {
 	private static final int DEFAULT_DEBUG_CELL_DISPLAY_RADIUS = 0;
 	private static final int DEFAULT_DEBUG_LIGHT_LEVEL_RADIUS = 0;
 
+	private static final Executor SAVE_EXECUTOR = Executors.newSingleThreadExecutor();
+
 	public static final Path CONFIG_FILE_PATH = FabricLoader.getInstance().getConfigDir()
 			.resolve("lambdynlights.toml")
 			.normalize();
@@ -62,6 +70,8 @@ public class DynamicLightsConfig {
 	private final BooleanSettingEntry waterSensitiveCheck;
 	private final BooleanSettingEntry beamLighting;
 	private final BooleanSettingEntry guardianLaser;
+	private final BooleanSettingEntry sonicBoomLighting;
+	private final BooleanSettingEntry glowingEffectLighting;
 	private final BooleanSettingEntry debugActiveDynamicLightingCells;
 	private final BooleanSettingEntry debugDisplayDynamicLightingChunkRebuild;
 	private final BooleanSettingEntry debugDisplayHandlerBoundingBox;
@@ -69,6 +79,8 @@ public class DynamicLightsConfig {
 	private ExplosiveLightingMode tntLightingMode;
 	private int debugCellDisplayRadius;
 	private int debugLightLevelRadius;
+
+	private int lastHash;
 
 	public final SpruceOption dynamicLightsModeOption = new SpruceCyclingOption("lambdynlights.option.mode",
 			amount -> this.setDynamicLightsMode(this.dynamicLightsMode.next()),
@@ -103,6 +115,14 @@ public class DynamicLightsConfig {
 				"light_sources.guardian_laser", true, this.config,
 				Text.translatable("lambdynlights.option.light_sources.guardian_laser.tooltip")
 		);
+		this.sonicBoomLighting = new BooleanSettingEntry(
+				"light_sources.sonic_boom", true, this.config,
+				Text.translatable("lambdynlights.option.light_sources.sonic_boom.tooltip")
+		);
+		this.glowingEffectLighting = new BooleanSettingEntry(
+				"light_sources.glowing_effect", true, this.config,
+				Text.translatable("lambdynlights.option.light_sources.glowing_effect.tooltip")
+		);
 		this.debugActiveDynamicLightingCells = new BooleanSettingEntry(
 				"debug.active_dynamic_lighting_cells", false, this.config,
 				Text.translatable("lambdynlights.option.debug.active_dynamic_lighting_cells.tooltip")
@@ -122,6 +142,7 @@ public class DynamicLightsConfig {
 				this.waterSensitiveCheck,
 				this.beamLighting,
 				this.guardianLaser,
+				this.sonicBoomLighting,
 				this.debugActiveDynamicLightingCells,
 				this.debugDisplayDynamicLightingChunkRebuild,
 				this.debugDisplayHandlerBoundingBox
@@ -148,6 +169,8 @@ public class DynamicLightsConfig {
 				.orElse(DEFAULT_TNT_LIGHTING_MODE);
 		this.debugCellDisplayRadius = this.config.getOrElse("debug.cell_display_radius", DEFAULT_DEBUG_CELL_DISPLAY_RADIUS);
 		this.debugLightLevelRadius = this.config.getOrElse("debug.light_level_radius", DEFAULT_DEBUG_LIGHT_LEVEL_RADIUS);
+
+		this.lastHash = this.serialize().hashCode();
 
 		LambDynLights.log(LOGGER, "Configuration loaded.");
 	}
@@ -209,16 +232,35 @@ public class DynamicLightsConfig {
 	}
 
 	/**
-	 * Saves the configuration.
+	 * Queues the saving of the configuration.
 	 */
 	public void save() {
-		var toml = new TomlWriter().writeToString(this.config);
+		this.maybeSerialize().ifPresent(data -> SAVE_EXECUTOR.execute(() -> this.doSave(data)));
+	}
 
+	private @NotNull String serialize() {
+		return new TomlWriter().writeToString(this.config);
+	}
+
+	private @NotNull Optional<String> maybeSerialize() {
+		var data = this.serialize();
+		int hash = data.hashCode();
+
+		if (this.lastHash != hash) {
+			this.lastHash = hash;
+			return Optional.of(data);
+		} else {
+			return Optional.empty();
+		}
+	}
+
+	private void doSave(String data) {
 		try {
 			Files.createDirectories(CONFIG_FILE_PATH.getParent());
-			Files.writeString(CONFIG_FILE_PATH, toml,
-					StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.DSYNC
-			);
+
+			var tmpPath = CONFIG_FILE_PATH.resolveSibling(CONFIG_FILE_PATH.getFileName().toString() + ".tmp");
+			Files.writeString(tmpPath, data);
+			Files.move(tmpPath, CONFIG_FILE_PATH, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			LambDynLights.error(LOGGER, "Failed to save configuration file.", e);
 			return;
@@ -333,6 +375,20 @@ public class DynamicLightsConfig {
 	 */
 	public BooleanSettingEntry getGuardianLaser() {
 		return this.guardianLaser;
+	}
+
+	/**
+	 * {@return the sonic boom light source setting holder}
+	 */
+	public BooleanSettingEntry getSonicBoomLighting() {
+		return this.sonicBoomLighting;
+	}
+
+	/**
+	 * {@return the glowing effect lighting setting holder}
+	 */
+	public BooleanSettingEntry getGlowingEffectLighting() {
+		return this.glowingEffectLighting;
 	}
 
 	/**

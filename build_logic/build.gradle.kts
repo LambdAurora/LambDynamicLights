@@ -23,6 +23,7 @@ dependencies {
 	implementation(libs.gradle.licenser)
 	implementation(libs.gradle.loom)
 	implementation(libs.gradle.lambdamcdev)
+	implementation(libs.gson)
 
 	// A bit of a hack you definitely should not worry about.
 	// https://github.com/gradle/gradle/issues/15383#issuecomment-779893192

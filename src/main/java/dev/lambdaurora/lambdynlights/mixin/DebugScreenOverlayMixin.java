@@ -11,7 +11,6 @@ package dev.lambdaurora.lambdynlights.mixin;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.LambDynLightsConstants;
-import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import net.minecraft.TextFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
@@ -28,7 +27,7 @@ import java.util.List;
  * Adds a debug string for dynamic light sources tracking and updates.
  *
  * @author LambdAurora
- * @version 4.0.0
+ * @version 4.4.0
  * @since 1.3.2
  */
 @Mixin(DebugScreenOverlay.class)
@@ -48,7 +47,7 @@ public class DebugScreenOverlayMixin {
 				.append(" (Occupying ")
 				.append(ldl.engine.getLastEntryCount())
 				.append('/')
-				.append(DynamicLightingEngine.MAX_LIGHT_SOURCES)
+				.append(ldl.engine.getSize())
 				.append(" ; Updated: ")
 				.append(ldl.getLastUpdateCount());
 

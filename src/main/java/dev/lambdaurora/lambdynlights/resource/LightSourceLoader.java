@@ -16,6 +16,7 @@ import com.mojang.serialization.JsonOps;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.yumi.commons.Unit;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
@@ -25,6 +26,7 @@ import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.util.profiling.Profiler;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,16 +35,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 /**
  * Represents a light source loader.
  *
  * @param <L> the type of light source to load
  * @author LambdAurora
- * @version 4.1.1
+ * @version 4.4.0
  * @since 4.0.0
  */
 public abstract class LightSourceLoader<L> implements IdentifiableResourceReloadListener {
+	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights|LightSourceLoader");
 	protected static final String SILENCE_ERROR_KEY = "silence_error";
 
 	private final Minecraft client = Minecraft.getInstance();
@@ -100,8 +104,12 @@ public abstract class LightSourceLoader<L> implements IdentifiableResourceReload
 	public final void apply(RegistryAccess registryAccess) {
 		var ops = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 
-		var lightSources = new ArrayList<L>();
-		this.loadedLightSources.forEach(data -> this.apply(ops, data).ifPresent(lightSources::add));
+		var lightSources = this.loadedLightSources.stream()
+				.filter(data -> this.canApply(ops, registryAccess, data))
+				.map(data -> this.apply(ops, data))
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.collect(Collectors.toCollection(ArrayList::new));
 		this.doApply(registryAccess, lightSources);
 		this.lightSources = lightSources;
 	}
@@ -139,4 +147,12 @@ public abstract class LightSourceLoader<L> implements IdentifiableResourceReload
 	}
 
 	protected abstract @NotNull Optional<L> apply(DynamicOps<JsonElement> ops, LoadedLightSourceResource loadedData);
+
+	protected boolean canApply(DynamicOps<JsonElement> ops, RegistryAccess registryAccess, LoadedLightSourceResource loadedData) {
+		if (loadedData.data().has(ResourceConditions.CONDITIONS_KEY)) {
+			return ResourceConditions.objectMatchesConditions(loadedData.data());
+		}
+
+		return true;
+	}
 }

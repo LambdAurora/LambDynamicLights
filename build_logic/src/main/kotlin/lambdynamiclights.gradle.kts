@@ -30,7 +30,7 @@ lambdamcdev {
 				.withEnvironment("client")
 				.withDepend("fabricloader", ">=${libs.versions.fabric.loader.get()}")
 				.withDepend("minecraft", "~1.20 <1.20.2-")
-				.withDepend("java", ">=${Constants.JAVA_VERSION}")
+				.withDepend("java", ">=${project.property("java_version")}")
 				.withModMenu {
 					it.withCurseForge("https://www.curseforge.com/minecraft/mc-mods/lambdynamiclights")
 						.withDiscord("https://discord.lambdaurora.dev/")

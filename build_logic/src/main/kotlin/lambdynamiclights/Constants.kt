@@ -1,15 +1,14 @@
 package lambdynamiclights
 
 import dev.lambdaurora.mcdev.api.ModUtils
+import dev.lambdaurora.mcdev.api.VersionType
 import org.gradle.accessors.dm.LibrariesForLibs
 
 object Constants {
-	const val GROUP = "dev.lambdaurora.lambdynamiclights"
 	const val NAME = "lambdynamiclights"
 	const val NAMESPACE = "lambdynlights"
 	const val PRETTY_NAME = "LambDynamicLights"
-	const val VERSION = "4.1.4"
-	const val JAVA_VERSION = 17
+	const val VERSION = "4.4.0"
 
 	const val DESCRIPTION = "The most feature-complete dynamic lighting mod for Fabric."
 	const val API_DESCRIPTION = "Library to provide dynamic lighting to Minecraft through LambDynamicLights."
@@ -37,7 +36,7 @@ object Constants {
 		return this.minecraftVersion!!
 	}
 
-	fun getVersionType(): String {
-		return ModUtils.fetchVersionType(this.VERSION, this.mcVersion())
+	fun getVersionType(): VersionType {
+		return ModUtils.getVersionType(this.VERSION, this.mcVersion())
 	}
 }

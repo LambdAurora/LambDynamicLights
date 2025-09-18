@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.lambdynlights;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsContext;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
@@ -29,6 +30,8 @@ import dev.lambdaurora.lambdynlights.resource.item.ItemLightSources;
 import dev.lambdaurora.lambdynlights.util.DynamicLightBehaviorDebugRenderer;
 import dev.lambdaurora.lambdynlights.util.DynamicLightDebugRenderer;
 import dev.lambdaurora.lambdynlights.util.DynamicLightLevelDebugRenderer;
+import dev.lambdaurora.lambdynlights.util.DynamicLightSectionDebugRenderer;
+import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.yumi.commons.event.EventManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -40,21 +43,28 @@ import net.fabricmc.loader.api.LanguageAdapterException;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
+import net.minecraft.TextFormatting;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.SonicBoomParticle;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.ChunkSectionPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,14 +79,21 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 4.1.1
+ * @version 4.4.0
  * @since 1.0.0
  */
 @ApiStatus.Internal
 public class LambDynLights implements ClientModInitializer, DynamicLightsContext {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights");
-	public static final EventManager<Identifier> EVENT_MANAGER = new EventManager<>(LambDynLightsConstants.id("default"), Identifier::tryParse);
+	public static final EventManager<Identifier> EVENT_MANAGER = new EventManager<>(LambDynLights.id("default"), Identifier::tryParse);
 	private static LambDynLights INSTANCE;
+
+	public static final KeyMapping TOGGLE_FPS_DYNAMIC_LIGHTING = new KeyMapping(
+			LambDynLightsConstants.NAMESPACE + ".key.toggle_fps_dynamic_lighting",
+			InputConstants.Type.KEYSYM,
+			GLFW.GLFW_KEY_UNKNOWN,
+			KeyMapping.CATEGORY_MISC
+	);
 
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
 	private final ItemLightSources itemLightSources = new ItemLightSources();
@@ -88,9 +105,14 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 	private final List<DynamicLightSource> toClear = new ArrayList<>();
 	private final ReentrantReadWriteLock lightSourcesLock = new ReentrantReadWriteLock();
 
-	public final DynamicLightDebugRenderer.SectionRebuild sectionRebuildDebugRenderer = new DynamicLightDebugRenderer.SectionRebuild(this);
-	public final DynamicLightLevelDebugRenderer dynamicLightLevelDebugRenderer = new DynamicLightLevelDebugRenderer(this);
-	public final DynamicLightBehaviorDebugRenderer dynamicLightBehaviorDebugRenderer = new DynamicLightBehaviorDebugRenderer(this, this.dynamicLightSources);
+	private final DynamicLightDebugRenderer.SectionRebuild sectionRebuildDebugRenderer
+			= new DynamicLightDebugRenderer.SectionRebuild(this);
+	public final @Unmodifiable List<DynamicLightDebugRenderer> debugRenderers = List.of(
+			sectionRebuildDebugRenderer,
+			new DynamicLightLevelDebugRenderer(this),
+			new DynamicLightBehaviorDebugRenderer(this, this.dynamicLightSources),
+			new DynamicLightSectionDebugRenderer(this)
+	);
 
 	private long lastUpdate = System.currentTimeMillis();
 	private boolean shouldTick = false;
@@ -111,74 +133,11 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(this.entityLightSources);
 
 		CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {
-			this.itemLightSources.apply(registries);
-			this.entityLightSources.apply(registries);
+			this.onTagsLoaded(registries);
 		});
 
-		ClientTickEvents.START_WORLD_TICK.register(level -> {
-			var mode = this.config.getDynamicLightsMode();
-			boolean shouldTick = mode.isEnabled();
-
-			if (shouldTick && mode.hasDelay()) {
-				long currentTime = System.currentTimeMillis();
-				if (currentTime < this.lastUpdate + mode.getDelay()) {
-					shouldTick = false;
-				} else {
-					this.lastUpdate = currentTime;
-				}
-			}
-
-			this.shouldTick = shouldTick || this.shouldForceRefresh;
-		});
-
-		ClientTickEvents.END_WORLD_TICK.register(level -> {
-			var renderer = Minecraft.getInstance().levelRenderer;
-
-			this.lightSourcesLock.writeLock().lock();
-			if (this.config.getDynamicLightsMode().isEnabled()) {
-				level.getProfiler().push("dynamic_lighting_compute_spatial_lookup");
-				this.engine.computeSpatialLookup(this.dynamicLightSources);
-				level.getProfiler().pop();
-			}
-			this.toClear.forEach(source -> {
-				source.getDynamicLightChunksToRebuild(true).forEach(chunk -> this.scheduleChunkRebuild(renderer, chunk));
-			});
-			this.toClear.clear();
-			this.lightSourcesLock.writeLock().unlock();
-
-			this.lastUpdateCount = 0;
-
-			if (this.shouldTick) {
-				var it = this.dynamicLightSources.iterator();
-				while (it.hasNext()) {
-					var lightSource = it.next();
-
-					// In case of light sources controlled by a DynamicLightBehavior, they might require polling to be removed.
-					if (lightSource instanceof DeferredDynamicLightSource deferred) {
-						DynamicLightBehavior behavior = deferred.behavior();
-
-						if (behavior.isRemoved()) {
-							this.toClear.add(lightSource);
-							it.remove();
-							continue;
-						}
-					}
-
-					var chunks = lightSource.getDynamicLightChunksToRebuild(this.shouldForceRefresh || this.toAdd.contains(lightSource));
-
-					if (!chunks.isEmpty()) {
-						chunks.forEach(chunk -> this.scheduleChunkRebuild(renderer, chunk));
-						this.lastUpdateCount++;
-					}
-				}
-
-				this.toAdd.clear();
-			}
-
-			this.sectionRebuildDebugRenderer.tick();
-
-			this.shouldForceRefresh = false;
-		});
+		ClientTickEvents.START_WORLD_TICK.register(level -> this.onStartLevelTick());
+		ClientTickEvents.END_WORLD_TICK.register(this::onEndLevelTick);
 
 		this.initializeApi();
 		DynamicLightHandlers.registerDefaultHandlers();
@@ -262,6 +221,95 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 	 */
 	public int getLastUpdateCount() {
 		return this.lastUpdateCount;
+	}
+
+	public void onTagsLoaded(RegistryAccess registries) {
+		this.itemLightSources.apply(registries);
+		this.entityLightSources.apply(registries);
+	}
+
+	public void onStartLevelTick() {
+		var mode = this.config.getDynamicLightsMode();
+		boolean shouldTick = mode.isEnabled();
+
+		if (shouldTick && mode.hasDelay()) {
+			long currentTime = System.currentTimeMillis();
+			if (currentTime < this.lastUpdate + mode.getDelay()) {
+				shouldTick = false;
+			} else {
+				this.lastUpdate = currentTime;
+			}
+		}
+
+		this.shouldTick = shouldTick || this.shouldForceRefresh;
+	}
+
+	public void onEndLevelTick(ClientLevel level) {
+		var renderer = Minecraft.getInstance().levelRenderer;
+
+		this.lightSourcesLock.writeLock().lock();
+		if (this.config.getDynamicLightsMode().isEnabled()) {
+			level.getProfiler().push("dynamic_lighting_compute_spatial_lookup");
+			this.engine.computeSpatialLookup(this.dynamicLightSources);
+			level.getProfiler().pop();
+		}
+		this.toClear.forEach(source -> {
+			source.getDynamicLightChunksToRebuild(true).forEach(chunk -> this.scheduleChunkRebuild(renderer, chunk));
+		});
+		this.toClear.clear();
+		this.lightSourcesLock.writeLock().unlock();
+
+		this.lastUpdateCount = 0;
+
+		if (this.shouldTick) {
+			var it = this.dynamicLightSources.iterator();
+			while (it.hasNext()) {
+				var lightSource = it.next();
+
+				// In case of light sources controlled by a DynamicLightBehavior, they might require polling to be removed.
+				if (lightSource instanceof DeferredDynamicLightSource deferred) {
+					DynamicLightBehavior behavior = deferred.behavior();
+
+					if (behavior.isRemoved()) {
+						this.toClear.add(lightSource);
+						it.remove();
+						continue;
+					}
+				}
+
+				var chunks = lightSource.getDynamicLightChunksToRebuild(this.shouldForceRefresh || this.toAdd.contains(lightSource));
+
+				if (!chunks.isEmpty()) {
+					chunks.forEach(chunk -> this.scheduleChunkRebuild(renderer, chunk));
+					this.lastUpdateCount++;
+				}
+			}
+
+			this.toAdd.clear();
+		}
+
+		this.sectionRebuildDebugRenderer.tick();
+
+		this.shouldForceRefresh = false;
+	}
+
+	public void onEndClientTick(Minecraft client) {
+		if (TOGGLE_FPS_DYNAMIC_LIGHTING.consumeClick()) {
+			boolean newValue = !this.config.getSelfLightSource().get();
+			var toggleText = SpruceTexts.getToggleText(newValue);
+			this.config.getSelfLightSource().set(newValue);
+			this.config.save();
+
+			if (client.player != null) {
+				client.player.displayClientMessage(
+						Text.translatable(
+								LambDynLightsConstants.NAMESPACE + ".key.toggle_fps_dynamic_lighting.info",
+								toggleText.copy().withStyle(newValue ? TextFormatting.GREEN : TextFormatting.RED)
+						),
+						true
+				);
+			}
+		}
 	}
 
 	/**
@@ -375,7 +423,7 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 	/**
 	 * Clears light sources.
 	 */
-	public void clearLightSources() {
+	public void onChangeWorld() {
 		var chunkProviders = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
 		while (chunkProviders.hasNext()) {
@@ -385,6 +433,8 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 				entityIt.resetDynamicLight();
 			this.toClear.add(it);
 		}
+
+		this.engine.resetSize();
 	}
 
 	/**
@@ -415,11 +465,11 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 		return result;
 	}
 
-	/**
-	 * Removes entities light source from tracked light sources.
-	 */
-	public void removeEntitiesLightSource() {
-		this.removeLightSources(lightSource -> (lightSource instanceof Entity && !(lightSource instanceof Player)));
+	public boolean canLightParticle(Particle particle) {
+		if (particle instanceof SonicBoomParticle)
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -434,6 +484,20 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 		}
 
 		logger.info(msg);
+	}
+
+	/**
+	 * Logs an informational message.
+	 *
+	 * @param logger the logger to use
+	 * @param msg the message to log
+	 */
+	public static void info(Logger logger, String msg, Object... args) {
+		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			msg = "[LambDynLights] " + msg;
+		}
+
+		logger.info(msg, args);
 	}
 
 	/**
@@ -584,5 +648,14 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 	 */
 	public static LambDynLights get() {
 		return INSTANCE;
+	}
+
+	/**
+	 * {@return a LambDynamicLights identifier}
+	 *
+	 * @param path the path
+	 */
+	public static Identifier id(String path) {
+		return new Identifier(LambDynLightsConstants.NAMESPACE, path);
 	}
 }
