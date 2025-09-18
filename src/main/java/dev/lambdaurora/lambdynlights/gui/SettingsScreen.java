@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 4.2.8
+ * @version 4.4.0
  * @since 1.0.0
  */
 public class SettingsScreen extends SpruceScreen {
@@ -220,7 +220,8 @@ public class SettingsScreen extends SpruceScreen {
 		list.addSingleOptionEntry(this.waterSensitiveOption);
 		list.addSingleOptionEntry(new SpruceSeparatorOption(SPECIAL_DYNAMIC_LIGHT_SOURCES_KEY, true, null));
 		list.addOptionEntry(this.creeperLightingOption, this.tntLightingOption);
-		list.addOptionEntry(this.config.getBeamLighting().getOption(), this.config.getGuardianLaser().getOption());
+		list.addOptionEntry(this.config.getBeamLighting().getOption(), this.config.getGlowingEffectLighting().getOption());
+		list.addOptionEntry(this.config.getGuardianLaser().getOption(), this.config.getSonicBoomLighting().getOption());
 		context.addInnerWidget(list);
 	}
 

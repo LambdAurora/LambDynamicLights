@@ -9,7 +9,7 @@
 
 package dev.lambdaurora.lambdynlights.engine.source;
 
-import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
+import dev.lambdaurora.lambdynlights.engine.CellHasher;
 import dev.lambdaurora.lambdynlights.engine.lookup.SpatialLookupCollectionEntry;
 import dev.lambdaurora.lambdynlights.engine.lookup.SpatialLookupEntry;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
@@ -20,6 +20,7 @@ import it.unimi.dsi.fastutil.longs.LongList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,12 +35,13 @@ public class CollectionDynamicLightSource implements DynamicLightSource {
 		this.dirty = true;
 	}
 
-	public Stream<SpatialLookupEntry> splitIntoDynamicLightEntries() {
+	@Override
+	public Stream<SpatialLookupEntry> splitIntoDynamicLightEntries(@NotNull CellHasher cellHasher) {
 		record Data(LongList position, ByteList luminance) {}
 		var cellKeyToData = new Int2ObjectOpenHashMap<Data>();
 
 		for (var entry : this.entries) {
-			int cellKey = DynamicLightingEngine.hashAt(entry.x(), entry.y(), entry.z());
+			int cellKey = cellHasher.hashAt(entry.x(), entry.y(), entry.z());
 
 			var data = cellKeyToData.computeIfAbsent(cellKey, k -> new Data(new LongArrayList(), new ByteArrayList()));
 

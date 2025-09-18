@@ -442,6 +442,23 @@
 
 - Fixed some crashes related to debug renderers.
 
+## 4.4.0
+
+- Added Warden Sonic Boom attack particles dynamic lighting ([#307](https://github.com/LambdAurora/LambDynamicLights/issues/307)).
+- Added option to control whether the Glowing effect gives dynamic lighting to entities ([#140](https://github.com/LambdAurora/LambDynamicLights/issues/140)).
+- Added a keybind to toggle ON/OFF first-person dynamic lighting.
+  - This may be useful to users who use shaders with first-person dynamic lighting included.
+    With the addition of an additional mod, or Vanilla in 1.21.9,
+    it is also possible to bind this to the same key which toggles shaders ([#248](https://github.com/LambdAurora/LambDynamicLights/issues/248)).
+- Added support for Fabric resource conditions in dynamic light source files.
+  - Fixed [#309](https://github.com/LambdAurora/LambDynamicLights/issues/309).
+- Improved handling of capacity limit of the spatial lookup, making it resize dynamically ([#292](https://github.com/LambdAurora/LambDynamicLights/issues/292)).
+  - If you had issues with too many light sources, this should at least fix the lack of light updates,
+    however this still can affect performances.
+- Fixed leak of the tracking of dynamic lighting of Firefly particles.
+- Updated Ukrainian translations ([#304](https://github.com/LambdAurora/LambDynamicLights/pull/304)).
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"

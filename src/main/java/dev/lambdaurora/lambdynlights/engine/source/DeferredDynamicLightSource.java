@@ -10,6 +10,7 @@
 package dev.lambdaurora.lambdynlights.engine.source;
 
 import dev.lambdaurora.lambdynlights.api.behavior.DynamicLightBehavior;
+import dev.lambdaurora.lambdynlights.engine.CellHasher;
 import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import dev.lambdaurora.lambdynlights.engine.lookup.SpatialLookupDeferredEntry;
 import dev.lambdaurora.lambdynlights.engine.lookup.SpatialLookupEntry;
@@ -17,6 +18,7 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.ChunkSectionPos;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -25,7 +27,7 @@ import java.util.stream.Stream;
  * Represents a dynamic light source which is deferred to a {@link DynamicLightBehavior}.
  *
  * @author LambdAurora, Akarys
- * @version 4.0.1
+ * @version 4.4.0
  * @since 4.0.0
  */
 public final class DeferredDynamicLightSource implements DynamicLightSource {
@@ -42,7 +44,7 @@ public final class DeferredDynamicLightSource implements DynamicLightSource {
 	}
 
 	@Override
-	public Stream<SpatialLookupEntry> splitIntoDynamicLightEntries() {
+	public Stream<SpatialLookupEntry> splitIntoDynamicLightEntries(@NotNull CellHasher cellHasher) {
 		DynamicLightBehavior.BoundingBox boundingBox = this.behavior.getBoundingBox();
 
 		var chunks = new ArrayList<SpatialLookupEntry>();
@@ -54,7 +56,7 @@ public final class DeferredDynamicLightSource implements DynamicLightSource {
 		for (int x = DynamicLightingEngine.positionToCell(boundingBox.startX()); x <= cellEndX; x++) {
 			for (int y = DynamicLightingEngine.positionToCell(boundingBox.startY()); y <= cellEndY; y++) {
 				for (int z = DynamicLightingEngine.positionToCell(boundingBox.startZ()); z <= cellEndZ; z++) {
-					chunks.add(new SpatialLookupDeferredEntry(DynamicLightingEngine.hashCell(x, y, z), behavior));
+					chunks.add(new SpatialLookupDeferredEntry(cellHasher.hashCell(x, y, z), behavior));
 				}
 			}
 		}

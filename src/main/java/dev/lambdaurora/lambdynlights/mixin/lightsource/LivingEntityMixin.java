@@ -23,7 +23,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
 			return;
 		}
 
-		if (this.isOnFire() || this.isCurrentlyGlowing()) {
+		if (this.isOnFire() || (LambDynLights.get().config.getGlowingEffectLighting().get() && this.isCurrentlyGlowing())) {
 			this.lambdynlights$luminance = 15;
 		} else {
 			this.lambdynlights$luminance = LambDynLights.getLivingEntityLuminanceFromItems((LivingEntity) (Object) this);

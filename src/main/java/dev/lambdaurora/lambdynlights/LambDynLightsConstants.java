@@ -11,13 +11,12 @@ package dev.lambdaurora.lambdynlights;
 
 import dev.yumi.commons.TriState;
 import dev.yumi.mc.core.api.YumiMods;
-import net.minecraft.resources.Identifier;
 
 /**
  * Contains constants about LambDynamicLights.
  *
  * @author LambdAurora
- * @version 4.3.1
+ * @version 4.4.0
  * @since 3.0.1
  */
 public final class LambDynLightsConstants {
@@ -48,14 +47,5 @@ public final class LambDynLightsConstants {
 	 */
 	public static boolean isDevMode() {
 		return VERSION.endsWith("-local");
-	}
-
-	/**
-	 * {@return a LambDynamicLights identifier}
-	 *
-	 * @param path the path
-	 */
-	public static Identifier id(String path) {
-		return Identifier.of(NAMESPACE, path);
 	}
 }
