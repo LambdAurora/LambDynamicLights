@@ -9,7 +9,9 @@
 
 package dev.lambdaurora.lambdynlights.resource;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
@@ -23,6 +25,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.io.Resource;
 import net.minecraft.resources.io.ResourceManager;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.Profiler;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -105,7 +108,7 @@ public abstract class LightSourceLoader<L> implements IdentifiableResourceReload
 		var ops = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 
 		var lightSources = this.loadedLightSources.stream()
-				.filter(data -> this.canApply(ops, registryAccess, data))
+				.filter(this::canApply)
 				.map(data -> this.apply(ops, data))
 				.filter(Optional::isPresent)
 				.map(Optional::get)
@@ -148,11 +151,27 @@ public abstract class LightSourceLoader<L> implements IdentifiableResourceReload
 
 	protected abstract @NotNull Optional<L> apply(DynamicOps<JsonElement> ops, LoadedLightSourceResource loadedData);
 
-	protected boolean canApply(DynamicOps<JsonElement> ops, RegistryAccess registryAccess, LoadedLightSourceResource loadedData) {
+	protected boolean canApply(LoadedLightSourceResource loadedData) {
 		if (loadedData.data().has(ResourceConditions.CONDITIONS_KEY)) {
 			return ResourceConditions.objectMatchesConditions(loadedData.data());
+		} else if (loadedData.data().has("global_conditions")) {
+			return matchesMoonlightConditionsHack(loadedData.data());
 		}
 
 		return true;
+	}
+
+	private static boolean matchesMoonlightConditionsHack(JsonObject object) {
+		try {
+			JsonArray conditions = GsonHelper.getAsJsonArray(object, "global_conditions", null);
+
+			if (conditions == null) {
+				return true; // no conditions
+			} else {
+				return ResourceConditions.conditionsMatch(conditions, true);
+			}
+		} catch (RuntimeException exception) {
+			return false;
+		}
 	}
 }
