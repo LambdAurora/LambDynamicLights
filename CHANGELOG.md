@@ -459,6 +459,11 @@
 - Updated Ukrainian translations ([#304](https://github.com/LambdAurora/LambDynamicLights/pull/304)).
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+### 4.4.1
+
+- Updated [Yumi Minecraft Libraries: Foundation].
+  - This fixes a crash with some mods that specified `null` values in their custom properties.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"
