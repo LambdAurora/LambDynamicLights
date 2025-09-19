@@ -17,6 +17,7 @@
 		"ParticleEngineMixin",
 		"RegistryOpsAccessor",
 		"VideoSettingsScreenMixin",
+		"fabric.AoCalculatorMixin",
 		"sodium.SodiumOptionsGuiMixin"
 	],
 	"injectors": {
