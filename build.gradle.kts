@@ -68,7 +68,6 @@ dependencies {
 
 	modImplementation(libs.fabric.loader)
 	fabricApiModules.forEach { modImplementation(it) }
-	//modRuntimeOnly(fabricApi.module("fabric-renderer-indigo", libs.versions.fabric.api.get()))
 	modImplementation(libs.yumi.mc.foundation)
 	include(libs.yumi.mc.foundation)
 
