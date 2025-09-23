@@ -16,7 +16,7 @@
 		"OptionsMixin",
 		"ParticleEngineMixin",
 		"VideoSettingsScreenMixin",
-		"fabric.AoCalculatorMixin",
+		"fapi.AoCalculatorMixin",
 		"retrofit.DynamicLightHandlerMixin",
 		"retrofit.DynamicLightHandlersMixin",
 		"sodium.SodiumOptionsGuiMixin"

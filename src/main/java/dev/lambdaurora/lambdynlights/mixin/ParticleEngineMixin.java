@@ -9,8 +9,7 @@
 
 package dev.lambdaurora.lambdynlights.mixin;
 
-import dev.lambdaurora.lambdynlights.LambDynLights;
-import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSourceBehavior;
+import dev.lambdaurora.lambdynlights.engine.source.ParticleLightSourceBehavior;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.Particle;
@@ -28,17 +27,6 @@ public class ParticleEngineMixin {
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/Particle;tick()V", shift = At.Shift.AFTER)
 	)
 	private void lambdynlights$onTick(Particle particle, CallbackInfo ci) {
-		var lightSource = (EntityDynamicLightSourceBehavior) particle;
-
-		if (!particle.isAlive()) {
-			lightSource.setDynamicLightEnabled(false);
-		} else {
-			if (LambDynLights.get().canLightParticle(particle)) {
-				lightSource.dynamicLightTick();
-			} else {
-				lightSource.setLuminance(0);
-			}
-			LambDynLights.updateTracking(lightSource);
-		}
+		ParticleLightSourceBehavior.tickParticle(particle);
 	}
 }

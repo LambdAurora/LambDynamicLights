@@ -24,9 +24,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +36,7 @@ import java.util.Optional;
  * Represents an item light sources manager.
  *
  * @author LambdAurora
- * @version 4.4.0
+ * @version 4.5.0
  * @since 1.3.0
  */
 public final class ItemLightSources extends LightSourceLoader<ItemLightSource> implements ItemLightSourceManager {
@@ -43,18 +45,27 @@ public final class ItemLightSources extends LightSourceLoader<ItemLightSource> i
 
 	private final Event<Identifier, OnRegister> onRegisterEvent = YumiEvents.EVENTS.create(OnRegister.class);
 
-	@Override
-	protected Logger getLogger() {
-		return LOGGER;
+	public ItemLightSources(ApplicationPredicate applicationPredicate) {
+		super(applicationPredicate);
 	}
 
 	@Override
-	public Identifier getFabricId() {
+	public @NotNull Identifier id() {
 		return RESOURCE_RELOADER_ID;
 	}
 
 	@Override
-	protected String getResourcePath() {
+	public @Unmodifiable Collection<Identifier> dependencies() {
+		return List.of();
+	}
+
+	@Override
+	public Logger getLogger() {
+		return LOGGER;
+	}
+
+	@Override
+	public String getResourcePath() {
 		return "item";
 	}
 

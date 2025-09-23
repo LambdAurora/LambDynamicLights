@@ -8,6 +8,8 @@
 	"lambdynlights.menu.light_sources.special": "Sources spéciales de lumière dynamiques",
 	"lambdynlights.menu.search": "Recherche:",
 	"lambdynlights.menu.sodium.tab": "%s",
+	"lambdynlights.menu.support_me": "Soutenez-moi !",
+	"lambdynlights.menu.support_me.tooltip": "Vous avez aimé ce mod? Vous pouvez me soutenir, afin que je puisse continuer de maintenir et fournir des mods de haute-qualité !",
 	"lambdynlights.menu.tabs.advanced": "Avancé",
 	"lambdynlights.menu.tabs.debug": "Debug",
 	"lambdynlights.menu.tabs.debug.description": "Pour les moddeurs, en cas de bugs bizarres.",

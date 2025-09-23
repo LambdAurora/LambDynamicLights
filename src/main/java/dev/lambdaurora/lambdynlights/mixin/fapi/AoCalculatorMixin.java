@@ -7,7 +7,7 @@
  * see the LICENSE file.
  */
 
-package dev.lambdaurora.lambdynlights.mixin.fabric;
+package dev.lambdaurora.lambdynlights.mixin.fapi;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.core.BlockPos;

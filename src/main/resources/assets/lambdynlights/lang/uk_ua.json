@@ -40,5 +40,5 @@
 	"lambdynlights.tooltip.tnt_lighting": "Установлює режим динамічного світла для динаміту.\n— %s вимикає динамічне світло динаміту.\n— %s установлює постійну люмінесценцію.\n— %s установлює динамічну люмінесценцію.",
 	"lambdynlights.tooltip.water_sensitive": "Умикає перевірку чутливих до води джерел світла. Це означає, що деякі предмети не випромінюють світло під час занурення у воду.",
 	"modmenu.bluesky": "Bluesky",
-    "modmenu.descriptionTranslation.lambdynlights": "Найповніший мод динамічного світла для Fabric"
+	"modmenu.descriptionTranslation.lambdynlights": "Найповніший мод динамічного світла для Fabric"
 }

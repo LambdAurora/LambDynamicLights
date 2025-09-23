@@ -1,0 +1,7 @@
+{
+	"mappings": {
+		"dev/lambdaurora/lambdynlights/mixin/BrightnessGetterMixin": {
+			"method_68890(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;)I": "lambda$static$0(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;)I"
+		}
+	}
+}

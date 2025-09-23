@@ -3,14 +3,14 @@ name: "Gradle Build"
 on:
   push:
     branches:
-      - "*"
+      - "**"
   pull_request:
 
 jobs:
   build:
     strategy:
       matrix:
-        java: [ 21 ]
+        java: [ 21, 25 ]
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"

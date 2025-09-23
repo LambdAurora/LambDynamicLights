@@ -28,6 +28,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ import java.util.Optional;
  * Represents an entity light source manager.
  *
  * @author LambdAurora
- * @version 4.4.0
+ * @version 4.5.0
  * @since 4.0.0
  */
 public final class EntityLightSources extends LightSourceLoader<EntityLightSource> implements EntityLightSourceManager {
@@ -64,27 +65,31 @@ public final class EntityLightSources extends LightSourceLoader<EntityLightSourc
 	private final Event<Identifier, OnRegister> onRegisterEvent = YumiEvents.EVENTS.create(OnRegister.class);
 	private final ItemLightSourceManager itemLightSourceManager;
 
-	public EntityLightSources(ItemLightSourceManager itemLightSourceManager) {
+	public EntityLightSources(
+			ItemLightSourceManager itemLightSourceManager,
+			ApplicationPredicate applicationPredicate
+	) {
+		super(applicationPredicate);
 		this.itemLightSourceManager = itemLightSourceManager;
 	}
 
 	@Override
-	protected Logger getLogger() {
-		return LOGGER;
-	}
-
-	@Override
-	public Identifier getFabricId() {
+	public @NotNull Identifier id() {
 		return RESOURCE_RELOADER_ID;
 	}
 
 	@Override
-	public Collection<Identifier> getFabricDependencies() {
+	public @Unmodifiable Collection<Identifier> dependencies() {
 		return RESOURCE_RELOADER_DEPENDENCIES;
 	}
 
 	@Override
-	protected String getResourcePath() {
+	public Logger getLogger() {
+		return LOGGER;
+	}
+
+	@Override
+	public String getResourcePath() {
 		return "entity";
 	}
 
