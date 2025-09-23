@@ -386,7 +386,7 @@ val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	this.versionType.set(Constants.getVersionType())
 	this.versionName.set("${Constants.PRETTY_NAME} ${Constants.VERSION} (${McVersionLookup.getVersionTag(Constants.mcVersion())})")
 	this.gameVersions.set(listOf(Constants.mcVersion()) + Constants.COMPATIBLE_MC_VERSIONS)
-	this.loaders.set(listOf("fabric", "quilt"))
+	this.loaders.set(listOf("fabric", "quilt", "neoforge"))
 	this.dependencies.set(
 		listOf(
 			ModVersionDependency("P7dR8mSH", ModVersionDependency.Type.REQUIRED),
@@ -396,7 +396,7 @@ val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	)
 	this.changelog.set(Utils.fetchChangelog(project))
 	this.readme.set(Utils.parseReadme(project))
-	this.files.setFrom(tasks.remapJar.get())
+	this.files.setFrom(finalJar)
 }
 
 modrinth {
@@ -448,7 +448,7 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 		return@register
 	}
 
-	val mainFile = upload(project.property("curseforge_id"), tasks.remapJar.get())
+	val mainFile = upload(project.property("curseforge_id"), finalJar)
 	mainFile.releaseType = Constants.getVersionType()
 	mainFile.addGameVersion(McVersionLookup.getCurseForgeEquivalent(Constants.mcVersion()))
 	Constants.COMPATIBLE_MC_VERSIONS.stream()
