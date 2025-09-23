@@ -37,6 +37,7 @@ lambdamcdev {
 						.withGitHubReleases("${Constants.SOURCES_LINK}/releases")
 						.withModrinth("https://modrinth.com/mod/lambdynamiclights")
 						.withLink("modmenu.bluesky", "https://bsky.app/profile/lambdaurora.dev")
+						.withLink("modmenu.donate", "https://donate.lambdaurora.dev/")
 				}
 		}
 	}
