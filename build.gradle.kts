@@ -11,8 +11,10 @@ import lambdynamiclights.task.AssembleNeoForgeJarTask
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import net.fabricmc.loom.LoomGradleExtension
 import net.fabricmc.loom.api.mappings.layered.MappingsNamespace
+import net.fabricmc.loom.build.nesting.NestableJarGenerationTask
 import net.fabricmc.loom.task.RemapJarTask
 import net.fabricmc.loom.task.RemapSourcesJarTask
+
 
 plugins {
 	id("lambdynamiclights")
@@ -197,9 +199,14 @@ tasks.remapJar {
 
 	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs")
 
-	this.nestedJars.setFrom(this.nestedJars.files.stream().filter {
-		!it.name.endsWith("-mojmap.jar")
-	}.toList())
+	val processIncludeJars = project.tasks.named(
+		net.fabricmc.loom.util.Constants.Task.PROCESS_INCLUDE_JARS,
+		NestableJarGenerationTask::class
+	)
+	this.nestedJars.setFrom(processIncludeJars.map { task ->
+		project.fileTree(task.outputDirectory).filter { !it.name.endsWith("-mojmap.jar") }
+	})
+	this.nestedJars.builtBy(processIncludeJars)
 }
 
 val neoforgeJar = tasks.register<Jar>("neoforgeJar") {
@@ -287,9 +294,13 @@ val remapNeoforgeJarToMojmap by tasks.registering(RemapJarTask::class) {
 	this.archiveClassifier = "neoforge-mojmap"
 	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
 
-	this.nestedJars.setFrom(this.nestedJars.files.stream().filter {
-		it.name.endsWith("-mojmap.jar")
-	}.toList())
+	val processIncludeJars = project.tasks.named(
+		net.fabricmc.loom.util.Constants.Task.PROCESS_INCLUDE_JARS,
+		NestableJarGenerationTask::class
+	)
+	this.nestedJars.setFrom(processIncludeJars.map { task ->
+		project.fileTree(task.outputDirectory).filter { it.name.endsWith("-mojmap.jar") }
+	})
 }
 
 val remapNeoforgeSourcesJarToMojmap by tasks.registering(RemapSourcesJarTask::class) {
