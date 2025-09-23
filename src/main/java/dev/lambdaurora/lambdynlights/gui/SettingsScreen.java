@@ -27,6 +27,7 @@ import dev.lambdaurora.spruceui.widget.container.SpruceParentWidget;
 import dev.lambdaurora.spruceui.widget.container.tabbed.SpruceTabbedWidget;
 import dev.lambdaurora.spruceui.widget.text.SpruceTextFieldWidget;
 import net.minecraft.TextFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -161,7 +162,7 @@ public class SettingsScreen extends SpruceScreen {
 			tabIndex = this.tabbedWidget.getList().children().indexOf(oldEntry);
 		}
 
-		this.tabbedWidget = new SpruceTabbedWidget(Position.origin(), this.width, this.height, this.title.copy(), Math.max(100, this.width / 8));
+		this.tabbedWidget = new SpruceTabbedWidget(Position.origin(), this.width, this.height - 40, this.title.copy(), Math.max(100, this.width / 8));
 		this.tabbedWidget.getList().setBackground(RandomPrideFlagBackground.random());
 		this.tabbedWidget.addTabEntry(Text.translatable("lambdynlights.menu.tabs.general"), null,
 				this.tabContainerBuilder(this::buildGeneralTab)
@@ -176,6 +177,25 @@ public class SettingsScreen extends SpruceScreen {
 				this.tabContainerBuilder(this::buildDebugTab)
 		);
 		this.addWidget(this.tabbedWidget);
+
+		int tabsWidth = this.tabbedWidget.getList().getWidth();
+		var resetButtonPos = Position.of(this, tabsWidth + (this.width - tabsWidth) / 2 - 155, this.height - 29);
+
+		var supportMeButton = new SpruceButtonWidget(
+				Position.of(this, 4, resetButtonPos.getRelativeY()),
+				tabsWidth - 8, 20, Text.translatable("lambdynlights.menu.support_me"),
+				btn -> Util.getPlatform().openUri("https://donate.lambdaurora.dev/")
+		);
+		supportMeButton.setTooltip(Text.translatable("lambdynlights.menu.support_me.tooltip"));
+		this.addRenderableWidget(supportMeButton);
+
+		this.addRenderableWidget(this.resetOption.createWidget(resetButtonPos, 150));
+		var doneButtonPos = resetButtonPos.copy();
+		doneButtonPos.setRelativeX(doneButtonPos.getRelativeX() + 160);
+		this.addRenderableWidget(new SpruceButtonWidget(doneButtonPos, 150, 20,
+				SpruceTexts.GUI_DONE,
+				btn -> this.client.setScreen(this.parent)
+		));
 
 		if (tabIndex > 0 && this.tabbedWidget.getList().children().get(tabIndex) instanceof SpruceTabbedWidget.TabEntry tabEntry) {
 			this.tabbedWidget.getList().setSelected(tabEntry);
@@ -192,13 +212,7 @@ public class SettingsScreen extends SpruceScreen {
 		tabConsumer.accept(new TabContext(
 				this.tabbedWidget,
 				container,
-				height - this.tabbedWidget.getList().getPosition().getRelativeY() - 40
-		));
-
-		container.addChild(this.resetOption.createWidget(Position.of(this, width / 2 - 155, height - 29), 150));
-		container.addChild(new SpruceButtonWidget(Position.of(this, width / 2 - 155 + 160, height - 29), 150, 20,
-				SpruceTexts.GUI_DONE,
-				btn -> this.client.setScreen(this.parent)
+				height - this.tabbedWidget.getList().getPosition().getRelativeY()
 		));
 
 		return container;
