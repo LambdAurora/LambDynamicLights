@@ -24,6 +24,8 @@ import dev.lambdaurora.lambdynlights.engine.source.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSource;
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSourceBehavior;
 import dev.lambdaurora.lambdynlights.mixin.LevelRendererAccessor;
+import dev.lambdaurora.lambdynlights.platform.PlatformProvider;
+import dev.lambdaurora.lambdynlights.resource.LightSourceLoader;
 import dev.lambdaurora.lambdynlights.resource.entity.EntityLightSources;
 import dev.lambdaurora.lambdynlights.resource.item.ItemLightSources;
 import dev.lambdaurora.lambdynlights.util.DynamicLightBehaviorDebugRenderer;
@@ -36,8 +38,6 @@ import dev.yumi.mc.core.api.ModContainer;
 import dev.yumi.mc.core.api.YumiMods;
 import dev.yumi.mc.core.api.entrypoint.EntrypointContainer;
 import dev.yumi.mc.core.api.entrypoint.client.ClientModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.TextFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -52,7 +52,6 @@ import net.minecraft.core.ChunkSectionPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceType;
 import net.minecraft.util.profiling.Profiler;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -82,7 +81,7 @@ import java.util.function.Predicate;
 @ApiStatus.Internal
 public class LambDynLights implements ClientModInitializer, DynamicLightsContext {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights");
-	private static LambDynLights INSTANCE;
+	public static final LambDynLights INSTANCE = new LambDynLights();
 
 	public static final KeyMapping TOGGLE_FPS_DYNAMIC_LIGHTING = new KeyMapping(
 			LambDynLightsConstants.NAMESPACE + ".key.toggle_fps_dynamic_lighting",
@@ -92,8 +91,11 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 	);
 
 	public final DynamicLightsConfig config = new DynamicLightsConfig(this);
-	private final ItemLightSources itemLightSources = new ItemLightSources();
-	private final EntityLightSources entityLightSources = new EntityLightSources(this.itemLightSources);
+	private final LightSourceLoader.ApplicationPredicate.Pending lightSourceApplicationPredicate
+			= new LightSourceLoader.ApplicationPredicate.Pending();
+	private final ItemLightSources itemLightSources = new ItemLightSources(lightSourceApplicationPredicate);
+	private final EntityLightSources entityLightSources
+			= new EntityLightSources(this.itemLightSources, lightSourceApplicationPredicate);
 	private final DynamicLightBehaviorSources dynamicLightBehaviorSources = new DynamicLightBehaviorSources(this);
 	public final DynamicLightingEngine engine = new DynamicLightingEngine(this.config);
 	private final Set<DynamicLightSource> dynamicLightSources = new HashSet<>();
@@ -116,15 +118,13 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 	private int lastUpdateCount = 0;
 	private int dynamicLightSourcesCount = 0;
 
+	private LambDynLights() {}
+
 	@Override
 	public void onInitializeClient(ModContainer mod) {
-		INSTANCE = this;
 		log(LOGGER, "Initializing LambDynamicLights...");
 
 		this.config.load();
-
-		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(this.itemLightSources);
-		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(this.entityLightSources);
 
 		CrashReportEvents.CREATE.register((report) -> {
 			var category = report.addCategory("Dynamic Lighting");
@@ -136,9 +136,17 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 			);
 		});
 
-		CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {
-			this.onTagsLoaded(registries);
-		});
+		var platform = YumiMods.get()
+				.getEntrypoints(LambDynLightsConstants.NAMESPACE + ":platform_provider", PlatformProvider.class)
+				.getFirst()
+				.value()
+				.getPlatform(mod);
+
+		this.lightSourceApplicationPredicate.set(platform.getLightSourceLoaderApplicationPredicate());
+		platform.registerReloader(this.itemLightSources);
+		platform.registerReloader(this.entityLightSources);
+
+		platform.getTagLoadedEvent().register(this::onTagsLoaded);
 
 		this.initializeApi();
 	}

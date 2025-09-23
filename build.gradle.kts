@@ -1,15 +1,23 @@
 import com.modrinth.minotaur.dependencies.ModDependency
 import dev.lambdaurora.mcdev.api.McVersionLookup
 import dev.lambdaurora.mcdev.api.ModVersionDependency
+import dev.lambdaurora.mcdev.api.manifest.Nmt
+import dev.lambdaurora.mcdev.task.GenerateNeoForgeJiJDataTask
 import dev.lambdaurora.mcdev.task.packaging.PackageModrinthTask
 import lambdynamiclights.Constants
 import lambdynamiclights.Utils
+import lambdynamiclights.task.AssembleFinalJarTask
+import lambdynamiclights.task.AssembleNeoForgeJarTask
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import net.fabricmc.loom.LoomGradleExtension
+import net.fabricmc.loom.api.mappings.layered.MappingsNamespace
+import net.fabricmc.loom.task.RemapJarTask
+import net.fabricmc.loom.task.RemapSourcesJarTask
 
 plugins {
 	id("lambdynamiclights")
 	`maven-publish`
-	id("com.gradleup.shadow").version("8.3.3")
+	id("com.gradleup.shadow").version("9.1.0")
 	id("com.modrinth.minotaur").version("2.+")
 	id("net.darkhax.curseforgegradle").version("1.1.+")
 }
@@ -24,9 +32,15 @@ val fabricApiModules = listOf(
 	fabricApi.module("fabric-resource-conditions-api-v1", libs.versions.fabric.api.get())!!
 )
 
+val neoforge: SourceSet by sourceSets.creating {
+	this.compileClasspath += sourceSets.main.get().compileClasspath
+	this.runtimeClasspath += sourceSets.main.get().runtimeClasspath
+}
+
 tasks.generateFmj.configure {
 	val fmj = this.fmj.get()
-		.withEntrypoints("yumi:client_init", "dev.lambdaurora.lambdynlights.LambDynLights")
+		.withEntrypoints("yumi:client_init", "dev.lambdaurora.lambdynlights.LambDynLights::INSTANCE")
+		.withEntrypoints("lambdynlights:platform_provider", "dev.lambdaurora.lambdynlights.platform.fabric.FabricPlatform")
 		.withEntrypoints("modmenu", "dev.lambdaurora.lambdynlights.LambDynLightsModMenu")
 		.withAccessWidener("lambdynlights.accesswidener")
 		.withMixins("lambdynlights.mixins.json", "lambdynlights.lightsource.mixins.json")
@@ -39,6 +53,27 @@ tasks.generateFmj.configure {
 		.withBreak("ryoamiclights", "*")
 
 	fabricApiModules.forEach { module -> fmj.withDepend(module.name, ">=${module.version}") }
+}
+
+lambdamcdev.manifests {
+	val fmj = this.fmj().get()
+
+	nmt {
+		fmj.copyTo(this)
+		withName(Constants.PRETTY_NAME + " (Runtime)")
+		withDescription(Constants.RUNTIME_DESCRIPTION)
+		withLoaderVersion("[2,)")
+		withYumiEntrypoints("yumi:client_init", "dev.lambdaurora.lambdynlights.LambDynLights::INSTANCE")
+		withYumiEntrypoints("lambdynlights:platform_provider", "dev.lambdaurora.lambdynlights.platform.neoforge.NeoForgePlatformProvider")
+		withAccessTransformer("META-INF/accesstransformer.cfg")
+		withMixins("lambdynlights.mixins.json", "lambdynlights.lightsource.mixins.json")
+		withDepend(Constants.NAMESPACE + "_api", "[${version},)", Nmt.DependencySide.CLIENT)
+		withDepend("minecraft", "[${libs.versions.minecraft.get()},)")
+		withDepend("spruceui", "[${libs.versions.spruceui.get()},)", Nmt.DependencySide.CLIENT)
+		withDepend("yumi_mc_core", "[${libs.versions.yumi.mc.foundation.get()},)", Nmt.DependencySide.CLIENT)
+		withBreak("sodiumdynamiclights", "*", Nmt.DependencySide.CLIENT)
+		withBreak("ryoamiclights", "*", Nmt.DependencySide.CLIENT)
+	}
 }
 
 repositories {
@@ -56,10 +91,36 @@ repositories {
 		url = uri("https://maven.ladysnake.org/releases")
 	}
 	maven { url = uri("https://maven.wispforest.io/releases") }
+	maven {
+		name = "NeoForge"
+		url = uri("https://maven.neoforged.net/")
+		content {
+			includeGroupByRegex("net\\.neoforged.*")
+			includeGroupByRegex("cpw\\.mods.*")
+		}
+	}
 }
 
 loom {
 	accessWidenerPath = file("src/main/resources/lambdynlights.accesswidener")
+}
+
+val mojmap = lambdamcdev.setupMojmapRemapping()
+
+afterEvaluate {
+	val shims: SourceSet by sourceSets.creating {
+		this.compileClasspath += configurations["minecraftNamedCompile"]
+	}
+
+	dependencies {
+		"shimsCompileOnly"(libs.fabric.loader) // Due to MC classes referring to EnvType.
+		"shimsCompileOnly"(libs.neoforge.loader)
+		"neoforgeCompileOnly"(shims.output)
+	}
+
+	license {
+		exclude(shims)
+	}
 }
 
 dependencies {
@@ -92,20 +153,36 @@ dependencies {
 
 	shadow(libs.nightconfig.core)
 	shadow(libs.nightconfig.toml)
-}
 
-tasks.processResources {
-	inputs.property("version", project.version)
+	"neoforgeCompileOnly"(libs.neoforge.loader)
+	"neoforgeImplementation"(sourceSets.main.get().output)
 
-	filesMatching("fabric.mod.json") {
-		expand("version" to inputs.properties["version"])
+	"mojmapCompileOnly"(libs.yumi.mc.foundation)
+	"mojmapCompileOnly"(libs.spruceui)
+	"mojmapCompileOnly"(libs.pridelib)
+
+	include(project(":api", configuration = "mojmapRuntimeElements"))
+	include(libs.yumi.mc.foundation) {
+		capabilities {
+			requireCapability("dev.yumi.mc.core:yumi-mc-foundation-mojmap")
+		}
+	}
+	include(libs.spruceui) {
+		capabilities {
+			requireCapability("dev.lambdaurora:spruceui-mojmap")
+		}
+	}
+	include(libs.pridelib) {
+		capabilities {
+			requireCapability("io.github.queerbric:pridelib-mojmap")
+		}
 	}
 }
 
 tasks.shadowJar {
 	dependsOn(tasks.jar)
 	configurations = listOf(project.configurations["shadow"])
-	destinationDirectory.set(file("${project.layout.buildDirectory.get()}/devlibs"))
+	destinationDirectory.set(project.layout.buildDirectory.dir("devlibs"))
 	archiveClassifier.set("dev")
 
 	relocate("com.electronwill.nightconfig", "dev.lambdaurora.lambdynlights.shadow.nightconfig")
@@ -116,8 +193,182 @@ tasks.shadowJar {
 }
 
 tasks.remapJar {
-	dependsOn(tasks.shadowJar)
+	this.dependsOn(tasks.shadowJar)
+
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs")
+
+	this.nestedJars.setFrom(this.nestedJars.files.stream().filter {
+		!it.name.endsWith("-mojmap.jar")
+	}.toList())
 }
+
+val neoforgeJar = tasks.register<Jar>("neoforgeJar") {
+	this.group = "build"
+	this.from(neoforge.output)
+	this.archiveClassifier = "neoforge-dev"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
+}
+
+val neoforgeSourcesJar = tasks.register<Jar>("neoforgeSourcesJar") {
+	this.group = "build"
+	this.from(neoforge.java.sourceDirectories)
+	this.from(neoforge.resources.sourceDirectories)
+	this.archiveClassifier = "neoforge-dev-sources"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
+}
+
+val remapNeoforgeJar = tasks.register<RemapJarTask>("remapNeoforgeJarToIntermediary") {
+	this.group = "remapping"
+	this.dependsOn(neoforgeJar.get())
+	this.inputFile.set(neoforgeJar.get().archiveFile)
+	this.classpath.from(neoforge.compileClasspath)
+	this.archiveClassifier = "neoforge-intermediary"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
+
+	addNestedDependencies = false // Jars will be included later.
+}
+
+val remapNeoforgeSourcesJar = tasks.register<RemapSourcesJarTask>("remapNeoforgeSourcesJarToIntermediary") {
+	this.group = "remapping"
+	this.dependsOn(neoforgeSourcesJar.get())
+	this.inputFile.set(neoforgeSourcesJar.get().archiveFile)
+	this.classpath.from(neoforge.compileClasspath)
+	this.archiveClassifier = "neoforge-intermediary-sources"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
+}
+
+//region Mojmap
+val remapMojmap by tasks.registering(RemapJarTask::class) {
+	this.group = "remapping"
+	this.dependsOn(tasks.remapJar)
+
+	inputFile.set(tasks.remapJar.flatMap { it.archiveFile })
+	customMappings.from(mojmap.mappingsConfiguration())
+	sourceNamespace = "intermediary"
+	targetNamespace = "named"
+	classpath.setFrom(
+		(loom as LoomGradleExtension).getMinecraftJars(MappingsNamespace.INTERMEDIARY),
+		mojmap.sourceSet().compileClasspath
+	)
+
+	this.archiveClassifier = "mojmap"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs")
+
+	addNestedDependencies = false // Jars will be included later.
+}
+
+val remapSourcesMojmap by tasks.registering(RemapSourcesJarTask::class) {
+	this.group = "remapping"
+	this.dependsOn(tasks.remapSourcesJar)
+
+	inputFile.set(tasks.remapSourcesJar.flatMap { it.archiveFile })
+	customMappings.from(mojmap.mappingsConfiguration())
+	sourceNamespace = "intermediary"
+	targetNamespace = "named"
+	classpath.setFrom(
+		(loom as LoomGradleExtension).getMinecraftJars(MappingsNamespace.INTERMEDIARY),
+		mojmap.sourceSet().compileClasspath
+	)
+
+	this.archiveClassifier = "mojmap-sources"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs")
+}
+
+val remapNeoforgeJarToMojmap by tasks.registering(RemapJarTask::class) {
+	this.group = "remapping"
+	this.dependsOn(remapNeoforgeJar)
+
+	inputFile.set(remapNeoforgeJar.flatMap { it.archiveFile })
+	customMappings.from(mojmap.mappingsConfiguration())
+	sourceNamespace = "intermediary"
+	targetNamespace = "named"
+	classpath.setFrom((loom as LoomGradleExtension).getMinecraftJars(MappingsNamespace.INTERMEDIARY))
+
+	this.archiveClassifier = "neoforge-mojmap"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
+
+	this.nestedJars.setFrom(this.nestedJars.files.stream().filter {
+		it.name.endsWith("-mojmap.jar")
+	}.toList())
+}
+
+val remapNeoforgeSourcesJarToMojmap by tasks.registering(RemapSourcesJarTask::class) {
+	this.group = "remapping"
+	this.dependsOn(remapNeoforgeSourcesJar)
+
+	inputFile.set(remapNeoforgeSourcesJar.flatMap { it.archiveFile })
+	customMappings.from(mojmap.mappingsConfiguration())
+	sourceNamespace = "intermediary"
+	targetNamespace = "named"
+	classpath.setFrom((loom as LoomGradleExtension).getMinecraftJars(MappingsNamespace.INTERMEDIARY))
+
+	this.archiveClassifier = "neoforge-mojmap-sources"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
+}
+
+val generateJarJarMetadata by tasks.registering(GenerateNeoForgeJiJDataTask::class) {
+	val includeConfig = project.configurations.getByName("includeInternal");
+	this.from(includeConfig) {
+		it.name.endsWith("-mojmap")
+	}
+	this.outputFile.set(
+		project.layout.buildDirectory
+			.asFile
+			.map(File::toPath)
+			.map { path -> path.resolve("generated/jarjar/metadata.json").toFile() }
+			.get()
+	)
+}
+
+val mergedNeoForgeJar by tasks.registering(AssembleNeoForgeJarTask::class) {
+	this.group = "build"
+	this.dependsOn(
+		remapMojmap,
+		remapNeoforgeJarToMojmap,
+		generateJarJarMetadata
+	)
+
+	this.runtimeMojmapJar.set(remapMojmap.flatMap { it.archiveFile })
+	this.neoforgeJar.set(remapNeoforgeJarToMojmap.flatMap { it.archiveFile })
+	this.jarJarMetadata.set(generateJarJarMetadata.flatMap { it.outputFile })
+	this.archiveClassifier = "mojmap"
+}
+
+val mergedNeoForgeSourcesJar by tasks.registering(AssembleNeoForgeJarTask::class) {
+	this.group = "build"
+	this.dependsOn(
+		remapSourcesMojmap,
+		remapNeoforgeSourcesJarToMojmap,
+		generateJarJarMetadata
+	)
+
+	this.runtimeMojmapJar.set(remapSourcesMojmap.flatMap { it.archiveFile })
+	this.neoforgeJar.set(remapNeoforgeSourcesJarToMojmap.flatMap { it.archiveFile })
+	this.jarJarMetadata.set(generateJarJarMetadata.flatMap { it.outputFile })
+	this.archiveClassifier = "mojmap-sources"
+}
+
+val finalJar by tasks.registering(AssembleFinalJarTask::class) {
+	this.group = "build"
+	this.dependsOn(
+		remapMojmap,
+		mergedNeoForgeJar,
+		generateJarJarMetadata
+	)
+
+	this.artifactGroup.set(project.group.toString())
+	this.version.set(project.version.toString())
+	this.fmj.set(lambdamcdev.manifests.fmj())
+	this.nmt.set(lambdamcdev.manifests.nmt())
+	this.runtimeIntermediaryJar.set(tasks.remapJar.flatMap { it.archiveFile })
+	this.runtimeNeoForgeJar.set(mergedNeoForgeJar.flatMap { it.archiveFile })
+	this.jarJarMetadata.set(generateJarJarMetadata.flatMap { it.outputFile })
+}
+
+tasks.build.get().dependsOn(finalJar, mergedNeoForgeSourcesJar)
+mojmap.setJarArtifact(mergedNeoForgeJar)
+mojmap.setSourcesArtifact(mergedNeoForgeSourcesJar)
+//endregion
 
 val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	this.group = "publishing"
@@ -140,8 +391,8 @@ val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 modrinth {
 	projectId = project.property("modrinth_id") as String
 	versionName = "${Constants.PRETTY_NAME} ${Constants.VERSION} (${McVersionLookup.getVersionTag(Constants.mcVersion())})"
-	uploadFile.set(tasks.remapJar.get())
-	loaders.set(listOf("fabric", "quilt"))
+	uploadFile.set(finalJar)
+	loaders.set(listOf("fabric", "quilt", "neoforge"))
 	gameVersions.set(listOf(Constants.mcVersion()) + Constants.COMPATIBLE_MC_VERSIONS)
 	versionType.set(Constants.getVersionType().toString())
 	syncBodyFrom.set(Utils.parseReadme(project))
@@ -192,7 +443,7 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 	Constants.COMPATIBLE_MC_VERSIONS.stream()
 		.map { McVersionLookup.getCurseForgeEquivalent(it) }
 		.forEach { mainFile.addGameVersion(it) }
-	mainFile.addModLoader("Fabric", "Quilt")
+	mainFile.addModLoader("Fabric", "Quilt", "NeoForge")
 	mainFile.addJavaVersion("Java 21", "Java 22")
 	mainFile.addEnvironment("Client")
 
@@ -200,6 +451,8 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 	mainFile.addRequirement("fabric-api")
 	mainFile.addOptional("modmenu")
 	mainFile.addIncompatibility("optifabric")
+	mainFile.addIncompatibility("ryoamiclights")
+	mainFile.addIncompatibility("dynamiclights-reforged")
 
 	mainFile.changelogType = "markdown"
 	mainFile.changelog = changelogContent

@@ -39,7 +39,7 @@
 	"lambdynlights.tooltip.self_light_source": "Habilita la iluminación dinámica en primera persona. Se recomienda desactivar esto si estás usando shaders que ya tienen su propia iluminación dinámica.",
 	"lambdynlights.tooltip.tnt_lighting": "Establece el modo de iluminación dinámica para TNT.\n- %s desactiva la iluminación dinámica del TNT.\n- %s establece una luminancia constante.\n- %s establece una luminancia dinámica.",
 	"lambdynlights.tooltip.water_sensitive": "Habilita la comprobación para fuentes de luz sensibles al agua. Esto significa que algunos objetos no emitirán luz mientras estén sumergidos en agua.",
-	"modmenu.bluesky": "Cielo Azul",
+	"modmenu.bluesky": "Bluesky",
 	"modmenu.descriptionTranslation.lambdynlights": "La iluminación dinámica es la luz emitida por diversas fuentes móviles, como jugadores o entidades.\nCaracterísticas:\n • Iluminación dinámica\n • Configuración avanzada\n • Compatibilidad con objetos de mods\n • Brillo de flechas espectrales, bengalas y otras entidades\n • Resplandor de entidades en llamas\n • Atenuación de antorchas, fogatas y otros objetos en el agua\n • API práctica para desarrolladores y creadores de resource packs\n • ¡Y mucho más!",
 	"modmenu.summaryTranslation.lambdynlights": "El mod de iluminación dinámica más completo para Fabric."	
 }

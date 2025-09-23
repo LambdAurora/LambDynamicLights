@@ -8,10 +8,11 @@ object Constants {
 	const val NAME = "lambdynamiclights"
 	const val NAMESPACE = "lambdynlights"
 	const val PRETTY_NAME = "LambDynamicLights"
-	const val VERSION = "4.4.1"
+	const val VERSION = "4.5.0"
 
-	const val DESCRIPTION = "The most feature-complete dynamic lighting mod for Fabric."
+	const val DESCRIPTION = "The most feature-complete dynamic lighting mod."
 	const val API_DESCRIPTION = "Library to provide dynamic lighting to Minecraft through LambDynamicLights."
+	const val RUNTIME_DESCRIPTION = "The runtime of the most feature-complete dynamic lighting mod."
 
 	@JvmField
 	val AUTHORS = listOf("LambdAurora")

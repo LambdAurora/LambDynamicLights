@@ -464,6 +464,14 @@
 - Updated [Yumi Minecraft Libraries: Foundation].
   - This fixes a crash with some mods that specified `null` values in their custom properties.
 
+## 4.5.0
+
+- Added full support for NeoForge.
+  - The published JAR works on both Fabric and NeoForge.
+- Fixed crashes with AsyncParticles ([#312](https://github.com/LambdAurora/LambDynamicLights/issues/312)).
+- Updated Vietnamese translations ([#310](https://github.com/LambdAurora/LambDynamicLights/pull/310)).
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"
