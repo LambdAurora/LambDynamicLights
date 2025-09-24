@@ -58,34 +58,9 @@ tasks.generateFmj.configure {
 }
 
 val mojmap = lambdamcdev.setupMojmapRemapping()
-
-val remapMojmap by tasks.registering(RemapJarTask::class) {
-	dependsOn(tasks.remapJar)
-
-	inputFile.set(tasks.remapJar.flatMap { it.archiveFile })
-	customMappings.from(mojmap.mappingsConfiguration())
-	sourceNamespace = "intermediary"
-	targetNamespace = "named"
-	archiveClassifier = "mojmap"
-	classpath.setFrom((loom as LoomGradleExtension).getMinecraftJars(MappingsNamespace.INTERMEDIARY))
-
-	addNestedDependencies = false // Jars have already been included in the remapJar task
-}
-
+val remapMojmap = mojmap.registerRemap(tasks.remapJar) {}
 mojmap.setJarArtifact(remapMojmap)
-
-val remapMojmapSources by tasks.registering(RemapSourcesJarTask::class) {
-	dependsOn(tasks.remapSourcesJar)
-
-	inputFile.set(tasks.remapSourcesJar.flatMap { it.archiveFile })
-	customMappings.from(mojmap.mappingsConfiguration())
-	sourceNamespace = "intermediary"
-	targetNamespace = "named"
-	archiveClassifier = "mojmap-sources"
-	classpath.setFrom((loom as LoomGradleExtension).getMinecraftJars(MappingsNamespace.INTERMEDIARY))
-}
-
-// Add the remapped sources artifact
+val remapMojmapSources = mojmap.registerSourcesRemap(tasks.remapSourcesJar) {}
 mojmap.setSourcesArtifact(remapMojmapSources)
 
 // Configure the maven publication.
