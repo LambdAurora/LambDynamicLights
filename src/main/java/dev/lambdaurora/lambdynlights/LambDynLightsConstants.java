@@ -17,7 +17,7 @@ import dev.yumi.mc.core.api.YumiMods;
  * Contains constants about LambDynamicLights.
  *
  * @author LambdAurora
- * @version 4.5.0
+ * @version 4.5.1
  * @since 3.0.1
  */
 public final class LambDynLightsConstants {
@@ -27,6 +27,7 @@ public final class LambDynLightsConstants {
 	public static final String NAMESPACE = "lambdynlights";
 
 	static final ModContainer MOD_CONTAINER = YumiMods.get().getMod(NAMESPACE)
+			.or(() -> YumiMods.get().getMod(NAMESPACE + "_runtime"))
 			.orElseThrow();
 
 	/**

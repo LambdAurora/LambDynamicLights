@@ -472,6 +472,11 @@
 - Updated Vietnamese translations ([#310](https://github.com/LambdAurora/LambDynamicLights/pull/310)).
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+### 4.5.1
+
+- Fixed and improved the Maven publication metadata.
+- (NeoForge) Fixed crashes with Accessories due to bad remapping.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"
