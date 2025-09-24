@@ -273,6 +273,7 @@ val remapNeoforgeSourcesJarToMojmap = mojmap.registerSourcesRemap("remapNeoforge
 
 	inputFile.set(remapNeoforgeSourcesJar.flatMap { it.archiveFile })
 
+	this.classpath.from(configurations["minecraftClientLibraries"])
 	this.archiveClassifier = "neoforge-mojmap-sources"
 	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
 }
