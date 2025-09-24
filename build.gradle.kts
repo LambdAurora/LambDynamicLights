@@ -256,6 +256,7 @@ val remapMojmap = mojmap.registerRemap(tasks.remapJar) {
 }
 
 val remapSourcesMojmap = mojmap.registerSourcesRemap(tasks.remapSourcesJar) {
+	this.classpath.from(configurations["minecraftClientLibraries"])
 	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs")
 }
 
