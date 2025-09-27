@@ -21,7 +21,7 @@ jobs:
           distribution: "temurin"
           java-version: ${{ matrix.java }}
       - name: "Set up Gradle"
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: ${{ !startsWith(github.ref, 'refs/heads/1.') && !startsWith(github.ref, 'refs/heads/dev/') && !startsWith(github.ref, 'refs/tags/v') }}
 

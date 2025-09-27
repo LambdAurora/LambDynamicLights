@@ -478,6 +478,11 @@
 - (NeoForge) Fixed crashes with Accessories due to bad remapping.
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+### 4.5.2
+
+- Updated [Yumi Minecraft Libraries: Foundation].
+  - This may fix some synchronization issues on Fabric.
+
 ## 4.6.0
 
 - API changes:
