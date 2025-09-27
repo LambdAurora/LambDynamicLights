@@ -84,10 +84,10 @@ public abstract class LightSourceLoader<L> implements ResourceReloader {
 
 	@Override
 	public CompletableFuture<Void> reload(
-			SharedState sharedState, Executor prepareExecutor, Synchronizer synchronizer, Executor applyExecutor
+			Synchronizer synchronizer, ResourceManager resourceManager, Executor prepareExecutor, Executor applyExecutor
 	) {
 		return CompletableFuture.supplyAsync(() -> {
-					this.load(sharedState.resourceManager());
+					this.load(resourceManager);
 					return Unit.INSTANCE;
 				}, prepareExecutor)
 				.thenCompose(synchronizer::whenPrepared)

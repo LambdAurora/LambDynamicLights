@@ -39,7 +39,7 @@ import java.util.Random;
  * If you have an issue with this, I don't care.
  *
  * @author LambdAurora
- * @version 4.6.0
+ * @version 4.3.0
  * @since 2.1.0
  */
 public class RandomPrideFlagBackground implements Background {
@@ -173,7 +173,7 @@ public class RandomPrideFlagBackground implements Background {
 		}
 
 		@Override
-		public void buildVertices(VertexConsumer vertexConsumer) {
+		public void buildVertices(VertexConsumer vertexConsumer, float z) {
 			float partHeight = this.height / (this.colors.size() - 1.f);
 
 			// First one
@@ -181,21 +181,21 @@ public class RandomPrideFlagBackground implements Background {
 			float leftY = this.y;
 
 			int color = this.colors.getInt(0);
-			vertexConsumer.addVertexWith2DPose(this.pose, x + width, rightY + partHeight).color(color);
-			vertexConsumer.addVertexWith2DPose(this.pose, x + width, rightY).color(color);
-			vertexConsumer.addVertexWith2DPose(this.pose, x, leftY).color(color);
+			vertexConsumer.addVertex(x + width, rightY + partHeight, z).color(color);
+			vertexConsumer.addVertex(x + width, rightY, z).color(color);
+			vertexConsumer.addVertex(x, leftY, z).color(color);
 			// Dirty 4th vertex as GUI only accepts quads.
-			vertexConsumer.addVertexWith2DPose(this.pose, x, leftY).color(color);
+			vertexConsumer.addVertex(x, leftY, z).color(color);
 
 			rightY += partHeight;
 
 			for (int i = 1; i < this.colors.size() - 1; i++) {
 				color = this.colors.getInt(i);
 
-				vertexConsumer.addVertexWith2DPose(this.pose, x + width, rightY + partHeight).color(color);
-				vertexConsumer.addVertexWith2DPose(this.pose, x + width, rightY).color(color);
-				vertexConsumer.addVertexWith2DPose(this.pose, x, leftY).color(color);
-				vertexConsumer.addVertexWith2DPose(this.pose, x, leftY + partHeight).color(color);
+				vertexConsumer.addVertex(x + width, rightY + partHeight, z).color(color);
+				vertexConsumer.addVertex(x + width, rightY, z).color(color);
+				vertexConsumer.addVertex(x, leftY, z).color(color);
+				vertexConsumer.addVertex(x, leftY + partHeight, z).color(color);
 
 				rightY += partHeight;
 				leftY += partHeight;
@@ -203,11 +203,11 @@ public class RandomPrideFlagBackground implements Background {
 
 			// Last one
 			color = this.colors.getInt(this.colors.size() - 1);
-			vertexConsumer.addVertexWith2DPose(this.pose, x + width, rightY).color(color);
-			vertexConsumer.addVertexWith2DPose(this.pose, x, leftY).color(color);
-			vertexConsumer.addVertexWith2DPose(this.pose, x, y + height).color(color);
+			vertexConsumer.addVertex(x + width, rightY, z).color(color);
+			vertexConsumer.addVertex(x, leftY, z).color(color);
+			vertexConsumer.addVertex(x, y + height, z).color(color);
 			// Dirty 4th vertex as GUI only accepts quads.
-			vertexConsumer.addVertexWith2DPose(this.pose, x, y + height).color(color);
+			vertexConsumer.addVertex(x, y + height, z).color(color);
 		}
 
 		private static @Nullable ScreenRectangle getBounds(

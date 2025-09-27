@@ -19,22 +19,26 @@ import dev.yumi.commons.event.ListenableEvent;
 import dev.yumi.mc.core.api.ModContainer;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceCondition;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
-import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.resources.io.ResourceType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 /**
  * Provides the Fabric-specific platform operations.
  *
  * @author LambdAurora
- * @version 4.5.1
+ * @version 4.5.0
  * @since 4.5.0
  */
 public final class FabricPlatform implements Platform, PlatformProvider {
@@ -45,15 +49,32 @@ public final class FabricPlatform implements Platform, PlatformProvider {
 
 	@Override
 	public void registerReloader(LightSourceLoader<?> reloader) {
-		var resourceLoader = ResourceLoader.get(ResourceType.CLIENT_RESOURCES);
-		resourceLoader.registerReloader(reloader.id(), reloader);
-		for (var dependency : reloader.dependencies()) {
-			resourceLoader.addReloaderOrdering(dependency, reloader.id());
-		}
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES)
+				.registerReloadListener(new IdentifiableResourceReloadListener() {
+					@Override
+					public Identifier getFabricId() {
+						return reloader.id();
+					}
+
+					@Override
+					public Collection<Identifier> getFabricDependencies() {
+						return reloader.dependencies();
+					}
+
+					@Override
+					public CompletableFuture<Void> reload(
+							Synchronizer synchronizer,
+							ResourceManager resourceManager,
+							Executor prepareExecutor,
+							Executor applyExecutor
+					) {
+						return reloader.reload(synchronizer, resourceManager, prepareExecutor, applyExecutor);
+					}
+				});
 	}
 
 	@Override
-	public ListenableEvent<Identifier, Consumer<HolderLookup.Provider>> getTagLoadedEvent() {
+	public ListenableEvent<Identifier, Consumer<RegistryAccess>> getTagLoadedEvent() {
 		return new ListenableEvent<>() {
 			@Override
 			public @NotNull Identifier defaultPhaseId() {
@@ -61,7 +82,7 @@ public final class FabricPlatform implements Platform, PlatformProvider {
 			}
 
 			@Override
-			public void register(@NotNull Identifier phaseIdentifier, @NotNull Consumer<HolderLookup.Provider> listener) {
+			public void register(@NotNull Identifier phaseIdentifier, @NotNull Consumer<RegistryAccess> listener) {
 				CommonLifecycleEvents.TAGS_LOADED.register(
 						phaseIdentifier,
 						(registries, client) -> {if (client) listener.accept(registries);}
