@@ -17,7 +17,7 @@ jobs:
           distribution: "temurin"
           java-version: 21
       - name: "Set up Gradle"
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       # The USERNAME and PASSWORD need to correspond to the credentials environment variables used in
       # the publishing section of your build.gradle

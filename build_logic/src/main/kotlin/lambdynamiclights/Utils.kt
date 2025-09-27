@@ -12,6 +12,6 @@ object Utils {
 	}
 
 	fun fetchChangelog(project: Project): String? {
-		return ModUtils.fetchChangelog(project, Constants.VERSION)
+		return ModUtils.fetchChangelog(project, project.property("base_version").toString())
 	}
 }

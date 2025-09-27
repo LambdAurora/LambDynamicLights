@@ -19,7 +19,7 @@ import dev.lambdaurora.lambdynlights.resource.LightSourceLoader;
 import dev.lambdaurora.lambdynlights.resource.LoadedLightSourceResource;
 import dev.yumi.commons.event.Event;
 import dev.yumi.mc.core.api.YumiEvents;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -36,12 +36,11 @@ import java.util.Optional;
  * Represents an item light sources manager.
  *
  * @author LambdAurora
- * @version 4.5.0
+ * @version 4.6.0
  * @since 1.3.0
  */
 public final class ItemLightSources extends LightSourceLoader<ItemLightSource> implements ItemLightSourceManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights|ItemLightSources");
-	public static final Identifier RESOURCE_RELOADER_ID = LambDynLights.id("item_dynamic_lights");
 
 	private final Event<Identifier, OnRegister> onRegisterEvent = YumiEvents.EVENTS.create(OnRegister.class);
 
@@ -70,11 +69,11 @@ public final class ItemLightSources extends LightSourceLoader<ItemLightSource> i
 	}
 
 	@Override
-	protected void doApply(RegistryAccess registryAccess, List<ItemLightSource> lightSources) {
+	protected void doApply(HolderLookup.Provider registryLookup, List<ItemLightSource> lightSources) {
 		this.onRegisterEvent.invoker().onRegister(new RegisterContext() {
 			@Override
-			public @NotNull RegistryAccess registryAccess() {
-				return registryAccess;
+			public @NotNull HolderLookup.Provider registryLookup() {
+				return registryLookup;
 			}
 
 			@Override

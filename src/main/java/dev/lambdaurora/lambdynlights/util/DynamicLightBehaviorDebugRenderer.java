@@ -20,6 +20,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -44,7 +45,7 @@ public class DynamicLightBehaviorDebugRenderer extends DynamicLightDebugRenderer
 	}
 
 	@Override
-	public void render(MatrixStack matrices, MultiBufferSource multiBufferSource, double x, double y, double z) {
+	public void render(@NotNull MatrixStack matrices, @NotNull MultiBufferSource multiBufferSource, double x, double y, double z) {
 		if (!this.isEnabled()) {
 			return;
 		}

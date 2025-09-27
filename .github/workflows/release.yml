@@ -17,7 +17,7 @@ jobs:
           distribution: "temurin"
           java-version: 21
       - name: "Set up Gradle"
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: "Build with Gradle"
         run: ./gradlew build packageModrinth --parallel --stacktrace
         env:
@@ -65,7 +65,7 @@ jobs:
           distribution: "temurin"
           java-version: 21
       - name: "Set up Gradle"
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: "Release on CurseForge"
         run: ./gradlew curseforge --parallel --stacktrace
         env:
