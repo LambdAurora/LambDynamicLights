@@ -124,7 +124,7 @@ public abstract class LightSourceLoader<L> implements ResourceReloader {
 		var ops = RegistryOps.create(JsonOps.INSTANCE, registryLookup);
 
 		var lightSources = this.loadedLightSources.stream()
-				.filter(data -> this.canApply(ops, registryAccess, data))
+				.filter(data -> this.canApply(ops, registryLookup, data))
 				.map(data -> this.apply(ops, data))
 				.filter(Optional::isPresent)
 				.map(Optional::get)
@@ -167,7 +167,7 @@ public abstract class LightSourceLoader<L> implements ResourceReloader {
 
 	protected abstract @NotNull Optional<L> apply(DynamicOps<JsonElement> ops, LoadedLightSourceResource loadedData);
 
-	protected boolean canApply(RegistryOps<JsonElement> ops, RegistryAccess registryAccess, LoadedLightSourceResource loadedData) {
+	protected boolean canApply(RegistryOps<JsonElement> ops, HolderLookup.Provider registryAccess, LoadedLightSourceResource loadedData) {
 		return this.applicationPredicate.canApply(this, ops, registryAccess, loadedData);
 	}
 
@@ -176,7 +176,7 @@ public abstract class LightSourceLoader<L> implements ResourceReloader {
 		boolean canApply(
 				LightSourceLoader<?> loader,
 				RegistryOps<JsonElement> ops,
-				RegistryAccess registryAccess,
+				HolderLookup.Provider registryAccess,
 				LoadedLightSourceResource loadedData
 		);
 
@@ -191,7 +191,7 @@ public abstract class LightSourceLoader<L> implements ResourceReloader {
 			public boolean canApply(
 					LightSourceLoader<?> loader,
 					RegistryOps<JsonElement> ops,
-					RegistryAccess registryAccess,
+					HolderLookup.Provider registryAccess,
 					LoadedLightSourceResource loadedData
 			) {
 				return this.wrapped == null || this.wrapped.canApply(loader, ops, registryAccess, loadedData);
