@@ -45,7 +45,6 @@ import java.util.Optional;
  */
 public final class EntityLightSources extends LightSourceLoader<EntityLightSource> implements EntityLightSourceManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights|EntityLightSources");
-	private static final Identifier RESOURCE_RELOADER_ID = LambDynLights.id("entity");
 	private static final List<Identifier> RESOURCE_RELOADER_DEPENDENCIES = List.of(ItemLightSources.RESOURCE_RELOADER_ID);
 
 	public static final EntityLuminance.Type CREEPER = EntityLuminance.Type.registerSimple(
