@@ -478,11 +478,6 @@
 - (NeoForge) Fixed crashes with Accessories due to bad remapping.
 - Updated [Yumi Minecraft Libraries: Foundation].
 
-### 4.5.2
-
-- Updated [Yumi Minecraft Libraries: Foundation].
-  - This may fix some synchronization issues on Fabric.
-
 ## 4.6.0
 
 - API changes:
@@ -490,6 +485,11 @@
     and `EntityLightSourceManager.RegisterContext::registryAccess`
     in favor of `ItemLightSourceManager.RegisterContext::registryLookup`
     and `EntityLightSourceManager.RegisterContext::registryLookup` respectively.
+- Updated [Yumi Minecraft Libraries: Foundation].
+  - This may fix some synchronization issues on Fabric.
+
+## 4.7.0
+
 - Updated to Minecraft 1.21.9.
   - F3 debug entries are now configurable.
   - Made Copper Torch water-sensitive like the other torches.
