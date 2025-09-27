@@ -1,5 +1,6 @@
 import dev.lambdaurora.mcdev.api.McVersionLookup
 import lambdynamiclights.Constants
+import lambdynamiclights.LambDynamicLightsExt
 import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
@@ -12,7 +13,10 @@ plugins {
 val libs = the<LibrariesForLibs>()
 Constants.finalizeInit(libs)
 
-version = "${Constants.VERSION}+${McVersionLookup.getVersionTag(Constants.mcVersion())}"
+val ldl = project.extensions
+	.create("ldl", LambDynamicLightsExt::class, project, libs)
+
+version = "${ldl.version()}+${McVersionLookup.getVersionTag(ldl.mcVersion())}"
 lambdamcdev.namespace = Constants.NAMESPACE
 val javaVersion = Integer.parseInt(project.property("java_version").toString())
 

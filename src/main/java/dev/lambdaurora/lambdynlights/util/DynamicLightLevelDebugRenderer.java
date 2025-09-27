@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.debug.DebugRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a debug renderer for dynamic light levels.
@@ -37,7 +38,7 @@ public class DynamicLightLevelDebugRenderer extends DynamicLightDebugRenderer {
 	}
 
 	@Override
-	public void render(MatrixStack matrices, MultiBufferSource bufferSource, double x, double y, double z) {
+	public void render(@NotNull MatrixStack matrices, @NotNull MultiBufferSource bufferSource, double x, double y, double z) {
 		int lightDisplayRadius = this.config.getDebugLightLevelRadius();
 
 		if (lightDisplayRadius == 0) {

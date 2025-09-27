@@ -31,8 +31,8 @@ public interface DynamicLightBehavior {
 	 * distance scale to the one expected by the mod. Most commonly, you'll be multiplying your computed distance by this ratio.
 	 *
 	 * <h3>Example - a single point emitting light</h3>
-	 * <pre><code>
-	 * public @Range(from = 0, to = 15) double lightAtPos(BlockPos pos, double falloffRatio)
+	 * {@snippet lang="java" :
+	 * public @Range(from = 0, to = 15) double lightAtPos(BlockPos pos, double falloffRatio) {
 	 * 	double dx = pos.getX() - this.x + 0.5;
 	 * 	double dy = pos.getY() - this.y + 0.5;
 	 * 	double dz = pos.getZ() - this.z + 0.5;
@@ -40,7 +40,7 @@ public interface DynamicLightBehavior {
 	 * 	double distanceSquared = dx * dx + dy * dy + dz * dz;
 	 * 	return Math.max(luminance - Math.sqrt(distanceSquared) * falloffRatio, 0.0);
 	 * }
-	 * </code></pre>
+	 * }
 	 *
 	 * @param pos the position of the light query
 	 * @param falloffRatio the rate at which the light level should fall to {@code 0} the furthest it is from the source
@@ -54,12 +54,12 @@ public interface DynamicLightBehavior {
 	 * This must not include falloff light.
 	 *
 	 * <h3>Example - a single point emitting light</h3>
-	 * <pre><code>
+	 * {@snippet lang="java" :
 	 * public BoundingBox getBoundingBox() {
 	 * 	// Doesn't depend on the luminance of the source since falloff isn't included
 	 * 	return new BoundingBox(this.x, this.y, this.z, this.x + 1, this.y + 1, this.z + 1);
 	 * }
-	 * </code></pre>
+	 * }
 	 */
 	@NotNull
 	BoundingBox getBoundingBox();

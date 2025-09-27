@@ -22,6 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
@@ -53,7 +54,7 @@ public class DynamicLightSectionDebugRenderer extends DynamicLightDebugRenderer 
 	}
 
 	@Override
-	public void render(MatrixStack matrices, MultiBufferSource bufferSource, double x, double y, double z) {
+	public void render(@NotNull MatrixStack matrices, @NotNull MultiBufferSource bufferSource, double x, double y, double z) {
 		int cellDisplayRadius = this.config.getDebugCellDisplayRadius();
 
 		if (!this.config.getDebugActiveDynamicLightingCells().get() && cellDisplayRadius == 0) {

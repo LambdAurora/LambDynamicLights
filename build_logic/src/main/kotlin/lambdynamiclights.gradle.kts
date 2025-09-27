@@ -49,7 +49,7 @@ dependencies {
 		officialMojangMappings()
 		// Parchment is currently broken when used with the hacked mojmap layer due to remapping shenanigans.
 		//parchment("org.parchmentmc.data:parchment-${Constants.getMcVersionString()}:${libs.versions.mappings.parchment.get()}@zip")
-		mappings("dev.lambdaurora:yalmm:${Constants.mcVersion()}+build.${libs.versions.mappings.yalmm.get()}")
+		mappings("dev.lambdaurora:yalmm:${libs.versions.minecraft.get()}+build.${libs.versions.mappings.yalmm.get()}")
 	})
 
 	api(libs.yumi.commons.event) {

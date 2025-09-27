@@ -27,6 +27,7 @@ import net.minecraft.core.ChunkSectionPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
 /**
@@ -151,7 +152,7 @@ public abstract class DynamicLightDebugRenderer implements DebugRenderer.SimpleD
 		}
 
 		@Override
-		public void render(MatrixStack matrices, MultiBufferSource bufferSource, double x, double y, double z) {
+		public void render(@NotNull MatrixStack matrices, @NotNull MultiBufferSource bufferSource, double x, double y, double z) {
 			if (!this.isEnabled()) return;
 
 			matrices.push();

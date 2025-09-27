@@ -16,7 +16,7 @@ import com.mojang.serialization.JsonOps;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.yumi.commons.Unit;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.io.Resource;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  *
  * @param <L> the type of light source to load
  * @author LambdAurora
- * @version 4.5.0
+ * @version 4.6.0
  * @since 4.0.0
  */
 public abstract class LightSourceLoader<L> implements ResourceReloader {
@@ -115,10 +115,10 @@ public abstract class LightSourceLoader<L> implements ResourceReloader {
 	 * <p>
 	 * The codecs cannot be fully loaded right on resource load as registry state is not known at this time.
 	 *
-	 * @param registryAccess the registry access
+	 * @param registryLookup the registry access
 	 */
-	public final void apply(RegistryAccess registryAccess) {
-		var ops = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
+	public final void apply(HolderLookup.Provider registryLookup) {
+		var ops = RegistryOps.create(JsonOps.INSTANCE, registryLookup);
 
 		var lightSources = this.loadedLightSources.stream()
 				.filter(data -> this.canApply(ops, data))
@@ -126,11 +126,11 @@ public abstract class LightSourceLoader<L> implements ResourceReloader {
 				.filter(Optional::isPresent)
 				.map(Optional::get)
 				.collect(Collectors.toCollection(ArrayList::new));
-		this.doApply(registryAccess, lightSources);
+		this.doApply(registryLookup, lightSources);
 		this.lightSources = lightSources;
 	}
 
-	protected void doApply(RegistryAccess registryAccess, List<L> lightSources) {
+	protected void doApply(HolderLookup.Provider registryLookup, List<L> lightSources) {
 	}
 
 	protected void load(Identifier resourceId, Resource resource) {

@@ -343,9 +343,9 @@ mojmap.setSourcesArtifact(mergedNeoForgeSourcesJar)
 
 val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	this.group = "publishing"
-	this.versionType.set(Constants.getVersionType())
-	this.versionName.set("${Constants.PRETTY_NAME} ${Constants.VERSION} (${McVersionLookup.getVersionTag(Constants.mcVersion())})")
-	this.gameVersions.set(listOf(Constants.mcVersion()) + Constants.COMPATIBLE_MC_VERSIONS)
+	this.versionType.set(ldl.versionType())
+	this.versionName.set("${Constants.PRETTY_NAME} ${ldl.version()} (${McVersionLookup.getVersionTag(ldl.mcVersion())})")
+	this.gameVersions.set(ldl.compatibleMcVersions())
 	this.loaders.set(listOf("fabric", "quilt", "neoforge"))
 	this.dependencies.set(
 		listOf(
@@ -361,11 +361,11 @@ val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 
 modrinth {
 	projectId = project.property("modrinth_id") as String
-	versionName = "${Constants.PRETTY_NAME} ${Constants.VERSION} (${McVersionLookup.getVersionTag(Constants.mcVersion())})"
+	versionName = "${Constants.PRETTY_NAME} ${ldl.version()} (${McVersionLookup.getVersionTag(ldl.mcVersion())})"
 	uploadFile.set(finalJar)
 	loaders.set(listOf("fabric", "quilt", "neoforge"))
-	gameVersions.set(listOf(Constants.mcVersion()) + Constants.COMPATIBLE_MC_VERSIONS)
-	versionType.set(Constants.getVersionType().toString())
+	gameVersions.set(ldl.compatibleMcVersions())
+	versionType.set(ldl.versionType().toString())
 	syncBodyFrom.set(Utils.parseReadme(project))
 	dependencies.set(
 		listOf(
@@ -409,16 +409,15 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 	}
 
 	val mainFile = upload(project.property("curseforge_id"), finalJar)
-	mainFile.releaseType = Constants.getVersionType()
-	mainFile.addGameVersion(McVersionLookup.getCurseForgeEquivalent(Constants.mcVersion()))
-	Constants.COMPATIBLE_MC_VERSIONS.stream()
+	mainFile.releaseType = ldl.versionType()
+	ldl.compatibleMcVersions().stream()
 		.map { McVersionLookup.getCurseForgeEquivalent(it) }
 		.forEach { mainFile.addGameVersion(it) }
 	mainFile.addModLoader("Fabric", "Quilt", "NeoForge")
 	mainFile.addJavaVersion("Java 21", "Java 22")
 	mainFile.addEnvironment("Client")
 
-	mainFile.displayName = "${Constants.PRETTY_NAME} ${Constants.VERSION} (${McVersionLookup.getVersionTag(Constants.mcVersion())})"
+	mainFile.displayName = "${Constants.PRETTY_NAME} ${ldl.version()} (${McVersionLookup.getVersionTag(ldl.mcVersion())})"
 	mainFile.addRequirement("fabric-api")
 	mainFile.addOptional("modmenu")
 	mainFile.addIncompatibility("optifabric")

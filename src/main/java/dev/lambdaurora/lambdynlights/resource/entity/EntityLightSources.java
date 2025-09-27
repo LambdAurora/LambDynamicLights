@@ -24,7 +24,7 @@ import dev.lambdaurora.lambdynlights.resource.entity.luminance.DisplayEntityLumi
 import dev.lambdaurora.lambdynlights.resource.item.ItemLightSources;
 import dev.yumi.commons.event.Event;
 import dev.yumi.mc.core.api.YumiEvents;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -40,12 +40,11 @@ import java.util.Optional;
  * Represents an entity light source manager.
  *
  * @author LambdAurora
- * @version 4.5.0
+ * @version 4.6.0
  * @since 4.0.0
  */
 public final class EntityLightSources extends LightSourceLoader<EntityLightSource> implements EntityLightSourceManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights|EntityLightSources");
-	private static final Identifier RESOURCE_RELOADER_ID = LambDynLights.id("entity_dynamic_lights");
 	private static final List<Identifier> RESOURCE_RELOADER_DEPENDENCIES = List.of(ItemLightSources.RESOURCE_RELOADER_ID);
 
 	public static final EntityLuminance.Type CREEPER = EntityLuminance.Type.registerSimple(
@@ -94,11 +93,11 @@ public final class EntityLightSources extends LightSourceLoader<EntityLightSourc
 	}
 
 	@Override
-	protected void doApply(RegistryAccess registryAccess, List<EntityLightSource> lightSources) {
+	protected void doApply(HolderLookup.Provider registryLookup, List<EntityLightSource> lightSources) {
 		this.onRegisterEvent.invoker().onRegister(new RegisterContext() {
 			@Override
-			public @NotNull RegistryAccess registryAccess() {
-				return registryAccess;
+			public @NotNull HolderLookup.Provider registryLookup() {
+				return registryLookup;
 			}
 
 			@Override
