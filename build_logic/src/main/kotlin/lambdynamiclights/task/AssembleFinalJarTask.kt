@@ -151,6 +151,7 @@ abstract class AssembleFinalJarTask @Inject constructor() : AbstractAssembleJarT
 
 	private fun writeNmt(neoFs: FileSystem, outFs: FileSystem) {
 		val parentNmt = this.nmt.get().derive(::Nmt)
+		parentNmt.withNamespace(Constants.NAMESPACE)
 		parentNmt.withName(Constants.PRETTY_NAME)
 		parentNmt.withDescription(Constants.DESCRIPTION)
 		parentNmt.withLoaderVersion(this.nmt.get().loaderVersion)

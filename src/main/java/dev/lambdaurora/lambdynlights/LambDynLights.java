@@ -50,7 +50,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.ChunkSectionPos;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.profiling.Profiler;
@@ -76,7 +76,7 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 4.4.0
+ * @version 4.6.0
  * @since 1.0.0
  */
 @ApiStatus.Internal
@@ -209,7 +209,7 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 		return this.lastUpdateCount;
 	}
 
-	public void onTagsLoaded(RegistryAccess registries) {
+	public void onTagsLoaded(HolderLookup.Provider registries) {
 		this.itemLightSources.apply(registries);
 		this.entityLightSources.apply(registries);
 	}

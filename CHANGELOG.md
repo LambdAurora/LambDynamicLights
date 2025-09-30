@@ -493,7 +493,14 @@
 - Updated to Minecraft 1.21.9.
   - F3 debug entries are now configurable.
   - Made Copper Torch water-sensitive like the other torches.
+- Made settings accessible again from the "LambDynamicLights" mod in ModMenu.
+  - Since release 4.5.0 the settings were only accessible from the child mod "LambDynamicLights - Runtime".
 - Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+
+### 4.7.1
+
+- Improved reliability of mod initialization on NeoForge.
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
