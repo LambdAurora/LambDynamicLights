@@ -23,7 +23,7 @@ import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceCondition;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.resources.io.ResourceType;
@@ -38,7 +38,7 @@ import java.util.function.Consumer;
  * Provides the Fabric-specific platform operations.
  *
  * @author LambdAurora
- * @version 4.5.0
+ * @version 4.6.0
  * @since 4.5.0
  */
 public final class FabricPlatform implements Platform, PlatformProvider {
@@ -74,7 +74,7 @@ public final class FabricPlatform implements Platform, PlatformProvider {
 	}
 
 	@Override
-	public ListenableEvent<Identifier, Consumer<RegistryAccess>> getTagLoadedEvent() {
+	public ListenableEvent<Identifier, Consumer<HolderLookup.Provider>> getTagLoadedEvent() {
 		return new ListenableEvent<>() {
 			@Override
 			public @NotNull Identifier defaultPhaseId() {
@@ -82,7 +82,7 @@ public final class FabricPlatform implements Platform, PlatformProvider {
 			}
 
 			@Override
-			public void register(@NotNull Identifier phaseIdentifier, @NotNull Consumer<RegistryAccess> listener) {
+			public void register(@NotNull Identifier phaseIdentifier, @NotNull Consumer<HolderLookup.Provider> listener) {
 				CommonLifecycleEvents.TAGS_LOADED.register(
 						phaseIdentifier,
 						(registries, client) -> {if (client) listener.accept(registries);}

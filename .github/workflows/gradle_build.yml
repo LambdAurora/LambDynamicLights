@@ -6,6 +6,8 @@ on:
       - "**"
   pull_request:
 
+concurrency: build-${{ github.sha }}
+
 jobs:
   build:
     strategy:

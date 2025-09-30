@@ -111,6 +111,7 @@ abstract class AssembleFinalJarTask @Inject constructor() : AbstractAssembleJarT
 		Files.writeString(fmjPath, JsonUtils.GSON.toJson(json))
 
 		val parentFmj = this.fmj.get().derive(::Fmj)
+		parentFmj.withEntrypoints("modmenu", "dev.lambdaurora.lambdynlights.LambDynLightsModMenu")
 		parentFmj.withDepend(Constants.NAMESPACE + "_runtime", ">=${this.version.get()}")
 		parentFmj.withEnvironment(this.fmj.get().environment)
 		parentFmj.withJar(outFabricJar.toString())
@@ -150,6 +151,7 @@ abstract class AssembleFinalJarTask @Inject constructor() : AbstractAssembleJarT
 
 	private fun writeNmt(neoFs: FileSystem, outFs: FileSystem) {
 		val parentNmt = this.nmt.get().derive(::Nmt)
+		parentNmt.withNamespace(Constants.NAMESPACE)
 		parentNmt.withName(Constants.PRETTY_NAME)
 		parentNmt.withDescription(Constants.DESCRIPTION)
 		parentNmt.withLoaderVersion(this.nmt.get().loaderVersion)
