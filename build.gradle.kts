@@ -337,7 +337,7 @@ val finalJar by tasks.registering(AssembleFinalJarTask::class) {
 	this.jarJarMetadata.set(generateJarJarMetadata.flatMap { it.outputFile })
 }
 
-tasks.build.get().dependsOn(finalJar, mergedNeoForgeSourcesJar)
+tasks.assemble.get().dependsOn(finalJar, mergedNeoForgeSourcesJar)
 mojmap.setJarArtifact(mergedNeoForgeJar)
 mojmap.setSourcesArtifact(mergedNeoForgeSourcesJar)
 //endregion

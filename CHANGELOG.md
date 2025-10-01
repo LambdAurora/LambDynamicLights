@@ -502,6 +502,12 @@
 
 - Improved reliability of mod initialization on NeoForge.
 
+### 4.7.2
+
+- Improved automatic deduction of dynamic lighting from block items by considering their components.
+  - The Light block item now lights up with the correct luminance level with dynamic lighting.
+- Fixed "Glowing Effect" option not being saved ([#316](https://github.com/LambdAurora/LambDynamicLights/issues/316)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"

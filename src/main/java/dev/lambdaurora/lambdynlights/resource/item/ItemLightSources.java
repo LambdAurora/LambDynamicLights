@@ -20,8 +20,11 @@ import dev.lambdaurora.lambdynlights.resource.LoadedLightSourceResource;
 import dev.yumi.commons.event.Event;
 import dev.yumi.mc.core.api.YumiEvents;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -125,7 +128,19 @@ public final class ItemLightSources extends LightSourceLoader<ItemLightSource> i
 		}
 
 		if (!matchedAny) {
-			luminance = Block.byItem(stack.getItem()).defaultState().getLightEmission();
+			if (stack.getItem() instanceof BlockItem blockItem) {
+				var state = blockItem.getBlock().defaultState();
+				var component = stack.getOrDefault(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY);
+
+				if (!component.isEmpty()) {
+					state = component.apply(state);
+				}
+
+				luminance = state.getLightEmission();
+			} else {
+				// In case someone injects there.
+				luminance = Block.byItem(stack.getItem()).defaultState().getLightEmission();
+			}
 		}
 
 		return luminance;
