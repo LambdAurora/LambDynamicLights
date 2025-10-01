@@ -9,7 +9,7 @@ mappings-parchment = "2024.07.28"
 # Dependencies
 yumi-commons = "1.0.0-beta.5"
 yumi-mc-foundation = "1.0.0-alpha.16+1.21.1"
-spruceui = "8.0.3+1.21.8"
+spruceui = "8.0.4+1.21.8"
 pridelib = "1.4.4+1.21.8"
 
 modmenu = "15.0.0-beta.1"

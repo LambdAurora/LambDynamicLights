@@ -68,7 +68,7 @@ lambdamcdev.manifests {
 		withAccessTransformer("META-INF/accesstransformer.cfg")
 		withMixins("lambdynlights.mixins.json", "lambdynlights.lightsource.mixins.json")
 		withDepend(Constants.NAMESPACE + "_api", "[${version},)", Nmt.DependencySide.CLIENT)
-		withDepend("minecraft", "[${libs.versions.minecraft.get()},)")
+		withDepend("minecraft", "[1.21.6,1.21.8]")
 		withDepend("spruceui", "[${libs.versions.spruceui.get()},)", Nmt.DependencySide.CLIENT)
 		withDepend("yumi_mc_core", "[${libs.versions.yumi.mc.foundation.get()},)", Nmt.DependencySide.CLIENT)
 		withBreak("sodiumdynamiclights", "*", Nmt.DependencySide.CLIENT)
@@ -336,7 +336,7 @@ val finalJar by tasks.registering(AssembleFinalJarTask::class) {
 	this.jarJarMetadata.set(generateJarJarMetadata.flatMap { it.outputFile })
 }
 
-tasks.build.get().dependsOn(finalJar, mergedNeoForgeSourcesJar)
+tasks.assemble.get().dependsOn(finalJar, mergedNeoForgeSourcesJar)
 mojmap.setJarArtifact(mergedNeoForgeJar)
 mojmap.setSourcesArtifact(mergedNeoForgeSourcesJar)
 //endregion

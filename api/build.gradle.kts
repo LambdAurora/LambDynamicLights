@@ -38,7 +38,7 @@ lambdamcdev {
 		nmt {
 			fmj.copyTo(this)
 			withLoaderVersion("[2,)")
-			withDepend("minecraft", "[" + libs.versions.minecraft.get() + ",)")
+			withDepend("minecraft", "[1.21.6,1.21.8]")
 		}
 
 		fmj {
