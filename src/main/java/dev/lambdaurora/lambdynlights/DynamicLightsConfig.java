@@ -142,6 +142,7 @@ public class DynamicLightsConfig {
 				this.beamLighting,
 				this.guardianLaser,
 				this.sonicBoomLighting,
+				this.glowingEffectLighting,
 				this.debugActiveDynamicLightingCells,
 				this.debugDisplayDynamicLightingChunkRebuild,
 				this.debugDisplayHandlerBoundingBox

@@ -32,7 +32,9 @@ public class NeoForgeInitializer {
 				});
 
 		modBus.addListener(RegisterClientReloadListenersEvent.class, event -> {
-			NeoForgePlatform.INSTANCE.reloaders.forEach(event::registerReloadListener);
+			NeoForgePlatform.INSTANCE.reloaders.stream()
+					.map(PendingResourceReloader::reloader)
+					.forEach(event::registerReloadListener);
 		});
 	}
 }

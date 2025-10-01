@@ -15,9 +15,8 @@ import dev.lambdaurora.lambdynlights.resource.LightSourceLoader;
 import dev.yumi.commons.event.ListenableEvent;
 import dev.yumi.mc.core.api.ModContainer;
 import dev.yumi.mc.core.api.YumiEvents;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceReloader;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import org.jetbrains.annotations.NotNull;
@@ -30,12 +29,12 @@ import java.util.function.Consumer;
  * Provides the NeoForge-specific platform operations.
  *
  * @author LambdAurora
- * @version 4.5.0
+ * @version 4.7.1
  * @since 4.5.0
  */
 public final class NeoForgePlatform implements Platform, PlatformProvider {
 	public static final NeoForgePlatform INSTANCE = new NeoForgePlatform();
-	final List<ResourceReloader> reloaders = new ArrayList<>();
+	final List<PendingResourceReloader> reloaders = new ArrayList<>();
 
 	private NeoForgePlatform() {}
 
@@ -46,11 +45,11 @@ public final class NeoForgePlatform implements Platform, PlatformProvider {
 
 	@Override
 	public void registerReloader(LightSourceLoader<?> reloader) {
-		this.reloaders.add(reloader);
+		this.reloaders.add(new PendingResourceReloader(reloader.id(), reloader, reloader.dependencies()));
 	}
 
 	@Override
-	public ListenableEvent<Identifier, Consumer<RegistryAccess>> getTagLoadedEvent() {
+	public ListenableEvent<Identifier, Consumer<HolderLookup.Provider>> getTagLoadedEvent() {
 		return new ListenableEvent<>() {
 			@Override
 			public @NotNull Identifier defaultPhaseId() {
@@ -58,7 +57,7 @@ public final class NeoForgePlatform implements Platform, PlatformProvider {
 			}
 
 			@Override
-			public void register(@NotNull Identifier phaseIdentifier, @NotNull Consumer<RegistryAccess> listener) {
+			public void register(@NotNull Identifier phaseIdentifier, @NotNull Consumer<HolderLookup.Provider> listener) {
 				NeoForge.EVENT_BUS.addListener(TagsUpdatedEvent.class, event -> {
 					if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED) {
 						listener.accept(event.getRegistryAccess());

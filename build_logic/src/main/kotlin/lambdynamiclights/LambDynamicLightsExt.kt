@@ -15,7 +15,9 @@ open class LambDynamicLightsExt(private val project: Project, private val libs: 
 	}
 
 	fun extraCompatibleMcVersions(): List<String> {
-		return this.project.property("compatible_mc_versions").toString().split(",").map { it.trim() }
+		val raw = this.project.property("compatible_mc_versions").toString()
+
+		return if (raw.isBlank()) listOf() else raw.split(",").map { it.trim() }
 	}
 
 	fun compatibleMcVersions(): List<String> {

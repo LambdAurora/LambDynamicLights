@@ -7,7 +7,7 @@ mappings-yalmm = "6"
 mappings-parchment = "2024.07.28"
 
 # Dependencies
-yumi-commons = "1.0.0-beta.4"
+yumi-commons = "1.0.0-beta.5"
 yumi-mc-foundation = "1.0.0-alpha.16+1.21.1"
 spruceui = "6.2.5+1.21.1"
 pridelib = "1.2.4+1.21.1"
