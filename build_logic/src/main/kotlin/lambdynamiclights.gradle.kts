@@ -29,7 +29,7 @@ lambdamcdev {
 				.withIcon("assets/${Constants.NAMESPACE}/icon.png")
 				.withEnvironment("client")
 				.withDepend("fabricloader", ">=${libs.versions.fabric.loader.get()}")
-				.withDepend("minecraft", "~1.21 <1.21.2-")
+				.withDepend("minecraft", project.property("fabric_mc_constraints").toString())
 				.withDepend("java", ">=${project.property("java_version")}")
 				.withModMenu {
 					it.withCurseForge("https://www.curseforge.com/minecraft/mc-mods/lambdynamiclights")

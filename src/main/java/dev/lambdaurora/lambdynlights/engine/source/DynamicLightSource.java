@@ -11,23 +11,30 @@ package dev.lambdaurora.lambdynlights.engine.source;
 
 import dev.lambdaurora.lambdynlights.engine.CellHasher;
 import dev.lambdaurora.lambdynlights.engine.lookup.SpatialLookupEntry;
-import it.unimi.dsi.fastutil.longs.LongSet;
+import dev.lambdaurora.lambdynlights.engine.scheduler.ChunkRebuildStatus;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.ChunkSectionPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 
 /**
  * Represents a dynamic light source.
  *
  * @author LambdAurora
- * @version 4.4.0
+ * @version 4.8.0
  * @since 4.0.0
  */
 public interface DynamicLightSource {
+	/**
+	 * {@return the identifier of this dynamic light source, may not be unique}
+	 */
+	int getDynamicLightId();
+
 	/**
 	 * Splits this dynamic light source into spatial lookup entries.
 	 *
@@ -37,30 +44,30 @@ public interface DynamicLightSource {
 	Stream<SpatialLookupEntry> splitIntoDynamicLightEntries(@NotNull CellHasher cellHasher);
 
 	/**
-	 * Computes the set of chunk sections to rebuild to display in-world the new light values.
+	 * Computes the map of chunk sections to rebuild to display in-world the new light values.
 	 *
 	 * @param forced {@code true} if relevant chunk sections must be returned to rebuild the chunk sections (for example if the light source is removed),
 	 * or {@code false} otherwise
-	 * @return the set of chunk sections to rebuild, or an empty set if none is to be rebuilt
+	 * @return the map of chunk sections to rebuild, or an empty map if none is to be rebuilt
 	 */
-	LongSet getDynamicLightChunksToRebuild(boolean forced);
+	Long2ObjectMap<ChunkRebuildStatus> getDynamicLightChunksToRebuild(boolean forced);
 
 	/**
 	 * Gathers the closest chunks from the given coordinates.
 	 *
-	 * @param chunks the chunk set to add relevant chunks to
 	 * @param x the X-coordinate
 	 * @param y the Y-coordinate
 	 * @param z the Z-coordinate
+	 * @param chunkConsumer the consumer of the relevant chunks
 	 */
-	static void gatherClosestChunks(LongSet chunks, double x, double y, double z) {
+	static void gatherClosestChunks(double x, double y, double z, LongConsumer chunkConsumer) {
 		var chunkPos = new BlockPos.Mutable(
 				ChunkSectionPos.blockToSectionCoord(x),
 				ChunkSectionPos.blockToSectionCoord(y),
 				ChunkSectionPos.blockToSectionCoord(z)
 		);
 
-		chunks.add(ChunkSectionPos.asLong(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ()));
+		chunkConsumer.accept(ChunkSectionPos.asLong(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ()));
 
 		var directionX = (MathHelper.floor(x) & 15) >= 8 ? Direction.EAST : Direction.WEST;
 		var directionY = (MathHelper.floor(y) & 15) >= 8 ? Direction.UP : Direction.DOWN;
@@ -77,7 +84,7 @@ public interface DynamicLightSource {
 				chunkPos.move(directionZ.getOpposite()); // origin
 				chunkPos.move(directionY); // Y
 			}
-			chunks.add(ChunkSectionPos.asLong(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ()));
+			chunkConsumer.accept(ChunkSectionPos.asLong(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ()));
 		}
 	}
 }

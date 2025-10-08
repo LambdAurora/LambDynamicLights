@@ -23,6 +23,7 @@ gradle-licenser = "2.1.+"
 gradle-loom = "1.11.+"
 gradle-lambdamcdev = "1.6.0"
 gson = "2.11.0"
+apache-commons-compress = "1.28.0"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -50,3 +51,4 @@ gradle-licenser = { module = "dev.yumi:yumi-gradle-licenser", version.ref = "gra
 gradle-loom = { module = "net.fabricmc:fabric-loom", version.ref = "gradle-loom" }
 gradle-lambdamcdev = { module = "dev.lambdaurora.mcdev:dev.lambdaurora.mcdev.gradle.plugin", version.ref = "gradle-lambdamcdev" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+apache-commons-compress = { module = "org.apache.commons:commons-compress", version.ref = "apache-commons-compress" }

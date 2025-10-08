@@ -27,7 +27,7 @@ import java.util.List;
  * Adds a debug string for dynamic light sources tracking and updates.
  *
  * @author LambdAurora
- * @version 4.4.0
+ * @version 4.8.0
  * @since 1.3.2
  */
 @Mixin(DebugScreenOverlay.class)
@@ -42,6 +42,14 @@ public class DebugScreenOverlayMixin {
 
 		var list = cir.getReturnValue();
 		var ldl = LambDynLights.get();
+		var chunkRebuildScheduler = ldl.getChunkRebuildScheduler();
+
+		int sourceUpdatedLastTick = 0;
+
+		if (chunkRebuildScheduler != null) {
+			sourceUpdatedLastTick = chunkRebuildScheduler.getSourceUpdatedLastTick();
+		}
+
 		var builder = new StringBuilder(prefix + "Dynamic Light Sources: ");
 		builder.append(ldl.getLightSourcesCount())
 				.append(" (Occupying ")
@@ -49,7 +57,7 @@ public class DebugScreenOverlayMixin {
 				.append('/')
 				.append(ldl.engine.getSize())
 				.append(" ; Updated: ")
-				.append(ldl.getLastUpdateCount());
+				.append(sourceUpdatedLastTick);
 
 		if (!ldl.config.getDynamicLightsMode().isEnabled()) {
 			builder.append(" ; ");
@@ -63,6 +71,10 @@ public class DebugScreenOverlayMixin {
 
 		list.add(prefix + "Compute Spatial Lookup Timing: %.3fms (avg. 40t)"
 				.formatted(ldl.engine.getComputeSpatialLookupTime() / 1_000_000.f));
+
+		if (chunkRebuildScheduler != null) {
+			chunkRebuildScheduler.appendF3Debug(line -> list.add(prefix + line));
+		}
 
 		list.add(prefix + "Dynamic Light At Feet: %.3f"
 				.formatted(ldl.engine.getDynamicLightLevel(this.minecraft.player.getBlockPos())));

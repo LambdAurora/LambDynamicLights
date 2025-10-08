@@ -69,7 +69,7 @@ lambdamcdev.manifests {
 		withAccessTransformer("META-INF/accesstransformer.cfg")
 		withMixins("lambdynlights.mixins.json", "lambdynlights.lightsource.mixins.json")
 		withDepend(Constants.NAMESPACE + "_api", "[${version},)", Nmt.DependencySide.CLIENT)
-		withDepend("minecraft", "[${libs.versions.minecraft.get()},)")
+		withDepend("minecraft", project.property("neoforge_mc_constraints").toString())
 		withDepend("spruceui", "[${libs.versions.spruceui.get()},)", Nmt.DependencySide.CLIENT)
 		withDepend("yumi_mc_core", "[${libs.versions.yumi.mc.foundation.get()},)", Nmt.DependencySide.CLIENT)
 		withBreak("sodiumdynamiclights", "*", Nmt.DependencySide.CLIENT)
@@ -82,22 +82,31 @@ repositories {
 	maven {
 		name = "Terraformers"
 		url = uri("https://maven.terraformersmc.com/releases/")
-	}
-	maven {
-		name = "ParchmentMC"
-		url = uri("https://maven.parchmentmc.org")
+		content {
+			includeGroupAndSubgroups("com.terraformersmc")
+			includeGroup("dev.emi")
+		}
 	}
 	maven {
 		name = "Ladysnake Libs"
 		url = uri("https://maven.ladysnake.org/releases")
+		content {
+			includeGroup("org.ladysnake.cardinal-components-api")
+		}
 	}
-	maven { url = uri("https://maven.wispforest.io/releases") }
+	maven {
+		name = "Wispforest"
+		url = uri("https://maven.wispforest.io/releases")
+		content {
+			includeGroupAndSubgroups("io.wispforest")
+		}
+	}
 	maven {
 		name = "NeoForge"
 		url = uri("https://maven.neoforged.net/")
 		content {
-			includeGroupByRegex("net\\.neoforged.*")
-			includeGroupByRegex("cpw\\.mods.*")
+			includeGroupAndSubgroups("net.neoforged")
+			includeGroupAndSubgroups("cpw.mods")
 		}
 	}
 }
@@ -196,6 +205,11 @@ dependencies {
 		}
 	}
 	//endregion
+}
+
+loom.runs.getByName("client") {
+	this.vmArg("-DMC_DEBUG_ENABLED")
+	this.vmArg("-DMC_DEBUG_HOTKEYS")
 }
 
 tasks.shadowJar {

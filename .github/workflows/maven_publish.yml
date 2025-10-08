@@ -18,6 +18,12 @@ jobs:
           java-version: 21
       - name: "Set up Gradle"
         uses: gradle/actions/setup-gradle@v4
+      - name: "Handle Loom Cache"
+        uses: actions/cache@v4
+        with:
+          path: "**/.gradle/loom-cache"
+          key: "${{ runner.os }}-gradle-${{ hashFiles('**/libs.versions.*', '**/*.gradle*', '**/gradle-wrapper.properties') }}"
+          restore-keys: "${{ runner.os }}-gradle-"
 
       # The USERNAME and PASSWORD need to correspond to the credentials environment variables used in
       # the publishing section of your build.gradle
