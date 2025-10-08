@@ -1,35 +1,42 @@
 package lambdynamiclights.task
 
-import com.google.gson.JsonParser
-import dev.lambdaurora.mcdev.util.JsonUtils
 import dev.yumi.commons.function.YumiPredicates
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.jvm.tasks.Jar
-import java.nio.file.FileSystem
-import java.nio.file.FileSystems
-import java.nio.file.FileVisitResult
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.StandardCopyOption
+import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.function.Predicate
 import javax.inject.Inject
-import kotlin.use
 
 abstract class AbstractAssembleJarTask @Inject constructor() : Jar() {
-	protected fun openFs(jar: RegularFileProperty): FileSystem {
-		return FileSystems.newFileSystem(jar.get().asFile.toPath())
+	protected fun openJar(path: Path): FileSystem {
+		return FileSystems.newFileSystem(path, mapOf("enablePosixFileAttributes" to "true"))
+	}
+
+	protected fun createDirectories(path: Path) {
+		if (Files.exists(path)) {
+			return
+		} else {
+			this.createDirectories(path.toAbsolutePath().parent)
+			Files.createDirectory(path)
+		}
+	}
+
+	protected fun writeString(path: Path, csq: CharSequence) {
+		Files.writeString(path, csq)
+	}
+
+	protected fun copy(source: Path, target: Path, vararg options: CopyOption) {
+		Files.copy(source, target, *options)
 	}
 
 	protected fun copy(source: Path, target: Path, predicate: Predicate<Path>) {
 		if (target.parent != null) {
-			Files.createDirectories(target.parent)
+			this.createDirectories(target.parent)
 		}
 
 		if (Files.isRegularFile(source)) {
 			if (predicate.test(source))
-				Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
+				this.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
 			return
 		}
 
@@ -41,13 +48,13 @@ abstract class AbstractAssembleJarTask @Inject constructor() : Jar() {
 
 			override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
 				if (!predicate.test(dir)) return FileVisitResult.SKIP_SUBTREE
-				Files.createDirectories(this.resolve(dir))
+				createDirectories(this.resolve(dir))
 				return FileVisitResult.CONTINUE
 			}
 
 			override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
 				if (predicate.test(file)) {
-					Files.copy(file, this.resolve(file), StandardCopyOption.REPLACE_EXISTING)
+					copy(file, this.resolve(file), StandardCopyOption.REPLACE_EXISTING)
 				}
 				return FileVisitResult.CONTINUE
 			}
@@ -60,7 +67,7 @@ abstract class AbstractAssembleJarTask @Inject constructor() : Jar() {
 
 	protected fun move(source: Path, target: Path) {
 		if (target.parent != null) {
-			Files.createDirectories(target.parent)
+			this.createDirectories(target.parent)
 		}
 
 		if (Files.isRegularFile(source)) {
@@ -75,12 +82,13 @@ abstract class AbstractAssembleJarTask @Inject constructor() : Jar() {
 			}
 
 			override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-				Files.createDirectories(this.resolve(dir))
+				createDirectories(this.resolve(dir))
 				return FileVisitResult.CONTINUE
 			}
 
 			override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-				Files.move(file, this.resolve(file))
+				val target = this.resolve(file)
+				Files.move(file, target)
 				return FileVisitResult.CONTINUE
 			}
 		})

@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.lambdynlights;
 
+import dev.lambdaurora.lambdynlights.engine.TickMode;
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.util.Nameable;
 import net.minecraft.TextFormatting;
@@ -22,20 +23,20 @@ import java.util.Optional;
  * Represents the dynamic lights mode.
  *
  * @author LambdAurora
- * @version 2.0.1
+ * @version 4.8.0
  * @since 1.0.0
  */
 public enum DynamicLightsMode implements Nameable {
-	OFF(0, TextFormatting.RED, SpruceTexts.OPTIONS_OFF),
-	FASTEST(500, TextFormatting.GOLD, SpruceTexts.OPTIONS_GENERIC_FASTEST),
-	FAST(250, TextFormatting.YELLOW, SpruceTexts.OPTIONS_GENERIC_FAST),
-	FANCY(0, TextFormatting.GREEN, SpruceTexts.OPTIONS_GENERIC_FANCY);
+	OFF(TickMode.REAL_TIME, TextFormatting.RED, SpruceTexts.OPTIONS_OFF),
+	FASTEST(TickMode.SLOWER, TextFormatting.GOLD, SpruceTexts.OPTIONS_GENERIC_FASTEST),
+	FAST(TickMode.SLOW, TextFormatting.YELLOW, SpruceTexts.OPTIONS_GENERIC_FAST),
+	FANCY(TickMode.REAL_TIME, TextFormatting.GREEN, SpruceTexts.OPTIONS_GENERIC_FANCY);
 
-	private final int delay;
+	private final TickMode tickMode;
 	private final Text translatedText;
 
-	DynamicLightsMode(int delay, @NotNull TextFormatting formatting, @NotNull Text translatedText) {
-		this.delay = delay;
+	DynamicLightsMode(TickMode tickMode, @NotNull TextFormatting formatting, @NotNull Text translatedText) {
+		this.tickMode = tickMode;
 		this.translatedText = translatedText.copy().withStyle(formatting);
 	}
 
@@ -49,21 +50,10 @@ public enum DynamicLightsMode implements Nameable {
 	}
 
 	/**
-	 * Returns whether this mode has an update delay.
-	 *
-	 * @return {@code true} if the mode has an update delay, else {@code false}
+	 * {@return the corresponding tick mode for this dynamic lights mode}
 	 */
-	public boolean hasDelay() {
-		return this.delay != 0;
-	}
-
-	/**
-	 * Returns the update delay of this mode.
-	 *
-	 * @return the mode's update delay
-	 */
-	public int getDelay() {
-		return this.delay;
+	public @NotNull TickMode tickMode() {
+		return this.tickMode;
 	}
 
 	/**

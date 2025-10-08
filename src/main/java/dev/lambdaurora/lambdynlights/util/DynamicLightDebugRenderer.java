@@ -13,9 +13,12 @@ import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.lambdaurora.lambdynlights.DynamicLightsConfig;
 import dev.lambdaurora.lambdynlights.LambDynLights;
+import dev.lambdaurora.lambdynlights.engine.scheduler.ChunkRebuildStatus;
 import dev.lambdaurora.spruceui.util.ColorUtil;
 import it.unimi.dsi.fastutil.longs.Long2IntMap;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -30,11 +33,13 @@ import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
+import java.util.function.Supplier;
+
 /**
  * Represents a debug renderer for dynamic lighting.
  *
  * @author LambdAurora
- * @version 4.0.0
+ * @version 4.8.0
  * @since 4.0.0
  */
 @Environment(EnvType.CLIENT)
@@ -140,14 +145,16 @@ public abstract class DynamicLightDebugRenderer implements DebugRenderer.SimpleD
 	}
 
 	public static class SectionRebuild extends DynamicLightDebugRenderer {
-		private static final int COLOR = 0x3f0099ff;
-		private final Long2IntMap chunks = new Long2IntOpenHashMap();
+		private static final int SCHEDULED_COLOR = 0x3f0099ff;
+		private static final int REQUESTED_COLOR = 0x3f9b00a6;
+		private final Long2IntMap scheduledChunks = new Long2IntOpenHashMap();
+		private Long2ObjectMap<int[]> requestedChunks;
 
 		public SectionRebuild(LambDynLights mod) {
 			super(mod);
 		}
 
-		private boolean isEnabled() {
+		public boolean isEnabled() {
 			return this.config.getDebugDisplayDynamicLightingChunkRebuilds().get();
 		}
 
@@ -157,34 +164,84 @@ public abstract class DynamicLightDebugRenderer implements DebugRenderer.SimpleD
 
 			matrices.push();
 			matrices.translate(-x, -y, -z);
-			for (var entry : this.chunks.long2IntEntrySet()) {
-				var chunk = ChunkSectionPos.of(entry.getLongKey());
-
-				float red = ColorUtil.floatColor(ColorUtil.argbUnpackRed(COLOR));
-				float green = ColorUtil.floatColor(ColorUtil.argbUnpackGreen(COLOR));
-				float blue = ColorUtil.floatColor(ColorUtil.argbUnpackBlue(COLOR));
-				float alpha = entry.getIntValue() / 4.f;
-
-				ShapeRenderer.renderLineBox(
-						matrices, bufferSource.getBuffer(RenderType.lines()),
-						chunk.minBlockX(), chunk.minBlockY(), chunk.minBlockZ(),
-						ChunkSectionPos.sectionToBlockCoord(chunk.x(), 16), ChunkSectionPos.sectionToBlockCoord(chunk.y(), 16), ChunkSectionPos.sectionToBlockCoord(chunk.z(), 16),
-						red, green, blue, alpha
-				);
+			for (var entry : this.scheduledChunks.long2IntEntrySet()) {
+				this.renderBox(matrices, bufferSource, SCHEDULED_COLOR, entry.getIntValue() / 4.f, ChunkSectionPos.of(entry.getLongKey()));
 			}
 			matrices.pop();
+
+			if (this.requestedChunks != null) {
+				for (var chunk : this.requestedChunks.long2ObjectEntrySet()) {
+					var chunkPos = ChunkSectionPos.of(chunk.getLongKey());
+					var statuses = chunk.getValue();
+					boolean canRenderBox = false;
+
+					int statusY = chunkPos.maxBlockY() - 4;
+					for (int i = 0; i < statuses.length; i++) {
+						if (statuses[i] > 0) {
+							var status = ChunkRebuildStatus.VALUES.get(i);
+
+							DebugRenderer.renderFloatingText(
+									matrices,
+									bufferSource,
+									statuses[i] + "x " + status,
+									chunkPos.minBlockX() + 8,
+									statusY,
+									chunkPos.minBlockZ() + 8,
+									status.color(),
+									.08f
+							);
+
+							if (i != ChunkRebuildStatus.AFFECTED.ordinal()) {
+								canRenderBox = true;
+							}
+						}
+
+						statusY -= 2;
+					}
+
+					if (canRenderBox) {
+						matrices.push();
+						matrices.translate(-x, -y, -z);
+						this.renderBox(matrices, bufferSource, REQUESTED_COLOR, 1.f, chunkPos);
+						matrices.pop();
+					}
+				}
+			}
+		}
+
+		private void renderBox(MatrixStack matrices, MultiBufferSource bufferSource, int color, float alpha, ChunkSectionPos chunk) {
+			float red = ColorUtil.floatColor(ColorUtil.argbUnpackRed(color));
+			float green = ColorUtil.floatColor(ColorUtil.argbUnpackGreen(color));
+			float blue = ColorUtil.floatColor(ColorUtil.argbUnpackBlue(color));
+
+			ShapeRenderer.renderLineBox(
+					matrices, bufferSource.getBuffer(RenderType.lines()),
+					chunk.minBlockX(), chunk.minBlockY(), chunk.minBlockZ(),
+					ChunkSectionPos.sectionToBlockCoord(chunk.x(), 16), ChunkSectionPos.sectionToBlockCoord(chunk.y(), 16), ChunkSectionPos.sectionToBlockCoord(chunk.z(), 16),
+					red, green, blue, alpha
+			);
 		}
 
 		public void scheduleChunkRebuild(long chunkPos) {
 			if (!this.isEnabled()) return;
 
-			this.chunks.put(chunkPos, 4);
+			this.scheduledChunks.put(chunkPos, 4);
+		}
+
+		public void setRequestedChunks(Supplier<Long2ObjectMap<int[]>> chunks) {
+			if (!this.isEnabled()) return;
+
+			this.requestedChunks = chunks.get();
+		}
+
+		public void clearRequestedChunks() {
+			this.requestedChunks = Long2ObjectMaps.emptyMap();
 		}
 
 		public void tick() {
 			if (!this.isEnabled()) return;
 
-			var iterator = this.chunks.long2IntEntrySet().iterator();
+			var iterator = this.scheduledChunks.long2IntEntrySet().iterator();
 			while (iterator.hasNext()) {
 				var entry = iterator.next();
 

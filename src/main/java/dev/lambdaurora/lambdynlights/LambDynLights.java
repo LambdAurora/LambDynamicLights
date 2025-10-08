@@ -19,19 +19,17 @@ import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import dev.lambdaurora.lambdynlights.compat.CompatLayer;
 import dev.lambdaurora.lambdynlights.engine.DynamicLightBehaviorSources;
 import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
+import dev.lambdaurora.lambdynlights.engine.TickMode;
+import dev.lambdaurora.lambdynlights.engine.scheduler.ChunkRebuildScheduler;
 import dev.lambdaurora.lambdynlights.engine.source.DeferredDynamicLightSource;
 import dev.lambdaurora.lambdynlights.engine.source.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSource;
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSourceBehavior;
-import dev.lambdaurora.lambdynlights.mixin.LevelRendererAccessor;
 import dev.lambdaurora.lambdynlights.platform.PlatformProvider;
 import dev.lambdaurora.lambdynlights.resource.LightSourceLoader;
 import dev.lambdaurora.lambdynlights.resource.entity.EntityLightSources;
 import dev.lambdaurora.lambdynlights.resource.item.ItemLightSources;
-import dev.lambdaurora.lambdynlights.util.DynamicLightBehaviorDebugRenderer;
-import dev.lambdaurora.lambdynlights.util.DynamicLightDebugRenderer;
-import dev.lambdaurora.lambdynlights.util.DynamicLightLevelDebugRenderer;
-import dev.lambdaurora.lambdynlights.util.DynamicLightSectionDebugRenderer;
+import dev.lambdaurora.lambdynlights.util.*;
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.yumi.mc.core.api.CrashReportEvents;
 import dev.yumi.mc.core.api.ModContainer;
@@ -45,10 +43,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.FireflyParticle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.SonicBoomParticle;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.ChunkSectionPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
@@ -59,7 +55,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockAndTintGetter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +73,7 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 4.6.0
+ * @version 4.8.0
  * @since 1.0.0
  */
 @ApiStatus.Internal
@@ -112,10 +110,12 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 			new DynamicLightSectionDebugRenderer(this)
 	);
 
-	private long lastUpdate = System.currentTimeMillis();
-	private boolean shouldTick = false;
+	private ChunkRebuildScheduler chunkRebuildScheduler;
+
+	private int tick = 0;
+	private TickMode minimumTickMode = TickMode.REAL_TIME;
+	private boolean disableTicking = false;
 	boolean shouldForceRefresh = false;
-	private int lastUpdateCount = 0;
 	private int dynamicLightSourcesCount = 0;
 
 	private LambDynLights() {}
@@ -191,20 +191,83 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 		return this.dynamicLightBehaviorSources;
 	}
 
-	/**
-	 * {@return {@code true} if dynamic lighting should tick, or {@code false} otherwise}
-	 */
-	public boolean shouldTick() {
-		return this.shouldTick;
+	public @Nullable ChunkRebuildScheduler getChunkRebuildScheduler() {
+		return this.chunkRebuildScheduler;
 	}
 
 	/**
-	 * Returns the last number of dynamic light source updates.
+	 * {@return {@code true} if dynamic lighting should tick, or {@code false} otherwise}
 	 *
-	 * @return the last number of dynamic light source updates
+	 * @param entity the entity to tick
 	 */
-	public int getLastUpdateCount() {
-		return this.lastUpdateCount;
+	public boolean shouldTick(EntityDynamicLightSource entity) {
+		if (this.disableTicking) return false;
+
+		var effectiveMode = this.minimumTickMode.min(
+				this.getBaseTickMode(
+						entity.getDynamicLightX(),
+						entity.getDynamicLightY(),
+						entity.getDynamicLightZ()
+				)
+		);
+
+		// Early return for performance reasons
+		if (effectiveMode == TickMode.REAL_TIME) return true;
+
+		return this.tick % effectiveMode.delay() == entity.getDynamicLightId() % effectiveMode.delay();
+	}
+
+	/**
+	 * {@return {@code true} if dynamic lighting should tick, or {@code false} otherwise}
+	 *
+	 * @param source the deferred light source to tick
+	 */
+	public boolean shouldTick(DeferredDynamicLightSource source) {
+		if (this.disableTicking) return false;
+
+		var effectiveMode = this.minimumTickMode.min(
+				BoundingBoxUtils.forAllPoints(source.behavior().getBoundingBox(), this::getBaseTickMode)
+						.stream().reduce(TickMode.BACKGROUND, TickMode::max)
+		);
+
+		// Early return for performance reasons
+		if (effectiveMode == TickMode.REAL_TIME) return true;
+
+		return this.tick % effectiveMode.delay() == source.getDynamicLightId() % effectiveMode.delay();
+	}
+
+	private TickMode getBaseTickMode(double x, double y, double z) {
+		var mode = TickMode.REAL_TIME;
+
+		// If the entity is far behind the camera, we greatly slow it down.
+		var camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+		var planeNormal = camera.getLookVector();
+		var planeOrigin = camera.getPosition();
+
+		var planeOriginToEntity = new Vector3f(
+				(float) (x - planeOrigin.x),
+				(float) (y - planeOrigin.y),
+				(float) (z - planeOrigin.z)
+		);
+		var signedDistance = planeNormal.dot(planeOriginToEntity);
+
+		if (this.config.getBackgroundAdaptativeTicking().get() && signedDistance < -DynamicLightingEngine.MAX_RADIUS - 1) {
+			mode = TickMode.BACKGROUND;
+		}
+		// If the entity is too far away, we slow it down.
+		else {
+			float dX = (float) (camera.getPosition().x - x);
+			float dY = (float) (camera.getPosition().y - y);
+			float dZ = (float) (camera.getPosition().z - z);
+			float squaredDist = dX * dX + dY * dY + dZ * dZ;
+			if (squaredDist > this.config.getSlowerTickingDistance()) {
+				mode = TickMode.SLOWER;
+			} else if (squaredDist > this.config.getSlowTickingDistance()) {
+				mode = TickMode.SLOW;
+			}
+		}
+
+		return mode;
 	}
 
 	public void onTagsLoaded(HolderLookup.Provider registries) {
@@ -214,22 +277,17 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 
 	public void onStartLevelTick() {
 		var mode = this.config.getDynamicLightsMode();
-		boolean shouldTick = mode.isEnabled();
 
-		if (shouldTick && mode.hasDelay()) {
-			long currentTime = System.currentTimeMillis();
-			if (currentTime < this.lastUpdate + mode.getDelay()) {
-				shouldTick = false;
-			} else {
-				this.lastUpdate = currentTime;
-			}
-		}
+		this.disableTicking = !mode.isEnabled();
+		this.minimumTickMode = mode.tickMode();
 
-		this.shouldTick = shouldTick || this.shouldForceRefresh;
+		this.tick += 1;
 	}
 
 	public void onEndLevelTick() {
 		var renderer = Minecraft.getInstance().levelRenderer;
+
+		this.chunkRebuildScheduler.startTick();
 
 		this.lightSourcesLock.writeLock().lock();
 		if (this.config.getDynamicLightsMode().isEnabled()) {
@@ -237,15 +295,11 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 			this.engine.computeSpatialLookup(this.dynamicLightSources);
 			Profiler.get().pop();
 		}
-		this.toClear.forEach(source -> {
-			source.getDynamicLightChunksToRebuild(true).forEach(chunk -> this.scheduleChunkRebuild(renderer, chunk));
-		});
+		this.toClear.forEach(this.chunkRebuildScheduler::remove);
 		this.toClear.clear();
 		this.lightSourcesLock.writeLock().unlock();
 
-		this.lastUpdateCount = 0;
-
-		if (this.shouldTick) {
+		if (!this.disableTicking || this.shouldForceRefresh) {
 			var it = this.dynamicLightSources.iterator();
 			while (it.hasNext()) {
 				var lightSource = it.next();
@@ -261,18 +315,18 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 					}
 				}
 
-				var chunks = lightSource.getDynamicLightChunksToRebuild(this.shouldForceRefresh || this.toAdd.contains(lightSource));
+				if (lightSource instanceof EntityDynamicLightSource entity && !this.shouldTick(entity)) continue;
+				if (lightSource instanceof DeferredDynamicLightSource deferred && !this.shouldTick(deferred)) continue;
 
-				if (!chunks.isEmpty()) {
-					chunks.forEach(chunk -> this.scheduleChunkRebuild(renderer, chunk));
-					this.lastUpdateCount++;
-				}
+				var chunks = lightSource.getDynamicLightChunksToRebuild(this.shouldForceRefresh || this.toAdd.contains(lightSource));
+				this.chunkRebuildScheduler.update(lightSource, chunks);
 			}
 
 			this.toAdd.clear();
 		}
 		this.dynamicLightSourcesCount = this.dynamicLightSources.size();
 
+		this.chunkRebuildScheduler.endTick();
 		this.sectionRebuildDebugRenderer.tick();
 
 		this.shouldForceRefresh = false;
@@ -398,7 +452,7 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 	/**
 	 * Clears light sources.
 	 */
-	public void onChangeWorld() {
+	public void onChangeWorld(@Nullable ClientLevel level) {
 		var chunkProviders = this.dynamicLightSources.iterator();
 		DynamicLightSource it;
 		while (chunkProviders.hasNext()) {
@@ -410,6 +464,16 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 		}
 
 		this.engine.resetSize();
+
+		if (level == null) this.chunkRebuildScheduler = null;
+		else {
+			var oldChunkRebuildScheduler = this.chunkRebuildScheduler;
+			this.chunkRebuildScheduler = this.config.getChunkRebuildSchedulerMode().create(this.sectionRebuildDebugRenderer);
+			if (oldChunkRebuildScheduler != null) {
+				oldChunkRebuildScheduler.close();
+			}
+			this.sectionRebuildDebugRenderer.clearRequestedChunks();
+		}
 	}
 
 	/**
@@ -517,22 +581,6 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 		}
 
 		logger.error(msg, args);
-	}
-
-	/**
-	 * Schedules a chunk rebuild at the specified chunk position.
-	 *
-	 * @param renderer the renderer
-	 * @param chunkPos the packed chunk position
-	 */
-	private void scheduleChunkRebuild(@NotNull LevelRenderer renderer, long chunkPos) {
-		scheduleChunkRebuild(renderer, ChunkSectionPos.x(chunkPos), ChunkSectionPos.y(chunkPos), ChunkSectionPos.z(chunkPos));
-		this.sectionRebuildDebugRenderer.scheduleChunkRebuild(chunkPos);
-	}
-
-	public static void scheduleChunkRebuild(@NotNull LevelRenderer renderer, int x, int y, int z) {
-		if (Minecraft.getInstance().level != null)
-			((LevelRendererAccessor) renderer).lambdynlights$scheduleChunkRebuild(x, y, z, false);
 	}
 
 	/**

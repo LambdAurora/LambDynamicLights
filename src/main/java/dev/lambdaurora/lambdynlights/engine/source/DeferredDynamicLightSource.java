@@ -14,23 +14,30 @@ import dev.lambdaurora.lambdynlights.engine.CellHasher;
 import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import dev.lambdaurora.lambdynlights.engine.lookup.SpatialLookupDeferredEntry;
 import dev.lambdaurora.lambdynlights.engine.lookup.SpatialLookupEntry;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import it.unimi.dsi.fastutil.longs.LongSet;
+import dev.lambdaurora.lambdynlights.engine.scheduler.ChunkRebuildStatus;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.ChunkSectionPos;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 
 /**
  * Represents a dynamic light source which is deferred to a {@link DynamicLightBehavior}.
  *
  * @author LambdAurora, Akarys
- * @version 4.4.0
+ * @version 4.8.0
  * @since 4.0.0
  */
 public final class DeferredDynamicLightSource implements DynamicLightSource {
+	private static final AtomicInteger ID_COUNTER = new AtomicInteger(0);
+
+	private final int id = ID_COUNTER.getAndIncrement();
 	private final DynamicLightBehavior behavior;
 	private DynamicLightBehavior.BoundingBox previousBoundingBox;
 
@@ -41,6 +48,11 @@ public final class DeferredDynamicLightSource implements DynamicLightSource {
 
 	public DynamicLightBehavior behavior() {
 		return this.behavior;
+	}
+
+	@Override
+	public int getDynamicLightId() {
+		return this.id;
 	}
 
 	@Override
@@ -65,26 +77,28 @@ public final class DeferredDynamicLightSource implements DynamicLightSource {
 	}
 
 	@Override
-	public LongSet getDynamicLightChunksToRebuild(boolean forced) {
+	public Long2ObjectMap<ChunkRebuildStatus> getDynamicLightChunksToRebuild(boolean forced) {
 		if (!forced && !this.behavior.hasChanged()) {
-			return LongSet.of();
+			return Long2ObjectMaps.emptyMap();
 		}
 
 		DynamicLightBehavior.BoundingBox boundingBox = this.behavior.getBoundingBox();
 
-		var chunks = new LongOpenHashSet();
+		var chunks = new Long2ObjectOpenHashMap<ChunkRebuildStatus>();
 
-		addBoundingBoxToChunksSet(chunks, boundingBox);
 		if (this.previousBoundingBox != null) {
-			addBoundingBoxToChunksSet(chunks, this.previousBoundingBox);
+			addBoundingBoxToChunksSet(this.previousBoundingBox, chunk -> chunks.put(chunk, ChunkRebuildStatus.REMOVE_REQUESTED));
 		}
+		addBoundingBoxToChunksSet(boundingBox, chunk -> chunks.put(chunk, ChunkRebuildStatus.REQUESTED));
 
 		this.previousBoundingBox = boundingBox;
 
 		return chunks;
 	}
 
-	private static void addBoundingBoxToChunksSet(LongSet set, DynamicLightBehavior.BoundingBox boundingBox) {
+	private static void addBoundingBoxToChunksSet(
+			DynamicLightBehavior.BoundingBox boundingBox, LongConsumer consumer
+	) {
 		int chunkStartX = getStartChunk(boundingBox.startX());
 		int chunkStartY = getStartChunk(boundingBox.startY());
 		int chunkStartZ = getStartChunk(boundingBox.startZ());
@@ -95,7 +109,7 @@ public final class DeferredDynamicLightSource implements DynamicLightSource {
 		for (int x = chunkStartX; x <= chunkEndX; x++) {
 			for (int y = chunkStartY; y <= chunkEndY; y++) {
 				for (int z = chunkStartZ; z <= chunkEndZ; z++) {
-					set.add(ChunkSectionPos.asLong(x, y, z));
+					consumer.accept(ChunkSectionPos.asLong(x, y, z));
 				}
 			}
 		}
