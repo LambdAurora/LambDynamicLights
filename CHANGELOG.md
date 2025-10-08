@@ -508,12 +508,12 @@
   - The Light block item now lights up with the correct luminance level with dynamic lighting.
 - Fixed "Glowing Effect" option not being saved ([#316](https://github.com/LambdAurora/LambDynamicLights/issues/316)).
 
-## 4.8.0
+## 4.8.1
 
 - Added dynamic light sources culling ([#318](https://github.com/LambdAurora/LambDynamicLights/issues/318)).
   - This should significantly reduce the amount of chunk section rebuilds processed, which has been one of the notorious sources of lag of this mod.
   - You can disable culling in the Performance tab of the mod in case there's glitches.
-- Added adaptative ticking ([#319](https://github.com/LambdAurora/LambDynamicLights/issues/319)).
+- Added adaptive ticking ([#319](https://github.com/LambdAurora/LambDynamicLights/issues/319)).
   - Light sources far away will tick a bit slower, slowing more the further away they are.
   - The distances (in chunks) for which light sources will begin to slow down is configurable in the new Performance tab of the mod.
   - Light sources behind the camera will tick a lot slower.

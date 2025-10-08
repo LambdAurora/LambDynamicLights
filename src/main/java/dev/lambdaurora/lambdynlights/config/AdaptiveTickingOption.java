@@ -22,18 +22,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 
-public final class AdaptativeTickingOption extends SpruceDoubleOption {
+public final class AdaptiveTickingOption extends SpruceDoubleOption {
 	private Runnable setCallback = () -> {};
 	private Slider currentSlider;
 
-	public AdaptativeTickingOption(
+	public AdaptiveTickingOption(
 			String key,
 			Supplier<Double> getter,
 			IntConsumer setter,
 			@NotNull TooltipData tooltip
 	) {
 		super(
-				"lambdynlights.option.adaptative_ticking." + key,
+				"lambdynlights.option.adaptive_ticking." + key,
 				1, 33, 1,
 				getter, value -> setter.accept(value.intValue()),
 				option -> {
@@ -48,7 +48,7 @@ public final class AdaptativeTickingOption extends SpruceDoubleOption {
 		);
 	}
 
-	public void setCompanion(AdaptativeTickingOption companion) {
+	public void setCompanion(AdaptiveTickingOption companion) {
 		this.setCallback = () -> {
 			if (companion.currentSlider != null) {
 				companion.currentSlider.update(companion);
@@ -74,7 +74,7 @@ public final class AdaptativeTickingOption extends SpruceDoubleOption {
 			super(position, width, height, option);
 		}
 
-		public void update(AdaptativeTickingOption option) {
+		public void update(AdaptiveTickingOption option) {
 			this.value = option.getRatio(option.get());
 			this.updateMessage();
 		}

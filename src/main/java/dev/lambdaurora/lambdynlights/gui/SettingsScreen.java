@@ -243,7 +243,7 @@ public class SettingsScreen extends SpruceScreen {
 		list.addSingleOptionEntry(this.config.chunkRebuildSchedulerOption);
 		list.addSingleOptionEntry(this.config.slowTickingOption);
 		list.addSingleOptionEntry(this.config.slowerTickingOption);
-		list.addSingleOptionEntry(this.config.getBackgroundAdaptativeTicking().getOption());
+		list.addSingleOptionEntry(this.config.getBackgroundAdaptiveTicking().getOption());
 		context.addInnerWidget(list);
 	}
 
