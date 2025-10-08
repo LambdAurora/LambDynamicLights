@@ -180,9 +180,9 @@ public final class CullingChunkRebuildScheduler extends ChunkRebuildScheduler {
 						ChunkSectionPos.sectionToBlockCoord(x),
 						ChunkSectionPos.sectionToBlockCoord(y),
 						ChunkSectionPos.sectionToBlockCoord(z),
-						ChunkSectionPos.sectionToBlockCoord(x, 15),
-						ChunkSectionPos.sectionToBlockCoord(y, 15),
-						ChunkSectionPos.sectionToBlockCoord(z, 15)
+						ChunkSectionPos.sectionToBlockCoord(x, 16),
+						ChunkSectionPos.sectionToBlockCoord(y, 16),
+						ChunkSectionPos.sectionToBlockCoord(z, 16)
 				);
 
 				if (isNotCulled) {
