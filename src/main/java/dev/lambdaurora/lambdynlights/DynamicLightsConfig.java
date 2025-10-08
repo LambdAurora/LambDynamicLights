@@ -14,6 +14,7 @@ import com.electronwill.nightconfig.core.io.ParsingException;
 import com.electronwill.nightconfig.core.io.ParsingMode;
 import com.electronwill.nightconfig.toml.TomlParser;
 import com.electronwill.nightconfig.toml.TomlWriter;
+import dev.lambdaurora.lambdynlights.config.AdaptativeTickingOption;
 import dev.lambdaurora.lambdynlights.config.BooleanSettingEntry;
 import dev.lambdaurora.lambdynlights.config.SettingEntry;
 import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
@@ -23,6 +24,7 @@ import dev.yumi.mc.core.api.YumiMods;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Text;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,12 +44,15 @@ import java.util.concurrent.Executors;
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 4.4.0
+ * @version 4.8.0
  * @since 1.0.0
  */
 public class DynamicLightsConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambDynamicLights|Config");
 	private static final DynamicLightsMode DEFAULT_DYNAMIC_LIGHTS_MODE = DynamicLightsMode.FANCY;
+	private static final ChunkRebuildSchedulerMode DEFAULT_CHUNK_REBUILD_SCHEDULER_MODE = ChunkRebuildSchedulerMode.CULLING;
+	private static final int DEFAULT_SLOW_TICKING_DISTANCE = 5;
+	private static final int DEFAULT_SLOWER_TICKING_DISTANCE = 8;
 	private static final boolean DEFAULT_ENTITIES_LIGHT_SOURCE = true;
 	private static final boolean DEFAULT_SELF_LIGHT_SOURCE = true;
 	private static final boolean DEFAULT_WATER_SENSITIVE_CHECK = true;
@@ -64,6 +69,10 @@ public class DynamicLightsConfig {
 	private final CommentedConfig config;
 	private final LambDynLights mod;
 	private DynamicLightsMode dynamicLightsMode;
+	private ChunkRebuildSchedulerMode chunkRebuildSchedulerMode;
+	private int slowTickingDistance;
+	private int slowerTickingDistance;
+	private final BooleanSettingEntry backgroundAdaptativeTicking;
 	private final List<SettingEntry<?>> settingEntries;
 	private final BooleanSettingEntry entitiesLightSource;
 	private final BooleanSettingEntry selfLightSource;
@@ -92,10 +101,54 @@ public class DynamicLightsConfig {
 					.append(Text.literal("\n"))
 					.append(Text.translatable("lambdynlights.tooltip.mode.3", DynamicLightsMode.FANCY.getTranslatedText()))).build());
 
+	public final SpruceOption chunkRebuildSchedulerOption = new SpruceCyclingOption("lambdynlights.option.chunk_rebuild_scheduler",
+			amount -> this.setChunkRebuildSchedulerMode(this.chunkRebuildSchedulerMode.next()),
+			option -> option.getDisplayText(this.chunkRebuildSchedulerMode.getTranslatedText()),
+			TooltipData.builder().text(Text.translatable("lambdynlights.option.chunk_rebuild_scheduler.tooltip",
+					ChunkRebuildSchedulerMode.CULLING.getTranslatedText(), ChunkRebuildSchedulerMode.IMMEDIATE.getTranslatedText()
+			)).build()
+	);
+
+	public final AdaptativeTickingOption slowTickingOption = new AdaptativeTickingOption(
+			"slow",
+			() -> MathHelper.sqrt(this.slowTickingDistance) / 16.0,
+			chunks -> {
+				this.setSlowTickingChunks(chunks, true);
+
+				if (this.getSlowTickingDistance() > this.getSlowerTickingDistance()) {
+					this.setSlowerTickingChunks(chunks, true);
+				}
+			},
+			TooltipData.builder()
+					.text(Text.translatable("lambdynlights.option.adaptative_ticking.slow.tooltip"))
+					.build()
+	);
+
+	public final AdaptativeTickingOption slowerTickingOption = new AdaptativeTickingOption(
+			"slower",
+			() -> MathHelper.sqrt(this.slowerTickingDistance) / 16.0,
+			chunks -> {
+				this.setSlowerTickingChunks(chunks, true);
+
+				if (this.getSlowTickingDistance() > this.getSlowerTickingDistance()) {
+					this.setSlowTickingChunks(chunks, true);
+				}
+			},
+			TooltipData.builder()
+					.text(Text.translatable("lambdynlights.option.adaptative_ticking.slower.tooltip"))
+					.build()
+	);
+
+
 	public DynamicLightsConfig(@NotNull LambDynLights mod) {
 		this.mod = mod;
 		this.config = CommentedConfig.inMemory();
 
+		this.backgroundAdaptativeTicking = new BooleanSettingEntry("adaptative_ticking.background_sleep", true, this.config,
+				TooltipData.builder()
+						.text(Text.translatable("lambdynlights.option.adaptative_ticking.background_sleep.tooltip"))
+						.build()
+		);
 		this.entitiesLightSource = new BooleanSettingEntry("light_sources.entities", DEFAULT_ENTITIES_LIGHT_SOURCE, this.config,
 				TooltipData.builder().text(Text.translatable("lambdynlights.tooltip.entities")).build());
 		this.selfLightSource = new BooleanSettingEntry("light_sources.self", DEFAULT_SELF_LIGHT_SOURCE, this.config,
@@ -141,7 +194,11 @@ public class DynamicLightsConfig {
 				TooltipData.builder().text(Text.translatable("lambdynlights.option.debug.display_behavior_bounding_box.tooltip")).build()
 		);
 
+		this.slowTickingOption.setCompanion(this.slowerTickingOption);
+		this.slowerTickingOption.setCompanion(this.slowTickingOption);
+
 		this.settingEntries = List.of(
+				this.backgroundAdaptativeTicking,
 				this.entitiesLightSource,
 				this.selfLightSource,
 				this.waterSensitiveCheck,
@@ -169,6 +226,13 @@ public class DynamicLightsConfig {
 		String dynamicLightsModeValue = this.config.getOrElse("mode", DEFAULT_DYNAMIC_LIGHTS_MODE.getName());
 		this.dynamicLightsMode = DynamicLightsMode.byId(dynamicLightsModeValue)
 				.orElse(DEFAULT_DYNAMIC_LIGHTS_MODE);
+		String chunkRebuildSchedulerMode = this.config.getOrElse(
+				"chunk_rebuild_scheduler", DEFAULT_CHUNK_REBUILD_SCHEDULER_MODE.getName()
+		);
+		this.chunkRebuildSchedulerMode = ChunkRebuildSchedulerMode.byId(chunkRebuildSchedulerMode)
+				.orElse(DEFAULT_CHUNK_REBUILD_SCHEDULER_MODE);
+		this.setSlowTickingChunks(config.getIntOrElse("adaptative_ticking.slow", DEFAULT_SLOW_TICKING_DISTANCE), false);
+		this.setSlowerTickingChunks(config.getIntOrElse("adaptative_ticking.slower", DEFAULT_SLOWER_TICKING_DISTANCE), false);
 		this.settingEntries.forEach(entry -> entry.load(this.config));
 		this.creeperLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.creeper", DEFAULT_CREEPER_LIGHTING_MODE.getName()))
 				.orElse(DEFAULT_CREEPER_LIGHTING_MODE);
@@ -280,6 +344,9 @@ public class DynamicLightsConfig {
 	 */
 	public void reset() {
 		this.setDynamicLightsMode(DEFAULT_DYNAMIC_LIGHTS_MODE);
+		this.setChunkRebuildSchedulerMode(DEFAULT_CHUNK_REBUILD_SCHEDULER_MODE);
+		this.setSlowTickingChunks(DEFAULT_SLOW_TICKING_DISTANCE, true);
+		this.setSlowerTickingChunks(DEFAULT_SLOWER_TICKING_DISTANCE, true);
 		this.settingEntries.forEach(SettingEntry::reset);
 		this.setCreeperLightingMode(DEFAULT_CREEPER_LIGHTING_MODE);
 		this.setTntLightingMode(DEFAULT_TNT_LIGHTING_MODE);
@@ -308,6 +375,54 @@ public class DynamicLightsConfig {
 
 		this.dynamicLightsMode = mode;
 		this.config.set("mode", mode.getName());
+	}
+
+	/**
+	 * {@return the chunk rebuild scheduler mode}
+	 */
+	public @NotNull ChunkRebuildSchedulerMode getChunkRebuildSchedulerMode() {
+		return this.chunkRebuildSchedulerMode;
+	}
+
+	/**
+	 * Sets the dynamic lighting mode.
+	 *
+	 * @param mode the dynamic lights mode
+	 */
+	public void setChunkRebuildSchedulerMode(@NotNull ChunkRebuildSchedulerMode mode) {
+		this.chunkRebuildSchedulerMode = mode;
+		this.config.set("chunk_rebuild_scheduler", mode.getName());
+	}
+
+	public int getSlowTickingDistance() {
+		return this.slowTickingDistance;
+	}
+
+	public int getSlowerTickingDistance() {
+		return this.slowerTickingDistance;
+	}
+
+	private void setSlowTickingChunks(int chunks, boolean save) {
+		this.slowTickingDistance = MathHelper.square(chunks * 16);
+
+		if (save) {
+			this.config.set("adaptative_ticking.slow", chunks);
+		}
+	}
+
+	private void setSlowerTickingChunks(int chunks, boolean save) {
+		this.slowerTickingDistance = MathHelper.square(chunks * 16);
+
+		if (save) {
+			this.config.set("adaptative_ticking.slower", chunks);
+		}
+	}
+
+	/**
+	 * {@return the background adaptative ticking setting holder}
+	 */
+	public BooleanSettingEntry getBackgroundAdaptativeTicking() {
+		return this.backgroundAdaptativeTicking;
 	}
 
 	/**

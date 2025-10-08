@@ -32,6 +32,10 @@ repositories {
 	maven {
 		name = "Gegy"
 		url = uri("https://maven.gegy.dev")
+		content {
+			includeGroupAndSubgroups("dev.lambdaurora")
+			includeGroup("io.github.queerbric")
+		}
 	}
 }
 

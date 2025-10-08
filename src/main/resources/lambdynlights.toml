@@ -2,6 +2,17 @@
 # The dynamic lights mode
 mode = "fancy"
 
+# The chunk rebuild scheduler mode (immediate, culling).
+chunk_rebuild_scheduler = "culling"
+
+[adaptative_ticking]
+	# How far away (in chunks) until light sources get ticked less often.
+	slow = 5
+	# How far away (in chunks) until light sources get ticked even less often.
+	slower = 8
+	# Reduces how often sources behind the camera get ticked.
+	background_sleep = true
+
 # Light sources settings.
 [light_sources]
 	# Enable entities light source.

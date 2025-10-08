@@ -5,3 +5,5 @@ accessible class net/minecraft/client/OptionInstance$ValueSet
 accessible method net/minecraft/world/entity/Display getPackedBrightnessOverride ()I
 accessible method net/minecraft/world/entity/Display$BlockDisplay getBlockState ()Lnet/minecraft/world/level/block/state/BlockState;
 accessible method net/minecraft/world/entity/Display$ItemDisplay getItemStack ()Lnet/minecraft/world/item/ItemStack;
+
+accessible method net/minecraft/client/renderer/culling/Frustum cubeInFrustum (DDDDDD)I

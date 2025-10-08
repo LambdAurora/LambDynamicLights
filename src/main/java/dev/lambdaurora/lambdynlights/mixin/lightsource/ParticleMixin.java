@@ -10,6 +10,7 @@
 package dev.lambdaurora.lambdynlights.mixin.lightsource;
 
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSourceBehavior;
+import dev.lambdaurora.lambdynlights.engine.source.ParticleLightSourceBehavior;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -32,11 +33,11 @@ public class ParticleMixin implements EntityDynamicLightSourceBehavior {
 	protected double y;
 	@Shadow
 	protected double z;
-	@Shadow
-	protected boolean removed;
 
 	@Unique
-	protected int lambdynlights$luminance = 0;
+	private int lambdynlights$id = ParticleLightSourceBehavior.ID_COUNTER.getAndIncrement();
+	@Unique
+	private int lambdynlights$luminance = 0;
 	@Unique
 	private int lambdynlights$lastLuminance = 0;
 	@Unique
@@ -47,6 +48,11 @@ public class ParticleMixin implements EntityDynamicLightSourceBehavior {
 	private double lambdynlights$prevZ;
 	@Unique
 	private LongSet lambdynlights$trackedLitChunkPos = LongSet.of();
+
+	@Override
+	public int getDynamicLightId() {
+		return this.lambdynlights$id;
+	}
 
 	@Override
 	public double getDynamicLightX() {

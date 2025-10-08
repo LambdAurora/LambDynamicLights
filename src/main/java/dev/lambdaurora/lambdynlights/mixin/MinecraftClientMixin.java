@@ -35,6 +35,6 @@ public class MinecraftClientMixin {
 
 	@Inject(method = "updateLevelInEngines", at = @At("HEAD"))
 	private void onUpdateLevelInEngines(ClientLevel level, CallbackInfo ci) {
-		LambDynLights.get().onChangeWorld();
+		LambDynLights.get().onChangeWorld(level);
 	}
 }

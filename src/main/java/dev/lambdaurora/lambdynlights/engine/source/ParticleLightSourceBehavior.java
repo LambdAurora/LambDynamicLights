@@ -14,16 +14,18 @@ import dev.yumi.mc.core.api.YumiMods;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
  * Represents the ticking behavior of particle light sources.
  *
  * @author LambdAurora
- * @version 4.4.2
+ * @version 4.8.0
  * @since 4.4.2
  */
 public final class ParticleLightSourceBehavior {
+	public static final AtomicInteger ID_COUNTER = new AtomicInteger(0);
 	private static final Consumer<Particle> DO_TICK_PARTICLE;
 
 	public static void tickParticle(Particle particle) {

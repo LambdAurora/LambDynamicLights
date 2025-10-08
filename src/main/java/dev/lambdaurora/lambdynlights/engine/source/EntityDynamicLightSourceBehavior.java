@@ -12,8 +12,8 @@ package dev.lambdaurora.lambdynlights.engine.source;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.echo.GuardianEntityLightSource;
 import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import it.unimi.dsi.fastutil.longs.LongSet;
+import dev.lambdaurora.lambdynlights.engine.scheduler.ChunkRebuildStatus;
+import it.unimi.dsi.fastutil.longs.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Guardian;
 import org.jetbrains.annotations.ApiStatus;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.ApiStatus;
  * Represents the behavior of a dynamic light source.
  *
  * @author LambdAurora
- * @version 4.4.0
+ * @version 4.8.0
  * @since 4.0.0
  */
 @ApiStatus.Internal
@@ -75,9 +75,9 @@ public interface EntityDynamicLightSourceBehavior extends EntityDynamicLightSour
 	 * @param entity the entity to tick
 	 */
 	static void tickEntity(Entity entity) {
-		if (!LambDynLights.get().shouldTick()) return;
-
 		var lightSource = (EntityDynamicLightSourceBehavior) entity;
+
+		if (!LambDynLights.get().shouldTick(lightSource)) return;
 
 		if (entity.isRemoved()) {
 			lightSource.setDynamicLightEnabled(false);
@@ -95,7 +95,7 @@ public interface EntityDynamicLightSourceBehavior extends EntityDynamicLightSour
 		}
 	}
 
-	default LongSet getDynamicLightChunksToRebuild(boolean forced) {
+	default Long2ObjectMap<ChunkRebuildStatus> getDynamicLightChunksToRebuild(boolean forced) {
 		double x = this.getDynamicLightX();
 		double y = this.getDynamicLightY();
 		double z = this.getDynamicLightZ();
@@ -106,17 +106,20 @@ public interface EntityDynamicLightSourceBehavior extends EntityDynamicLightSour
 		int luminance = this.getLuminance();
 
 		if (!forced && Math.abs(deltaX) <= 0.1 && Math.abs(deltaY) <= 0.1 && Math.abs(deltaZ) <= 0.1 && luminance == this.getLastDynamicLuminance()) {
-			return LongSet.of();
+			return Long2ObjectMaps.emptyMap();
 		}
 
 		var newPos = new LongOpenHashSet();
 
 		if (luminance > 0) {
-			DynamicLightSource.gatherClosestChunks(newPos, x, y, z);
+			DynamicLightSource.gatherClosestChunks(x, y, z, newPos::add);
 		}
 
-		var result = new LongOpenHashSet(newPos);
-		result.addAll(this.lambdynlights$getTrackedLitChunkPos());
+		var result = new Long2ObjectArrayMap<ChunkRebuildStatus>(8);
+		this.lambdynlights$getTrackedLitChunkPos().forEach(chunk -> {
+			result.put(chunk, ChunkRebuildStatus.REMOVE_REQUESTED);
+		});
+		newPos.forEach(chunk -> result.put(chunk, ChunkRebuildStatus.REQUESTED));
 
 		this.updateDynamicLightPreviousCoordinates();
 		this.setLastDynamicLuminance(luminance);

@@ -11,6 +11,7 @@ package dev.lambdaurora.lambdynlights.gui;
 
 import dev.lambdaurora.lambdynlights.accessor.DynamicLightHandlerHolder;
 import dev.lambdaurora.spruceui.Position;
+import dev.lambdaurora.spruceui.SpruceTextAlignment;
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.background.Background;
 import dev.lambdaurora.spruceui.background.EmptyBackground;
@@ -26,11 +27,13 @@ import dev.lambdaurora.spruceui.widget.container.SpruceEntryListWidget;
 import dev.lambdaurora.spruceui.widget.container.SpruceParentWidget;
 import dev.lambdaurora.spruceui.widget.text.SpruceTextFieldWidget;
 import dev.yumi.commons.TriState;
+import dev.yumi.commons.collections.YumiCollections;
 import net.minecraft.TextFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.Text;
 import net.minecraft.util.FormattedCharSequence;
@@ -44,13 +47,27 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceListWidget.LightSourceEntry> {
+public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceListWidget.LightSourceListEntry> {
 	private static final Background HIGHLIGHT_BACKGROUND = new SimpleColorBackground(128, 128, 128, 24);
+	private final LightSourceListEntry explanationEntry;
 	private final List<LightSourceEntry> entries = new ArrayList<>();
 	private int lastIndex = 0;
 
 	public LightSourceListWidget(Position position, int width, int height, SpruceTextFieldWidget searchBar) {
-		super(position, width, height, 4, LightSourceEntry.class);
+		super(position, width, height, 4, LightSourceListEntry.class);
+
+		this.explanationEntry = new LightSourceListEntry(this);
+		this.explanationEntry.children.add(new SpruceLabelWidget(
+				Position.of(this.explanationEntry, this.explanationEntry.getWidth() / 2 - 145, 0),
+				Text.literal("ℹ ").withStyle(TextFormatting.DARK_AQUA)
+						.append(Text.translatable(
+										"lambdynlights.menu.tabs.dynamic_lights.entity.explanation",
+										Text.translatable("lambdynlights")
+								).withStyle(TextFormatting.GRAY)
+						),
+				145 * 2,
+				Language.getInstance().isDefaultRightToLeft() ? SpruceTextAlignment.RIGHT : SpruceTextAlignment.LEFT
+		));
 
 		searchBar.setChangedListener(this::update);
 		searchBar.setRenderTextProvider((input, firstCharacterIndex) -> {
@@ -68,10 +85,16 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 
 	private void update(@Nullable String filter) {
 		if (filter == null) {
-			this.replaceEntries(this.entries);
+			this.replaceEntries(YumiCollections.concat(
+					List.of(explanationEntry),
+					this.entries
+			));
 		} else {
 			final var entryFilter = List.of(filter.toLowerCase().split("\\s"));
-			this.replaceEntries(this.entries.stream().filter(entry -> this.checkFilter(entry, entryFilter)).toList());
+			this.replaceEntries(YumiCollections.concat(
+					List.of(explanationEntry),
+					this.entries.stream().filter(entry -> this.checkFilter(entry, entryFilter)).toList()
+			));
 		}
 
 		for (int i = 0; i < this.children().size(); i++) {
@@ -189,36 +212,17 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 		builder.add(NarratedElementType.USAGE, Text.translatable("narration.component_list.usage"));
 	}
 
-	public static class LightSourceEntry extends Entry implements SpruceParentWidget<SpruceWidget>, WithBackground {
-		private final List<SpruceWidget> children = new ArrayList<>();
-		private final LightSourceListWidget parent;
-		private final DynamicLightHandlerHolder<?> option;
-		private @Nullable SpruceWidget focused;
-		private boolean dragging;
-		private Background background = EmptyBackground.EMPTY_BACKGROUND;
+	public static sealed class LightSourceListEntry
+			extends Entry
+			implements SpruceParentWidget<SpruceWidget>, WithBackground {
+		protected final List<SpruceWidget> children = new ArrayList<>();
+		protected final LightSourceListWidget parent;
+		protected @Nullable SpruceWidget focused;
+		protected boolean dragging;
+		protected Background background = EmptyBackground.EMPTY_BACKGROUND;
 
-		private LightSourceEntry(LightSourceListWidget parent, DynamicLightHandlerHolder<?> option) {
+		protected LightSourceListEntry(LightSourceListWidget parent) {
 			this.parent = parent;
-			this.option = option;
-		}
-
-		public static LightSourceEntry create(LightSourceListWidget parent, DynamicLightHandlerHolder<?> option) {
-			var entry = new LightSourceEntry(parent, option);
-			var setting = option.lambdynlights$getSetting();
-			var label = new SpruceLabelWidget(
-					Position.of(entry, entry.getWidth() / 2 - 145, 7),
-					option.lambdynlights$getName(),
-					175
-			);
-
-			if (Minecraft.getInstance().options.advancedItemTooltips) {
-				var id = BuiltInRegistries.ENTITY_TYPE.getId((EntityType<?>) option);
-				label.setTooltip(Text.literal(id.toString()).withStyle(TextFormatting.GRAY));
-			}
-
-			entry.children.add(label);
-			entry.children.add(setting.getOption().createWidget(Position.of(entry, entry.getWidth() / 2 + 70, 2), 32));
-			return entry;
 		}
 
 		@Override
@@ -364,6 +368,34 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 				}
 			}
 			return result;
+		}
+	}
+
+	public static final class LightSourceEntry extends LightSourceListEntry {
+		private final DynamicLightHandlerHolder<?> option;
+
+		private LightSourceEntry(LightSourceListWidget parent, DynamicLightHandlerHolder<?> option) {
+			super(parent);
+			this.option = option;
+		}
+
+		public static LightSourceEntry create(LightSourceListWidget parent, DynamicLightHandlerHolder<?> option) {
+			var entry = new LightSourceEntry(parent, option);
+			var setting = option.lambdynlights$getSetting();
+			var label = new SpruceLabelWidget(
+					Position.of(entry, entry.getWidth() / 2 - 145, 7),
+					option.lambdynlights$getName(),
+					175
+			);
+
+			if (Minecraft.getInstance().options.advancedItemTooltips) {
+				var id = BuiltInRegistries.ENTITY_TYPE.getId((EntityType<?>) option);
+				label.setTooltip(Text.literal(id.toString()).withStyle(TextFormatting.GRAY));
+			}
+
+			entry.children.add(label);
+			entry.children.add(setting.getOption().createWidget(Position.of(entry, entry.getWidth() / 2 + 70, 2), 32));
+			return entry;
 		}
 	}
 }

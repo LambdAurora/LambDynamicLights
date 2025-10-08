@@ -24,6 +24,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
 	@Shadow
+	private int id;
+
+	@Shadow
 	public abstract Level level();
 
 	@Shadow
@@ -64,6 +67,11 @@ public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
 	public void onRemove(CallbackInfo ci) {
 		if (this.level().isClientSide())
 			this.setDynamicLightEnabled(false);
+	}
+
+	@Override
+	public int getDynamicLightId() {
+		return this.id;
 	}
 
 	@Override
