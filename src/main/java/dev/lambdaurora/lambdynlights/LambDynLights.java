@@ -252,7 +252,7 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 		);
 		var signedDistance = planeNormal.dot(planeOriginToEntity);
 
-		if (this.config.getBackgroundAdaptativeTicking().get() && signedDistance < -DynamicLightingEngine.MAX_RADIUS - 1) {
+		if (this.config.getBackgroundAdaptiveTicking().get() && signedDistance < -DynamicLightingEngine.MAX_RADIUS - 1) {
 			mode = TickMode.BACKGROUND;
 		}
 		// If the entity is too far away, we slow it down.
