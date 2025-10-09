@@ -13,7 +13,6 @@ import dev.lambdaurora.lambdynlights.accessor.FrustumStorage;
 import dev.lambdaurora.lambdynlights.engine.source.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.util.DynamicLightDebugRenderer;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -22,6 +21,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.ChunkSectionPos;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.FrustumIntersection;
 
 import java.util.Arrays;
@@ -32,7 +32,7 @@ import java.util.function.Consumer;
  * Represents a chunk section rebuild scheduler which will attempt to minimize chunk rebuilds thanks to frustum culling.
  *
  * @author LambdAurora, Akarys
- * @version 4.8.0
+ * @version 4.8.2
  * @since 4.8.0
  */
 public final class CullingChunkRebuildScheduler extends ChunkRebuildScheduler {
@@ -178,7 +178,9 @@ public final class CullingChunkRebuildScheduler extends ChunkRebuildScheduler {
 				int y = ChunkSectionPos.y(chunkPos);
 				int z = ChunkSectionPos.z(chunkPos);
 
-				int hitResult = frustum.cubeInFrustum(
+				// If the frustum is not yet setup, consider we can see the chunks.
+				// We'd rather display than to cause visual glitches.
+				int hitResult = frustum == null ? FrustumIntersection.INTERSECT : frustum.cubeInFrustum(
 						ChunkSectionPos.sectionToBlockCoord(x),
 						ChunkSectionPos.sectionToBlockCoord(y),
 						ChunkSectionPos.sectionToBlockCoord(z),
@@ -229,7 +231,7 @@ public final class CullingChunkRebuildScheduler extends ChunkRebuildScheduler {
 		});
 	}
 
-	private Frustum getFrustum(LevelRenderer renderer) {
+	private @Nullable Frustum getFrustum(LevelRenderer renderer) {
 		return ((FrustumStorage) renderer).lambdynlights$getFrustum();
 	}
 }
