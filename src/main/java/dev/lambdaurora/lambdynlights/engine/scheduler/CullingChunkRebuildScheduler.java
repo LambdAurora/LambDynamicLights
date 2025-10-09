@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.ChunkSectionPos;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -30,7 +31,7 @@ import java.util.function.Consumer;
  * Represents a chunk section rebuild scheduler which will attempt to minimize chunk rebuilds thanks to frustum culling.
  *
  * @author LambdAurora, Akarys
- * @version 4.8.0
+ * @version 4.8.2
  * @since 4.8.0
  */
 public final class CullingChunkRebuildScheduler extends ChunkRebuildScheduler {
@@ -176,7 +177,9 @@ public final class CullingChunkRebuildScheduler extends ChunkRebuildScheduler {
 				int y = ChunkSectionPos.y(chunkPos);
 				int z = ChunkSectionPos.z(chunkPos);
 
-				boolean isNotCulled = frustum.cubeInFrustum(
+				// If the frustum is not yet setup, consider we can see the chunks.
+				// We'd rather display than to cause visual glitches.
+				boolean isNotCulled = frustum == null || frustum.cubeInFrustum(
 						ChunkSectionPos.sectionToBlockCoord(x),
 						ChunkSectionPos.sectionToBlockCoord(y),
 						ChunkSectionPos.sectionToBlockCoord(z),
@@ -226,7 +229,7 @@ public final class CullingChunkRebuildScheduler extends ChunkRebuildScheduler {
 		});
 	}
 
-	private Frustum getFrustum(LevelRenderer renderer) {
+	private @Nullable Frustum getFrustum(LevelRenderer renderer) {
 		return ((FrustumStorage) renderer).lambdynlights$getFrustum();
 	}
 }

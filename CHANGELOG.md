@@ -522,6 +522,11 @@
 - Updated [Yumi Minecraft Libraries: Foundation].
   - Fixed crashes with the latest versions of NeoForge.
 
+### 4.8.2
+
+- Fixed crash due to null frustum.
+  - This crash happens very inconsistently upon joining a world, when the first client tick happens but the frustum is not yet setup.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"

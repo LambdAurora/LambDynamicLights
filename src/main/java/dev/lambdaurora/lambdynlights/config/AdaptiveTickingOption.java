@@ -21,6 +21,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 
+/**
+ * Represents an option for adaptive ticking.
+ *
+ * @author LambdAurora
+ * @version 4.8.0
+ * @since 4.8.0
+ */
 public final class AdaptiveTickingOption extends SpruceDoubleOption {
 	private final Text tooltip;
 	private Runnable setCallback = () -> {};
