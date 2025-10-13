@@ -6,8 +6,8 @@ import com.google.gson.JsonParser
 import dev.lambdaurora.mcdev.api.manifest.Fmj
 import dev.lambdaurora.mcdev.api.manifest.Nmt
 import dev.lambdaurora.mcdev.util.JsonUtils
+import dev.lambdaurora.mcdev.util.ZipFix
 import lambdynamiclights.Constants
-import lambdynamiclights.ZipFix
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
@@ -76,11 +76,11 @@ abstract class AssembleFinalJarTask @Inject constructor() : AbstractAssembleJarT
 				this.cleanupFabricJar(fabricJarFs)
 			}
 
-			ZipFix.fixZip(outFabricJar)
-			ZipFix.fixZip(outNeoForgeJar)
+			ZipFix.makeZipReproducible(outFabricJar)
+			ZipFix.makeZipReproducible(outNeoForgeJar)
 		}
 
-		ZipFix.fixZip(outputJar)
+		ZipFix.makeZipReproducible(outputJar)
 	}
 
 	private fun doAssemble(outFs: FileSystem, fabricJarFs: FileSystem, neoJarFs: FileSystem) {

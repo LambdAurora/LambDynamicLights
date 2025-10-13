@@ -527,6 +527,11 @@
 - Fixed crash due to null frustum.
   - This crash happens very inconsistently upon joining a world, when the first client tick happens but the frustum is not yet setup.
 
+### 4.8.3
+
+- Fixed integration with Sodium Options API.
+- Updated Turkish translations ([#326](https://github.com/LambdAurora/LambDynamicLights/pull/326)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"

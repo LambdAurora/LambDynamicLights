@@ -19,6 +19,8 @@
 		"RegistryOpsAccessor",
 		"VideoSettingsScreenMixin",
 		"fapi.AoCalculatorMixin",
+		"sodium.RSOTabAccessor",
+		"sodium.SodiumOptionsAPITabFrameMixin",
 		"sodium.SodiumOptionsGuiMixin"
 	],
 	"injectors": {
