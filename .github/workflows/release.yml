@@ -118,7 +118,7 @@ jobs:
             core.setOutput("type", json.type);
             core.setOutput("name", json.name);
             core.setOutput("game_versions", json.game_versions.join("\n"));
-            core.setOutput("loaders", json.loaders.json("\n"));
+            core.setOutput("loaders", json.loaders.join("\n"));
             await fs.writeFile("CHANGELOG.md", json.changelog);
       - uses: Kir-Antipov/mc-publish@v3.3
         with:
