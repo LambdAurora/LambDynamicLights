@@ -530,6 +530,7 @@
 ### 4.8.3
 
 - Fixed integration with Sodium Options API.
+- Updated Upside-down English translations.
 - Updated Turkish translations ([#326](https://github.com/LambdAurora/LambDynamicLights/pull/326)).
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
