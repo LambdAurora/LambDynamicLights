@@ -100,16 +100,47 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-      - name: "Set up Java"
-        uses: actions/setup-java@v4
+      - name: "Download artifacts"
+        uses: actions/download-artifact@v4
         with:
-          distribution: "temurin"
-          java-version: 21
-      - name: "Set up Gradle"
-        uses: gradle/actions/setup-gradle@v4
-      - name: "Release on CurseForge"
-        run: ./gradlew curseforge --parallel --stacktrace
-        env:
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          name: Modrinth
+          path: dist
+      - name: "Extract files"
+        run: unzip dist/modrinth.zip
+      - id: manifest
+        name: "Extract manifest data"
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const { default: fs } = await import("node:fs/promises");
+            const json = JSON.parse(await fs.readFile("manifest.json", { encoding: "utf8" }));
+            core.setOutput("version", json.version);
+            core.setOutput("type", json.type);
+            core.setOutput("name", json.name);
+            core.setOutput("game_versions", json.game_versions.join("\n"));
+            core.setOutput("loaders", json.loaders.json("\n"));
+            await fs.writeFile("CHANGELOG.md", json.changelog);
+      - uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          curseforge-id: 393442
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          files: ./*.jar
+
+          name: ${{ steps.manifest.outputs.name }}
+          version: ${{ steps.manifest.outputs.version }}
+          version-type: ${{ steps.manifest.outputs.type }}
+          changelog-file: CHANGELOG.*
+
+          loaders: ${{ steps.manifest.outputs.loaders }}
+          game-versions: ${{ steps.manifest.outputs.game_versions }}
+          game-version-filter: none
+          dependencies: |
+            fabric-api(required)
+            modmenu(optional)
+            optifabric(incompatible)
+            ryoamiclights(incompatible)
+            dynamiclights-reforged(incompatible)
+          java: |
+            21
+            22

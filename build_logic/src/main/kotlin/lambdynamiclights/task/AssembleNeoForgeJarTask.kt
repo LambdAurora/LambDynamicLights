@@ -3,7 +3,7 @@ package lambdynamiclights.task
 import com.google.gson.JsonParser
 import dev.lambdaurora.mcdev.api.AccessWidenerToTransformer
 import dev.lambdaurora.mcdev.util.JsonUtils
-import lambdynamiclights.ZipFix
+import dev.lambdaurora.mcdev.util.ZipFix
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
@@ -73,7 +73,7 @@ abstract class AssembleNeoForgeJarTask @Inject constructor() : AbstractAssembleJ
 			this.copy(this.jarJarMetadata.get().asFile.toPath(), jarjarDirPath.resolve("metadata.json"))
 		}
 
-		ZipFix.fixZip(outputJar)
+		ZipFix.makeZipReproducible(outputJar)
 	}
 
 	private fun handleNeoJar(fs: FileSystem) {

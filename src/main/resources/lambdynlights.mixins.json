@@ -20,6 +20,8 @@
 		"fapi.AoCalculatorMixin",
 		"retrofit.DynamicLightHandlerMixin",
 		"retrofit.DynamicLightHandlersMixin",
+		"sodium.RSOTabAccessor",
+		"sodium.SodiumOptionsAPITabFrameMixin",
 		"sodium.SodiumOptionsGuiMixin"
 	],
 	"injectors": {
