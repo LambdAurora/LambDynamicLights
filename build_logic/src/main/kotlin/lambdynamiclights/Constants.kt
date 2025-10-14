@@ -11,6 +11,8 @@ object Constants {
 	const val API_DESCRIPTION = "Library to provide dynamic lighting to Minecraft through LambDynamicLights."
 	const val RUNTIME_DESCRIPTION = "The runtime of the most feature-complete dynamic lighting mod."
 
+	const val API_ARTIFACT = "$NAME-api"
+
 	@JvmField
 	val AUTHORS = listOf("LambdAurora")
 
