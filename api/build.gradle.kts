@@ -69,7 +69,7 @@ publishing {
 		create<MavenPublication>("mavenJava") {
 			from(components["java"])
 
-			artifactId = "lambdynamiclights-api"
+			artifactId = Constants.API_ARTIFACT
 
 			pom {
 				name.set(prettyName)
