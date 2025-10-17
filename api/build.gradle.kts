@@ -8,7 +8,16 @@ val prettyName = "${Constants.PRETTY_NAME} (API)"
 
 base.archivesName.set(Constants.NAME + "-api")
 
+val mojmap = lambdamcdev.setupMojmapRemapping()
+configurations["mojmapApi"].extendsFrom(configurations["api"])
+
 dependencies {
+	api(libs.yumi.commons.event) {
+		// Exclude Minecraft and loader-provided libraries.
+		exclude(group = "org.slf4j")
+		exclude(group = "org.ow2.asm")
+	}
+
 	include(libs.yumi.commons.core)
 	include(libs.yumi.commons.collections)
 	include(libs.yumi.commons.event)
@@ -53,7 +62,6 @@ tasks.generateFmj.configure {
 	dependsOn(generateNmt)
 }
 
-val mojmap = lambdamcdev.setupMojmapRemapping()
 val remapMojmap = mojmap.registerRemap(tasks.remapJar) {}
 mojmap.setJarArtifact(remapMojmap)
 val remapMojmapSources = mojmap.registerSourcesRemap(tasks.remapSourcesJar) {}

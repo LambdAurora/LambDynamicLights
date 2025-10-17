@@ -24,6 +24,7 @@ plugins {
 base.archivesName.set(Constants.NAME)
 
 logger.lifecycle("Preparing version ${version}...")
+lambdamcdev.setupActionsRefCheck()
 
 val fabricApiModules = listOf(
 	fabricApi.module("fabric-lifecycle-events-v1", libs.versions.fabric.api.get())!!,
