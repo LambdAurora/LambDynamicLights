@@ -97,32 +97,32 @@ public class ParticleMixin implements EntityDynamicLightSourceBehavior {
 	}
 
 	@Override
-	public int getLuminance() {
+	public final int getLuminance() {
 		return this.lambdynlights$luminance;
 	}
 
 	@Override
-	public void setLuminance(int luminance) {
+	public final void setLuminance(int luminance) {
 		this.lambdynlights$luminance = luminance;
 	}
 
 	@Override
-	public int getLastDynamicLuminance() {
+	public final int getLastDynamicLuminance() {
 		return this.lambdynlights$lastLuminance;
 	}
 
 	@Override
-	public void setLastDynamicLuminance(int luminance) {
+	public final void setLastDynamicLuminance(int luminance) {
 		this.lambdynlights$lastLuminance = luminance;
 	}
 
 	@Override
-	public LongSet lambdynlights$getTrackedLitChunkPos() {
+	public final LongSet lambdynlights$getTrackedLitChunkPos() {
 		return this.lambdynlights$trackedLitChunkPos;
 	}
 
 	@Override
-	public void lambdynlights$setTrackedLitChunkPos(LongSet trackedLitChunkPos) {
+	public final void lambdynlights$setTrackedLitChunkPos(LongSet trackedLitChunkPos) {
 		this.lambdynlights$trackedLitChunkPos = trackedLitChunkPos;
 	}
 

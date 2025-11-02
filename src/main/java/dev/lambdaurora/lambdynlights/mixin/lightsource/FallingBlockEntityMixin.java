@@ -22,6 +22,6 @@ public abstract class FallingBlockEntityMixin extends EntityMixin {
 	@Override
 	public void dynamicLightTick() {
 		super.dynamicLightTick();
-		this.lambdynlights$luminance = Math.max(this.lambdynlights$luminance, this.blockState.getLightEmission());
+		this.setLuminance(Math.max(this.getLuminance(), this.blockState.getLightEmission()));
 	}
 }

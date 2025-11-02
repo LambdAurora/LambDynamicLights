@@ -544,6 +544,14 @@
 - Fixed bad Maven metadata which prevented auto-import of some libraries needed by LambDynamicLights.
   - This update is only technical, as such this update only affects the publishing of the mod for other modders to use.
 
+### 4.8.6
+
+- Improved dynamic lighting crash report data to be less confusing.
+- Fixed an obscure conflict with mods bundling a modified and older implementation of LambDynamicLights.
+  - *Developer's Note: this issue is specifically caused by Mixin loosing track of who is the owner of a `@Unique` field across inheritance.
+    The fix is to only rely on the interface methods that should be unique enough to prevent future issues.
+    This also means this is an issue which is load-order dependent.*
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"

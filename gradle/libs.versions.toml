@@ -20,7 +20,7 @@ accessories = "1.1.0-beta.16+1.21.1"
 nightconfig = "3.8.1"
 
 # Gradle
-gradle-licenser = "2.1.+"
+gradle-licenser = "2.2.+"
 gradle-loom = "1.11.+"
 gradle-lambdamcdev = "1.8.+"
 gson = "2.11.0"
