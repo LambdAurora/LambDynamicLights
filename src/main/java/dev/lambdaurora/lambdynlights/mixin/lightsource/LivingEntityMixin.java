@@ -19,18 +19,18 @@ public abstract class LivingEntityMixin extends EntityMixin {
 	@Override
 	public void dynamicLightTick() {
 		if (this.isInvisible()) {
-			this.lambdynlights$luminance = 0;
+			this.setLuminance(0);
 			return;
 		}
 
 		if (this.isOnFire() || (LambDynLights.get().config.getGlowingEffectLighting().get() && this.isCurrentlyGlowing())) {
-			this.lambdynlights$luminance = 15;
+			this.setLuminance(15);
 		} else {
-			this.lambdynlights$luminance = LambDynLights.getLivingEntityLuminanceFromItems((LivingEntity) (Object) this);
+			this.setLuminance(LambDynLights.getLivingEntityLuminanceFromItems((LivingEntity) (Object) this));
 		}
 
 		int luminance = LambDynLights.getLuminanceFrom((Entity) (Object) this);
-		if (luminance > this.lambdynlights$luminance)
-			this.lambdynlights$luminance = luminance;
+		if (luminance > this.getLuminance())
+			this.setLuminance(luminance);
 	}
 }

@@ -10,7 +10,6 @@
 package dev.lambdaurora.lambdynlights.mixin.lightsource;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
-import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSourceBehavior;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -50,8 +49,9 @@ public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
 	@Shadow
 	public abstract boolean isInvisible();
 
+	// Must be private, DO NOT TRUST INHERITANCE WHEN USING @UNIQUE
 	@Unique
-	protected int lambdynlights$luminance = 0;
+	private int lambdynlights$luminance = 0;
 	@Unique
 	private int lambdynlights$lastLuminance = 0;
 	@Unique
@@ -130,32 +130,32 @@ public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
 	}
 
 	@Override
-	public int getLuminance() {
+	public final int getLuminance() {
 		return this.lambdynlights$luminance;
 	}
 
 	@Override
-	public void setLuminance(int luminance) {
+	public final void setLuminance(int luminance) {
 		this.lambdynlights$luminance = luminance;
 	}
 
 	@Override
-	public int getLastDynamicLuminance() {
+	public final int getLastDynamicLuminance() {
 		return this.lambdynlights$lastLuminance;
 	}
 
 	@Override
-	public void setLastDynamicLuminance(int luminance) {
+	public final void setLastDynamicLuminance(int luminance) {
 		this.lambdynlights$lastLuminance = luminance;
 	}
 
 	@Override
-	public LongSet lambdynlights$getTrackedLitChunkPos() {
+	public final LongSet lambdynlights$getTrackedLitChunkPos() {
 		return this.lambdynlights$trackedLitChunkPos;
 	}
 
 	@Override
-	public void lambdynlights$setTrackedLitChunkPos(LongSet trackedLitChunkPos) {
+	public final void lambdynlights$setTrackedLitChunkPos(LongSet trackedLitChunkPos) {
 		this.lambdynlights$trackedLitChunkPos = trackedLitChunkPos;
 	}
 }

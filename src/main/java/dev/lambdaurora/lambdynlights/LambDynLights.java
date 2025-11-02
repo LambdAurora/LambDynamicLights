@@ -74,7 +74,7 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 4.8.0
+ * @version 4.8.6
  * @since 1.0.0
  */
 @ApiStatus.Internal
@@ -129,12 +129,16 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 		DevModeGui.init();
 
 		CrashReportEvents.CREATE.register((report) -> {
-			var category = report.addCategory("Dynamic Lighting");
+			var category = report.addCategory("Dynamic Lighting", 0);
+			category.setDetail(
+					"Description",
+					"This section contains information related to dynamic lighting, this may not be related to your crash."
+			);
 			category.setDetail("Mode", this.config.getDynamicLightsMode().getName());
 			category.setDetail("Dynamic Light Sources", this.dynamicLightSourcesCount);
 			category.setDetail(
 					"Spatial Hash Occupancy",
-					"%d / %d".formatted(this.engine.getLastEntryCount(), DynamicLightingEngine.DEFAULT_LIGHT_SOURCES)
+					"%d / %d".formatted(this.engine.getLastEntryCount(), this.engine.getSize())
 			);
 		});
 

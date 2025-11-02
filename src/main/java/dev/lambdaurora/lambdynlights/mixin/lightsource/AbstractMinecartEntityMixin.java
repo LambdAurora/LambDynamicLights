@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
  * Adds the tick method for dynamic light source tracking in minecart entities.
  *
  * @author LambdAurora
- * @version 4.0.0
+ * @version 4.8.6
  * @since 1.3.2
  */
 @Mixin(AbstractMinecart.class)
@@ -29,9 +29,6 @@ public abstract class AbstractMinecartEntityMixin extends EntityMixin {
 	@Override
 	public void dynamicLightTick() {
 		super.dynamicLightTick();
-		this.lambdynlights$luminance = Math.max(
-				this.lambdynlights$luminance,
-				this.getDisplayBlockState().getLightEmission()
-		);
+		this.setLuminance(Math.max(this.getLuminance(), this.getDisplayBlockState().getLightEmission()));
 	}
 }

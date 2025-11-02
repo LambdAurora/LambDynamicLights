@@ -44,7 +44,7 @@ public abstract class PrimedTntEntityMixin extends EntityMixin implements Entity
 	@Override
 	public void dynamicLightTick() {
 		if (!LambDynLights.get().config.getTntLightingMode().isEnabled()) {
-			this.lambdynlights$luminance = 0;
+			this.setLuminance(0);
 			return;
 		}
 
@@ -58,6 +58,6 @@ public abstract class PrimedTntEntityMixin extends EntityMixin implements Entity
 			luminance = 10;
 		}
 
-		this.lambdynlights$luminance = Math.max(this.lambdynlights$luminance, luminance);
+		this.setLuminance(Math.max(this.getLuminance(), luminance));
 	}
 }
