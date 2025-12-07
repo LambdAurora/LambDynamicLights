@@ -51,7 +51,7 @@ public final class DevModeGui {
 					client.font.width(LambDynLightsConstants.DEV_MODE_OVERLAY_TEXT) + 4, bottom,
 					0xaa000000
 			);
-			graphics.drawShadowedText(client.font, LambDynLightsConstants.DEV_MODE_OVERLAY_TEXT, 2, y - 2, 0xffff0000);
+			graphics.drawString(client.font, LambDynLightsConstants.DEV_MODE_OVERLAY_TEXT, 2, y - 2, 0xffff0000);
 		}
 	}
 }

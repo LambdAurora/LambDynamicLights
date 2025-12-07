@@ -14,7 +14,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.util.ArrayList;
@@ -45,12 +44,12 @@ public record WetSensitiveEntityLuminance(
 	);
 
 	@Override
-	public @NotNull Type type() {
+	public Type type() {
 		return EntityLuminance.Type.WET_SENSITIVE;
 	}
 
 	@Override
-	public @Range(from = 0, to = 15) int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity) {
+	public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
 		boolean submergedInWater = entity.isInWaterOrRain();
 
 		if (submergedInWater) {
@@ -65,7 +64,7 @@ public record WetSensitiveEntityLuminance(
 	 *
 	 * @return the builder
 	 */
-	public static @NotNull Builder builder() {
+	public static Builder builder() {
 		return new Builder();
 	}
 
@@ -83,7 +82,7 @@ public record WetSensitiveEntityLuminance(
 		 * @return {@code this}
 		 */
 		@Contract("_ -> this")
-		public Builder dry(@NotNull EntityLuminance... luminances) {
+		public Builder dry(EntityLuminance... luminances) {
 			this.dry.addAll(List.of(luminances));
 			return this;
 		}
@@ -95,7 +94,7 @@ public record WetSensitiveEntityLuminance(
 		 * @return {@code this}
 		 */
 		@Contract("_ -> this")
-		public Builder dry(@NotNull List<EntityLuminance> luminances) {
+		public Builder dry(List<EntityLuminance> luminances) {
 			this.dry.addAll(luminances);
 			return this;
 		}
@@ -107,7 +106,7 @@ public record WetSensitiveEntityLuminance(
 		 * @return {@code this}
 		 */
 		@Contract("_ -> this")
-		public Builder wet(@NotNull EntityLuminance... luminances) {
+		public Builder wet(EntityLuminance... luminances) {
 			this.wet.addAll(List.of(luminances));
 			return this;
 		}
@@ -119,7 +118,7 @@ public record WetSensitiveEntityLuminance(
 		 * @return {@code this}
 		 */
 		@Contract("_ -> this")
-		public Builder wet(@NotNull List<EntityLuminance> luminances) {
+		public Builder wet(List<EntityLuminance> luminances) {
 			this.wet.addAll(luminances);
 			return this;
 		}
@@ -129,7 +128,7 @@ public record WetSensitiveEntityLuminance(
 		 *
 		 * @return the resulting {@link WetSensitiveEntityLuminance}
 		 */
-		public @NotNull WetSensitiveEntityLuminance build() {
+		public WetSensitiveEntityLuminance build() {
 			return new WetSensitiveEntityLuminance(List.copyOf(this.dry), List.copyOf(this.wet));
 		}
 	}

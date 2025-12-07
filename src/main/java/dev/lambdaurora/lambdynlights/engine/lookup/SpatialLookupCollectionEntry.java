@@ -10,7 +10,6 @@
 package dev.lambdaurora.lambdynlights.engine.lookup;
 
 import net.minecraft.core.BlockPos;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an entry made of a collection of light sources in a spatial lookup.
@@ -24,14 +23,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public record SpatialLookupCollectionEntry(int cellKey, long[] positions, byte[] luminance) implements SpatialLookupEntry {
 	@Override
-	public double getDynamicLightLevel(@NotNull BlockPos pos) {
+	public double getDynamicLightLevel(BlockPos pos) {
 		double maxLightLevel = 0.;
 
 		for (int i = 0; i < this.positions.length; i++) {
 			long packed = this.positions[i];
-			double x = BlockPos.unpackLongX(packed) + 0.5;
-			double y = BlockPos.unpackLongY(packed) + 0.5;
-			double z = BlockPos.unpackLongZ(packed) + 0.5;
+			double x = BlockPos.getX(packed) + 0.5;
+			double y = BlockPos.getY(packed) + 0.5;
+			double z = BlockPos.getZ(packed) + 0.5;
 			byte luminance = this.luminance[i];
 
 			double lightLevel = SpatialLookupEntry.lightAtPos(x, y, z, pos, luminance);

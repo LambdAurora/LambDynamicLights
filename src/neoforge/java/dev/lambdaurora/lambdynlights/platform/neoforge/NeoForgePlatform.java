@@ -10,10 +10,8 @@
 package dev.lambdaurora.lambdynlights.platform.neoforge;
 
 import dev.lambdaurora.lambdynlights.platform.Platform;
-import dev.lambdaurora.lambdynlights.platform.PlatformProvider;
 import dev.lambdaurora.lambdynlights.resource.LightSourceLoader;
 import dev.yumi.commons.event.ListenableEvent;
-import dev.yumi.mc.core.api.ModContainer;
 import dev.yumi.mc.core.api.YumiEvents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
@@ -32,16 +30,11 @@ import java.util.function.Consumer;
  * @version 4.7.1
  * @since 4.5.0
  */
-public final class NeoForgePlatform implements Platform, PlatformProvider {
+public final class NeoForgePlatform implements Platform {
 	public static final NeoForgePlatform INSTANCE = new NeoForgePlatform();
 	final List<PendingResourceReloader> reloaders = new ArrayList<>();
 
 	private NeoForgePlatform() {}
-
-	@Override
-	public Platform getPlatform(ModContainer modContainer) {
-		return this;
-	}
 
 	@Override
 	public void registerReloader(LightSourceLoader<?> reloader) {

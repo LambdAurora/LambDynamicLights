@@ -13,7 +13,7 @@ import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.behavior.DynamicLightBehavior;
 import dev.lambdaurora.lambdynlights.api.behavior.DynamicLightBehaviorManager;
 import dev.lambdaurora.lambdynlights.engine.source.DeferredDynamicLightSource;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the dynamic lighting behavior manager implementation.
@@ -30,12 +30,12 @@ public final class DynamicLightBehaviorSources implements DynamicLightBehaviorMa
 	}
 
 	@Override
-	public void add(@NotNull DynamicLightBehavior source) {
+	public void add(DynamicLightBehavior source) {
 		this.mod.addLightSource(new DeferredDynamicLightSource(source));
 	}
 
 	@Override
-	public boolean remove(DynamicLightBehavior source) {
+	public boolean remove(@Nullable DynamicLightBehavior source) {
 		if (source == null) return false;
 
 		return this.mod.removeLightSources(other -> other instanceof DeferredDynamicLightSource deferred && deferred.behavior() == source);

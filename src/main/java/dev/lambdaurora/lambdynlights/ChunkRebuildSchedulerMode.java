@@ -14,9 +14,8 @@ import dev.lambdaurora.lambdynlights.engine.scheduler.CullingChunkRebuildSchedul
 import dev.lambdaurora.lambdynlights.engine.scheduler.SimpleChunkRebuildScheduler;
 import dev.lambdaurora.lambdynlights.util.DynamicLightDebugRenderer;
 import dev.lambdaurora.spruceui.util.Nameable;
-import net.minecraft.TextFormatting;
-import net.minecraft.network.chat.Text;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -32,19 +31,19 @@ import java.util.function.Function;
 public enum ChunkRebuildSchedulerMode implements Nameable {
 	IMMEDIATE(
 			SimpleChunkRebuildScheduler::new,
-			Text.translatable("lambdynlights.option.chunk_rebuild_scheduler.mode.immediate").withStyle(TextFormatting.RED)
+			Component.translatable("lambdynlights.option.chunk_rebuild_scheduler.mode.immediate").withStyle(ChatFormatting.RED)
 	),
 	CULLING(
 			CullingChunkRebuildScheduler::new,
-			Text.translatable("lambdynlights.option.chunk_rebuild_scheduler.mode.culling").withStyle(TextFormatting.GREEN)
+			Component.translatable("lambdynlights.option.chunk_rebuild_scheduler.mode.culling").withStyle(ChatFormatting.GREEN)
 	);
 
 	private final Function<DynamicLightDebugRenderer.SectionRebuild, ChunkRebuildScheduler> factory;
-	private final Text translatedText;
+	private final Component translatedText;
 
 	ChunkRebuildSchedulerMode(
 			Function<DynamicLightDebugRenderer.SectionRebuild, ChunkRebuildScheduler> factory,
-			Text translatedText
+			Component translatedText
 	) {
 		this.factory = factory;
 		this.translatedText = translatedText;
@@ -71,12 +70,12 @@ public enum ChunkRebuildSchedulerMode implements Nameable {
 	 *
 	 * @return the translated text of the dynamic lights mode
 	 */
-	public @NotNull Text getTranslatedText() {
+	public Component getTranslatedText() {
 		return this.translatedText;
 	}
 
 	@Override
-	public @NotNull String getName() {
+	public String getName() {
 		return this.name().toLowerCase();
 	}
 
@@ -86,7 +85,7 @@ public enum ChunkRebuildSchedulerMode implements Nameable {
 	 * @param id the identifier of the dynamic lights mode
 	 * @return the dynamic lights mode if found, else empty
 	 */
-	public static @NotNull Optional<ChunkRebuildSchedulerMode> byId(@NotNull String id) {
+	public static Optional<ChunkRebuildSchedulerMode> byId(String id) {
 		return Arrays.stream(values()).filter(mode -> mode.getName().equalsIgnoreCase(id)).findFirst();
 	}
 }

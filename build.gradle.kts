@@ -40,7 +40,7 @@ val neoforge: SourceSet by sourceSets.creating {
 tasks.generateFmj.configure {
 	val fmj = this.fmj.get()
 		.withEntrypoints("yumi:client_init", "dev.lambdaurora.lambdynlights.LambDynLights::INSTANCE")
-		.withEntrypoints("lambdynlights:platform_provider", "dev.lambdaurora.lambdynlights.platform.fabric.FabricPlatform")
+		.withEntrypoints("lambdynlights:platform", "dev.lambdaurora.lambdynlights.platform.fabric.FabricPlatform")
 		.withEntrypoints("modmenu", "dev.lambdaurora.lambdynlights.LambDynLightsModMenu")
 		.withAccessWidener("lambdynlights.accesswidener")
 		.withMixins("lambdynlights.mixins.json", "lambdynlights.lightsource.mixins.json")
@@ -65,7 +65,7 @@ lambdamcdev.manifests {
 		withDescription(Constants.RUNTIME_DESCRIPTION)
 		withLoaderVersion("[2,)")
 		withYumiEntrypoints("yumi:client_init", "dev.lambdaurora.lambdynlights.LambDynLights::INSTANCE")
-		withYumiEntrypoints("lambdynlights:platform_provider", "dev.lambdaurora.lambdynlights.platform.neoforge.NeoForgePlatform::INSTANCE")
+		withYumiEntrypoints("lambdynlights:platform", "dev.lambdaurora.lambdynlights.platform.neoforge.NeoForgePlatform::INSTANCE")
 		withAccessTransformer("META-INF/accesstransformer.cfg")
 		withMixins("lambdynlights.mixins.json", "lambdynlights.lightsource.mixins.json")
 		withDepend(Constants.NAMESPACE + "_api", "[${version},)", Nmt.DependencySide.CLIENT)

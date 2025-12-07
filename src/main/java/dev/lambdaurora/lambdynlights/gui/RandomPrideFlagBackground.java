@@ -27,9 +27,9 @@ import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.gui.render.state.GuiElementRenderState;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.network.chat.Text;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.network.chat.Component;
 import org.joml.Matrix3x2f;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Random;
 
@@ -83,9 +83,9 @@ public class RandomPrideFlagBackground implements Background {
 		SECOND_LAYER.render(graphics, widget, vOffset, mouseX, mouseY, delta);
 
 		if (this.nuhUh) {
-			var text = Text.literal("Nuh uh, you're not going to remove this, try harder :3c");
+			var text = Component.literal("Nuh uh, you're not going to remove this, try harder :3c");
 			var font = Minecraft.getInstance().font;
-			var lines = font.wrapLines(text, width - 8);
+			var lines = font.split(text, width - 8);
 
 			int startY = y + height - 24 - lines.size() * (font.lineHeight + 2);
 
@@ -181,21 +181,21 @@ public class RandomPrideFlagBackground implements Background {
 			float leftY = this.y;
 
 			int color = this.colors.getInt(0);
-			vertexConsumer.addVertex(x + width, rightY + partHeight, z).color(color);
-			vertexConsumer.addVertex(x + width, rightY, z).color(color);
-			vertexConsumer.addVertex(x, leftY, z).color(color);
+			vertexConsumer.addVertex(x + width, rightY + partHeight, z).setColor(color);
+			vertexConsumer.addVertex(x + width, rightY, z).setColor(color);
+			vertexConsumer.addVertex(x, leftY, z).setColor(color);
 			// Dirty 4th vertex as GUI only accepts quads.
-			vertexConsumer.addVertex(x, leftY, z).color(color);
+			vertexConsumer.addVertex(x, leftY, z).setColor(color);
 
 			rightY += partHeight;
 
 			for (int i = 1; i < this.colors.size() - 1; i++) {
 				color = this.colors.getInt(i);
 
-				vertexConsumer.addVertex(x + width, rightY + partHeight, z).color(color);
-				vertexConsumer.addVertex(x + width, rightY, z).color(color);
-				vertexConsumer.addVertex(x, leftY, z).color(color);
-				vertexConsumer.addVertex(x, leftY + partHeight, z).color(color);
+				vertexConsumer.addVertex(x + width, rightY + partHeight, z).setColor(color);
+				vertexConsumer.addVertex(x + width, rightY, z).setColor(color);
+				vertexConsumer.addVertex(x, leftY, z).setColor(color);
+				vertexConsumer.addVertex(x, leftY + partHeight, z).setColor(color);
 
 				rightY += partHeight;
 				leftY += partHeight;
@@ -203,11 +203,11 @@ public class RandomPrideFlagBackground implements Background {
 
 			// Last one
 			color = this.colors.getInt(this.colors.size() - 1);
-			vertexConsumer.addVertex(x + width, rightY, z).color(color);
-			vertexConsumer.addVertex(x, leftY, z).color(color);
-			vertexConsumer.addVertex(x, y + height, z).color(color);
+			vertexConsumer.addVertex(x + width, rightY, z).setColor(color);
+			vertexConsumer.addVertex(x, leftY, z).setColor(color);
+			vertexConsumer.addVertex(x, y + height, z).setColor(color);
 			// Dirty 4th vertex as GUI only accepts quads.
-			vertexConsumer.addVertex(x, y + height, z).color(color);
+			vertexConsumer.addVertex(x, y + height, z).setColor(color);
 		}
 
 		private static @Nullable ScreenRectangle getBounds(

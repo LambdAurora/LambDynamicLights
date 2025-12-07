@@ -9,7 +9,7 @@
 
 package dev.lambdaurora.lambdynlights.util;
 
-import com.mojang.blaze3d.vertex.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import dev.lambdaurora.spruceui.util.ColorUtil;
@@ -18,8 +18,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.debug.DebugRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.Mth;
 
 /**
  * Represents a debug renderer for dynamic light levels.
@@ -38,7 +37,9 @@ public class DynamicLightLevelDebugRenderer extends DynamicLightDebugRenderer {
 	}
 
 	@Override
-	public void render(@NotNull MatrixStack matrices, @NotNull MultiBufferSource bufferSource, double x, double y, double z) {
+	public void render(
+			PoseStack poses, MultiBufferSource bufferSource, double x, double y, double z
+	) {
 		int lightDisplayRadius = this.config.getDebugLightLevelRadius();
 
 		if (lightDisplayRadius == 0) {
@@ -46,10 +47,10 @@ public class DynamicLightLevelDebugRenderer extends DynamicLightDebugRenderer {
 			return;
 		}
 
-		int startX = this.client.player.getBlockPos().getX();
-		int startY = this.client.player.getBlockPos().getY();
-		int startZ = this.client.player.getBlockPos().getZ();
-		var pos = new BlockPos.Mutable();
+		int startX = this.client.player.blockPosition().getX();
+		int startY = this.client.player.blockPosition().getY();
+		int startZ = this.client.player.blockPosition().getZ();
+		var pos = new BlockPos.MutableBlockPos();
 
 		if (lightDisplayRadius > 0) {
 			for (int offsetX = 0; offsetX < lightDisplayRadius * 2 + 1; offsetX++) {
@@ -71,14 +72,14 @@ public class DynamicLightLevelDebugRenderer extends DynamicLightDebugRenderer {
 
 						if (light < 7.5) {
 							red = 255;
-							green = (int) MathHelper.lerp(light / 7.5, 0x00, 0xFF);
+							green = (int) Mth.lerp(light / 7.5, 0x00, 0xFF);
 						} else {
-							red = (int) MathHelper.lerp((light - 7.5) / 7.5, 0xFF, 0x00);
+							red = (int) Mth.lerp((light - 7.5) / 7.5, 0xFF, 0x00);
 							green = 255;
 						}
 
 						DebugRenderer.renderFloatingText(
-								matrices,
+								poses,
 								bufferSource,
 								"%.1f".formatted(light),
 								currentX + 0.5,

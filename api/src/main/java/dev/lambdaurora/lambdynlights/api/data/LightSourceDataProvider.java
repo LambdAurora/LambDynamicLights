@@ -18,7 +18,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +56,7 @@ public abstract class LightSourceDataProvider<L, C extends LightSourceDataProvid
 	/**
 	 * {@return the default namespace used for this light source data provider}
 	 */
-	public @NotNull String defaultNamespace() {
+	public String defaultNamespace() {
 		return this.defaultNamespace;
 	}
 
@@ -67,17 +66,17 @@ public abstract class LightSourceDataProvider<L, C extends LightSourceDataProvid
 	 * @param lookupProvider the lookup provider
 	 * @return the context
 	 */
-	protected abstract @NotNull C createContext(@NotNull HolderLookup.Provider lookupProvider);
+	protected abstract C createContext(HolderLookup.Provider lookupProvider);
 
 	/**
 	 * Generates the light sources and adds them to the list.
 	 *
 	 * @param context the light source data generation context
 	 */
-	protected abstract void generate(@NotNull C context);
+	protected abstract void generate(C context);
 
 	@Override
-	public @NotNull CompletableFuture<?> run(CachedOutput cachedOutput) {
+	public CompletableFuture<?> run(CachedOutput cachedOutput) {
 		return this.registryProvider.thenCompose(provider -> {
 			var context = this.createContext(provider);
 			this.generate(context);
@@ -91,7 +90,7 @@ public abstract class LightSourceDataProvider<L, C extends LightSourceDataProvid
 	}
 
 	@Override
-	public @NotNull String getName() {
+	public String getName() {
 		return this.subPath + " Light Sources Provider";
 	}
 
@@ -114,21 +113,21 @@ public abstract class LightSourceDataProvider<L, C extends LightSourceDataProvid
 		/**
 		 * {@return the lookup provider}
 		 */
-		public @NotNull HolderLookup.Provider lookupProvider() {
+		public HolderLookup.Provider lookupProvider() {
 			return this.lookupProvider;
 		}
 
 		/**
 		 * {@return the item lookup}
 		 */
-		public @NotNull HolderLookup<Item> itemLookup() {
+		public HolderLookup<Item> itemLookup() {
 			return this.itemLookup;
 		}
 
 		/**
 		 * {@return the entity type lookup}
 		 */
-		public @NotNull HolderLookup<EntityType<?>> entityTypeLookup() {
+		public HolderLookup<EntityType<?>> entityTypeLookup() {
 			return this.entityTypeLookup;
 		}
 
@@ -138,8 +137,8 @@ public abstract class LightSourceDataProvider<L, C extends LightSourceDataProvid
 		 * @param path the path of the identifier
 		 * @return the identifier of the given {@code path} and the default namespace
 		 */
-		public @NotNull Identifier idOf(@NotNull String path) {
-			return Identifier.of(LightSourceDataProvider.this.defaultNamespace, path);
+		public Identifier idOf(String path) {
+			return Identifier.fromNamespaceAndPath(LightSourceDataProvider.this.defaultNamespace, path);
 		}
 
 		/**
@@ -156,15 +155,15 @@ public abstract class LightSourceDataProvider<L, C extends LightSourceDataProvid
 		 * @param originalId the identifier to derive from
 		 * @return the derived identifier
 		 */
-		public @NotNull Identifier deriveId(@NotNull Identifier originalId) {
+		public Identifier deriveId(Identifier originalId) {
 			var id = originalId;
 
-			if (!id.namespace().equals(LightSourceDataProvider.this.defaultNamespace())) {
+			if (!id.getNamespace().equals(LightSourceDataProvider.this.defaultNamespace())) {
 				// The namespace is different:
-				id = this.idOf(originalId.path());
+				id = this.idOf(originalId.getPath());
 
-				if (!originalId.namespace().equals(Identifier.DEFAULT_NAMESPACE)) {
-					id = id.withPrefix(originalId.namespace() + "/");
+				if (!originalId.getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {
+					id = id.withPrefix(originalId.getNamespace() + "/");
 				}
 			}
 
@@ -178,7 +177,7 @@ public abstract class LightSourceDataProvider<L, C extends LightSourceDataProvid
 		 * @param source the light source
 		 * @see #add(String, Object)
 		 */
-		public void add(@NotNull Identifier id, @NotNull L source) {
+		public void add(Identifier id, L source) {
 			this.sources.put(id, source);
 		}
 
@@ -189,14 +188,14 @@ public abstract class LightSourceDataProvider<L, C extends LightSourceDataProvid
 		 * @param source The light source
 		 * @see #add(Identifier, Object)
 		 */
-		public void add(@NotNull String key, @NotNull L source) {
+		public void add(String key, L source) {
 			this.add(this.idOf(key), source);
 		}
 
 		/**
 		 * {@return the sources to be registered}
 		 */
-		public @NotNull Map<Identifier, L> sources() {
+		public Map<Identifier, L> sources() {
 			return this.sources;
 		}
 	}

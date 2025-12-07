@@ -72,7 +72,7 @@ public class BeaconBlockEntityMixin extends BlockEntity implements BeaconBlockEn
 		}
 	}
 
-	@Inject(method = "markRemoved", at = @At("RETURN"))
+	@Inject(method = "setRemoved", at = @At("RETURN"))
 	private void lambdynlights$markRemoved(CallbackInfo ci) {
 		if (this.level != null && this.level.isClientSide() && this.dynamicLightBeam != null) {
 			LambDynLights.get().dynamicLightBehaviorManager().remove(this.dynamicLightBeam);

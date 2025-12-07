@@ -11,14 +11,13 @@ package dev.lambdaurora.lambdynlights.api.data;
 
 import dev.lambdaurora.lambdynlights.api.entity.EntityLightSource;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
-import net.minecraft.advancements.critereon.EntityTypePredicate;
+import net.minecraft.advancements.criterion.EntityTypePredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -39,7 +38,7 @@ public abstract class EntityLightSourceDataProvider
 	}
 
 	@Override
-	protected @NotNull Context createContext(HolderLookup.@NotNull Provider lookupProvider) {
+	protected Context createContext(HolderLookup.Provider lookupProvider) {
 		return new Context(lookupProvider);
 	}
 
@@ -60,8 +59,8 @@ public abstract class EntityLightSourceDataProvider
 		 * @see #add(String, EntityLightSource.EntityPredicate, EntityLuminance...)
 		 */
 		public void add(
-				@NotNull Identifier key,
-				@NotNull EntityLightSource.EntityPredicate predicate, @NotNull EntityLuminance... luminances
+				Identifier key,
+				EntityLightSource.EntityPredicate predicate, EntityLuminance... luminances
 		) {
 			this.add(key, new EntityLightSource(predicate, List.of(luminances)));
 		}
@@ -75,8 +74,8 @@ public abstract class EntityLightSourceDataProvider
 		 * @see #add(Identifier, EntityLightSource.EntityPredicate, EntityLuminance...)
 		 */
 		public void add(
-				@NotNull String key,
-				@NotNull EntityLightSource.EntityPredicate predicate, @NotNull EntityLuminance... luminances
+				String key,
+				EntityLightSource.EntityPredicate predicate, EntityLuminance... luminances
 		) {
 			this.add(this.idOf(key), predicate, luminances);
 		}
@@ -92,7 +91,7 @@ public abstract class EntityLightSourceDataProvider
 		 * @see #add(String, List, EntityLuminance...)
 		 * @see #add(EntityType, EntityLuminance...)
 		 */
-		public void add(@NotNull Identifier key, @NotNull EntityType<?> type, @NotNull EntityLuminance... luminances) {
+		public void add(Identifier key, EntityType<?> type, EntityLuminance... luminances) {
 			this.add(key, EntityLightSource.EntityPredicate.builder().of(this.entityTypeLookup(), type).build(), luminances);
 		}
 
@@ -108,7 +107,7 @@ public abstract class EntityLightSourceDataProvider
 		 * @see #add(EntityType, EntityLuminance...)
 		 */
 		@SuppressWarnings("deprecation")
-		public void add(@NotNull Identifier key, @NotNull List<EntityType<?>> types, @NotNull EntityLuminance... luminances) {
+		public void add(Identifier key, List<EntityType<?>> types, EntityLuminance... luminances) {
 			var holderSet = HolderSet.direct(EntityType::builtInRegistryHolder, types);
 
 			this.add(
@@ -129,7 +128,7 @@ public abstract class EntityLightSourceDataProvider
 		 * @see #add(String, List, EntityLuminance...)
 		 * @see #add(EntityType, EntityLuminance...)
 		 */
-		public void add(@NotNull String key, @NotNull EntityType<?> type, @NotNull EntityLuminance... luminances) {
+		public void add(String key, EntityType<?> type, EntityLuminance... luminances) {
 			this.add(this.idOf(key), type, luminances);
 		}
 
@@ -145,7 +144,7 @@ public abstract class EntityLightSourceDataProvider
 		 * @see #add(EntityType, EntityLuminance...)
 		 */
 		public void add(
-				@NotNull String key, @NotNull List<EntityType<?>> types, @NotNull EntityLuminance... luminances
+				String key, List<EntityType<?>> types, EntityLuminance... luminances
 		) {
 			this.add(this.idOf(key), types, luminances);
 		}
@@ -163,8 +162,8 @@ public abstract class EntityLightSourceDataProvider
 		 * @see #add(String, List, EntityLuminance...)
 		 */
 		@SuppressWarnings("deprecation")
-		public void add(@NotNull EntityType<?> type, @NotNull EntityLuminance... luminances) {
-			var typeId = type.builtInRegistryHolder().key().value();
+		public void add(EntityType<?> type, EntityLuminance... luminances) {
+			var typeId = type.builtInRegistryHolder().key().identifier();
 			this.add(this.deriveId(typeId), type, luminances);
 		}
 
@@ -178,7 +177,7 @@ public abstract class EntityLightSourceDataProvider
 		 * @see #add(TagKey, EntityLuminance...)
 		 */
 		public void add(
-				@NotNull Identifier key, @NotNull TagKey<EntityType<?>> tag, @NotNull EntityLuminance... luminances
+				Identifier key, TagKey<EntityType<?>> tag, EntityLuminance... luminances
 		) {
 			this.add(key, EntityLightSource.EntityPredicate.builder().of(this.entityTypeLookup(), tag).build(), luminances);
 		}
@@ -193,7 +192,7 @@ public abstract class EntityLightSourceDataProvider
 		 * @see #add(TagKey, EntityLuminance...)
 		 */
 		public void add(
-				@NotNull String key, @NotNull TagKey<EntityType<?>> tag, @NotNull EntityLuminance... luminances
+				String key, TagKey<EntityType<?>> tag, EntityLuminance... luminances
 		) {
 			this.add(this.idOf(key), tag, luminances);
 		}
@@ -208,8 +207,8 @@ public abstract class EntityLightSourceDataProvider
 		 * @see #add(Identifier, TagKey, EntityLuminance...)
 		 * @see #add(String, TagKey, EntityLuminance...)
 		 */
-		public void add(@NotNull TagKey<EntityType<?>> tag, @NotNull EntityLuminance... luminances) {
-			this.add(this.deriveId(tag.id()), tag, luminances);
+		public void add(TagKey<EntityType<?>> tag, EntityLuminance... luminances) {
+			this.add(this.deriveId(tag.location()), tag, luminances);
 		}
 	}
 }

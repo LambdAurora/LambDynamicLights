@@ -11,8 +11,7 @@ package dev.lambdaurora.lambdynlights.api.entity.luminance;
 
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -28,12 +27,12 @@ public final class MinecartDisplayBlockLuminance implements EntityLuminance {
 	private MinecartDisplayBlockLuminance() {}
 
 	@Override
-	public @NotNull Type type() {
+	public Type type() {
 		return Type.MINECART_DISPLAY_BLOCK;
 	}
 
 	@Override
-	public @Range(from = 0, to = 15) int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity) {
+	public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
 		if (entity instanceof AbstractMinecart minecart) {
 			return minecart.getDisplayBlockState().getLightEmission();
 		}

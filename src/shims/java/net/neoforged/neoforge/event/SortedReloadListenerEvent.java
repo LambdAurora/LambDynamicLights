@@ -1,12 +1,12 @@
 package net.neoforged.neoforge.event;
 
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceReloader;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.neoforged.bus.api.Event;
 
 public abstract class SortedReloadListenerEvent extends Event {
 	/**
-	 * Adds a new {@link ResourceReloader reload listener} to the resource manager.
+	 * Adds a new {@link PreparableReloadListener reload listener} to the resource manager.
 	 * <p>
 	 * Unless explicitly specified, this listener will run after all vanilla listeners, in the order it was registered.
 	 *
@@ -15,7 +15,7 @@ public abstract class SortedReloadListenerEvent extends Event {
 	 *
 	 * @throws IllegalArgumentException if another listener with that key was already registered.
 	 */
-	public void addListener(Identifier key, ResourceReloader listener) {
+	public void addListener(Identifier key, PreparableReloadListener listener) {
 	}
 
 	/**

@@ -16,7 +16,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import net.minecraft.client.gui.screens.options.VideoSettingsScreen;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,7 +29,7 @@ public abstract class VideoSettingsScreenMixin extends OptionsSubScreen {
 	@Unique
 	private OptionInstance<?> lambdynlights$option;
 
-	public VideoSettingsScreenMixin(Screen parent, Options gameOptions, Text title) {
+	public VideoSettingsScreenMixin(Screen parent, Options gameOptions, Component title) {
 		super(parent, gameOptions, title);
 	}
 

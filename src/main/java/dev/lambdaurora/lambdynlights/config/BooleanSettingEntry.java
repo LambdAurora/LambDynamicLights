@@ -12,20 +12,19 @@ package dev.lambdaurora.lambdynlights.config;
 import com.electronwill.nightconfig.core.Config;
 import dev.lambdaurora.spruceui.option.SpruceOption;
 import dev.lambdaurora.spruceui.tooltip.TooltipData;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public class BooleanSettingEntry extends SettingEntry<Boolean> {
 	public BooleanSettingEntry(
-			String key, String guiKey, boolean defaultValue, @Nullable Config config, @NotNull TooltipData tooltip
+			String key, String guiKey, boolean defaultValue, @Nullable Config config, TooltipData tooltip
 	) {
 		super(key, guiKey, defaultValue, config, tooltip);
 	}
 
 	public BooleanSettingEntry(
-			String key, boolean defaultValue, @Nullable Config config, @NotNull TooltipData tooltip
+			String key, boolean defaultValue, @Nullable Config config, TooltipData tooltip
 	) {
 		super(key, key, defaultValue, config, tooltip);
 	}
@@ -52,7 +51,7 @@ public class BooleanSettingEntry extends SettingEntry<Boolean> {
 	}
 
 	@Override
-	protected SpruceOption buildOption(@NotNull TooltipData tooltip) {
+	protected SpruceOption buildOption(TooltipData tooltip) {
 		return SpruceOption.booleanBuilder(
 						this.getOptionKey(),
 						this::get,
