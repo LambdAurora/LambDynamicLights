@@ -29,14 +29,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(value = LevelRenderer.BrightnessGetter.class, priority = 900)
 public interface BrightnessGetterMixin {
-	@SuppressWarnings("UnresolvedMixinReference")
 	@Inject(
-			method = {"method_68890", "lambda$static$0"},
+			method = "method_68890",
 			at = @At("TAIL"),
-			cancellable = true,
-			remap = false,
-			allow = 1,
-			require = 1
+			cancellable = true
 	)
 	private static void onGetLightmapCoordinates(
 			BlockAndTintGetter level, BlockPos pos,

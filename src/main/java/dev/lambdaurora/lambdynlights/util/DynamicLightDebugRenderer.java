@@ -9,9 +9,12 @@
 
 package dev.lambdaurora.lambdynlights.util;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.lambdaurora.lambdynlights.DynamicLightsConfig;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.engine.scheduler.ChunkRebuildStatus;
+import dev.lambdaurora.spruceui.util.ColorUtil;
 import it.unimi.dsi.fastutil.longs.Long2IntMap;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -19,18 +22,17 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.debug.DebugRenderer;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.gizmos.GizmoStyle;
-import net.minecraft.gizmos.Gizmos;
-import net.minecraft.gizmos.TextGizmo;
 import net.minecraft.util.debug.DebugValueAccess;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
+import org.joml.Matrix4f;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -39,7 +41,7 @@ import java.util.function.Supplier;
  * Represents a debug renderer for dynamic lighting.
  *
  * @author LambdAurora
- * @version 4.9.0
+ * @version 4.8.0
  * @since 4.0.0
  */
 @Environment(EnvType.CLIENT)
@@ -52,8 +54,13 @@ public abstract class DynamicLightDebugRenderer implements DebugRenderer.SimpleD
 	}
 
 	static void renderFaces(
+			PoseStack poses,
 			DiscreteVoxelShape shape,
 			Vec3i origin,
+			VertexConsumer vertexConsumer,
+			double x,
+			double y,
+			double z,
 			int cellSize,
 			int color
 	) {
@@ -61,13 +68,16 @@ public abstract class DynamicLightDebugRenderer implements DebugRenderer.SimpleD
 			int realCellX = cellX + origin.getX();
 			int realCellY = cellY + origin.getY();
 			int realCellZ = cellZ + origin.getZ();
-			renderFace(direction, cellSize, realCellX, realCellY, realCellZ, color);
+			renderFace(poses, vertexConsumer, direction, x, y, z, cellSize, realCellX, realCellY, realCellZ, color);
 		});
 	}
 
 	static void renderEdges(
+			PoseStack poses,
 			DiscreteVoxelShape shape,
 			Vec3i origin,
+			MultiBufferSource multiBufferSource,
+			double x, double y, double z,
 			int cellSize,
 			int color
 	) {
@@ -78,8 +88,9 @@ public abstract class DynamicLightDebugRenderer implements DebugRenderer.SimpleD
 			int realEndCellX = endCellX + origin.getX();
 			int realEndCellY = endCellY + origin.getY();
 			int realEndCellZ = endCellZ + origin.getZ();
+			VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.debugLineStrip(1.0));
 			renderEdge(
-					cellSize,
+					poses, vertexConsumer, x, y, z, cellSize,
 					realStartCellX, realStartCellY, realStartCellZ,
 					realEndCellX, realEndCellY, realEndCellZ,
 					color
@@ -88,39 +99,51 @@ public abstract class DynamicLightDebugRenderer implements DebugRenderer.SimpleD
 	}
 
 	static void renderFace(
-			Direction direction,
+			PoseStack poses, VertexConsumer vertexConsumer, Direction direction,
+			double x, double y, double z,
 			int cellSize, int cellX, int cellY, int cellZ,
 			int color
 	) {
-		var facePos = new Vec3(
-				cellX * cellSize,
-				cellY * cellSize,
-				cellZ * cellSize
+		float faceX = (float) (cellX * cellSize - x);
+		float faceY = (float) (cellY * cellSize - y);
+		float faceZ = (float) (cellZ * cellSize - z);
+		ShapeRenderer.renderFace(
+				poses.last().pose(), vertexConsumer, direction,
+				faceX, faceY, faceZ,
+				faceX + cellSize, faceY + cellSize, faceZ + cellSize,
+				ColorUtil.floatColor(ColorUtil.argbUnpackRed(color)),
+				ColorUtil.floatColor(ColorUtil.argbUnpackGreen(color)),
+				ColorUtil.floatColor(ColorUtil.argbUnpackBlue(color)),
+				ColorUtil.floatColor(ColorUtil.argbUnpackAlpha(color))
 		);
-		Gizmos.rect(facePos, facePos.add(cellSize), direction, GizmoStyle.fill(color));
 	}
 
 	static void renderEdge(
+			PoseStack poses, VertexConsumer vertexConsumer,
+			double x, double y, double z,
 			int cellSize,
 			int startCellX, int startCellY, int startCellZ,
 			int endCellX, int endCellY, int endCellZ,
 			int color
 	) {
-		float startX = (float) (startCellX * cellSize);
-		float startY = (float) (startCellY * cellSize);
-		float startZ = (float) (startCellZ * cellSize);
-		float endX = (float) (endCellX * cellSize);
-		float endY = (float) (endCellY * cellSize);
-		float endZ = (float) (endCellZ * cellSize);
-		renderLine(startX, startY, startZ, endX, endY, endZ, color);
+		float startX = (float) (startCellX * cellSize - x);
+		float startY = (float) (startCellY * cellSize - y);
+		float startZ = (float) (startCellZ * cellSize - z);
+		float endX = (float) (endCellX * cellSize - x);
+		float endY = (float) (endCellY * cellSize - y);
+		float endZ = (float) (endCellZ * cellSize - z);
+		renderLine(poses, vertexConsumer, startX, startY, startZ, endX, endY, endZ, color);
 	}
 
 	static void renderLine(
+			PoseStack poses, VertexConsumer vertexConsumer,
 			float startX, float startY, float startZ,
 			float endX, float endY, float endZ,
 			int color
 	) {
-		Gizmos.line(new Vec3(startX, startY, startZ), new Vec3(endX, endY, endZ), color);
+		Matrix4f modelMatrix = poses.last().pose();
+		vertexConsumer.addVertex(modelMatrix, startX, startY, startZ).setColor(color);
+		vertexConsumer.addVertex(modelMatrix, endX, endY, endZ).setColor(color);
 	}
 
 	public static class SectionRebuild extends DynamicLightDebugRenderer {
@@ -138,15 +161,18 @@ public abstract class DynamicLightDebugRenderer implements DebugRenderer.SimpleD
 		}
 
 		@Override
-		public void emitGizmos(
-				double x, double y, double z,
-				DebugValueAccess debugValueAccess, Frustum frustum, float tickDelta
+		public void render(
+				PoseStack poses, MultiBufferSource bufferSource, double x, double y, double z,
+				DebugValueAccess debugValueAccess, Frustum frustum
 		) {
 			if (!this.isEnabled()) return;
 
+			poses.pushPose();
+			poses.translate(-x, -y, -z);
 			for (var entry : this.scheduledChunks.long2IntEntrySet()) {
-				this.addBox(SCHEDULED_COLOR, (int) (entry.getIntValue() / 4.f * 255), SectionPos.of(entry.getLongKey()));
+				this.renderBox(poses, bufferSource, SCHEDULED_COLOR, entry.getIntValue() / 4.f, SectionPos.of(entry.getLongKey()));
 			}
+			poses.popPose();
 
 			if (this.requestedChunks != null) {
 				for (var chunk : this.requestedChunks.long2ObjectEntrySet()) {
@@ -159,15 +185,15 @@ public abstract class DynamicLightDebugRenderer implements DebugRenderer.SimpleD
 						if (statuses[i] > 0) {
 							var status = ChunkRebuildStatus.VALUES.get(i);
 
-							Gizmos.billboardText(
+							DebugRenderer.renderFloatingText(
+									poses,
+									bufferSource,
 									statuses[i] + "x " + status,
-									new Vec3(
-											chunkPos.minBlockX() + 8,
-											statusY,
-											chunkPos.minBlockZ() + 8
-									),
-									TextGizmo.Style.forColorAndCentered(status.color())
-											.withScale(1f)
+									chunkPos.minBlockX() + 8,
+									statusY,
+									chunkPos.minBlockZ() + 8,
+									status.color(),
+									.08f
 							);
 
 							if (i != ChunkRebuildStatus.AFFECTED.ordinal()) {
@@ -179,21 +205,26 @@ public abstract class DynamicLightDebugRenderer implements DebugRenderer.SimpleD
 					}
 
 					if (canRenderBox) {
-						this.addBox(REQUESTED_COLOR, 0xff, chunkPos);
+						poses.pushPose();
+						poses.translate(-x, -y, -z);
+						this.renderBox(poses, bufferSource, REQUESTED_COLOR, 1.f, chunkPos);
+						poses.popPose();
 					}
 				}
 			}
 		}
 
-		private void addBox(int color, int alpha, SectionPos chunk) {
-			var box = new AABB(
-					chunk.minBlockX(), chunk.minBlockY(), chunk.minBlockZ(),
-					SectionPos.sectionToBlockCoord(chunk.x(), 16),
-					SectionPos.sectionToBlockCoord(chunk.y(), 16),
-					SectionPos.sectionToBlockCoord(chunk.z(), 16)
-			);
+		private void renderBox(PoseStack poses, MultiBufferSource bufferSource, int color, float alpha, SectionPos chunk) {
+			float red = ColorUtil.floatColor(ColorUtil.argbUnpackRed(color));
+			float green = ColorUtil.floatColor(ColorUtil.argbUnpackGreen(color));
+			float blue = ColorUtil.floatColor(ColorUtil.argbUnpackBlue(color));
 
-			Gizmos.cuboid(box, GizmoStyle.stroke((alpha << 24) | (color & 0x00ffffff)));
+			ShapeRenderer.renderLineBox(
+					poses.last(), bufferSource.getBuffer(RenderType.lines()),
+					chunk.minBlockX(), chunk.minBlockY(), chunk.minBlockZ(),
+					SectionPos.sectionToBlockCoord(chunk.x(), 16), SectionPos.sectionToBlockCoord(chunk.y(), 16), SectionPos.sectionToBlockCoord(chunk.z(), 16),
+					red, green, blue, alpha
+			);
 		}
 
 		public void scheduleChunkRebuild(long chunkPos) {

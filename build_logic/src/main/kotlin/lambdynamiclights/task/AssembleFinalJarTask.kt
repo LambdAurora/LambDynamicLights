@@ -49,7 +49,7 @@ abstract class AssembleFinalJarTask @Inject constructor() : AbstractAssembleJarT
 		this.openJar(outputJar).use { outFs ->
 			val outJarsDir = outFs.getPath("META-INF/jars")
 			val outFabricJar = outJarsDir.resolve(
-				runtimeIntermediaryJarPath.fileName.toString().replace(".jar", "-fabric.jar")
+				runtimeIntermediaryJarPath.fileName.toString().replace("-intermediary", "-fabric")
 			)
 			val outNeoForgeJar = outJarsDir.resolve(
 				neoForgeJarPath.fileName.toString().replace("-mojmap", "-neoforge")
@@ -70,7 +70,7 @@ abstract class AssembleFinalJarTask @Inject constructor() : AbstractAssembleJarT
 					this.doAssemble(outFs, fabricJarFs, neoJarFs)
 					this.writeFmj(fabricJarFs, outFs, outFabricJar)
 					this.writeNmt(neoJarFs, outFs)
-					this.handleJarJar(outFs, outNeoForgeJar)
+					this.handleJarJar(neoJarFs, outFs, outNeoForgeJar)
 				}
 
 				this.cleanupFabricJar(fabricJarFs)
@@ -124,7 +124,7 @@ abstract class AssembleFinalJarTask @Inject constructor() : AbstractAssembleJarT
 		this.writeString(outFs.getPath("fabric.mod.json"), JsonUtils.GSON.toJson(parentFmj))
 	}
 
-	private fun handleJarJar(outFs: FileSystem, neoJarPath: Path) {
+	private fun handleJarJar(neoFs: FileSystem, outFs: FileSystem, neoJarPath: Path) {
 		this.createDirectories(outFs.getPath("META-INF/jarjar"))
 
 		val jarJarMetadata = JsonObject()

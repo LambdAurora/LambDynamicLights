@@ -1,6 +1,7 @@
 package lambdynamiclights.task
 
 import com.google.gson.JsonParser
+import dev.lambdaurora.mcdev.api.AccessWidenerToTransformer
 import dev.lambdaurora.mcdev.util.JsonUtils
 import dev.lambdaurora.mcdev.util.ZipFix
 import lambdynamiclights.Constants
@@ -69,6 +70,10 @@ abstract class AssembleNeoForgeJarTask @Inject constructor() : AbstractAssembleJ
 							}
 					}
 
+					AccessWidenerToTransformer.convert(
+						runtimeJarFs.getPath("lambdynlights.accesswidener"),
+						outFs.getPath("META-INF/accesstransformer.cfg")
+					)
 					this.handleNeoJar(outFs)
 				}
 			}

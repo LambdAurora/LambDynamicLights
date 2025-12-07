@@ -9,17 +9,19 @@
 
 package dev.lambdaurora.lambdynlights.util;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.debug.DebugRenderer;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.gizmos.Gizmos;
-import net.minecraft.gizmos.TextGizmo;
 import net.minecraft.util.debug.DebugValueAccess;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 import org.jspecify.annotations.Nullable;
@@ -31,7 +33,7 @@ import java.time.Instant;
  * Represents a debug renderer for dynamic lighting.
  *
  * @author LambdAurora, Akarys
- * @version 4.9.0
+ * @version 4.6.0
  * @since 4.0.0
  */
 @Environment(EnvType.CLIENT)
@@ -52,9 +54,9 @@ public class DynamicLightSectionDebugRenderer extends DynamicLightDebugRenderer 
 	}
 
 	@Override
-	public void emitGizmos(
-			double x, double y, double z,
-			DebugValueAccess debugValueAccess, Frustum frustum, float tickDelta
+	public void render(
+			PoseStack poses, MultiBufferSource bufferSource, double x, double y, double z,
+			DebugValueAccess debugValueAccess, Frustum frustum
 	) {
 		int cellDisplayRadius = this.config.getDebugCellDisplayRadius();
 
@@ -86,25 +88,25 @@ public class DynamicLightSectionDebugRenderer extends DynamicLightDebugRenderer 
 						int cellZ = playerCellZ + offsetZ - cellDisplayRadius;
 						int currentHash = this.lightingEngine.hashCell(cellX, cellY, cellZ);
 
-						Gizmos.billboardText(
+						DebugRenderer.renderFloatingText(
+								poses,
+								bufferSource,
 								"HASH(%d, %d, %d) = %d".formatted(cellX, cellY, cellZ, currentHash),
-								new Vec3(
-										cellX * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0,
-										cellY * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0,
-										cellZ * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0
-								),
-								TextGizmo.Style.forColorAndCentered((playerHash == currentHash) ? 0xffff0000 : 0xff00ff00)
-										.withScale(.5f)
+								cellX * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0,
+								cellY * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0,
+								cellZ * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0,
+								(playerHash == currentHash) ? 0xffff0000 : 0xff00ff00,
+								.08f
 						);
 					}
 				}
 			}
 		}
 
-		renderEdges(this.data.matchShape, this.data.origin, DynamicLightingEngine.CELL_SIZE, COLOR);
+		renderEdges(poses, this.data.matchShape, this.data.origin, bufferSource, x, y, z, DynamicLightingEngine.CELL_SIZE, COLOR);
 		if (this.config.getDebugActiveDynamicLightingCells().get()) {
-			renderEdges(this.data.activeShape, this.data.origin, DynamicLightingEngine.CELL_SIZE, ACTIVE_COLOR);
-			renderEdges(this.data.activeNeighborShape, this.data.origin, DynamicLightingEngine.CELL_SIZE, ACTIVE_NEIGHBOR_COLOR);
+			renderEdges(poses, this.data.activeShape, this.data.origin, bufferSource, x, y, z, DynamicLightingEngine.CELL_SIZE, ACTIVE_COLOR);
+			renderEdges(poses, this.data.activeNeighborShape, this.data.origin, bufferSource, x, y, z, DynamicLightingEngine.CELL_SIZE, ACTIVE_NEIGHBOR_COLOR);
 
 			this.data.activeShape.forAllBoxes((startCellX, startCellY, startCellZ, endCellX, endCellY, endCellZ) -> {
 				for (int currentCellX = startCellX; currentCellX < endCellX; currentCellX++) {
@@ -114,15 +116,15 @@ public class DynamicLightSectionDebugRenderer extends DynamicLightDebugRenderer 
 							int cellY = currentCellY + data.origin.getY();
 							int cellZ = currentCellZ + data.origin.getZ();
 
-							Gizmos.billboardText(
+							DebugRenderer.renderFloatingText(
+									poses,
+									bufferSource,
 									"%d".formatted(this.lightingEngine.getEntryCountAt(cellX, cellY, cellZ)),
-									new Vec3(
-											cellX * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0,
-											cellY * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0,
-											cellZ * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0
-									),
-									TextGizmo.Style.forColorAndCentered(0xffffff00)
-											.withScale(1f)
+									cellX * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0,
+									cellY * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0,
+									cellZ * DynamicLightingEngine.CELL_SIZE + DynamicLightingEngine.CELL_SIZE / 2.0,
+									0xffffff00,
+									.2f
 							);
 						}
 					}
@@ -130,10 +132,11 @@ public class DynamicLightSectionDebugRenderer extends DynamicLightDebugRenderer 
 			}, true);
 		}
 
-		renderFaces(this.data.matchShape, this.data.origin, DynamicLightingEngine.CELL_SIZE, COLOR);
+		VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.debugSectionQuads());
+		renderFaces(poses, this.data.matchShape, this.data.origin, vertexConsumer, x, y, z, DynamicLightingEngine.CELL_SIZE, COLOR);
 		if (this.config.getDebugActiveDynamicLightingCells().get()) {
-			renderFaces(this.data.activeShape, this.data.origin, DynamicLightingEngine.CELL_SIZE, ACTIVE_COLOR);
-			renderFaces(this.data.activeNeighborShape, this.data.origin, DynamicLightingEngine.CELL_SIZE, ACTIVE_NEIGHBOR_COLOR);
+			renderFaces(poses, this.data.activeShape, this.data.origin, vertexConsumer, x, y, z, DynamicLightingEngine.CELL_SIZE, ACTIVE_COLOR);
+			renderFaces(poses, this.data.activeNeighborShape, this.data.origin, vertexConsumer, x, y, z, DynamicLightingEngine.CELL_SIZE, ACTIVE_NEIGHBOR_COLOR);
 		}
 	}
 

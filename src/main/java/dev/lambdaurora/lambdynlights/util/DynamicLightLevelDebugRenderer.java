@@ -9,24 +9,24 @@
 
 package dev.lambdaurora.lambdynlights.util;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import dev.lambdaurora.spruceui.util.ColorUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.debug.DebugRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gizmos.Gizmos;
-import net.minecraft.gizmos.TextGizmo;
 import net.minecraft.util.Mth;
 import net.minecraft.util.debug.DebugValueAccess;
-import net.minecraft.world.phys.Vec3;
 
 /**
  * Represents a debug renderer for dynamic light levels.
  *
  * @author Akarys
- * @version 4.9.0
+ * @version 4.6.0
  * @since 4.0.0
  */
 @Environment(EnvType.CLIENT)
@@ -39,9 +39,9 @@ public class DynamicLightLevelDebugRenderer extends DynamicLightDebugRenderer {
 	}
 
 	@Override
-	public void emitGizmos(
-			double x, double y, double z,
-			DebugValueAccess debugValueAccess, Frustum frustum, float tickDelta
+	public void render(
+			PoseStack poses, MultiBufferSource bufferSource, double x, double y, double z,
+			DebugValueAccess debugValueAccess, Frustum frustum
 	) {
 		int lightDisplayRadius = this.config.getDebugLightLevelRadius();
 
@@ -81,14 +81,15 @@ public class DynamicLightLevelDebugRenderer extends DynamicLightDebugRenderer {
 							green = 255;
 						}
 
-						Gizmos.billboardText(
+						DebugRenderer.renderFloatingText(
+								poses,
+								bufferSource,
 								"%.1f".formatted(light),
-								new Vec3(
-										currentX + 0.5,
-										currentY + 0.5,
-										currentZ + 0.5
-								),
-								TextGizmo.Style.forColorAndCentered(ColorUtil.packARGBColor(red, green, 0, 255))
+								currentX + 0.5,
+								currentY + 0.5,
+								currentZ + 0.5,
+								ColorUtil.packARGBColor(red, green, 0, 255),
+								.015f
 						);
 					}
 				}

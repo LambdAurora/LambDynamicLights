@@ -3,7 +3,6 @@ import dev.lambdaurora.mcdev.api.MappingVariant
 import dev.lambdaurora.mcdev.api.McVersionLookup
 import dev.lambdaurora.mcdev.api.ModVersionDependency
 import dev.lambdaurora.mcdev.api.manifest.Nmt
-import dev.lambdaurora.mcdev.task.ConvertAccessWidenerToTransformer
 import dev.lambdaurora.mcdev.task.GenerateNeoForgeJiJDataTask
 import dev.lambdaurora.mcdev.task.packaging.PackageModrinthTask
 import lambdynamiclights.Constants
@@ -11,7 +10,8 @@ import lambdynamiclights.Utils
 import lambdynamiclights.task.AssembleFinalJarTask
 import lambdynamiclights.task.AssembleNeoForgeJarTask
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
-import net.fabricmc.loom.build.nesting.NestableJarGenerationTask
+import net.fabricmc.loom.task.RemapJarTask
+import net.fabricmc.loom.task.RemapSourcesJarTask
 
 plugins {
 	id("lambdynamiclights")
@@ -28,6 +28,7 @@ lambdamcdev.setupActionsRefCheck()
 
 val fabricApiModules = listOf(
 	fabricApi.module("fabric-lifecycle-events-v1", libs.versions.fabric.api.get())!!,
+	fabricApi.module("fabric-resource-loader-v0", libs.versions.fabric.api.get())!!,
 	fabricApi.module("fabric-resource-loader-v1", libs.versions.fabric.api.get())!!,
 	fabricApi.module("fabric-resource-conditions-api-v1", libs.versions.fabric.api.get())!!
 )
@@ -230,40 +231,70 @@ tasks.remapJar {
 	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs")
 }
 
-val convertAWtoAT by tasks.registering(ConvertAccessWidenerToTransformer::class) {
-	this.group = "generation"
-	this.input = loom.accessWidenerPath
-	this.output = project.layout.buildDirectory.get().file("generated/accesstransformer.cfg")
-}
-
-val neoforgeJarTask = tasks.register<Jar>("neoforgeJar") {
-	this.dependsOn(tasks.getByName<NestableJarGenerationTask>("processMojmapIncludeJars"))
+val neoforgeJar = tasks.register<Jar>("neoforgeJar") {
 	this.group = "build"
 	this.from(neoforge.output)
-	this.from(convertAWtoAT) {
-		into("META-INF")
-	}
-	this.archiveClassifier = "neoforge"
+	this.archiveClassifier = "neoforge-dev"
 	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
 }
 
-loom.nestJars(
-	neoforgeJarTask,
-	fileTree(tasks.getByName<NestableJarGenerationTask>("processMojmapIncludeJars").outputDirectory)
-)
-
-val neoforgeSourcesJarTask = tasks.register<Jar>("neoforgeSourcesJar") {
+val neoforgeSourcesJar = tasks.register<Jar>("neoforgeSourcesJar") {
 	this.group = "build"
 	this.from(neoforge.java.sourceDirectories)
 	this.from(neoforge.resources.sourceDirectories)
-	this.from(convertAWtoAT) {
-		into("META-INF")
-	}
-	this.archiveClassifier = "neoforge-sources"
+	this.archiveClassifier = "neoforge-dev-sources"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
+}
+
+val remapNeoforgeJar = tasks.register<RemapJarTask>("remapNeoforgeJarToIntermediary") {
+	this.group = "remapping"
+	this.dependsOn(neoforgeJar.get())
+	this.inputFile.set(neoforgeJar.get().archiveFile)
+	this.classpath.from(neoforge.compileClasspath)
+	this.archiveClassifier = "neoforge-intermediary"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
+
+	addNestedDependencies = false // Jars will be included later.
+}
+
+val remapNeoforgeSourcesJar = tasks.register<RemapSourcesJarTask>("remapNeoforgeSourcesJarToIntermediary") {
+	this.group = "remapping"
+	this.dependsOn(neoforgeSourcesJar.get())
+	this.inputFile.set(neoforgeSourcesJar.get().archiveFile)
+	this.classpath.from(neoforge.compileClasspath)
+	this.archiveClassifier = "neoforge-intermediary-sources"
 	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
 }
 
 //region Mojmap
+val remapMojmap = mojmap.registerRemap(tasks.remapJar) {
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs")
+}
+
+val remapSourcesMojmap = mojmap.registerSourcesRemap(tasks.remapSourcesJar) {
+	this.classpath.from(configurations["minecraftClientLibraries"])
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs")
+}
+
+val remapNeoforgeJarToMojmap = mojmap.registerRemap("remapNeoforgeJarToMojmap") {
+	this.dependsOn(remapNeoforgeJar)
+
+	inputFile.set(remapNeoforgeJar.flatMap { it.archiveFile })
+
+	this.archiveClassifier = "neoforge-mojmap"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
+}
+
+val remapNeoforgeSourcesJarToMojmap = mojmap.registerSourcesRemap("remapNeoforgeSourcesJarToMojmap") {
+	this.dependsOn(remapNeoforgeSourcesJar)
+
+	inputFile.set(remapNeoforgeSourcesJar.flatMap { it.archiveFile })
+
+	this.classpath.from(configurations["minecraftClientLibraries"])
+	this.archiveClassifier = "neoforge-mojmap-sources"
+	this.destinationDirectory = project.layout.buildDirectory.dir("devlibs/neoforge")
+}
+
 val generateJarJarMetadata by tasks.registering(GenerateNeoForgeJiJDataTask::class) {
 	val includeConfig = project.configurations.getByName("mojmapIncludeInternal");
 	this.from(includeConfig)
@@ -279,13 +310,13 @@ val generateJarJarMetadata by tasks.registering(GenerateNeoForgeJiJDataTask::cla
 val mergedNeoForgeJar by tasks.registering(AssembleNeoForgeJarTask::class) {
 	this.group = "build"
 	this.dependsOn(
-		tasks.shadowJar,
-		neoforgeJarTask,
+		remapMojmap,
+		remapNeoforgeJarToMojmap,
 		generateJarJarMetadata
 	)
 
-	this.runtimeMojmapJar.set(tasks.shadowJar.flatMap { it.archiveFile })
-	this.neoforgeJar.set(neoforgeJarTask.flatMap { it.archiveFile })
+	this.runtimeMojmapJar.set(remapMojmap.flatMap { it.archiveFile })
+	this.neoforgeJar.set(remapNeoforgeJarToMojmap.flatMap { it.archiveFile })
 	this.jarJarMetadata.set(generateJarJarMetadata.flatMap { it.outputFile })
 	this.archiveClassifier = "mojmap"
 }
@@ -293,13 +324,13 @@ val mergedNeoForgeJar by tasks.registering(AssembleNeoForgeJarTask::class) {
 val mergedNeoForgeSourcesJar by tasks.registering(AssembleNeoForgeJarTask::class) {
 	this.group = "build"
 	this.dependsOn(
-		tasks["sourcesJar"],
-		neoforgeSourcesJarTask,
+		remapSourcesMojmap,
+		remapNeoforgeSourcesJarToMojmap,
 		generateJarJarMetadata
 	)
 
-	this.runtimeMojmapJar.set(tasks.named<Jar>("sourcesJar").flatMap { it.archiveFile })
-	this.neoforgeJar.set(neoforgeSourcesJarTask.flatMap { it.archiveFile })
+	this.runtimeMojmapJar.set(remapSourcesMojmap.flatMap { it.archiveFile })
+	this.neoforgeJar.set(remapNeoforgeSourcesJarToMojmap.flatMap { it.archiveFile })
 	this.jarJarMetadata.set(generateJarJarMetadata.flatMap { it.outputFile })
 	this.archiveClassifier = "mojmap-sources"
 }
@@ -307,7 +338,7 @@ val mergedNeoForgeSourcesJar by tasks.registering(AssembleNeoForgeJarTask::class
 val finalJar by tasks.registering(AssembleFinalJarTask::class) {
 	this.group = "build"
 	this.dependsOn(
-		tasks.remapJar,
+		remapMojmap,
 		mergedNeoForgeJar,
 		generateJarJarMetadata
 	)

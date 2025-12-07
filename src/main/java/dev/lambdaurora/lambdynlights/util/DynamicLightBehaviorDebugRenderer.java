@@ -9,17 +9,19 @@
 
 package dev.lambdaurora.lambdynlights.util;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.behavior.DynamicLightBehavior;
 import dev.lambdaurora.lambdynlights.engine.source.DeferredDynamicLightSource;
 import dev.lambdaurora.lambdynlights.engine.source.DynamicLightSource;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.gizmos.GizmoStyle;
-import net.minecraft.gizmos.Gizmos;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.util.debug.DebugValueAccess;
-import net.minecraft.world.phys.AABB;
 
 import java.util.Set;
 
@@ -27,7 +29,7 @@ import java.util.Set;
  * Represents a debug renderer for the bounding boxes of {@link DynamicLightBehavior}.
  *
  * @author Akarys
- * @version 4.9.0
+ * @version 4.6.0
  * @since 4.0.0
  */
 @Environment(EnvType.CLIENT)
@@ -44,24 +46,30 @@ public class DynamicLightBehaviorDebugRenderer extends DynamicLightDebugRenderer
 	}
 
 	@Override
-	public void emitGizmos(
-			double x, double y, double z,
-			DebugValueAccess debugValueAccess, Frustum frustum, float tickDelta
+	public void render(
+			PoseStack poses, MultiBufferSource bufferSource, double x, double y, double z,
+			DebugValueAccess debugValueAccess, Frustum frustum
 	) {
 		if (!this.isEnabled()) {
 			return;
 		}
 
+		poses.pushPose();
+		poses.translate(-x, -y, -z);
 		this.lightSourceSetRef.forEach(lightSource -> {
 			if (lightSource instanceof DeferredDynamicLightSource deferredLightSource) {
-				DynamicLightBehavior.BoundingBox boundingBox = deferredLightSource.behavior().getBoundingBox();
-				var box = new AABB(
-						boundingBox.startX(), boundingBox.startY(), boundingBox.startZ(),
-						boundingBox.endX(), boundingBox.endY(), boundingBox.endZ()
-				);
+				VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.lines());
 
-				Gizmos.cuboid(box, GizmoStyle.stroke(0xccff0000));
+				DynamicLightBehavior.BoundingBox boundingBox = deferredLightSource.behavior().getBoundingBox();
+
+				ShapeRenderer.renderLineBox(
+						poses.last(), vertexConsumer,
+						boundingBox.startX(), boundingBox.startY(), boundingBox.startZ(),
+						boundingBox.endX(), boundingBox.endY(), boundingBox.endZ(),
+						1.f, 0.f, 0.f, 0.8f
+				);
 			}
 		});
+		poses.popPose();
 	}
 }

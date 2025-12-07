@@ -44,16 +44,17 @@ lambdamcdev {
 }
 
 dependencies {
-	mappings(loom.officialMojangMappings())
+	@Suppress("UnstableApiUsage")
+	mappings(loom.layered {
+		officialMojangMappings()
+		// Parchment is currently broken when used with the hacked mojmap layer due to remapping shenanigans.
+		//parchment("org.parchmentmc.data:parchment-${Constants.getMcVersionString()}:${libs.versions.mappings.parchment.get()}@zip")
+		mappings("dev.lambdaurora:yalmm-mojbackward:1.21.10+build.3")
+	})
+	api("org.jspecify:jspecify:1.0.0")
 }
 
 tasks.jar {
-	from(rootProject.file("LICENSE")) {
-		rename { "${it}_${Constants.NAME}" }
-	}
-}
-
-tasks.named<Jar>("sourcesJar") {
 	from(rootProject.file("LICENSE")) {
 		rename { "${it}_${Constants.NAME}" }
 	}
