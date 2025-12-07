@@ -9,7 +9,7 @@
 
 package dev.lambdaurora.lambdynlights.util;
 
-import com.mojang.blaze3d.vertex.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.behavior.DynamicLightBehavior;
@@ -19,8 +19,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.client.renderer.rendertype.RenderType;
 
 import java.util.Set;
 
@@ -45,27 +44,29 @@ public class DynamicLightBehaviorDebugRenderer extends DynamicLightDebugRenderer
 	}
 
 	@Override
-	public void render(@NotNull MatrixStack matrices, @NotNull MultiBufferSource multiBufferSource, double x, double y, double z) {
+	public void render(
+			PoseStack poses, MultiBufferSource bufferSource, double x, double y, double z
+	) {
 		if (!this.isEnabled()) {
 			return;
 		}
 
-		matrices.push();
-		matrices.translate(-x, -y, -z);
+		poses.pushPose();
+		poses.translate(-x, -y, -z);
 		this.lightSourceSetRef.forEach(lightSource -> {
 			if (lightSource instanceof DeferredDynamicLightSource deferredLightSource) {
-				VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.lines());
+				VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.lines());
 
 				DynamicLightBehavior.BoundingBox boundingBox = deferredLightSource.behavior().getBoundingBox();
 
 				LevelRenderer.renderLineBox(
-						matrices, vertexConsumer,
+						poses, vertexConsumer,
 						boundingBox.startX(), boundingBox.startY(), boundingBox.startZ(),
 						boundingBox.endX(), boundingBox.endY(), boundingBox.endZ(),
 						1.f, 0.f, 0.f, 0.8f
 				);
 			}
 		});
-		matrices.pop();
+		poses.popPose();
 	}
 }

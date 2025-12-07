@@ -26,7 +26,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +51,7 @@ public final class ItemLightSources extends LightSourceLoader<ItemLightSource> i
 	}
 
 	@Override
-	public @NotNull Identifier id() {
+	public Identifier id() {
 		return RESOURCE_RELOADER_ID;
 	}
 
@@ -75,19 +74,19 @@ public final class ItemLightSources extends LightSourceLoader<ItemLightSource> i
 	protected void doApply(HolderLookup.Provider registryLookup, List<ItemLightSource> lightSources) {
 		this.onRegisterEvent.invoker().onRegister(new RegisterContext() {
 			@Override
-			public @NotNull HolderLookup.Provider registryLookup() {
+			public HolderLookup.Provider registryLookup() {
 				return registryLookup;
 			}
 
 			@Override
-			public void register(@NotNull ItemLightSource itemLightSource) {
+			public void register(ItemLightSource itemLightSource) {
 				lightSources.add(itemLightSource);
 			}
 		});
 	}
 
 	@Override
-	protected @NotNull Optional<ItemLightSource> apply(DynamicOps<JsonElement> ops, LoadedLightSourceResource loadedData) {
+	protected Optional<ItemLightSource> apply(DynamicOps<JsonElement> ops, LoadedLightSourceResource loadedData) {
 		var loaded = ItemLightSource.CODEC.parse(ops, loadedData.data());
 
 		if (!loadedData.silenceError() || LambDynLightsConstants.FORCE_LOG_ERRORS) {
@@ -106,12 +105,12 @@ public final class ItemLightSources extends LightSourceLoader<ItemLightSource> i
 	}
 
 	@Override
-	public @NotNull Event<Identifier, OnRegister> onRegisterEvent() {
+	public Event<Identifier, OnRegister> onRegisterEvent() {
 		return this.onRegisterEvent;
 	}
 
 	@Override
-	public int getLuminance(@NotNull ItemStack stack, boolean submergedInWater) {
+	public int getLuminance(ItemStack stack, boolean submergedInWater) {
 		boolean shouldCareAboutWater = submergedInWater && LambDynLights.get().config.getWaterSensitiveCheck().get();
 
 		int luminance = 0;
@@ -129,7 +128,7 @@ public final class ItemLightSources extends LightSourceLoader<ItemLightSource> i
 
 		if (!matchedAny) {
 			if (stack.getItem() instanceof BlockItem blockItem) {
-				var state = blockItem.getBlock().defaultState();
+				var state = blockItem.getBlock().defaultBlockState();
 				var component = stack.getOrDefault(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY);
 
 				if (!component.isEmpty()) {
@@ -139,7 +138,7 @@ public final class ItemLightSources extends LightSourceLoader<ItemLightSource> i
 				luminance = state.getLightEmission();
 			} else {
 				// In case someone injects there.
-				luminance = Block.byItem(stack.getItem()).defaultState().getLightEmission();
+				luminance = Block.byItem(stack.getItem()).defaultBlockState().getLightEmission();
 			}
 		}
 

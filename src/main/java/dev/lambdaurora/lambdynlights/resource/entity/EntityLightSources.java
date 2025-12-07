@@ -27,7 +27,6 @@ import dev.yumi.mc.core.api.YumiEvents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +72,7 @@ public final class EntityLightSources extends LightSourceLoader<EntityLightSourc
 	}
 
 	@Override
-	public @NotNull Identifier id() {
+	public Identifier id() {
 		return RESOURCE_RELOADER_ID;
 	}
 
@@ -96,19 +95,19 @@ public final class EntityLightSources extends LightSourceLoader<EntityLightSourc
 	protected void doApply(HolderLookup.Provider registryLookup, List<EntityLightSource> lightSources) {
 		this.onRegisterEvent.invoker().onRegister(new RegisterContext() {
 			@Override
-			public @NotNull HolderLookup.Provider registryLookup() {
+			public HolderLookup.Provider registryLookup() {
 				return registryLookup;
 			}
 
 			@Override
-			public void register(@NotNull EntityLightSource entityLightSource) {
+			public void register(EntityLightSource entityLightSource) {
 				lightSources.add(entityLightSource);
 			}
 		});
 	}
 
 	@Override
-	protected @NotNull Optional<EntityLightSource> apply(DynamicOps<JsonElement> ops, LoadedLightSourceResource loadedData) {
+	protected Optional<EntityLightSource> apply(DynamicOps<JsonElement> ops, LoadedLightSourceResource loadedData) {
 		var loaded = EntityLightSource.CODEC.parse(ops, loadedData.data());
 
 		if (!loadedData.silenceError() || LambDynLightsConstants.FORCE_LOG_ERRORS) {
@@ -127,12 +126,12 @@ public final class EntityLightSources extends LightSourceLoader<EntityLightSourc
 	}
 
 	@Override
-	public @NotNull Event<Identifier, OnRegister> onRegisterEvent() {
+	public Event<Identifier, OnRegister> onRegisterEvent() {
 		return this.onRegisterEvent;
 	}
 
 	@Override
-	public int getLuminance(@NotNull Entity entity) {
+	public int getLuminance(Entity entity) {
 		int luminance = 0;
 
 		for (var data : this.lightSources) {

@@ -16,7 +16,6 @@ import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import dev.lambdaurora.lambdynlights.resource.entity.EntityLightSources;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.util.List;
@@ -38,12 +37,12 @@ public record DisplayEntityLuminance(List<EntityLuminance> luminance) implements
 	);
 
 	@Override
-	public @NotNull Type type() {
+	public Type type() {
 		return EntityLightSources.DISPLAY;
 	}
 
 	@Override
-	public @Range(from = 0, to = 15) int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity) {
+	public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
 		if (entity instanceof Display display && display.getPackedBrightnessOverride() == -1) {
 			return EntityLuminance.getLuminance(itemLightSourceManager, entity, this.luminance);
 		}
@@ -60,12 +59,12 @@ public record DisplayEntityLuminance(List<EntityLuminance> luminance) implements
 		private BlockDisplayLuminance() {}
 
 		@Override
-		public @NotNull Type type() {
+		public Type type() {
 			return EntityLightSources.BLOCK_DISPLAY;
 		}
 
 		@Override
-		public @Range(from = 0, to = 15) int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity) {
+		public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
 			if (entity instanceof Display.BlockDisplay display)
 				return display.getBlockState().getLightEmission();
 			return 0;
@@ -81,14 +80,14 @@ public record DisplayEntityLuminance(List<EntityLuminance> luminance) implements
 		private ItemDisplayLuminance() {}
 
 		@Override
-		public @NotNull Type type() {
+		public Type type() {
 			return EntityLightSources.ITEM_DISPLAY;
 		}
 
 		@Override
-		public @Range(from = 0, to = 15) int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity) {
+		public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
 			if (entity instanceof Display.ItemDisplay display)
-				return itemLightSourceManager.getLuminance(display.getItemStack(), display.isSubmergedInWater());
+				return itemLightSourceManager.getLuminance(display.getItemStack(), display.isUnderWater());
 			return 0;
 		}
 	}

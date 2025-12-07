@@ -11,7 +11,6 @@ package dev.lambdaurora.lambdynlights.engine.lookup;
 
 import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import net.minecraft.core.BlockPos;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an entry in a spatial lookup.
@@ -32,9 +31,9 @@ public interface SpatialLookupEntry {
 	 * @param pos the position
 	 * @return the computed dynamic light level at the specified position
 	 */
-	double getDynamicLightLevel(@NotNull BlockPos pos);
+	double getDynamicLightLevel(BlockPos pos);
 
-	static double lightAtPos(double x, double y, double z, @NotNull BlockPos pos, int luminance) {
+	static double lightAtPos(double x, double y, double z, BlockPos pos, int luminance) {
 		// Can't use Entity#squaredDistanceTo because of eye Y coordinate.
 		double dx = pos.getX() - x + 0.5;
 		double dy = pos.getY() - y + 0.5;

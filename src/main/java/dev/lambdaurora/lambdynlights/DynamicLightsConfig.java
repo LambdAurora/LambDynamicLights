@@ -22,9 +22,8 @@ import dev.lambdaurora.spruceui.option.SpruceOption;
 import dev.yumi.mc.core.api.YumiMods;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.Text;
-import net.minecraft.util.math.MathHelper;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,8 +66,8 @@ public class DynamicLightsConfig {
 			.normalize();
 	private final CommentedConfig config;
 	private final LambDynLights mod;
-	private DynamicLightsMode dynamicLightsMode;
-	private ChunkRebuildSchedulerMode chunkRebuildSchedulerMode;
+	private DynamicLightsMode dynamicLightsMode = DEFAULT_DYNAMIC_LIGHTS_MODE;
+	private ChunkRebuildSchedulerMode chunkRebuildSchedulerMode = DEFAULT_CHUNK_REBUILD_SCHEDULER_MODE;
 	private int slowTickingDistance;
 	private int slowerTickingDistance;
 	private final BooleanSettingEntry backgroundAdaptiveTicking;
@@ -83,8 +82,8 @@ public class DynamicLightsConfig {
 	private final BooleanSettingEntry debugActiveDynamicLightingCells;
 	private final BooleanSettingEntry debugDisplayDynamicLightingChunkRebuild;
 	private final BooleanSettingEntry debugDisplayHandlerBoundingBox;
-	private ExplosiveLightingMode creeperLightingMode;
-	private ExplosiveLightingMode tntLightingMode;
+	private ExplosiveLightingMode creeperLightingMode = DEFAULT_CREEPER_LIGHTING_MODE;
+	private ExplosiveLightingMode tntLightingMode = DEFAULT_TNT_LIGHTING_MODE;
 	private int debugCellDisplayRadius;
 	private int debugLightLevelRadius;
 
@@ -93,23 +92,23 @@ public class DynamicLightsConfig {
 	public final SpruceOption dynamicLightsModeOption = new SpruceCyclingOption("lambdynlights.option.mode",
 			amount -> this.setDynamicLightsMode(this.dynamicLightsMode.next()),
 			option -> option.getDisplayText(this.dynamicLightsMode.getTranslatedText()),
-			Text.translatable("lambdynlights.tooltip.mode.1")
-					.append(Text.literal("\n"))
-					.append(Text.translatable("lambdynlights.tooltip.mode.2", DynamicLightsMode.FASTEST.getTranslatedText(), DynamicLightsMode.FAST.getTranslatedText()))
-					.append(Text.literal("\n"))
-					.append(Text.translatable("lambdynlights.tooltip.mode.3", DynamicLightsMode.FANCY.getTranslatedText())));
+			Component.translatable("lambdynlights.tooltip.mode.1")
+					.append(Component.literal("\n"))
+					.append(Component.translatable("lambdynlights.tooltip.mode.2", DynamicLightsMode.FASTEST.getTranslatedText(), DynamicLightsMode.FAST.getTranslatedText()))
+					.append(Component.literal("\n"))
+					.append(Component.translatable("lambdynlights.tooltip.mode.3", DynamicLightsMode.FANCY.getTranslatedText())));
 
 	public final SpruceOption chunkRebuildSchedulerOption = new SpruceCyclingOption("lambdynlights.option.chunk_rebuild_scheduler",
 			amount -> this.setChunkRebuildSchedulerMode(this.chunkRebuildSchedulerMode.next()),
 			option -> option.getDisplayText(this.chunkRebuildSchedulerMode.getTranslatedText()),
-			Text.translatable("lambdynlights.option.chunk_rebuild_scheduler.tooltip",
+			Component.translatable("lambdynlights.option.chunk_rebuild_scheduler.tooltip",
 					ChunkRebuildSchedulerMode.CULLING.getTranslatedText(), ChunkRebuildSchedulerMode.IMMEDIATE.getTranslatedText()
 			)
 	);
 
 	public final AdaptiveTickingOption slowTickingOption = new AdaptiveTickingOption(
 			"slow",
-			() -> MathHelper.sqrt(this.slowTickingDistance) / 16.0,
+			() -> Mth.sqrt(this.slowTickingDistance) / 16.0,
 			chunks -> {
 				this.setSlowTickingChunks(chunks, true);
 
@@ -117,12 +116,12 @@ public class DynamicLightsConfig {
 					this.setSlowerTickingChunks(chunks, true);
 				}
 			},
-			Text.translatable("lambdynlights.option.adaptive_ticking.slow.tooltip")
+			Component.translatable("lambdynlights.option.adaptive_ticking.slow.tooltip")
 	);
 
 	public final AdaptiveTickingOption slowerTickingOption = new AdaptiveTickingOption(
 			"slower",
-			() -> MathHelper.sqrt(this.slowerTickingDistance) / 16.0,
+			() -> Mth.sqrt(this.slowerTickingDistance) / 16.0,
 			chunks -> {
 				this.setSlowerTickingChunks(chunks, true);
 
@@ -130,56 +129,56 @@ public class DynamicLightsConfig {
 					this.setSlowTickingChunks(chunks, true);
 				}
 			},
-			Text.translatable("lambdynlights.option.adaptive_ticking.slower.tooltip")
+			Component.translatable("lambdynlights.option.adaptive_ticking.slower.tooltip")
 	);
 
 
-	public DynamicLightsConfig(@NotNull LambDynLights mod) {
+	public DynamicLightsConfig(LambDynLights mod) {
 		this.mod = mod;
 		this.config = CommentedConfig.inMemory();
 
 		this.backgroundAdaptiveTicking = new BooleanSettingEntry("adaptive_ticking.background_sleep", true, this.config,
-				Text.translatable("lambdynlights.option.adaptive_ticking.background_sleep.tooltip")
+		Component.translatable("lambdynlights.option.adaptive_ticking.background_sleep.tooltip")
 		);
 		this.entitiesLightSource = new BooleanSettingEntry("light_sources.entities", DEFAULT_ENTITIES_LIGHT_SOURCE, this.config,
-				Text.translatable("lambdynlights.tooltip.entities"));
+				Component.translatable("lambdynlights.tooltip.entities"));
 		this.selfLightSource = new BooleanSettingEntry("light_sources.self", DEFAULT_SELF_LIGHT_SOURCE, this.config,
-				Text.translatable("lambdynlights.tooltip.self_light_source"))
+				Component.translatable("lambdynlights.tooltip.self_light_source"))
 				.withOnSet(value -> {
 					if (!value) this.mod.removeLightSources(source ->
 							source instanceof LocalPlayer player && player == Minecraft.getInstance().player
 					);
 				});
 		this.waterSensitiveCheck = new BooleanSettingEntry("light_sources.water_sensitive_check", DEFAULT_WATER_SENSITIVE_CHECK, this.config,
-				Text.translatable("lambdynlights.tooltip.water_sensitive")
+				Component.translatable("lambdynlights.tooltip.water_sensitive")
 		);
 		this.beamLighting = new BooleanSettingEntry(
 				"light_sources.beam", true, this.config,
-				Text.translatable("lambdynlights.option.light_sources.beam.tooltip")
+				Component.translatable("lambdynlights.option.light_sources.beam.tooltip")
 		);
 		this.guardianLaser = new BooleanSettingEntry(
 				"light_sources.guardian_laser", true, this.config,
-				Text.translatable("lambdynlights.option.light_sources.guardian_laser.tooltip")
+				Component.translatable("lambdynlights.option.light_sources.guardian_laser.tooltip")
 		);
 		this.sonicBoomLighting = new BooleanSettingEntry(
 				"light_sources.sonic_boom", true, this.config,
-				Text.translatable("lambdynlights.option.light_sources.sonic_boom.tooltip")
+				Component.translatable("lambdynlights.option.light_sources.sonic_boom.tooltip")
 		);
 		this.glowingEffectLighting = new BooleanSettingEntry(
 				"light_sources.glowing_effect", true, this.config,
-				Text.translatable("lambdynlights.option.light_sources.glowing_effect.tooltip")
+				Component.translatable("lambdynlights.option.light_sources.glowing_effect.tooltip")
 		);
 		this.debugActiveDynamicLightingCells = new BooleanSettingEntry(
 				"debug.active_dynamic_lighting_cells", false, this.config,
-				Text.translatable("lambdynlights.option.debug.active_dynamic_lighting_cells.tooltip")
+				Component.translatable("lambdynlights.option.debug.active_dynamic_lighting_cells.tooltip")
 		);
 		this.debugDisplayDynamicLightingChunkRebuild = new BooleanSettingEntry(
 				"debug.display_dynamic_lighting_chunk_rebuild", false, this.config,
-				Text.translatable("lambdynlights.option.debug.display_dynamic_lighting_chunk_rebuild.tooltip")
+				Component.translatable("lambdynlights.option.debug.display_dynamic_lighting_chunk_rebuild.tooltip")
 		);
 		this.debugDisplayHandlerBoundingBox = new BooleanSettingEntry(
 				"debug.display_behavior_bounding_box", false, this.config,
-				Text.translatable("lambdynlights.option.debug.display_behavior_bounding_box.tooltip")
+				Component.translatable("lambdynlights.option.debug.display_behavior_bounding_box.tooltip")
 		);
 
 		this.slowTickingOption.setCompanion(this.slowerTickingOption);
@@ -295,11 +294,11 @@ public class DynamicLightsConfig {
 		this.maybeSerialize().ifPresent(data -> SAVE_EXECUTOR.execute(() -> this.doSave(data)));
 	}
 
-	private @NotNull String serialize() {
+	private String serialize() {
 		return new TomlWriter().writeToString(this.config);
 	}
 
-	private @NotNull Optional<String> maybeSerialize() {
+	private Optional<String> maybeSerialize() {
 		var data = this.serialize();
 		int hash = data.hashCode();
 
@@ -355,7 +354,7 @@ public class DynamicLightsConfig {
 	 *
 	 * @param mode the dynamic lights mode
 	 */
-	public void setDynamicLightsMode(@NotNull DynamicLightsMode mode) {
+	public void setDynamicLightsMode(DynamicLightsMode mode) {
 		if (this.dynamicLightsMode.isEnabled() != mode.isEnabled()) {
 			this.mod.shouldForceRefresh = true;
 		}
@@ -367,7 +366,7 @@ public class DynamicLightsConfig {
 	/**
 	 * {@return the chunk rebuild scheduler mode}
 	 */
-	public @NotNull ChunkRebuildSchedulerMode getChunkRebuildSchedulerMode() {
+	public ChunkRebuildSchedulerMode getChunkRebuildSchedulerMode() {
 		return this.chunkRebuildSchedulerMode;
 	}
 
@@ -376,7 +375,7 @@ public class DynamicLightsConfig {
 	 *
 	 * @param mode the dynamic lights mode
 	 */
-	public void setChunkRebuildSchedulerMode(@NotNull ChunkRebuildSchedulerMode mode) {
+	public void setChunkRebuildSchedulerMode(ChunkRebuildSchedulerMode mode) {
 		this.chunkRebuildSchedulerMode = mode;
 		this.config.set("chunk_rebuild_scheduler", mode.getName());
 	}
@@ -390,7 +389,7 @@ public class DynamicLightsConfig {
 	}
 
 	private void setSlowTickingChunks(int chunks, boolean save) {
-		this.slowTickingDistance = MathHelper.square(chunks * 16);
+		this.slowTickingDistance = Mth.square(chunks * 16);
 
 		if (save) {
 			this.config.set("adaptive_ticking.slow", chunks);
@@ -398,7 +397,7 @@ public class DynamicLightsConfig {
 	}
 
 	private void setSlowerTickingChunks(int chunks, boolean save) {
-		this.slowerTickingDistance = MathHelper.square(chunks * 16);
+		this.slowerTickingDistance = Mth.square(chunks * 16);
 
 		if (save) {
 			this.config.set("adaptive_ticking.slower", chunks);
@@ -447,7 +446,7 @@ public class DynamicLightsConfig {
 	 *
 	 * @param lightingMode the Creeper dynamic lighting mode
 	 */
-	public void setCreeperLightingMode(@NotNull ExplosiveLightingMode lightingMode) {
+	public void setCreeperLightingMode(ExplosiveLightingMode lightingMode) {
 		this.creeperLightingMode = lightingMode;
 		this.config.set("light_sources.creeper", lightingMode.getName());
 	}
@@ -466,7 +465,7 @@ public class DynamicLightsConfig {
 	 *
 	 * @param lightingMode the TNT dynamic lighting mode
 	 */
-	public void setTntLightingMode(@NotNull ExplosiveLightingMode lightingMode) {
+	public void setTntLightingMode(ExplosiveLightingMode lightingMode) {
 		this.tntLightingMode = lightingMode;
 		this.config.set("light_sources.tnt", lightingMode.getName());
 	}

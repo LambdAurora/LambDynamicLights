@@ -14,7 +14,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.util.ArrayList;
@@ -45,13 +44,13 @@ public record WaterSensitiveEntityLuminance(
 	);
 
 	@Override
-	public @NotNull Type type() {
+	public Type type() {
 		return EntityLuminance.Type.WATER_SENSITIVE;
 	}
 
 	@Override
-	public @Range(from = 0, to = 15) int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity) {
-		boolean submergedInWater = entity.isSubmergedInWater();
+	public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
+		boolean submergedInWater = entity.isUnderWater();
 
 		if (submergedInWater) {
 			return EntityLuminance.getLuminance(itemLightSourceManager, entity, this.inWater);
@@ -65,7 +64,7 @@ public record WaterSensitiveEntityLuminance(
 	 *
 	 * @return the builder
 	 */
-	public static @NotNull Builder builder() {
+	public static Builder builder() {
 		return new Builder();
 	}
 
@@ -83,7 +82,7 @@ public record WaterSensitiveEntityLuminance(
 		 * @return {@code this}
 		 */
 		@Contract("_ -> this")
-		public Builder outOfWater(@NotNull EntityLuminance... luminances) {
+		public Builder outOfWater(EntityLuminance... luminances) {
 			this.outOfWater.addAll(List.of(luminances));
 			return this;
 		}
@@ -95,7 +94,7 @@ public record WaterSensitiveEntityLuminance(
 		 * @return {@code this}
 		 */
 		@Contract("_ -> this")
-		public Builder outOfWater(@NotNull List<EntityLuminance> luminances) {
+		public Builder outOfWater(List<EntityLuminance> luminances) {
 			this.outOfWater.addAll(luminances);
 			return this;
 		}
@@ -107,7 +106,7 @@ public record WaterSensitiveEntityLuminance(
 		 * @return {@code this}
 		 */
 		@Contract("_ -> this")
-		public Builder inWater(@NotNull EntityLuminance... luminances) {
+		public Builder inWater(EntityLuminance... luminances) {
 			this.inWater.addAll(List.of(luminances));
 			return this;
 		}
@@ -119,7 +118,7 @@ public record WaterSensitiveEntityLuminance(
 		 * @return {@code this}
 		 */
 		@Contract("_ -> this")
-		public Builder inWater(@NotNull List<EntityLuminance> luminances) {
+		public Builder inWater(List<EntityLuminance> luminances) {
 			this.inWater.addAll(luminances);
 			return this;
 		}
@@ -129,7 +128,7 @@ public record WaterSensitiveEntityLuminance(
 		 *
 		 * @return the resulting {@link WaterSensitiveEntityLuminance}
 		 */
-		public @NotNull WaterSensitiveEntityLuminance build() {
+		public WaterSensitiveEntityLuminance build() {
 			return new WaterSensitiveEntityLuminance(List.copyOf(this.outOfWater), List.copyOf(this.inWater));
 		}
 	}

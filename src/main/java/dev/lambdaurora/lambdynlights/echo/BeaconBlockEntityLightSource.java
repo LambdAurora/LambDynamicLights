@@ -10,6 +10,8 @@
 package dev.lambdaurora.lambdynlights.echo;
 
 import dev.lambdaurora.lambdynlights.api.behavior.BeaconLightBehavior;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a beacon beam light source.
@@ -21,7 +23,8 @@ import dev.lambdaurora.lambdynlights.api.behavior.BeaconLightBehavior;
 public interface BeaconBlockEntityLightSource {
 	int lambdynlights$getLevels();
 
-	BeaconLightBehavior lambdynlights$getDynamicLightBeam();
+	@Contract(pure = true)
+	@Nullable BeaconLightBehavior lambdynlights$getDynamicLightBeam();
 
-	void lambdynlights$setDynamicLightBeam(BeaconLightBehavior beam);
+	void lambdynlights$setDynamicLightBeam(@Nullable BeaconLightBehavior beam);
 }

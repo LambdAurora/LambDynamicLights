@@ -14,9 +14,9 @@ import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.option.SpruceDoubleOption;
 import dev.lambdaurora.spruceui.widget.SpruceWidget;
 import dev.lambdaurora.spruceui.widget.option.SpruceOptionSliderWidget;
-import net.minecraft.TextFormatting;
-import net.minecraft.network.chat.Text;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.IntConsumer;
 import java.util.function.Supplier;
@@ -29,15 +29,15 @@ import java.util.function.Supplier;
  * @since 4.8.0
  */
 public final class AdaptiveTickingOption extends SpruceDoubleOption {
-	private final Text tooltip;
+	private final Component tooltip;
 	private Runnable setCallback = () -> {};
-	private Slider currentSlider;
+	private @Nullable Slider currentSlider;
 
 	public AdaptiveTickingOption(
 			String key,
 			Supplier<Double> getter,
 			IntConsumer setter,
-			@NotNull Text tooltip
+			Component tooltip
 	) {
 		super(
 				"lambdynlights.option.adaptive_ticking." + key,
@@ -47,8 +47,8 @@ public final class AdaptiveTickingOption extends SpruceDoubleOption {
 					double value = option.get();
 
 					return option.getDisplayText(value == 33
-							? SpruceTexts.OPTIONS_OFF.copy().withStyle(TextFormatting.RED)
-							: Text.literal(String.valueOf((int) value))
+							? SpruceTexts.OPTIONS_OFF.copy().withStyle(ChatFormatting.RED)
+							: Component.literal(String.valueOf((int) value))
 					);
 				},
 				tooltip

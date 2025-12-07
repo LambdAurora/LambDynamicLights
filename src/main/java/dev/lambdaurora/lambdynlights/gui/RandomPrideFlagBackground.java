@@ -23,7 +23,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
@@ -44,9 +44,9 @@ public class RandomPrideFlagBackground implements Background {
 	private static final IntList DEFAULT_RAINBOW_COLORS = IntList.of(
 			0xffff0018, 0xffffa52c, 0xffffff41, 0xff008018, 0xff0000f9, 0xff86007d
 	);
-	private static final PrideFlagShape PROGRESS = PrideFlagShapes.get(Identifier.of("pride", "progress"));
+	private static final PrideFlagShape PROGRESS = PrideFlagShapes.get(Identifier.fromNamespaceAndPath("pride", "progress"));
 	private static final PrideFlagShape HORIZONTAL_STRIPES
-			= PrideFlagShapes.get(Identifier.of("pride", "horizontal_stripes"));
+			= PrideFlagShapes.get(Identifier.fromNamespaceAndPath("pride", "horizontal_stripes"));
 	private static final Random RANDOM = new Random();
 
 	private final PrideFlag flag;
@@ -70,8 +70,8 @@ public class RandomPrideFlagBackground implements Background {
 
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		if (this.nuhUh || this.flag.getShape() == HORIZONTAL_STRIPES) {
-			var model = graphics.matrixStack().peek().model();
-			var tessellator = Tessellator.getInstance();
+			var model = graphics.pose().last().pose();
+			var tessellator = Tesselator.getInstance();
 			var buffer = tessellator.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR);
 
 			var colors = this.getColors();
@@ -83,22 +83,22 @@ public class RandomPrideFlagBackground implements Background {
 			float leftY = y;
 
 			int color = colors.getInt(0);
-			vertex(buffer, model,x + width, rightY + partHeight, 0).color(color);
-			vertex(buffer, model,x + width, rightY, 0).color(color);
-			vertex(buffer, model,x, leftY, 0).color(color);
+			vertex(buffer, model,x + width, rightY + partHeight, 0).setColor(color);
+			vertex(buffer, model,x + width, rightY, 0).setColor(color);
+			vertex(buffer, model,x, leftY, 0).setColor(color);
 
 			rightY += partHeight;
 
 			for (int i = 1; i < colors.size() - 1; i++) {
 				color = colors.getInt(i);
 
-				vertex(buffer, model,x + width, rightY + partHeight, 0).color(color);
-				vertex(buffer, model,x + width, rightY, 0).color(color);
-				vertex(buffer, model,x, leftY, 0).color(color);
+				vertex(buffer, model,x + width, rightY + partHeight, 0).setColor(color);
+				vertex(buffer, model,x + width, rightY, 0).setColor(color);
+				vertex(buffer, model,x, leftY, 0).setColor(color);
 
-				vertex(buffer, model,x + width, rightY + partHeight, 0).color(color);
-				vertex(buffer, model,x, leftY, 0).color(color);
-				vertex(buffer, model,x, leftY + partHeight, 0).color(color);
+				vertex(buffer, model,x + width, rightY + partHeight, 0).setColor(color);
+				vertex(buffer, model,x, leftY, 0).setColor(color);
+				vertex(buffer, model,x, leftY + partHeight, 0).setColor(color);
 
 				rightY += partHeight;
 				leftY += partHeight;
@@ -106,9 +106,9 @@ public class RandomPrideFlagBackground implements Background {
 
 			// Last one
 			color = colors.getInt(colors.size() - 1);
-			vertex(buffer, model,x + width, rightY, 0).color(color);
-			vertex(buffer, model,x, leftY, 0).color(color);
-			vertex(buffer, model,x, y + height, 0).color(color);
+			vertex(buffer, model,x + width, rightY, 0).setColor(color);
+			vertex(buffer, model,x, leftY, 0).setColor(color);
+			vertex(buffer, model,x, y + height, 0).setColor(color);
 
 			MeshData builtBuffer = buffer.build();
 			if (builtBuffer != null) {
@@ -116,20 +116,20 @@ public class RandomPrideFlagBackground implements Background {
 			}
 			tessellator.clear();
 		} else {
-			this.flag.render(graphics.matrixStack(), x, y, widget.getWidth(), widget.getHeight());
+			this.flag.render(graphics.pose(), x, y, widget.getWidth(), widget.getHeight());
 		}
 
 		SECOND_LAYER.render(graphics, widget, vOffset, mouseX, mouseY, delta);
 
 		if (this.nuhUh) {
-			var text = Text.literal("Nuh uh, you're not going to remove this, try harder :3c");
+			var text = Component.literal("Nuh uh, you're not going to remove this, try harder :3c");
 			var font = Minecraft.getInstance().font;
-			var lines = font.wrapLines(text, width - 8);
+			var lines = font.split(text, width - 8);
 
 			int startY = y + height - 24 - lines.size() * (font.lineHeight + 2);
 
 			for (var line : lines) {
-				graphics.drawCenteredShadowedText(font, line, x + width / 2, startY, 0xffff0000);
+				graphics.drawCenteredString(font, line, x + width / 2, startY, 0xffff0000);
 				startY += font.lineHeight + 2;
 			}
 		}

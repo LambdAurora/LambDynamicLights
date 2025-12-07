@@ -12,7 +12,7 @@ package dev.lambdaurora.lambdynlights.mixin.sodium;
 import dev.lambdaurora.lambdynlights.gui.SettingsScreen;
 import dev.lambdaurora.lambdynlights.util.SodiumOptionPage;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
@@ -31,7 +31,7 @@ public class SodiumOptionsGuiMixin extends Screen {
 	@Unique
 	private Object lambDynLights;
 
-	protected SodiumOptionsGuiMixin(Text title) {
+	protected SodiumOptionsGuiMixin(Component title) {
 		super(title);
 	}
 
@@ -45,7 +45,7 @@ public class SodiumOptionsGuiMixin extends Screen {
 	@Inject(method = "setPage", at = @At("HEAD"), remap = false, cancellable = true)
 	private void lambdynlights$onSetPage(@Coerce Object page, CallbackInfo ci) {
 		if (page == this.lambDynLights) {
-			this.client.setScreen(new SettingsScreen(this));
+			this.minecraft.setScreen(new SettingsScreen(this));
 			ci.cancel();
 		}
 	}

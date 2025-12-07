@@ -11,7 +11,7 @@ package dev.lambdaurora.lambdynlights.mixin.sodium;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -23,5 +23,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface RSOTabAccessor {
 	@Final
 	@Accessor(value = "title", remap = false)
-	Text getTitle();
+	Component getTitle();
 }

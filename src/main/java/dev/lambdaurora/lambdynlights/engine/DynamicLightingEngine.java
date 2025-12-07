@@ -18,16 +18,13 @@ import dev.lambdaurora.lambdynlights.engine.source.DynamicLightSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Represents the dynamic lighting engine.
@@ -41,11 +38,11 @@ public final class DynamicLightingEngine implements CellHasher {
 
 	public static final double MAX_RADIUS = 7.75;
 	public static final double MAX_RADIUS_SQUARED = MAX_RADIUS * MAX_RADIUS;
-	public static final int CELL_SIZE = MathHelper.ceil(MAX_RADIUS);
+	public static final int CELL_SIZE = Mth.ceil(MAX_RADIUS);
 	public static final int DEFAULT_LIGHT_SOURCES = 1024;
 	private static final Vec3i[] CELL_OFFSETS;
 
-	private SpatialLookupEntry[] spatialLookupEntries;
+	private @Nullable SpatialLookupEntry[] spatialLookupEntries;
 	private int[] startIndices;
 	private final long[] computeSpatialLookupTimes = new long[40];
 	private int lastEntryCount = 0;
@@ -54,7 +51,8 @@ public final class DynamicLightingEngine implements CellHasher {
 	public DynamicLightingEngine(DynamicLightsConfig config) {
 		this.config = config;
 
-		this.resize(DEFAULT_LIGHT_SOURCES);
+		this.spatialLookupEntries = new SpatialLookupEntry[DEFAULT_LIGHT_SOURCES];
+		this.startIndices = new int[DEFAULT_LIGHT_SOURCES];
 	}
 
 	/**
@@ -82,14 +80,14 @@ public final class DynamicLightingEngine implements CellHasher {
 	 * @param pos the position
 	 * @return the dynamic light level at the specified position
 	 */
-	public double getDynamicLightLevel(@NotNull BlockPos pos) {
+	public double getDynamicLightLevel(BlockPos pos) {
 		if (!this.config.getDynamicLightsMode().isEnabled()) {
 			return 0;
 		}
 
 		double result = 0;
 
-		var currentCell = new BlockPos.Mutable(
+		var currentCell = new BlockPos.MutableBlockPos(
 				positionToCell(pos.getX()),
 				positionToCell(pos.getY()),
 				positionToCell(pos.getZ())
@@ -113,7 +111,7 @@ public final class DynamicLightingEngine implements CellHasher {
 			}
 		}
 
-		return MathHelper.clamp(result, 0, 15);
+		return Mth.clamp(result, 0, 15);
 	}
 
 	/**
@@ -169,7 +167,7 @@ public final class DynamicLightingEngine implements CellHasher {
 	}
 
 	private void resize(int newLength) {
-		if (this.spatialLookupEntries != null && this.spatialLookupEntries.length == newLength) return;
+		if (this.spatialLookupEntries.length == newLength) return;
 
 		this.spatialLookupEntries = new SpatialLookupEntry[newLength];
 		this.startIndices = new int[newLength];
@@ -195,13 +193,15 @@ public final class DynamicLightingEngine implements CellHasher {
 		}
 
 		for (i = 0; i < this.spatialLookupEntries.length; i++) {
-			if (this.spatialLookupEntries[i] == null) {
+			var entry = this.spatialLookupEntries[i];
+
+			if (entry == null) {
 				this.lastEntryCount = i;
 				break;
 			}
 
-			int key = this.spatialLookupEntries[i].cellKey();
-			int previousKey = i == 0 ? Integer.MAX_VALUE : this.spatialLookupEntries[i - 1].cellKey();
+			int key = entry.cellKey();
+			int previousKey = i == 0 ? Integer.MAX_VALUE : Objects.requireNonNull(this.spatialLookupEntries[i - 1]).cellKey();
 
 			if (key != previousKey) {
 				this.startIndices[key] = i;

@@ -11,7 +11,6 @@ package dev.lambdaurora.lambdynlights.api.behavior;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.util.OptionalInt;
@@ -42,7 +41,7 @@ public record BeaconLightBehavior(int x, OptionalInt y, int z, @Range(from = 0, 
 	}
 
 	@Override
-	public @NotNull BoundingBox getBoundingBox() {
+	public BoundingBox getBoundingBox() {
 		return new BoundingBox(this.x, this.y.orElse(this.getWorldBottom()), this.z, this.x + 1, this.getWorldTop(), this.z + 1);
 	}
 

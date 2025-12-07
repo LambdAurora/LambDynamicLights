@@ -11,13 +11,12 @@ package dev.lambdaurora.lambdynlights.api.entity;
 
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
 import dev.yumi.commons.event.Event;
-import net.minecraft.advancements.critereon.EntityTypePredicate;
+import net.minecraft.advancements.criterion.EntityTypePredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.util.List;
@@ -38,12 +37,12 @@ public interface EntityLightSourceManager {
 	 *
 	 * @since 4.6.0
 	 */
-	Identifier RESOURCE_RELOADER_ID = Identifier.of("lambdynlights", "entity");
+	Identifier RESOURCE_RELOADER_ID = Identifier.fromNamespaceAndPath("lambdynlights", "entity");
 
 	/**
 	 * {@return the registration event for entity light sources}
 	 */
-	@NotNull Event<Identifier, OnRegister> onRegisterEvent();
+	Event<Identifier, OnRegister> onRegisterEvent();
 
 	/**
 	 * {@return the luminance value of the entity}
@@ -51,7 +50,7 @@ public interface EntityLightSourceManager {
 	 * @param entity the entity
 	 */
 	@Range(from = 0, to = 15)
-	int getLuminance(@NotNull Entity entity);
+	int getLuminance(Entity entity);
 
 	/**
 	 * Represents the registration event of entity light sources.
@@ -63,7 +62,7 @@ public interface EntityLightSourceManager {
 		 *
 		 * @param context the registration context
 		 */
-		void onRegister(@NotNull RegisterContext context);
+		void onRegister(RegisterContext context);
 	}
 
 	/**
@@ -75,7 +74,7 @@ public interface EntityLightSourceManager {
 		 *
 		 * @since 4.6.0
 		 */
-		@NotNull HolderLookup.Provider registryLookup();
+		HolderLookup.Provider registryLookup();
 
 		/**
 		 * {@return the access to registries}
@@ -83,7 +82,7 @@ public interface EntityLightSourceManager {
 		 * @deprecated Use {@link #registryLookup()} instead.
 		 */
 		@Deprecated(forRemoval = true, since = "4.6.0")
-		default @NotNull RegistryAccess registryAccess() {
+		default RegistryAccess registryAccess() {
 			return (RegistryAccess) this.registryLookup();
 		}
 
@@ -92,7 +91,7 @@ public interface EntityLightSourceManager {
 		 *
 		 * @param entityLightSource the entity light source to register
 		 */
-		void register(@NotNull EntityLightSource entityLightSource);
+		void register(EntityLightSource entityLightSource);
 
 		/**
 		 * Registers a light source of the given entity with the given luminance.
@@ -102,7 +101,7 @@ public interface EntityLightSourceManager {
 		 * @see #register(EntityLightSource)
 		 * @see #register(EntityType, EntityLuminance...)
 		 */
-		default void register(@NotNull EntityType<?> entityType, @Range(from = 0, to = 15) int luminance) {
+		default void register(EntityType<?> entityType, @Range(from = 0, to = 15) int luminance) {
 			this.register(new EntityLightSource(
 					new EntityLightSource.EntityPredicate(
 							Optional.of(EntityTypePredicate.of(entityType)),
@@ -126,7 +125,7 @@ public interface EntityLightSourceManager {
 		 * @see #register(EntityLightSource)
 		 * @see #register(EntityType, int)
 		 */
-		default void register(@NotNull EntityType<?> entityType, EntityLuminance... luminance) {
+		default void register(EntityType<?> entityType, EntityLuminance... luminance) {
 			this.register(new EntityLightSource(
 					new EntityLightSource.EntityPredicate(
 							Optional.of(EntityTypePredicate.of(entityType)),

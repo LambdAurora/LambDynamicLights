@@ -12,10 +12,8 @@ package dev.lambdaurora.lambdynlights.platform.fabric;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.LambDynLightsConstants;
 import dev.lambdaurora.lambdynlights.platform.Platform;
-import dev.lambdaurora.lambdynlights.platform.PlatformProvider;
 import dev.lambdaurora.lambdynlights.resource.LightSourceLoader;
 import dev.yumi.commons.event.ListenableEvent;
-import dev.yumi.mc.core.api.ModContainer;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
@@ -24,10 +22,9 @@ import net.fabricmc.fabric.api.resource.conditions.v1.ResourceCondition;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceManager;
-import net.minecraft.resources.io.ResourceType;
-import net.minecraft.util.profiling.Profiler;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
@@ -41,15 +38,10 @@ import java.util.function.Consumer;
  * @version 4.6.0
  * @since 4.5.0
  */
-public final class FabricPlatform implements Platform, PlatformProvider {
-	@Override
-	public Platform getPlatform(ModContainer mod) {
-		return this;
-	}
-
+public final class FabricPlatform implements Platform {
 	@Override
 	public void registerReloader(LightSourceLoader<?> reloader) {
-		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES)
+		ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
 				.registerReloadListener(new IdentifiableResourceReloadListener() {
 					@Override
 					public Identifier getFabricId() {
@@ -63,10 +55,10 @@ public final class FabricPlatform implements Platform, PlatformProvider {
 
 					@Override
 					public CompletableFuture<Void> reload(
-							Synchronizer synchronizer,
+							PreparationBarrier synchronizer,
 							ResourceManager resourceManager,
-							Profiler prepareProfiler,
-							Profiler applyProfiler,
+							ProfilerFiller prepareProfiler,
+							ProfilerFiller applyProfiler,
 							Executor prepareExecutor,
 							Executor applyExecutor
 					) {
@@ -83,12 +75,12 @@ public final class FabricPlatform implements Platform, PlatformProvider {
 	public ListenableEvent<Identifier, Consumer<HolderLookup.Provider>> getTagLoadedEvent() {
 		return new ListenableEvent<>() {
 			@Override
-			public @NotNull Identifier defaultPhaseId() {
+			public Identifier defaultPhaseId() {
 				return Event.DEFAULT_PHASE;
 			}
 
 			@Override
-			public void register(@NotNull Identifier phaseIdentifier, @NotNull Consumer<HolderLookup.Provider> listener) {
+			public void register(Identifier phaseIdentifier, Consumer<HolderLookup.Provider> listener) {
 				CommonLifecycleEvents.TAGS_LOADED.register(
 						phaseIdentifier,
 						(registries, client) -> {if (client) listener.accept(registries);}
@@ -96,7 +88,7 @@ public final class FabricPlatform implements Platform, PlatformProvider {
 			}
 
 			@Override
-			public void addPhaseOrdering(@NotNull Identifier firstPhase, @NotNull Identifier secondPhase) {
+			public void addPhaseOrdering(Identifier firstPhase, Identifier secondPhase) {
 				CommonLifecycleEvents.TAGS_LOADED.addPhaseOrdering(firstPhase, secondPhase);
 			}
 		};

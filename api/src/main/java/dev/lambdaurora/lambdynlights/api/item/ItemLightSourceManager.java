@@ -10,13 +10,12 @@
 package dev.lambdaurora.lambdynlights.api.item;
 
 import dev.yumi.commons.event.Event;
-import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -34,19 +33,19 @@ public interface ItemLightSourceManager {
 	 *
 	 * @since 4.6.0
 	 */
-	Identifier RESOURCE_RELOADER_ID = Identifier.of("lambdynlights", "item");
+	Identifier RESOURCE_RELOADER_ID = Identifier.fromNamespaceAndPath("lambdynlights", "item");
 
 	/**
 	 * {@return the registration event for item light sources}
 	 */
-	@NotNull Event<Identifier, OnRegister> onRegisterEvent();
+	Event<Identifier, OnRegister> onRegisterEvent();
 
 	/**
 	 * {@return the luminance value of the item stack}
 	 *
 	 * @param stack the item stack
 	 */
-	default @Range(from = 0, to = 15) int getLuminance(@NotNull ItemStack stack) {
+	default @Range(from = 0, to = 15) int getLuminance(ItemStack stack) {
 		return this.getLuminance(stack, false);
 	}
 
@@ -57,7 +56,7 @@ public interface ItemLightSourceManager {
 	 * @param submergedInWater {@code true} if the stack is submerged in water, else {@code false}
 	 */
 	@Range(from = 0, to = 15)
-	int getLuminance(@NotNull ItemStack stack, boolean submergedInWater);
+	int getLuminance(ItemStack stack, boolean submergedInWater);
 
 	/**
 	 * Represents the registration event of item light sources.
@@ -69,7 +68,7 @@ public interface ItemLightSourceManager {
 		 *
 		 * @param context the registration context
 		 */
-		void onRegister(@NotNull RegisterContext context);
+		void onRegister(RegisterContext context);
 	}
 
 	/**
@@ -81,7 +80,7 @@ public interface ItemLightSourceManager {
 		 *
 		 * @since 4.6.0
 		 */
-		@NotNull HolderLookup.Provider registryLookup();
+		HolderLookup.Provider registryLookup();
 
 		/**
 		 * {@return the access to registries}
@@ -89,7 +88,7 @@ public interface ItemLightSourceManager {
 		 * @deprecated Use {@link #registryLookup()} instead.
 		 */
 		@Deprecated(forRemoval = true, since = "4.6.0")
-		default @NotNull RegistryAccess registryAccess() {
+		default RegistryAccess registryAccess() {
 			return (RegistryAccess) this.registryLookup();
 		}
 
@@ -98,7 +97,7 @@ public interface ItemLightSourceManager {
 		 *
 		 * @param itemLightSource the item light source to register
 		 */
-		void register(@NotNull ItemLightSource itemLightSource);
+		void register(ItemLightSource itemLightSource);
 
 		/**
 		 * Registers a light source of the given item with the given luminance.
@@ -108,7 +107,7 @@ public interface ItemLightSourceManager {
 		 * @see #register(ItemLightSource)
 		 * @see #register(ItemLike, ItemLuminance)
 		 */
-		default void register(@NotNull ItemLike item, @Range(from = 0, to = 15) int luminance) {
+		default void register(ItemLike item, @Range(from = 0, to = 15) int luminance) {
 			this.register(new ItemLightSource(
 					ItemPredicate.Builder.item()
 							.of(item)
@@ -125,7 +124,7 @@ public interface ItemLightSourceManager {
 		 * @see #register(ItemLightSource)
 		 * @see #register(ItemLike, int)
 		 */
-		default void register(@NotNull ItemLike item, @NotNull ItemLuminance luminance) {
+		default void register(ItemLike item, ItemLuminance luminance) {
 			this.register(new ItemLightSource(
 					ItemPredicate.Builder.item()
 							.of(item)

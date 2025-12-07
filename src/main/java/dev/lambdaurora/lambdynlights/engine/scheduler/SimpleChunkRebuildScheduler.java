@@ -13,7 +13,6 @@ import dev.lambdaurora.lambdynlights.engine.source.DynamicLightSource;
 import dev.lambdaurora.lambdynlights.util.DynamicLightDebugRenderer;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -32,18 +31,18 @@ public final class SimpleChunkRebuildScheduler extends ChunkRebuildScheduler {
 	}
 
 	@Override
-	public void appendF3Debug(@NotNull Consumer<String> consumer) {
+	public void appendF3Debug(Consumer<String> consumer) {
 		consumer.accept("Scheduled Chunk Rebuilds (Immediate): %d".formatted(this.rebuildRequestedLastTick));
 	}
 
 	@Override
-	protected void accept(@NotNull DynamicLightSource lightSource, @NotNull Long2ObjectMap<ChunkRebuildStatus> chunks) {
+	protected void accept(DynamicLightSource lightSource, Long2ObjectMap<ChunkRebuildStatus> chunks) {
 		this.rebuildRequestedLastTick += chunks.size();
 		chunks.keySet().forEach(this::scheduleChunkRebuild);
 	}
 
 	@Override
-	protected void remove(@NotNull DynamicLightSource lightSource, @NotNull LongSet chunks) {
+	protected void remove(DynamicLightSource lightSource, LongSet chunks) {
 		this.rebuildRequestedLastTick += chunks.size();
 		chunks.forEach(this::scheduleChunkRebuild);
 	}

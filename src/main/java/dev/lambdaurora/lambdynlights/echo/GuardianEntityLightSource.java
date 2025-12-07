@@ -13,7 +13,9 @@ import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.api.behavior.LineLightBehavior;
 import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import net.minecraft.world.entity.monster.Guardian;
+import org.jetbrains.annotations.Contract;
 import org.joml.Vector3d;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Guardian laser light source.
@@ -23,9 +25,10 @@ import org.joml.Vector3d;
  * @since 4.0.0
  */
 public interface GuardianEntityLightSource {
-	LineLightBehavior lambdynlights$getDynamicLightBeam();
+	@Contract(pure = true)
+	@Nullable LineLightBehavior lambdynlights$getDynamicLightBeam();
 
-	void lambdynlights$setDynamicLightBeam(LineLightBehavior beam);
+	void lambdynlights$setDynamicLightBeam(@Nullable LineLightBehavior beam);
 
 	static void tick(Guardian guardian) {
 		var lightSource = (GuardianEntityLightSource) guardian;
@@ -49,7 +52,7 @@ public interface GuardianEntityLightSource {
 			if (lightSource.lambdynlights$getDynamicLightBeam() == null) {
 				beam = new LineLightBehavior(
 						new Vector3d(guardian.getX(), guardian.getY(), guardian.getZ()),
-						new Vector3d(target.getX(), target.getY() + target.getBoundingHeight() * 0.5, target.getZ()),
+						new Vector3d(target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ()),
 						7
 				) {
 					@Override
@@ -62,7 +65,7 @@ public interface GuardianEntityLightSource {
 			} else {
 				beam = lightSource.lambdynlights$getDynamicLightBeam();
 				beam.setStartPoint(guardian.getX(), guardian.getY(), guardian.getZ());
-				beam.setEndPoint(target.getX(), target.getY() + target.getBoundingHeight() * 0.5, target.getZ());
+				beam.setEndPoint(target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ());
 			}
 
 			int luminance = 7;

@@ -9,7 +9,7 @@
 
 package dev.lambdaurora.lambdynlights.api.behavior;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the dynamic lighting behavior manager,
@@ -26,7 +26,7 @@ public interface DynamicLightBehaviorManager {
 	 *
 	 * @param source the source to add
 	 */
-	void add(@NotNull DynamicLightBehavior source);
+	void add(DynamicLightBehavior source);
 
 	/**
 	 * Removes the given dynamic lighting source from the client world.
@@ -34,5 +34,5 @@ public interface DynamicLightBehaviorManager {
 	 * @param source the source to remove
 	 * @return {@code true} if the dynamic lighting source was present and removed, or {@code false} otherwise
 	 */
-	boolean remove(DynamicLightBehavior source);
+	boolean remove(@Nullable DynamicLightBehavior source);
 }

@@ -1,6 +1,6 @@
 package net.neoforged.neoforge.client.event;
 
-import net.minecraft.resources.io.ResourceReloader;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.event.IModBusEvent;
 
@@ -10,6 +10,6 @@ public class RegisterClientReloadListenersEvent extends Event implements IModBus
 	 *
 	 * @param reloadListener the reload listener
 	 */
-	public void registerReloadListener(ResourceReloader reloadListener) {
+	public void registerReloadListener(PreparableReloadListener reloadListener) {
 	}
 }
