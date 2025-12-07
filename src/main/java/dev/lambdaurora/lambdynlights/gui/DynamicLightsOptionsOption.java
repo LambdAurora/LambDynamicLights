@@ -17,7 +17,6 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Text;
 
 import java.util.Optional;
 import java.util.function.Consumer;

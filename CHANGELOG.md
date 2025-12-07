@@ -544,6 +544,27 @@
 - Fixed bad Maven metadata which prevented auto-import of some libraries needed by LambDynamicLights.
   - This update is only technical, as such this update only affects the publishing of the mod for other modders to use.
 
+### 4.8.6
+
+- Improved dynamic lighting crash report data to be less confusing.
+- Fixed an obscure conflict with mods bundling a modified and older implementation of LambDynamicLights.
+  - *Developer's Note: this issue is specifically caused by Mixin loosing track of who is the owner of a `@Unique` field across inheritance.
+    The fix is to only rely on the interface methods that should be unique enough to prevent future issues.
+    This also means this is an issue which is load-order dependent.*
+
+### 4.8.7
+
+- Fixed Warden Sonic Boom dynamic light toggle not working ([#341](https://github.com/LambdAurora/LambDynamicLights/issues/341)).
+- Added Korean translations ([#333](https://github.com/LambdAurora/LambDynamicLights/pull/333)).
+- Updated Ukrainian translations ([#334](https://github.com/LambdAurora/LambDynamicLights/pull/334)).
+- Updated Argentine Spanish translations ([#339](https://github.com/LambdAurora/LambDynamicLights/pull/339)).
+
+## 4.9.0-rc.1
+
+- Updated to Minecraft 1.21.11-rc2.
+- Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"

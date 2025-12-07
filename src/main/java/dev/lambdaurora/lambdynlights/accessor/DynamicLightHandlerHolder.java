@@ -10,18 +10,19 @@
 package dev.lambdaurora.lambdynlights.accessor;
 
 import dev.lambdaurora.lambdynlights.config.LightSourceSettingEntry;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.Nullable;
 
 @ApiStatus.Internal
 @ApiStatus.NonExtendable
 public interface DynamicLightHandlerHolder<T> {
-	LightSourceSettingEntry lambdynlights$getSetting();
+	@Nullable LightSourceSettingEntry lambdynlights$getSetting();
 
-	Text lambdynlights$getName();
+	Component lambdynlights$getName();
 
 	Identifier lambdynlights$getId();
 

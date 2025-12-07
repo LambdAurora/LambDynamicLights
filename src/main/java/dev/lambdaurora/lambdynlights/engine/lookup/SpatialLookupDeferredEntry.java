@@ -12,7 +12,6 @@ package dev.lambdaurora.lambdynlights.engine.lookup;
 import dev.lambdaurora.lambdynlights.api.behavior.DynamicLightBehavior;
 import dev.lambdaurora.lambdynlights.engine.DynamicLightingEngine;
 import net.minecraft.core.BlockPos;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a deferred dynamic light source entry in a spatial lookup.
@@ -25,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public record SpatialLookupDeferredEntry(int cellKey, DynamicLightBehavior behavior) implements SpatialLookupEntry {
 	@Override
-	public double getDynamicLightLevel(@NotNull BlockPos pos) {
+	public double getDynamicLightLevel(BlockPos pos) {
 		double luminance = this.behavior.lightAtPos(pos, 15. / DynamicLightingEngine.MAX_RADIUS);
 		luminance = Math.max(luminance, 0);
 		return luminance;

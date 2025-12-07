@@ -17,7 +17,7 @@ import io.github.queerbric.pride.*;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 import java.util.Random;
@@ -36,9 +36,9 @@ public class RandomPrideFlagBackground implements Background {
 	private static final IntList DEFAULT_RAINBOW_COLORS = IntList.of(
 			0xffff0018, 0xffffa52c, 0xffffff41, 0xff008018, 0xff0000f9, 0xff86007d
 	);
-	private static final PrideFlagShape PROGRESS = PrideFlagShapes.get(Identifier.of("pride", "progress"));
+	private static final PrideFlagShape PROGRESS = PrideFlagShapes.get(Identifier.fromNamespaceAndPath("pride", "progress"));
 	private static final PrideFlagShape HORIZONTAL_STRIPES
-			= PrideFlagShapes.get(Identifier.of("pride", "horizontal_stripes"));
+			= PrideFlagShapes.get(Identifier.fromNamespaceAndPath("pride", "horizontal_stripes"));
 	private static final Random RANDOM = new Random();
 
 	private final PrideFlag flag;
@@ -73,22 +73,22 @@ public class RandomPrideFlagBackground implements Background {
 				float leftY = y;
 
 				int color = colors.getInt(0);
-				buffer.addVertex(x + width, rightY + partHeight, 0).color(color);
-				buffer.addVertex(x + width, rightY, 0).color(color);
-				buffer.addVertex(x, leftY, 0).color(color);
+				buffer.addVertex(x + width, rightY + partHeight, 0).setColor(color);
+				buffer.addVertex(x + width, rightY, 0).setColor(color);
+				buffer.addVertex(x, leftY, 0).setColor(color);
 
 				rightY += partHeight;
 
 				for (int i = 1; i < colors.size() - 1; i++) {
 					color = colors.getInt(i);
 
-					buffer.addVertex(x + width, rightY + partHeight, 0).color(color);
-					buffer.addVertex(x + width, rightY, 0).color(color);
-					buffer.addVertex(x, leftY, 0).color(color);
+					buffer.addVertex(x + width, rightY + partHeight, 0).setColor(color);
+					buffer.addVertex(x + width, rightY, 0).setColor(color);
+					buffer.addVertex(x, leftY, 0).setColor(color);
 
-					buffer.addVertex(x + width, rightY + partHeight, 0).color(color);
-					buffer.addVertex(x, leftY, 0).color(color);
-					buffer.addVertex(x, leftY + partHeight, 0).color(color);
+					buffer.addVertex(x + width, rightY + partHeight, 0).setColor(color);
+					buffer.addVertex(x, leftY, 0).setColor(color);
+					buffer.addVertex(x, leftY + partHeight, 0).setColor(color);
 
 					rightY += partHeight;
 					leftY += partHeight;
@@ -96,9 +96,9 @@ public class RandomPrideFlagBackground implements Background {
 
 				// Last one
 				color = colors.getInt(colors.size() - 1);
-				buffer.addVertex(x + width, rightY, 0).color(color);
-				buffer.addVertex(x, leftY, 0).color(color);
-				buffer.addVertex(x, y + height, 0).color(color);
+				buffer.addVertex(x + width, rightY, 0).setColor(color);
+				buffer.addVertex(x, leftY, 0).setColor(color);
+				buffer.addVertex(x, y + height, 0).setColor(color);
 			});
 		} else {
 			this.flag.render(graphics, x, y, widget.getWidth(), widget.getHeight());
@@ -107,14 +107,14 @@ public class RandomPrideFlagBackground implements Background {
 		SECOND_LAYER.render(graphics, widget, vOffset, mouseX, mouseY, delta);
 
 		if (this.nuhUh) {
-			var text = Text.literal("Nuh uh, you're not going to remove this, try harder :3c");
+			var text = Component.literal("Nuh uh, you're not going to remove this, try harder :3c");
 			var font = Minecraft.getInstance().font;
-			var lines = font.wrapLines(text, width - 8);
+			var lines = font.split(text, width - 8);
 
 			int startY = y + height - 24 - lines.size() * (font.lineHeight + 2);
 
 			for (var line : lines) {
-				graphics.drawCenteredShadowedText(font, line, x + width / 2, startY, 0xffff0000);
+				graphics.drawCenteredString(font, line, x + width / 2, startY, 0xffff0000);
 				startY += font.lineHeight + 2;
 			}
 		}

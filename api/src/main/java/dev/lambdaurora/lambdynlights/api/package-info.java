@@ -12,4 +12,7 @@
  *
  * @see <a href="https://lambdaurora.dev/projects/lambdynamiclights/docs/v4/">LambDynamicLights v4 documentation</a>
  */
+@NullMarked
 package dev.lambdaurora.lambdynlights.api;
+
+import org.jspecify.annotations.NullMarked;

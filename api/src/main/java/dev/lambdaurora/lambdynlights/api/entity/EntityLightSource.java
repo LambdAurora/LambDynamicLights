@@ -14,7 +14,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import dev.lambdaurora.lambdynlights.api.predicate.LightSourceLocationPredicate;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentExactPredicate;
@@ -22,8 +22,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +64,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 	/**
 	 * Represents a predicate to match entities with.
 	 * <p>
-	 * This is inspired from the {@linkplain net.minecraft.advancements.critereon.EntityPredicate entity predicate}
+	 * This is inspired from the {@linkplain net.minecraft.advancements.criterion.EntityPredicate entity predicate}
 	 * found in advancements but with fewer features since this one needs to work on the client.
 	 *
 	 * @param entityType the entity type predicate to match if present
@@ -117,7 +117,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 		 * @param entity the entity to test
 		 * @return {@code true} if the entity matches this predicate, or {@code false} otherwise
 		 */
-		public boolean test(Entity entity) {
+		public boolean test(@Nullable Entity entity) {
 			if (entity == null) {
 				return false;
 			} else if (this.entityType.isPresent() && !this.entityType.get().matches(entity.getType())) {
@@ -168,20 +168,20 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			private Optional<SlotsPredicate> slots = Optional.empty();
 			private Optional<DataComponentExactPredicate> components = Optional.empty();
 
-			public @NotNull Builder of(@NotNull HolderGetter<EntityType<?>> holderGetter, @NotNull EntityType<?> type) {
+			public Builder of(HolderGetter<EntityType<?>> holderGetter, EntityType<?> type) {
 				this.entityType = Optional.of(EntityTypePredicate.of(holderGetter, type));
 				return this;
 			}
 
 			@SuppressWarnings("deprecation")
-			public @NotNull Builder of(@NotNull HolderGetter<EntityType<?>> holderGetter, @NotNull EntityType<?>... types) {
+			public Builder of(HolderGetter<EntityType<?>> holderGetter, EntityType<?>... types) {
 				// Follow the pattern set by Vanilla's EntityTypePredicate.of,
 				// which does not seem to use holderGetter for direct sets.
 				this.entityType = Optional.of(new EntityTypePredicate(HolderSet.direct(EntityType::builtInRegistryHolder, types)));
 				return this;
 			}
 
-			public @NotNull Builder of(@NotNull HolderGetter<EntityType<?>> holderGetter, @NotNull TagKey<EntityType<?>> tag) {
+			public Builder of(HolderGetter<EntityType<?>> holderGetter, TagKey<EntityType<?>> tag) {
 				this.entityType = Optional.of(EntityTypePredicate.of(holderGetter, tag));
 				return this;
 			}
@@ -193,7 +193,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @return {@code this}
 			 */
 			@Contract("_ -> this")
-			public Builder entityType(@NotNull EntityTypePredicate entityTypePredicate) {
+			public Builder entityType(EntityTypePredicate entityTypePredicate) {
 				this.entityType = Optional.of(entityTypePredicate);
 				return this;
 			}
@@ -205,7 +205,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @return {@code this}
 			 */
 			@Contract("_ -> this")
-			public Builder located(@NotNull LightSourceLocationPredicate.Builder builder) {
+			public Builder located(LightSourceLocationPredicate.Builder builder) {
 				this.located = Optional.of(builder.build());
 				return this;
 			}
@@ -217,7 +217,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @return {@code this}
 			 */
 			@Contract("_ -> this")
-			public Builder effects(@NotNull MobEffectsPredicate.Builder builder) {
+			public Builder effects(MobEffectsPredicate.Builder builder) {
 				this.effects = builder.build();
 				return this;
 			}
@@ -229,7 +229,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @return {@code this}
 			 */
 			@Contract("_ -> this")
-			public Builder flags(@NotNull EntityFlagsPredicate.Builder builder) {
+			public Builder flags(EntityFlagsPredicate.Builder builder) {
 				this.flags = Optional.of(builder.build());
 				return this;
 			}
@@ -241,7 +241,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @return {@code this}
 			 */
 			@Contract("_ -> this")
-			public Builder equipment(@NotNull EntityEquipmentPredicate.Builder builder) {
+			public Builder equipment(EntityEquipmentPredicate.Builder builder) {
 				this.equipment = Optional.of(builder.build());
 				return this;
 			}
@@ -253,7 +253,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @return {@code this}
 			 */
 			@Contract("_ -> this")
-			public Builder equipment(@NotNull EntityEquipmentPredicate equipmentPredicate) {
+			public Builder equipment(EntityEquipmentPredicate equipmentPredicate) {
 				this.equipment = Optional.of(equipmentPredicate);
 				return this;
 			}
@@ -265,7 +265,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @return {@code this}
 			 */
 			@Contract("_ -> this")
-			public Builder vehicle(@NotNull Builder builder) {
+			public Builder vehicle(Builder builder) {
 				this.vehicle = Optional.of(builder.build());
 				return this;
 			}
@@ -277,7 +277,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @return {@code this}
 			 */
 			@Contract("_ -> this")
-			public Builder passenger(@NotNull Builder builder) {
+			public Builder passenger(Builder builder) {
 				this.passenger = Optional.of(builder.build());
 				return this;
 			}
@@ -289,7 +289,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @return {@code this}
 			 */
 			@Contract("_ -> this")
-			public Builder slots(@NotNull SlotsPredicate slotsPredicate) {
+			public Builder slots(SlotsPredicate slotsPredicate) {
 				this.slots = Optional.of(slotsPredicate);
 				return this;
 			}
@@ -302,7 +302,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @since 4.2.0
 			 */
 			@Contract("_ -> this")
-			public Builder components(@NotNull DataComponentExactPredicate.Builder builder) {
+			public Builder components(DataComponentExactPredicate.Builder builder) {
 				return this.components(builder.build());
 			}
 
@@ -314,7 +314,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 * @since 4.2.0
 			 */
 			@Contract("_ -> this")
-			public Builder components(@NotNull DataComponentExactPredicate componentsPredicate) {
+			public Builder components(DataComponentExactPredicate componentsPredicate) {
 				this.components = Optional.of(componentsPredicate);
 				return this;
 			}
@@ -324,7 +324,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 *
 			 * @return the resulting {@link EntityPredicate}
 			 */
-			public @NotNull EntityPredicate build() {
+			public EntityPredicate build() {
 				return new EntityPredicate(
 						this.entityType,
 						this.located,

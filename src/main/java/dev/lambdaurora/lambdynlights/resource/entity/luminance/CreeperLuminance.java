@@ -15,7 +15,6 @@ import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import dev.lambdaurora.lambdynlights.resource.entity.EntityLightSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Creeper;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -31,12 +30,12 @@ public final class CreeperLuminance implements EntityLuminance {
 	private CreeperLuminance() {}
 
 	@Override
-	public @NotNull Type type() {
+	public Type type() {
 		return EntityLightSources.CREEPER;
 	}
 
 	@Override
-	public @Range(from = 0, to = 15) int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity) {
+	public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
 		int luminance = 0;
 
 		if (entity instanceof Creeper creeper) {

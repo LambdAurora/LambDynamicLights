@@ -11,7 +11,6 @@ package dev.lambdaurora.lambdynlights.engine.lookup;
 
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSource;
 import net.minecraft.core.BlockPos;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an entity dynamic light source entry in a spatial lookup.
@@ -24,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public record SpatialLookupEntityEntry(int cellKey, EntityDynamicLightSource source) implements SpatialLookupEntry {
 	@Override
-	public double getDynamicLightLevel(@NotNull BlockPos pos) {
+	public double getDynamicLightLevel(BlockPos pos) {
 		int luminance = this.source.getLuminance();
 		if (luminance > 0) {
 			return SpatialLookupEntry.lightAtPos(

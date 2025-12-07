@@ -12,7 +12,7 @@ package dev.lambdaurora.lambdynlights.mixin.lightsource;
 import dev.lambdaurora.lambdynlights.ExplosiveLightingMode;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSource;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.Level;
@@ -44,7 +44,7 @@ public abstract class PrimedTntEntityMixin extends EntityMixin implements Entity
 	@Override
 	public void dynamicLightTick() {
 		if (!LambDynLights.get().config.getTntLightingMode().isEnabled()) {
-			this.lambdynlights$luminance = 0;
+			this.setLuminance(0);
 			return;
 		}
 
@@ -53,11 +53,11 @@ public abstract class PrimedTntEntityMixin extends EntityMixin implements Entity
 		ExplosiveLightingMode lightingMode = LambDynLights.get().config.getTntLightingMode();
 		int luminance;
 		if (lightingMode == ExplosiveLightingMode.FANCY) {
-			luminance = (int) (-MathHelper.smoothstep((float) this.getFuse() / this.startFuseTimer) * 10.f) + 10;
+			luminance = (int) (-Mth.smoothstep((float) this.getFuse() / this.startFuseTimer) * 10.f) + 10;
 		} else {
 			luminance = 10;
 		}
 
-		this.lambdynlights$luminance = Math.max(this.lambdynlights$luminance, luminance);
+		this.setLuminance(Math.max(this.getLuminance(), luminance));
 	}
 }

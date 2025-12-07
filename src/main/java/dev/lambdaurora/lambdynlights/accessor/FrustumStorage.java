@@ -10,7 +10,8 @@
 package dev.lambdaurora.lambdynlights.accessor;
 
 import net.minecraft.client.renderer.culling.Frustum;
+import org.jspecify.annotations.Nullable;
 
 public interface FrustumStorage {
-	Frustum lambdynlights$getFrustum();
+	@Nullable Frustum lambdynlights$getFrustum();
 }

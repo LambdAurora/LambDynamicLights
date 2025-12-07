@@ -9,7 +9,7 @@
 
 package dev.lambdaurora.lambdynlights.mixin;
 
-import com.mojang.blaze3d.vertex.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -23,13 +23,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class DebugRendererMixin {
 	@Inject(method = "render", at = @At("TAIL"))
 	private void lambdynlights$onRender(
-			MatrixStack matrices, Frustum frustum, MultiBufferSource.BufferSource bufferSource,
+			PoseStack poses, Frustum frustum, MultiBufferSource.BufferSource bufferSource,
 			double x, double y, double z,
 			CallbackInfo ci
 	) {
 		var mod = LambDynLights.get();
 		for (var debugRenderer : mod.debugRenderers) {
-			debugRenderer.render(matrices, bufferSource, x, y, z);
+			debugRenderer.render(poses, bufferSource, x, y, z);
 		}
 	}
 }

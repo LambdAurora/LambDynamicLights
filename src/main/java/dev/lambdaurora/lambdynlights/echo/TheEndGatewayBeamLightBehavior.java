@@ -13,7 +13,6 @@ import dev.lambdaurora.lambdynlights.api.behavior.DynamicLightBehavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.TheEndGatewayBlockEntity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -35,7 +34,7 @@ public record TheEndGatewayBeamLightBehavior(TheEndGatewayBlockEntity gateway, L
 	}
 
 	@Override
-	public @NotNull BoundingBox getBoundingBox() {
+	public BoundingBox getBoundingBox() {
 		var pos = gateway.getBlockPos();
 		return new BoundingBox(
 				pos.getX(), this.getWorldBottom(), pos.getZ(),
@@ -50,7 +49,7 @@ public record TheEndGatewayBeamLightBehavior(TheEndGatewayBlockEntity gateway, L
 
 		double distanceSquared = dx * dx + dz * dz;
 
-		return gateway.getCachedState().getLightEmission() - Math.sqrt(distanceSquared) * falloffRatio;
+		return gateway.getBlockState().getLightEmission() - Math.sqrt(distanceSquared) * falloffRatio;
 	}
 
 	@Override

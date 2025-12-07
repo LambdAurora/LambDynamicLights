@@ -10,10 +10,10 @@
 package dev.lambdaurora.lambdynlights.api.behavior;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a generic dynamic lighting behavior that takes the shape of a line.
@@ -25,8 +25,8 @@ import org.joml.Vector3d;
 public class LineLightBehavior implements DynamicLightBehavior {
 	private Vector3d startPoint;
 	private Vector3d endPoint;
-	private Vector3d prevStartPoint;
-	private Vector3d prevEndPoint;
+	private @Nullable Vector3d prevStartPoint;
+	private @Nullable Vector3d prevEndPoint;
 	private int luminance;
 	private int prevLuminance;
 
@@ -145,14 +145,14 @@ public class LineLightBehavior implements DynamicLightBehavior {
 	}
 
 	@Override
-	public @NotNull BoundingBox getBoundingBox() {
+	public BoundingBox getBoundingBox() {
 		return new BoundingBox(
-				MathHelper.floor(this.startPoint.x()),
-				MathHelper.floor(this.startPoint.y()),
-				MathHelper.floor(this.startPoint.z()),
-				MathHelper.ceil(this.endPoint.x()),
-				MathHelper.ceil(this.endPoint.y()),
-				MathHelper.ceil(this.endPoint.z())
+				Mth.floor(this.startPoint.x()),
+				Mth.floor(this.startPoint.y()),
+				Mth.floor(this.startPoint.z()),
+				Mth.ceil(this.endPoint.x()),
+				Mth.ceil(this.endPoint.y()),
+				Mth.ceil(this.endPoint.z())
 		);
 	}
 }

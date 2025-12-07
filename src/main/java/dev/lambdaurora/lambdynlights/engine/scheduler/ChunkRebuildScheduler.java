@@ -15,8 +15,7 @@ import dev.lambdaurora.lambdynlights.util.DynamicLightDebugRenderer;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.ChunkSectionPos;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.core.SectionPos;
 
 import java.io.Closeable;
 import java.util.function.Consumer;
@@ -44,11 +43,11 @@ public abstract class ChunkRebuildScheduler implements Closeable {
 		return this.sourceUpdatedLastTick;
 	}
 
-	public void appendF3Debug(@NotNull Consumer<String> consumer) {
+	public void appendF3Debug(Consumer<String> consumer) {
 	}
 
 	public final void update(
-			@NotNull DynamicLightSource lightSource, @NotNull Long2ObjectMap<ChunkRebuildStatus> chunks
+			DynamicLightSource lightSource, Long2ObjectMap<ChunkRebuildStatus> chunks
 	) {
 		if (!chunks.isEmpty()) {
 			this.sourceUpdatedLastTick++;
@@ -57,10 +56,10 @@ public abstract class ChunkRebuildScheduler implements Closeable {
 	}
 
 	protected abstract void accept(
-			@NotNull DynamicLightSource lightSource, @NotNull Long2ObjectMap<ChunkRebuildStatus> chunks
+			DynamicLightSource lightSource, Long2ObjectMap<ChunkRebuildStatus> chunks
 	);
 
-	public final void remove(@NotNull DynamicLightSource lightSource) {
+	public final void remove(DynamicLightSource lightSource) {
 		final var chunks = lightSource.getDynamicLightChunksToRebuild(true);
 
 		if (!chunks.isEmpty()) {
@@ -70,7 +69,7 @@ public abstract class ChunkRebuildScheduler implements Closeable {
 		this.remove(lightSource, chunks.keySet());
 	}
 
-	protected abstract void remove(@NotNull DynamicLightSource lightSource, @NotNull LongSet chunks);
+	protected abstract void remove(DynamicLightSource lightSource, LongSet chunks);
 
 	/**
 	 * Closes this chunk rebuild scheduler.
@@ -90,7 +89,7 @@ public abstract class ChunkRebuildScheduler implements Closeable {
 	 * @param chunkPos the packed chunk position
 	 */
 	protected final void scheduleChunkRebuild(long chunkPos) {
-		this.scheduleChunkRebuild(ChunkSectionPos.x(chunkPos), ChunkSectionPos.y(chunkPos), ChunkSectionPos.z(chunkPos));
+		this.scheduleChunkRebuild(SectionPos.x(chunkPos), SectionPos.y(chunkPos), SectionPos.z(chunkPos));
 		this.sectionRebuildDebugRenderer.scheduleChunkRebuild(chunkPos);
 	}
 

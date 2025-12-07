@@ -11,7 +11,7 @@ package dev.lambdaurora.lambdynlights.mixin;
 
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.LambDynLightsConstants;
-import net.minecraft.TextFormatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
 import org.spongepowered.asm.mixin.Final;
@@ -38,7 +38,7 @@ public class DebugScreenOverlayMixin {
 
 	@Inject(method = "getGameInformation", at = @At("RETURN"))
 	private void onGetLeftText(CallbackInfoReturnable<List<String>> cir) {
-		var prefix = TextFormatting.LIGHT_PURPLE + "[LDL] " + TextFormatting.RESET;
+		var prefix = ChatFormatting.LIGHT_PURPLE + "[LDL] " + ChatFormatting.RESET;
 
 		var list = cir.getReturnValue();
 		var ldl = LambDynLights.get();
@@ -61,9 +61,9 @@ public class DebugScreenOverlayMixin {
 
 		if (!ldl.config.getDynamicLightsMode().isEnabled()) {
 			builder.append(" ; ");
-			builder.append(TextFormatting.RED);
+			builder.append(ChatFormatting.RED);
 			builder.append("Disabled");
-			builder.append(TextFormatting.RESET);
+			builder.append(ChatFormatting.RESET);
 		}
 
 		builder.append(')');
@@ -77,10 +77,10 @@ public class DebugScreenOverlayMixin {
 		}
 
 		list.add(prefix + "Dynamic Light At Feet: %.3f"
-				.formatted(ldl.engine.getDynamicLightLevel(this.minecraft.player.getBlockPos())));
+				.formatted(ldl.engine.getDynamicLightLevel(this.minecraft.player.blockPosition())));
 
 		if (LambDynLightsConstants.isDevMode()) {
-			list.add(TextFormatting.RED + LambDynLightsConstants.DEV_MODE_OVERLAY_TEXT);
+			list.add(ChatFormatting.RED + LambDynLightsConstants.DEV_MODE_OVERLAY_TEXT);
 		}
 	}
 }

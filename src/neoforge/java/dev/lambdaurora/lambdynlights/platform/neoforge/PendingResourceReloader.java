@@ -10,11 +10,11 @@
 package dev.lambdaurora.lambdynlights.platform.neoforge;
 
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceReloader;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 
 @ApiStatus.Internal
-record PendingResourceReloader(Identifier id, ResourceReloader reloader, Collection<Identifier> dependencies) {
+record PendingResourceReloader(Identifier id, PreparableReloadListener reloader, Collection<Identifier> dependencies) {
 }

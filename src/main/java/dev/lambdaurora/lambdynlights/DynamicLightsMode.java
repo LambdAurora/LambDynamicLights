@@ -12,9 +12,8 @@ package dev.lambdaurora.lambdynlights;
 import dev.lambdaurora.lambdynlights.engine.TickMode;
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.util.Nameable;
-import net.minecraft.TextFormatting;
-import net.minecraft.network.chat.Text;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -27,15 +26,15 @@ import java.util.Optional;
  * @since 1.0.0
  */
 public enum DynamicLightsMode implements Nameable {
-	OFF(TickMode.REAL_TIME, TextFormatting.RED, SpruceTexts.OPTIONS_OFF),
-	FASTEST(TickMode.SLOWER, TextFormatting.GOLD, SpruceTexts.OPTIONS_GENERIC_FASTEST),
-	FAST(TickMode.SLOW, TextFormatting.YELLOW, SpruceTexts.OPTIONS_GENERIC_FAST),
-	FANCY(TickMode.REAL_TIME, TextFormatting.GREEN, SpruceTexts.OPTIONS_GENERIC_FANCY);
+	OFF(TickMode.REAL_TIME, ChatFormatting.RED, SpruceTexts.OPTIONS_OFF),
+	FASTEST(TickMode.SLOWER, ChatFormatting.GOLD, SpruceTexts.OPTIONS_GENERIC_FASTEST),
+	FAST(TickMode.SLOW, ChatFormatting.YELLOW, SpruceTexts.OPTIONS_GENERIC_FAST),
+	FANCY(TickMode.REAL_TIME, ChatFormatting.GREEN, SpruceTexts.OPTIONS_GENERIC_FANCY);
 
 	private final TickMode tickMode;
-	private final Text translatedText;
+	private final Component translatedText;
 
-	DynamicLightsMode(TickMode tickMode, @NotNull TextFormatting formatting, @NotNull Text translatedText) {
+	DynamicLightsMode(TickMode tickMode, ChatFormatting formatting, Component translatedText) {
 		this.tickMode = tickMode;
 		this.translatedText = translatedText.copy().withStyle(formatting);
 	}
@@ -52,7 +51,7 @@ public enum DynamicLightsMode implements Nameable {
 	/**
 	 * {@return the corresponding tick mode for this dynamic lights mode}
 	 */
-	public @NotNull TickMode tickMode() {
+	public TickMode tickMode() {
 		return this.tickMode;
 	}
 
@@ -73,12 +72,12 @@ public enum DynamicLightsMode implements Nameable {
 	 *
 	 * @return the translated text of the dynamic lights mode
 	 */
-	public @NotNull Text getTranslatedText() {
+	public Component getTranslatedText() {
 		return this.translatedText;
 	}
 
 	@Override
-	public @NotNull String getName() {
+	public String getName() {
 		return this.name().toLowerCase();
 	}
 
@@ -88,7 +87,7 @@ public enum DynamicLightsMode implements Nameable {
 	 * @param id the identifier of the dynamic lights mode
 	 * @return the dynamic lights mode if found, else empty
 	 */
-	public static @NotNull Optional<DynamicLightsMode> byId(@NotNull String id) {
+	public static Optional<DynamicLightsMode> byId(String id) {
 		return Arrays.stream(values()).filter(mode -> mode.getName().equalsIgnoreCase(id)).findFirst();
 	}
 }

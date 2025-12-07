@@ -11,7 +11,7 @@ package dev.lambdaurora.lambdynlights.api.predicate;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -27,7 +27,7 @@ import java.util.Optional;
 /**
  * Represents a predicate to match a location with.
  * <p>
- * This is inspired from the {@linkplain net.minecraft.advancements.critereon.LocationPredicate location predicate}
+ * This is inspired from the {@linkplain net.minecraft.advancements.criterion.LocationPredicate location predicate}
  * found in advancements but with fewer features since this one needs to work on the client.
  *
  * @param position the position predicate to match if present
@@ -66,7 +66,7 @@ public record LightSourceLocationPredicate(
 		} else if (this.dimension.isPresent() && this.dimension.get() != level.dimension()) {
 			return false;
 		} else {
-			BlockPos pos = BlockPos.ofFloored(x, y, z);
+			BlockPos pos = BlockPos.containing(x, y, z);
 			boolean loaded = level.isLoaded(pos);
 			if (this.biomes.isEmpty() || loaded && this.biomes.get().contains(level.getBiome(pos))) {
 				if (this.smokey.isEmpty() || loaded && this.smokey.get() == CampfireBlock.isSmokeyPos(level, pos)) {

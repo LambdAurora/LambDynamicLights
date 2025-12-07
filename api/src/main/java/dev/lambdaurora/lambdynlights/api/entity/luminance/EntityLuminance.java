@@ -18,7 +18,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Brightness;
 import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.util.List;
@@ -51,7 +50,7 @@ public interface EntityLuminance {
 	/**
 	 * {@return the type of this entity luminance}
 	 */
-	@NotNull Type type();
+	Type type();
 
 	/**
 	 * Gets the luminance of the given entity.
@@ -61,7 +60,7 @@ public interface EntityLuminance {
 	 * @return the luminance of the given entity
 	 */
 	@Range(from = 0, to = 15)
-	int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity);
+	int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity);
 
 	/**
 	 * Gets the luminance of the given entity out of the given list of entity luminance source.
@@ -72,9 +71,9 @@ public interface EntityLuminance {
 	 * @return the luminance of the given entity
 	 */
 	static @Range(from = 0, to = 15) int getLuminance(
-			@NotNull ItemLightSourceManager itemLightSourceManager,
-			@NotNull Entity entity,
-			@NotNull List<@NotNull EntityLuminance> luminances
+			ItemLightSourceManager itemLightSourceManager,
+			Entity entity,
+			List<EntityLuminance> luminances
 	) {
 		int luminance = 0;
 
@@ -114,12 +113,12 @@ public interface EntityLuminance {
 		);
 
 		@Override
-		public @NotNull Type type() {
+		public Type type() {
 			return Type.VALUE;
 		}
 
 		@Override
-		public @Range(from = 0, to = 15) int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity) {
+		public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
 			return this.luminance;
 		}
 	}
@@ -163,22 +162,22 @@ public interface EntityLuminance {
 				"projectile/throwable_item", ThrowableItemLuminance.INSTANCE
 		);
 
-		public static Type register(@NotNull Identifier id, @NotNull MapCodec<? extends EntityLuminance> codec) {
+		public static Type register(Identifier id, MapCodec<? extends EntityLuminance> codec) {
 			var type = new Type(id, codec);
 			TYPES.put(id, type);
 			return type;
 		}
 
 		private static Type register(String name, MapCodec<? extends EntityLuminance> codec) {
-			return register(Identifier.of("lambdynlights", name), codec);
+			return register(Identifier.fromNamespaceAndPath("lambdynlights", name), codec);
 		}
 
-		public static Type registerSimple(@NotNull Identifier id, @NotNull EntityLuminance singleton) {
+		public static Type registerSimple(Identifier id, EntityLuminance singleton) {
 			return register(id, MapCodec.unit(singleton));
 		}
 
 		private static Type registerSimple(String name, EntityLuminance singleton) {
-			return registerSimple(Identifier.of("lambdynlights", name), singleton);
+			return registerSimple(Identifier.fromNamespaceAndPath("lambdynlights", name), singleton);
 		}
 	}
 }

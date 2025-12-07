@@ -11,8 +11,7 @@ package dev.lambdaurora.lambdynlights.api.entity.luminance;
 
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -28,14 +27,14 @@ public final class ThrowableItemLuminance implements EntityLuminance {
 	private ThrowableItemLuminance() {}
 
 	@Override
-	public @NotNull Type type() {
+	public Type type() {
 		return Type.THROWABLE_ITEM;
 	}
 
 	@Override
-	public @Range(from = 0, to = 15) int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity) {
+	public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
 		if (entity instanceof ThrowableItemProjectile tip) {
-			return itemLightSourceManager.getLuminance(tip.getItem(), tip.isSubmergedInWater());
+			return itemLightSourceManager.getLuminance(tip.getItem(), tip.isUnderWater());
 		}
 
 		return 0;

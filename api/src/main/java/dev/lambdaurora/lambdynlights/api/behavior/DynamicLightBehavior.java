@@ -10,7 +10,6 @@
 package dev.lambdaurora.lambdynlights.api.behavior;
 
 import net.minecraft.core.BlockPos;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -61,7 +60,6 @@ public interface DynamicLightBehavior {
 	 * }
 	 *}
 	 */
-	@NotNull
 	BoundingBox getBoundingBox();
 
 	/**

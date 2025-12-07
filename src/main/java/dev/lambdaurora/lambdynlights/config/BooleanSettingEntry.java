@@ -12,20 +12,20 @@ package dev.lambdaurora.lambdynlights.config;
 import com.electronwill.nightconfig.core.Config;
 import dev.lambdaurora.spruceui.option.SpruceBooleanOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
-import net.minecraft.network.chat.Text;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public class BooleanSettingEntry extends SettingEntry<Boolean> {
 	public BooleanSettingEntry(
-			String key, String guiKey, boolean defaultValue, @Nullable Config config, @Nullable Text tooltip
+			String key, String guiKey, boolean defaultValue, @Nullable Config config, @Nullable Component tooltip
 	) {
 		super(key, guiKey, defaultValue, config, tooltip);
 	}
 
 	public BooleanSettingEntry(
-			String key, boolean defaultValue, @Nullable Config config, @Nullable Text tooltip
+			String key, boolean defaultValue, @Nullable Config config, @Nullable Component tooltip
 	) {
 		super(key, key, defaultValue, config, tooltip);
 	}
@@ -52,7 +52,7 @@ public class BooleanSettingEntry extends SettingEntry<Boolean> {
 	}
 
 	@Override
-	protected SpruceOption buildOption(@Nullable Text tooltip) {
+	protected SpruceOption buildOption(@Nullable Component tooltip) {
 		return new SpruceBooleanOption(
 				this.getOptionKey(),
 				this::get,
