@@ -38,6 +38,6 @@
 	"lambdynlights.tooltip.mode.3": "%s是流暢的動態光源。",
 	"lambdynlights.tooltip.self_light_source": "啟用第一人稱動態光源。如果您使用的是具有自帶動態光源的光影包，建議停用此選項。",
 	"lambdynlights.tooltip.tnt_lighting": "設定TNT的動態光源模式。\n- %s會停用TNT的動態光源。\n- %s會設定恆定的亮度。\n- %s會設定動態的亮度。",
-	"lambdynlights.tooltip.water_sensitive": "啟用水敏感光源檢查。這表示某些物品在浸入水中時不會發光。"
+	"lambdynlights.tooltip.water_sensitive": "啟用水敏感光源檢查。這表示某些物品在浸入水中時不會發光。",
 	"modmenu.bluesky": "Bluesky"
 }
