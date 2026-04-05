@@ -124,22 +124,6 @@ loom {
 	accessWidenerPath = file("src/main/resources/lambdynlights.accesswidener")
 }
 
-afterEvaluate {
-	val shims: SourceSet by sourceSets.creating {
-		this.compileClasspath += configurations["minecraftNamedCompile"]
-	}
-
-	dependencies {
-		"shimsCompileOnly"(libs.fabric.loader) // Due to MC classes referring to EnvType.
-		"shimsCompileOnly"(libs.neoforge.loader)
-		"neoforgeCompileOnly"(shims.output)
-	}
-
-	license {
-		exclude(shims)
-	}
-}
-
 dependencies {
 	api(project(":api"))
 	include(project(":api"))
@@ -172,6 +156,7 @@ dependencies {
 	shadow(libs.nightconfig.toml)
 
 	"neoforgeCompileOnly"(libs.neoforge.loader)
+	"neoforgeCompileOnly"(variantOf(libs.neoforge.api) { classifier("universal") })
 	"neoforgeImplementation"(sourceSets.main.get().output)
 }
 
