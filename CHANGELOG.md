@@ -580,6 +580,10 @@
 - Updated [SpruceUI].
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+### 4.10.1
+
+- Fixed Simplified Chinese translations ([#368](https://github.com/LambdAurora/LambDynamicLights/issues/368)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"
