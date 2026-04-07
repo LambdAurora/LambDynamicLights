@@ -24,7 +24,7 @@ import java.util.List;
  * Represents a compatibility layer with another mod.
  *
  * @author LambdAurora
- * @version 4.3.1
+ * @version 4.10.1
  * @since 3.1.4
  */
 public interface CompatLayer {
@@ -52,7 +52,7 @@ public interface CompatLayer {
 		try {
 			if (YumiMods.get().getMod("accessories").isPresent()) {
 				layers.add(new AccessoriesCompat());
-			} else if (YumiMods.get().getMod("trinkets").isPresent()) {
+			} else if (YumiMods.get().getMod("trinkets_updated").isPresent()) {
 				layers.add(new TrinketsCompat());
 			}
 		} catch (LinkageError e) {

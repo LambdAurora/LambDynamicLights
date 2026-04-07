@@ -582,7 +582,9 @@
 
 ### 4.10.1
 
+- Readded Trinkets compatibility with Trinkets Updated ([#367](https://github.com/LambdAurora/LambDynamicLights/issues/367)).
 - Fixed Simplified Chinese translations ([#368](https://github.com/LambdAurora/LambDynamicLights/issues/368)).
+- Updated [Yumi Minecraft Libraries: Foundation].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"

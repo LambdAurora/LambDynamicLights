@@ -86,13 +86,6 @@ repositories {
 		}
 	}
 	maven {
-		name = "Ladysnake Libs"
-		url = uri("https://maven.ladysnake.org/releases")
-		content {
-			includeGroup("org.ladysnake.cardinal-components-api")
-		}
-	}
-	maven {
 		name = "Wispforest"
 		url = uri("https://maven.wispforest.io/releases")
 		content {
@@ -105,6 +98,18 @@ repositories {
 		content {
 			includeGroupAndSubgroups("net.neoforged")
 			includeGroupAndSubgroups("cpw.mods")
+		}
+	}
+	exclusiveContent {
+		filter {
+			includeGroupAndSubgroups("eu.pb4")
+		}
+
+		forRepository {
+			maven {
+				name = "Nucleoid"
+				url = uri("https://maven.nucleoid.xyz/releases")
+			}
 		}
 	}
 	exclusiveContent {
@@ -149,7 +154,7 @@ dependencies {
 
 	// Mod compatibility
 	compileOnly(libs.sodium.api)
-	//modCompileOnly(libs.trinkets)
+	compileOnly(libs.trinkets)
 	//modCompileOnly(libs.accessories)
 
 	shadow(libs.nightconfig.core)
