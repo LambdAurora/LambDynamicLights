@@ -104,10 +104,33 @@ repositories {
 	}
 	maven {
 		name = "NeoForge"
-		url = uri("https://maven.neoforged.net/")
+		url = uri("https://maven.neoforged.net/releases/")
 		content {
 			includeGroupAndSubgroups("net.neoforged")
 			includeGroupAndSubgroups("cpw.mods")
+		}
+	}
+	exclusiveContent {
+		filter {
+			includeGroupAndSubgroups("eu.pb4")
+		}
+
+		forRepository {
+			maven {
+				name = "Nucleoid"
+				url = uri("https://maven.nucleoid.xyz/releases")
+			}
+		}
+	}
+	exclusiveContent {
+		filter {
+			includeGroupAndSubgroups("net.caffeinemc")
+		}
+
+		forRepository {
+			maven {
+				url = uri("https://maven.caffeinemc.net/releases/")
+			}
 		}
 	}
 }
@@ -431,7 +454,7 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 		.map { McVersionLookup.getCurseForgeEquivalent(it) }
 		.forEach { mainFile.addGameVersion(it) }
 	mainFile.addModLoader("Fabric", "Quilt", "NeoForge")
-	mainFile.addJavaVersion("Java 21", "Java 22")
+	mainFile.addJavaVersion("Java 21", "Java 22", "Java 25")
 	mainFile.addEnvironment("Client")
 
 	mainFile.displayName = "${Constants.PRETTY_NAME} ${ldl.version()} (${McVersionLookup.getVersionTag(ldl.mcVersion())})"

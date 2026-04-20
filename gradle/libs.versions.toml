@@ -1,8 +1,8 @@
 [versions]
 minecraft = "1.21.1"
 fabric-loader = "0.16.9"
-neoforge-loader = "7.0.11"
 fabric-api = "0.105.0+1.21.1"
+neoforge-loader = "7.0.11"
 mappings-yalmm = "6"
 mappings-parchment = "2024.07.28"
 
@@ -28,8 +28,8 @@ gson = "2.11.0"
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
-neoforge-loader = { module = "net.neoforged.fancymodloader:loader", version.ref = "neoforge-loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+neoforge-loader = { module = "net.neoforged.fancymodloader:loader", version.ref = "neoforge-loader" }
 
 # Dependencies
 yumi-commons-core = { module = "dev.yumi.commons:yumi-commons-core", version.ref = "yumi-commons" }

@@ -26,7 +26,7 @@ public final class LambDynLightsConstants {
 	 */
 	public static final String NAMESPACE = "lambdynlights";
 
-	static final ModContainer MOD_CONTAINER = YumiMods.get().getMod(NAMESPACE)
+	public static final ModContainer MOD_CONTAINER = YumiMods.get().getMod(NAMESPACE)
 			.or(() -> YumiMods.get().getMod(NAMESPACE + "_runtime"))
 			.orElseThrow();
 

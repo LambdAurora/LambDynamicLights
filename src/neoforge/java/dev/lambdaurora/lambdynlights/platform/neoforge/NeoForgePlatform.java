@@ -17,7 +17,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +44,12 @@ public final class NeoForgePlatform implements Platform {
 	public ListenableEvent<Identifier, Consumer<HolderLookup.Provider>> getTagLoadedEvent() {
 		return new ListenableEvent<>() {
 			@Override
-			public @NotNull Identifier defaultPhaseId() {
+			public Identifier defaultPhaseId() {
 				return YumiEvents.EVENTS.defaultPhaseId();
 			}
 
 			@Override
-			public void register(@NotNull Identifier phaseIdentifier, @NotNull Consumer<HolderLookup.Provider> listener) {
+			public void register(Identifier phaseIdentifier, Consumer<HolderLookup.Provider> listener) {
 				NeoForge.EVENT_BUS.addListener(TagsUpdatedEvent.class, event -> {
 					if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED) {
 						listener.accept(event.getRegistryAccess());
@@ -59,7 +58,7 @@ public final class NeoForgePlatform implements Platform {
 			}
 
 			@Override
-			public void addPhaseOrdering(@NotNull Identifier firstPhase, @NotNull Identifier secondPhase) {
+			public void addPhaseOrdering(Identifier firstPhase, Identifier secondPhase) {
 			}
 		};
 	}

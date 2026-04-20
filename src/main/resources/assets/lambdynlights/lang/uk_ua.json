@@ -9,7 +9,7 @@
 	"lambdynlights.menu.search": "Пошук:",
 	"lambdynlights.menu.sodium.tab": "%s",
 	"lambdynlights.menu.support_me": "Підтримай мене!",
-	"lambdynlights.menu.support_me.tooltip": "Подобається мод? Ви можете підтримати мене, щоб я міг продовжувати постачати високоякісні моди!"
+	"lambdynlights.menu.support_me.tooltip": "Подобається мод? Ви можете підтримати мене, щоб я міг продовжувати постачати високоякісні моди!",
 	"lambdynlights.menu.tabs.advanced": "Розширені",
 	"lambdynlights.menu.tabs.debug": "Налагодження",
 	"lambdynlights.menu.tabs.debug.description": "Для творців модів, на випадок складних помилок.",
@@ -26,7 +26,7 @@
 	"lambdynlights.option.adaptive_ticking.background_sleep": "Адаптивний такт для джерел світла позаду",
 	"lambdynlights.option.adaptive_ticking.background_sleep.tooltip": "Змушує джерела світла за камерою оновлюватися рідше (рекомендовано).",
 	"lambdynlights.option.chunk_rebuild_scheduler": "Стратегія перебудови чанку",
-	"lambdynlights.option.chunk_rebuild_scheduler.tooltip": "Визначає, як мод відновлює чанки.\n• %s (рекомендовано): чанки перебудовуються лише при необхідности. Може спричиняти надзвичайно рідкісні візуальні збої.\n• %s: блоки перебудовуються, щойно оновлюється динамічне світло. Може погіршити продуктивність.\nЗміни тут набуде чинности лише після збереження та виходу.",
+	"lambdynlights.option.chunk_rebuild_scheduler.tooltip": "Визначає, як мод відновлює чанки.\n• %s (рекомендовано): чанки перебудовуються лише за необхідности. Може спричиняти надзвичайно рідкісні візуальні збої.\n• %s: блоки перебудовуються, щойно оновлюється динамічне світло. Може погіршити продуктивність.\nЗміни тут набудуть чинности лише після збереження та виходу.",
 	"lambdynlights.option.chunk_rebuild_scheduler.mode.immediate": "Миттєво",
 	"lambdynlights.option.chunk_rebuild_scheduler.mode.culling": "Оптимізовано",
 	"lambdynlights.option.debug.active_dynamic_lighting_cells": "Показ осередків активного динамічного світла",
@@ -62,5 +62,5 @@
 	"lambdynlights.tooltip.tnt_lighting": "Установлює режим динамічного світла для динаміту.\n— %s вимикає динамічне світло динаміту.\n— %s установлює постійну люмінесценцію.\n— %s установлює динамічну люмінесценцію.",
 	"lambdynlights.tooltip.water_sensitive": "Умикає перевірку чутливих до води джерел світла. Це означає, що деякі предмети не випромінюють світло під час занурення у воду.",
 	"modmenu.bluesky": "Bluesky",
-	"modmenu.descriptionTranslation.lambdynlights": "Найповніший мод динамічного світла для Fabric"
+	"modmenu.descriptionTranslation.lambdynlights": "Найповніший мод динамічного світла для Fabric."
 }

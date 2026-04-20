@@ -559,10 +559,31 @@
 - Updated Ukrainian translations ([#334](https://github.com/LambdAurora/LambDynamicLights/pull/334)).
 - Updated Argentine Spanish translations ([#339](https://github.com/LambdAurora/LambDynamicLights/pull/339)).
 
-## 4.9.0-rc.1
+## 4.9.0
 
-- Updated to Minecraft 1.21.11-rc2.
+- Updated to Minecraft 1.21.11.
 - Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+
+### 4.9.1
+
+- Fixed crash with Sodium on NeoForge ([#345](https://github.com/LambdAurora/LambDynamicLights/issues/345)).
+
+## 4.10.0
+
+- Updated to Minecraft 26.1.
+- Added Czech translations ([#357](https://github.com/LambdAurora/LambDynamicLights/pull/357)).
+- Updated Ukrainian translations ([#355](https://github.com/LambdAurora/LambDynamicLights/pull/355)).
+- Updated Traditional Chinese translations ([#363](https://github.com/LambdAurora/LambDynamicLights/pull/363), [#365](https://github.com/LambdAurora/LambDynamicLights/pull/365)).
+- Updated Simplified Chinese translations ([#364](https://github.com/LambdAurora/LambDynamicLights/pull/364), [#365](https://github.com/LambdAurora/LambDynamicLights/pull/365)).
+- Updated Japanese translations ([#365](https://github.com/LambdAurora/LambDynamicLights/pull/365)).
+- Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+
+### 4.10.1
+
+- Readded Trinkets compatibility with Trinkets Updated ([#367](https://github.com/LambdAurora/LambDynamicLights/issues/367)).
+- Fixed Simplified Chinese translations ([#368](https://github.com/LambdAurora/LambDynamicLights/issues/368)).
 - Updated [Yumi Minecraft Libraries: Foundation].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
