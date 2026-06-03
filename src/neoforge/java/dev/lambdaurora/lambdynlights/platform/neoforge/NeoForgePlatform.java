@@ -26,7 +26,7 @@ import java.util.function.Consumer;
  * Provides the NeoForge-specific platform operations.
  *
  * @author LambdAurora
- * @version 4.7.1
+ * @version 4.10.3
  * @since 4.5.0
  */
 public final class NeoForgePlatform implements Platform {
@@ -50,11 +50,9 @@ public final class NeoForgePlatform implements Platform {
 
 			@Override
 			public void register(Identifier phaseIdentifier, Consumer<HolderLookup.Provider> listener) {
-				NeoForge.EVENT_BUS.addListener(TagsUpdatedEvent.class, event -> {
-					if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED) {
-						listener.accept(event.getLookupProvider());
-					}
-				});
+				NeoForge.EVENT_BUS.addListener(TagsUpdatedEvent.ClientPacketReceived.class, event ->
+						listener.accept(event.getRegistries())
+				);
 			}
 
 			@Override

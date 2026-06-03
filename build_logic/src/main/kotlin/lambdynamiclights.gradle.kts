@@ -57,6 +57,8 @@ tasks.named<Jar>("sourcesJar") {
 
 license {
 	rule(rootProject.file("metadata/HEADER"))
+
+	include("**/*.java")
 }
 
 publishing {
