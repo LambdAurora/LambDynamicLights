@@ -71,7 +71,7 @@ import java.util.function.Predicate;
  * Represents the LambDynamicLights mod.
  *
  * @author LambdAurora
- * @version 4.8.0
+ * @version 4.8.9
  * @since 1.0.0
  */
 @ApiStatus.Internal
@@ -288,7 +288,10 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 	}
 
 	public void onEndLevelTick(ClientLevel level) {
-		assert this.chunkRebuildScheduler != null;
+		if (this.chunkRebuildScheduler == null) {
+			this.chunkRebuildScheduler = this.config.getChunkRebuildSchedulerMode().create(this.sectionRebuildDebugRenderer);
+		}
+
 		this.chunkRebuildScheduler.startTick();
 
 		this.lightSourcesLock.writeLock().lock();

@@ -86,7 +86,7 @@ public class SettingsScreen extends SpruceScreen {
 			version.append(Component.literal(" (dev)").withStyle(ChatFormatting.RED));
 		}
 
-		VERSION = version;
+		VERSION = version.append(Component.literal(" (EOL)").withStyle(ChatFormatting.RED));
 	}
 
 	public SettingsScreen(@Nullable Screen parent) {
