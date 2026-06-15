@@ -574,7 +574,7 @@
 
 - Notice: this is the End-of-Life update for LambDynamicLights on Minecraft 1.21.
 - Fixed recurring crashes with `null` chunk rebuild scheduler.
-- Updated Sodium configuration screen compatibility with Sodium 0.8.x.
+- Updated Sodium configuration screen compatibility with Sodium 0.8.x ([#377](https://github.com/LambdAurora/LambDynamicLights/issues/377)).
 - Backported some changes:
   - Fixed beacon beam still emitting light after being obstructed ([#381](https://github.com/LambdAurora/LambDynamicLights/issues/381)).
 
