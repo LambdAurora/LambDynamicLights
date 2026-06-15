@@ -570,6 +570,11 @@
   - Updated Japanese translations ([#365](https://github.com/LambdAurora/LambDynamicLights/pull/365)).
   - Fixed Simplified Chinese translations ([#368](https://github.com/LambdAurora/LambDynamicLights/issues/368)).
 
+### 4.8.9
+
+- Backported some changes:
+  - Fixed beacon beam still emitting light after being obstructed ([#381](https://github.com/LambdAurora/LambDynamicLights/issues/381)).
+
 ## 4.9.0
 
 - Updated to Minecraft 1.21.11.
@@ -600,6 +605,10 @@
 ### 4.10.2
 
 - Improved compatibility by using chainable injections.
+
+### 4.10.3
+
+- Fixed beacon beam still emitting light after being obstructed ([#381](https://github.com/LambdAurora/LambDynamicLights/issues/381)).
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
