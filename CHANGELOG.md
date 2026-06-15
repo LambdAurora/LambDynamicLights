@@ -570,6 +570,11 @@
   - Updated Japanese translations ([#365](https://github.com/LambdAurora/LambDynamicLights/pull/365)).
   - Fixed Simplified Chinese translations ([#368](https://github.com/LambdAurora/LambDynamicLights/issues/368)).
 
+### 4.8.9
+
+- Backported some changes:
+  - Fixed beacon beam still emitting light after being obstructed ([#381](https://github.com/LambdAurora/LambDynamicLights/issues/381)).
+
 ## 4.9.0
 
 - Updated to Minecraft 1.21.11.
@@ -595,6 +600,15 @@
 
 - Readded Trinkets compatibility with Trinkets Updated ([#367](https://github.com/LambdAurora/LambDynamicLights/issues/367)).
 - Fixed Simplified Chinese translations ([#368](https://github.com/LambdAurora/LambDynamicLights/issues/368)).
+- Updated [Yumi Minecraft Libraries: Foundation].
+
+### 4.10.2
+
+- Improved compatibility by using chainable injections.
+
+### 4.10.3
+
+- Fixed beacon beam still emitting light after being obstructed ([#381](https://github.com/LambdAurora/LambDynamicLights/issues/381)).
 - Updated [Yumi Minecraft Libraries: Foundation].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"

@@ -1,6 +1,6 @@
 [versions]
 minecraft = "1.21.1"
-fabric-loader = "0.16.9"
+fabric-loader = "0.18.4"
 fabric-api = "0.105.0+1.21.1"
 neoforge-loader = "7.0.11"
 mappings-yalmm = "6"
@@ -15,14 +15,15 @@ pridelib = "1.2.4+1.21.1"
 modmenu = "11.0.3"
 trinkets = "3.10.0"
 accessories = "1.1.0-beta.16+1.21.1"
+sodium = "0.8.12-beta.1+mc1.21.1"
 
 # Configuration
 nightconfig = "3.8.1"
 
 # Gradle
-gradle-licenser = "2.2.+"
-gradle-loom = "1.14.+"
-gradle-lambdamcdev = "1.8.+"
+gradle-licenser = "4.0.+"
+gradle-loom = "1.16.+"
+gradle-lambdamcdev = "1.10.+"
 gson = "2.11.0"
 
 [libraries]
@@ -41,6 +42,7 @@ pridelib = { module = "io.github.queerbric:pridelib", version.ref = "pridelib" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 trinkets = { module = "dev.emi:trinkets", version.ref = "trinkets" }
 accessories = { module = "io.wispforest:accessories-fabric", version.ref = "accessories" }
+sodium-api = { module = "net.caffeinemc:sodium-fabric-api", version.ref = "sodium" }
 
 # Configuration
 nightconfig-core = { module = "com.electronwill.night-config:core", version.ref = "nightconfig" }

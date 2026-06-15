@@ -26,12 +26,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
 import java.util.OptionalInt;
 
 @Mixin(BeaconBlockEntity.class)
 public class BeaconBlockEntityMixin extends BlockEntity implements BeaconBlockEntityLightSource {
 	@Shadow
-	int levels;
+	private int levels;
+	@Shadow
+	private List<BeaconBlockEntity.BeaconBeamSection> beamSections;
 	@Unique
 	private BeaconLightBehavior dynamicLightBeam;
 
@@ -44,9 +47,9 @@ public class BeaconBlockEntityMixin extends BlockEntity implements BeaconBlockEn
 			at = @At(value = "FIELD", target = "Lnet/minecraft/world/level/block/entity/BeaconBlockEntity;beamSections:Ljava/util/List;", ordinal = 2)
 	)
 	private static void lambdynlights$onTick(
-			Level level, BlockPos pos, BlockState state, BeaconBlockEntity beacon,
+			Level level, BlockPos pos, BlockState selfState, BeaconBlockEntity beacon,
 			CallbackInfo ci,
-			@Local(ordinal = 0) boolean hadLevels
+			@Local(ordinal = 0) boolean wasActive
 	) {
 		if (level.isClientSide()) {
 			var specialBeacon = (BeaconBlockEntityLightSource) beacon;
@@ -62,10 +65,10 @@ public class BeaconBlockEntityMixin extends BlockEntity implements BeaconBlockEn
 
 			if (specialBeacon.lambdynlights$getLevels() > 0 && specialBeacon.lambdynlights$getDynamicLightBeam() == null) {
 				specialBeacon.lambdynlights$setDynamicLightBeam(new BeaconLightBehavior(
-						pos.getX(), OptionalInt.of(pos.getY() + 1), pos.getZ(), state.getLightEmission(), level
+						pos.getX(), OptionalInt.of(pos.getY() + 1), pos.getZ(), selfState.getLightEmission(), level
 				));
 				LambDynLights.get().dynamicLightBehaviorManager().add(specialBeacon.lambdynlights$getDynamicLightBeam());
-			} else if (hadLevels && specialBeacon.lambdynlights$getLevels() == 0 && specialBeacon.lambdynlights$getDynamicLightBeam() != null) {
+			} else if (wasActive && specialBeacon.lambdynlights$getLevels() == 0 && specialBeacon.lambdynlights$getDynamicLightBeam() != null) {
 				LambDynLights.get().dynamicLightBehaviorManager().remove(specialBeacon.lambdynlights$getDynamicLightBeam());
 				specialBeacon.lambdynlights$setDynamicLightBeam(null);
 			}
@@ -81,6 +84,7 @@ public class BeaconBlockEntityMixin extends BlockEntity implements BeaconBlockEn
 
 	@Override
 	public int lambdynlights$getLevels() {
+		if (this.beamSections.isEmpty()) return 0;
 		return this.levels;
 	}
 

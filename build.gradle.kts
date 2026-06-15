@@ -180,6 +180,7 @@ dependencies {
 	modLocalRuntime(libs.modmenu) {
 		this.isTransitive = false
 	}
+	modCompileOnly(libs.sodium.api)
 
 	// Mod compatibility
 	modCompileOnly(libs.trinkets)
