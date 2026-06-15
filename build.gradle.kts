@@ -42,6 +42,7 @@ tasks.generateFmj.configure {
 		.withEntrypoints("yumi:client_init", "dev.lambdaurora.lambdynlights.LambDynLights::INSTANCE")
 		.withEntrypoints("lambdynlights:platform", "dev.lambdaurora.lambdynlights.platform.fabric.FabricPlatform")
 		.withEntrypoints("modmenu", "dev.lambdaurora.lambdynlights.LambDynLightsModMenu")
+		.withEntrypoints("sodium:config_api_user", "dev.lambdaurora.lambdynlights.compat.SodiumCompat")
 		.withAccessWidener("lambdynlights.accesswidener")
 		.withMixins("lambdynlights.mixins.json", "lambdynlights.lightsource.mixins.json")
 		.withDepend("${Constants.NAMESPACE}_api", ">=${version}")
@@ -75,6 +76,7 @@ lambdamcdev.manifests {
 		withDepend("yumi_mc_core", "[${libs.versions.yumi.mc.foundation.get()},)", Nmt.DependencySide.CLIENT)
 		withBreak("sodiumdynamiclights", "*", Nmt.DependencySide.CLIENT)
 		withBreak("ryoamiclights", "*", Nmt.DependencySide.CLIENT)
+		withCustom("\"sodium:config_api_user\"", "dev.lambdaurora.lambdynlights.compat.SodiumCompat")
 	}
 }
 
