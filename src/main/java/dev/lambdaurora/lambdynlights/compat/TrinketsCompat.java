@@ -17,7 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
  * Represents the Trinkets compatibility layer.
  *
  * @author LambdAurora
- * @version 4.10.1
+ * @version 4.12.0
  * @since 3.1.4
  */
 final class TrinketsCompat implements CompatLayer {
@@ -26,15 +26,13 @@ final class TrinketsCompat implements CompatLayer {
 		int luminance = 0;
 		var component = TrinketsApi.getAttachment(entity);
 
-		/*for (var equipped : component.getAllEquipped()) {
-			if (!equipped.getB().isEmpty()) {
-				luminance = Math.max(luminance, itemLightSources.getLuminance(equipped.getB(), submergedInWater));
+		for (var equipped : component.allEquipped(false)) {
+			luminance = Math.max(luminance, itemLightSources.getLuminance(equipped.get(), submergedInWater));
 
-				if (luminance >= 15) {
-					break;
-				}
+			if (luminance >= 15) {
+				break;
 			}
-		}*/
+		}
 
 		return luminance;
 	}

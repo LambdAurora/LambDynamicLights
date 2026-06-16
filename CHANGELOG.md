@@ -621,6 +621,16 @@
 - Deprecated `lambdynlights:magma_cube` entity luminance, replaced by `lambdynlights:cube_mob_squish`.
 - Updated particle dynamic light ticking to mitigate performance issues with Particle Core, similar to AsyncParticles.
 
+## 4.12.0
+
+- Updated to Minecraft 26.2.
+- Added support for Sulfur Cubes.
+  - A Sulfur Cube with a block emitting light will emit light.
+  - When TNT explosion is active, explosive Sulfur Cubes mimic the behavior.
+- Updated Trinkets compatibility.
+- Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"
