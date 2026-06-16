@@ -39,9 +39,9 @@ public final class DynamicLightsOptionsOption {
 		@Override
 		public Function<OptionInstance<Unit>, AbstractWidget> createButton(
 				OptionInstance.TooltipSupplier<Unit> tooltipSupplier, Options options,
-				int x, int y, int width, Consumer<Unit> changeCallback) {
+				int x, int y, int width, OptionInstance.ValueUpdateListener<? super Unit> onValueChanged) {
 			return option -> Button.builder(SettingsScreen.TITLE, button -> Minecraft.getInstance()
-					.setScreen(new SettingsScreen(this.parent))).bounds(x, y, width, 20).build();
+					.setScreenAndShow(new SettingsScreen(this.parent))).bounds(x, y, width, 20).build();
 		}
 
 		@Override

@@ -153,7 +153,7 @@ public final class CullingChunkRebuildScheduler extends ChunkRebuildScheduler {
 	@Override
 	public void endTick() {
 		long startTime = System.nanoTime();
-		final var frustum = Minecraft.getInstance().gameRenderer.getMainCamera().getCullFrustum();
+		final var frustum = Minecraft.getInstance().gameRenderer.mainCamera().getCullFrustum();
 
 		var chunkIt = this.trackedChunks.long2ObjectEntrySet().iterator();
 		while (chunkIt.hasNext()) {

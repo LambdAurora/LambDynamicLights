@@ -10,7 +10,7 @@
 package dev.lambdaurora.lambdynlights.api.item;
 
 import dev.yumi.commons.event.Event;
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;

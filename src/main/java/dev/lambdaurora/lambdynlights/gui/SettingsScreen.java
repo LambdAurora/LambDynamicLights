@@ -34,7 +34,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Util;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -203,7 +203,7 @@ public class SettingsScreen extends SpruceScreen {
 		doneButtonPos.setRelativeX(doneButtonPos.getRelativeX() + 160);
 		this.addRenderableWidget(new SpruceButtonWidget(doneButtonPos, 150, 20,
 				SpruceTexts.GUI_DONE,
-				btn -> this.minecraft.setScreen(this.parent)
+				btn -> this.minecraft.setScreenAndShow(this.parent)
 		));
 
 		if (tabIndex > 0 && this.tabbedWidget.getList().children().get(tabIndex) instanceof SpruceTabbedWidget.TabEntry tabEntry) {
@@ -316,7 +316,7 @@ public class SettingsScreen extends SpruceScreen {
 
 			var searchInput = SpruceTextFieldWidget.builder(Position.of(searchInputX, 4), 136, 20)
 					.title(Component.literal("Search"))
-					.placeholder(EntityType.BLAZE.getDescription().copy().withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC))
+					.placeholder(EntityTypes.BLAZE.getDescription().copy().withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC))
 					.build();
 			return this.addWidget(searchInput);
 		}

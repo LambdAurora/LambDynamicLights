@@ -14,7 +14,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import dev.lambdaurora.lambdynlights.api.predicate.LightSourceLocationPredicate;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.*;
+import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
+import net.minecraft.advancements.predicates.entity.EntityFlagsPredicate;
+import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentExactPredicate;
@@ -64,7 +67,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 	/**
 	 * Represents a predicate to match entities with.
 	 * <p>
-	 * This is inspired from the {@linkplain net.minecraft.advancements.criterion.EntityPredicate entity predicate}
+	 * This is inspired from the {@linkplain net.minecraft.advancements.predicates.entity.EntityPredicate entity predicate}
 	 * found in advancements but with fewer features since this one needs to work on the client.
 	 *
 	 * @param entityType the entity type predicate to match if present
@@ -135,7 +138,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			} else if (this.passenger.isPresent()
 					&& entity.getPassengers().stream().noneMatch(passenger -> this.passenger.get().test(passenger))) {
 				return false;
-			} else if (this.slots.isPresent() && !((SlotsPredicate) this.slots.get()).matches(entity)) {
+			} else if (this.slots.isPresent() && !this.slots.get().matches(entity)) {
 				return false;
 			} else {
 				return this.components.isEmpty() || !this.components.get().test(entity);
@@ -218,7 +221,7 @@ public record EntityLightSource(EntityPredicate predicate, List<EntityLuminance>
 			 */
 			@Contract("_ -> this")
 			public Builder effects(MobEffectsPredicate.Builder builder) {
-				this.effects = builder.build();
+				this.effects = Optional.of(builder.build());
 				return this;
 			}
 

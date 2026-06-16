@@ -26,7 +26,7 @@ final class TrinketsCompat implements CompatLayer {
 		int luminance = 0;
 		var component = TrinketsApi.getAttachment(entity);
 
-		for (var equipped : component.getAllEquipped()) {
+		/*for (var equipped : component.getAllEquipped()) {
 			if (!equipped.getB().isEmpty()) {
 				luminance = Math.max(luminance, itemLightSources.getLuminance(equipped.getB(), submergedInWater));
 
@@ -34,7 +34,7 @@ final class TrinketsCompat implements CompatLayer {
 					break;
 				}
 			}
-		}
+		}*/
 
 		return luminance;
 	}

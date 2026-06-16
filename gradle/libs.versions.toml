@@ -1,16 +1,16 @@
 [versions]
-minecraft = "26.1.2"
-fabric-loader = "0.18.4"
-fabric-api = "0.152.1+26.1.2"
+minecraft = "26.2-rc-2"
+fabric-loader = "0.19.3"
+fabric-api = "0.152.1+26.2"
 neoforge-loader = "11.0.0"
-neoforge-api = "26.1.2.71"
+neoforge-api = "26.2.0-alpha.0+rc-2.20260615.113433"
 mappings-parchment = "2024.07.28"
 
 # Dependencies
 yumi-commons = "2.0.0"
-yumi-mc-foundation = "1.1.0+26.1"
-spruceui = "10.0.0+26.1"
-pridelib = "1.6.0+26.1"
+yumi-mc-foundation = "1.1.1+26.2"
+spruceui = "11.0.0+26.2"
+pridelib = "1.7.0-beta.1+26.2"
 
 modmenu = "18.0.0-beta.1"
 trinkets = "4.0.0-beta.2+26.1"

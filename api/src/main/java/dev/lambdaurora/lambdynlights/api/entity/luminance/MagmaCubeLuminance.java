@@ -11,7 +11,8 @@ package dev.lambdaurora.lambdynlights.api.entity.luminance;
 
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.MagmaCube;
+import net.minecraft.world.entity.monster.cubemob.AbstractCubeMob;
+import net.minecraft.world.entity.monster.cubemob.MagmaCube;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -33,7 +34,7 @@ public final class MagmaCubeLuminance implements EntityLuminance {
 
 	@Override
 	public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
-		if (entity instanceof MagmaCube magmaCube) {
+		if (entity instanceof AbstractCubeMob magmaCube) {
 			return (magmaCube.squish > 0.6) ? 11 : 8;
 		}
 
