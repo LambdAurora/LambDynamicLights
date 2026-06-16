@@ -21,7 +21,7 @@ import java.util.function.Consumer;
  * Represents the ticking behavior of particle light sources.
  *
  * @author LambdAurora
- * @version 4.8.0
+ * @version 4.11.0
  * @since 4.4.2
  */
 public final class ParticleLightSourceBehavior {
@@ -48,7 +48,7 @@ public final class ParticleLightSourceBehavior {
 	}
 
 	static {
-		if (YumiMods.get().isModLoaded("asyncparticles")) {
+		if (YumiMods.get().isModLoaded("asyncparticles") || YumiMods.get().isModLoaded("particle_core")) {
 			DO_TICK_PARTICLE = particle -> Minecraft.getInstance().execute(() -> doTickParticle(particle));
 		} else {
 			DO_TICK_PARTICLE = ParticleLightSourceBehavior::doTickParticle;

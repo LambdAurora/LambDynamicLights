@@ -3,6 +3,9 @@
 		"type": "minecraft:magma_cube"
 	},
 	"luminance": {
-		"type": "lambdynlights:magma_cube"
+		"type": "lambdynlights:cube_mob_squish",
+		"low": 8,
+		"high": 11,
+		"threshold": 0.6
 	}
 }

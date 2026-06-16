@@ -148,6 +148,8 @@ public interface EntityLuminance {
 		public static final Type ARROW_ITEM_DERIVED = registerSimple(
 				"arrow/derived_from_self_item", ArrowItemDerivedLuminance.INSTANCE
 		);
+		public static final Type BLOCK = register("block", BlockLuminance.CODEC);
+		public static final Type CUBE_MOB_SQUISH = register("cube_mob_squish", CubeMobSquishLuminance.CODEC);
 		public static final Type ENDERMAN = registerSimple("enderman", EndermanLuminance.INSTANCE);
 		public static final Type GLOW_SQUID = registerSimple("glow_squid", GlowSquidLuminance.INSTANCE);
 		public static final Type MAGMA_CUBE = registerSimple("magma_cube", MagmaCubeLuminance.INSTANCE);
