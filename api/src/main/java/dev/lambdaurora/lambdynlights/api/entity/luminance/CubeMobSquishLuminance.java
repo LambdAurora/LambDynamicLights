@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2026 LambdAurora <email@lambdaurora.dev>
+ *
+ * This file is part of LambDynamicLights.
+ *
+ * Licensed under the Lambda License. For more information,
+ * see the LICENSE file.
+ */
+
 package dev.lambdaurora.lambdynlights.api.entity.luminance;
 
 import com.mojang.serialization.Codec;
