@@ -614,6 +614,13 @@
 - Fixed beacon beam still emitting light after being obstructed ([#381](https://github.com/LambdAurora/LambDynamicLights/issues/381)).
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+## 4.11.0
+
+- Added `lambdynlights:block` entity luminance which provides the luminance value from a given block state.
+- Added `lambdynlights:cube_mob_squish` entity luminance which provides a luminance value based on the squish of a cube mob (slime, magma cube, sulfur cube, etc.).
+- Deprecated `lambdynlights:magma_cube` entity luminance, replaced by `lambdynlights:cube_mob_squish`.
+- Updated particle dynamic light ticking to mitigate performance issues with Particle Core, similar to AsyncParticles.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"
