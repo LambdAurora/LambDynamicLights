@@ -9,10 +9,9 @@
 
 package dev.lambdaurora.lambdynlights.mixin.lightsource;
 
-import dev.lambdaurora.lambdynlights.ExplosiveLightingMode;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSource;
-import net.minecraft.util.Mth;
+import dev.lambdaurora.lambdynlights.util.ExplosiveLuminance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.Level;
@@ -43,21 +42,8 @@ public abstract class PrimedTntEntityMixin extends EntityMixin implements Entity
 
 	@Override
 	public void dynamicLightTick() {
-		if (!LambDynLights.get().config.getTntLightingMode().isEnabled()) {
-			this.setLuminance(0);
-			return;
-		}
-
-		super.dynamicLightTick();
-
-		ExplosiveLightingMode lightingMode = LambDynLights.get().config.getTntLightingMode();
-		int luminance;
-		if (lightingMode == ExplosiveLightingMode.FANCY) {
-			luminance = (int) (-Mth.smoothstep((float) this.getFuse() / this.startFuseTimer) * 10.f) + 10;
-		} else {
-			luminance = 10;
-		}
-
-		this.setLuminance(Math.max(this.getLuminance(), luminance));
+		ExplosiveLuminance.doExplosiveLuminanceTick(
+				this, this::getFuse, () -> this.startFuseTimer, super::dynamicLightTick
+		);
 	}
 }

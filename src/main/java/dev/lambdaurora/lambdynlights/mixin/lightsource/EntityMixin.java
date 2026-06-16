@@ -12,8 +12,10 @@ package dev.lambdaurora.lambdynlights.mixin.lightsource;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import dev.lambdaurora.lambdynlights.engine.source.EntityDynamicLightSourceBehavior;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -50,6 +52,9 @@ public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
 	@Shadow
 	public abstract boolean isInvisible();
 
+	@Shadow
+	@Final
+	protected SynchedEntityData entityData;
 	// Must be private, DO NOT TRUST INHERITANCE WHEN USING @UNIQUE
 	@Unique
 	private int lambdynlights$luminance = 0;
