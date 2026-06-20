@@ -152,6 +152,7 @@ public interface EntityLuminance {
 		public static final Type CUBE_MOB_SQUISH = register("cube_mob_squish", CubeMobSquishLuminance.CODEC);
 		public static final Type ENDERMAN = registerSimple("enderman", EndermanLuminance.INSTANCE);
 		public static final Type GLOW_SQUID = registerSimple("glow_squid", GlowSquidLuminance.INSTANCE);
+		@SuppressWarnings("deprecation")
 		public static final Type MAGMA_CUBE = registerSimple("magma_cube", MagmaCubeLuminance.INSTANCE);
 		public static final Type FALLING_BLOCK = registerSimple("falling_block", FallingBlockLuminance.INSTANCE);
 		public static final Type ITEM = register("item", ItemDerivedEntityLuminance.CODEC);
