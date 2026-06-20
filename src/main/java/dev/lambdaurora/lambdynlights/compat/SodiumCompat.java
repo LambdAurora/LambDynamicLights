@@ -16,6 +16,7 @@ import net.caffeinemc.mods.sodium.api.config.ConfigEntryPoint;
 import net.caffeinemc.mods.sodium.api.config.structure.ConfigBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 /**
  * Provides the settings entry in Sodium's settings screen.
@@ -32,6 +33,7 @@ public final class SodiumCompat implements ConfigEntryPoint {
 				.setColorTheme(builder.createColorTheme()
 						.setBaseThemeRGB(0xffff5aa2)
 				)
+				.setNonTintedIcon(Identifier.parse("lambdynlights:icon.png"))
 				.addPage(builder.createExternalPage()
 						.setName(Component.translatable(
 								"lambdynlights.menu.sodium.tab",
