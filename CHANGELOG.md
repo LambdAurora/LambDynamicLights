@@ -642,6 +642,10 @@
 - Updated Malay and Malay (Jawi) translations ([#388](https://github.com/LambdAurora/LambDynamicLights/pull/388), [#389](https://github.com/LambdAurora/LambDynamicLights/pull/389)).
 - Updated pribelib to fix some flag rendering issues with Vulkan.
 
+### 4.12.2
+
+- Added the mod icon to the Sodium configuration screen ([#390](https://github.com/LambdAurora/LambDynamicLights/pull/390)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"
