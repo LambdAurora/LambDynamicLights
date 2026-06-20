@@ -634,7 +634,7 @@
 ### 4.12.1
 
 - Fixed Minecraft dependency version range on NeoForge ([#387](https://github.com/LambdAurora/LambDynamicLights/issues/387)).
-- Updated Malay and Malay (Jawi) translations ([#388](https://github.com/LambdAurora/LambDynamicLights/pull/388)).
+- Updated Malay and Malay (Jawi) translations ([#388](https://github.com/LambdAurora/LambDynamicLights/pull/388), [#389](https://github.com/LambdAurora/LambDynamicLights/pull/389)).
 - Updated pribelib to fix some flag rendering issues with Vulkan.
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
