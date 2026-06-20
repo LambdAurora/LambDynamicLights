@@ -24,9 +24,9 @@ logger.lifecycle("Preparing version ${version}...")
 lambdamcdev.setupActionsRefCheck()
 
 val fabricApiModules = listOf(
-	fabricApi.module("fabric-lifecycle-events-v1", libs.versions.fabric.api.get())!!,
-	fabricApi.module("fabric-resource-loader-v1", libs.versions.fabric.api.get())!!,
-	fabricApi.module("fabric-resource-conditions-api-v1", libs.versions.fabric.api.get())!!
+	fabricApi.module("fabric-lifecycle-events-v1", libs.versions.fabric.api.get()),
+	fabricApi.module("fabric-resource-loader-v1", libs.versions.fabric.api.get()),
+	fabricApi.module("fabric-resource-conditions-api-v1", libs.versions.fabric.api.get()),
 )
 
 val neoforge: SourceSet by sourceSets.creating {
@@ -98,14 +98,6 @@ repositories {
 		content {
 			includeGroupAndSubgroups("net.neoforged")
 			includeGroupAndSubgroups("cpw.mods")
-		}
-	}
-	maven {
-		name = "Maven for PR #3198" // https://github.com/neoforged/NeoForge/pull/3198
-		url = uri("https://prmaven.neoforged.net/NeoForge/pr3198")
-		content {
-			includeModule("net.neoforged", "neoforge")
-			includeModule("net.neoforged", "testframework")
 		}
 	}
 	exclusiveContent {
