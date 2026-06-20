@@ -578,6 +578,11 @@
 - Backported some changes:
   - Fixed beacon beam still emitting light after being obstructed ([#381](https://github.com/LambdAurora/LambDynamicLights/issues/381)).
 
+### 4.8.10
+
+- Notice: this is the End-of-Life update for LambDynamicLights on Minecraft 1.21.
+- Added the mod icon to the Sodium configuration screen ([#390](https://github.com/LambdAurora/LambDynamicLights/pull/390)).
+
 ## 4.9.0
 
 - Updated to Minecraft 1.21.11.
