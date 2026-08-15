@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.Mixin;
 public abstract class LivingEntityMixin extends EntityMixin {
 	@Override
 	public void dynamicLightTick() {
-		if (this.isInvisible()) {
+		if (this.isSpectator()) {
 			this.setLuminance(0);
 			return;
 		}
