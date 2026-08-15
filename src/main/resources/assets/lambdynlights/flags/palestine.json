@@ -1,0 +1,14 @@
+{
+	"shape": "pride:arrow",
+	"background": {
+		"colors": [
+			"#000000",
+			"#FFFFFF",
+			"#009639"
+		]
+	},
+	"colors": [
+		"#ED2E38"
+	],
+	"advance_ratio": 1.1
+}

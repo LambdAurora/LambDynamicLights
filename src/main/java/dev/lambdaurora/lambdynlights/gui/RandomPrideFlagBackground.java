@@ -18,6 +18,7 @@ import dev.lambdaurora.spruceui.util.ColorUtil;
 import dev.lambdaurora.spruceui.widget.SpruceWidget;
 import io.github.queerbric.pride.PrideFlag;
 import io.github.queerbric.pride.PrideFlags;
+import io.github.queerbric.pride.shape.CirclePrideFlagShape;
 import io.github.queerbric.pride.shape.HorizontalPrideFlagShape;
 import io.github.queerbric.pride.shape.PrideFlagShape;
 import io.github.queerbric.pride.shape.VerticalPrideFlagShape;
@@ -28,6 +29,7 @@ import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import org.joml.Matrix3x2f;
 import org.jspecify.annotations.Nullable;
 
@@ -42,7 +44,7 @@ import java.util.Random;
  * @version 4.10.0
  * @since 2.1.0
  */
-public class RandomPrideFlagBackground implements Background {
+public final class RandomPrideFlagBackground implements Background {
 	private static final Background SECOND_LAYER = new SimpleColorBackground(0xd0101010);
 	private static final HorizontalPrideFlagShape DEFAULT_RAINBOW = new HorizontalPrideFlagShape(IntList.of(
 			0xffff0018, 0xffffa52c, 0xffffff41, 0xff008018, 0xff0000f9, 0xff86007d
@@ -76,8 +78,16 @@ public class RandomPrideFlagBackground implements Background {
 					colors,
 					null
 			));
+		} else if (!(this.getShape() instanceof CirclePrideFlagShape)) {
+			var pose = graphics.pose();
+			pose.pushMatrix();
+			pose.translate(x, y);
+			pose.rotate(Mth.DEG_TO_RAD * 90);
+			//noinspection SuspiciousNameCombination -- Note: this is intended due to the rotation changing what axis is relevant.
+			this.flag.extractRenderState(graphics.vanilla(), 0, -width, height, width);
+			pose.popMatrix();
 		} else {
-			this.flag.extractRenderState(graphics.vanilla(), x, y, widget.getWidth(), widget.getHeight());
+			this.flag.extractRenderState(graphics.vanilla(), x, y, width, height);
 		}
 
 		SECOND_LAYER.extractRenderState(graphics, widget, vOffset, mouseX, mouseY, delta);
