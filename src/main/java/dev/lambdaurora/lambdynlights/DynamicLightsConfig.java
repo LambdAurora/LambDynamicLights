@@ -25,6 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,14 +37,12 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 4.8.0
+ * @version 4.12.0
  * @since 1.0.0
  */
 public class DynamicLightsConfig {
@@ -59,8 +58,6 @@ public class DynamicLightsConfig {
 	private static final ExplosiveLightingMode DEFAULT_TNT_LIGHTING_MODE = ExplosiveLightingMode.OFF;
 	private static final int DEFAULT_DEBUG_CELL_DISPLAY_RADIUS = 0;
 	private static final int DEFAULT_DEBUG_LIGHT_LEVEL_RADIUS = 0;
-
-	private static final Executor SAVE_EXECUTOR = Executors.newSingleThreadExecutor();
 
 	public static final Path CONFIG_FILE_PATH = YumiMods.get().getConfigDirectory()
 			.resolve("lambdynlights.toml")
@@ -304,7 +301,7 @@ public class DynamicLightsConfig {
 	 * Queues the saving of the configuration.
 	 */
 	public void save() {
-		this.maybeSerialize().ifPresent(data -> SAVE_EXECUTOR.execute(() -> this.doSave(data)));
+		this.maybeSerialize().ifPresent(data -> Util.ioPool().execute(() -> this.doSave(data)));
 	}
 
 	private String serialize() {

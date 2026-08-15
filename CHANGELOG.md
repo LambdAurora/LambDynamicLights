@@ -656,6 +656,8 @@
 ### 4.12.3
 
 - Fixed version display in configuration screen being misplaced with some resolutions.
+- Fixed the configuration save task thread executor not being shutdown when closing the game. ([#396](https://github.com/LambdAurora/LambDynamicLights/issues/396))
+  - The configuration saving task is now using Minecraft's own I/O thread pool, which is properly shutdown.
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
