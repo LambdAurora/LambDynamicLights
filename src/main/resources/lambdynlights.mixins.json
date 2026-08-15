@@ -11,6 +11,7 @@
 		"EntityRendererMixin",
 		"EntityTypeMixin",
 		"GuiMixin",
+		"LevelRendererAccessor",
 		"MinecraftClientMixin",
 		"OptionsMixin",
 		"ParticleGroupMixin",

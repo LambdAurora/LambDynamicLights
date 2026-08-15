@@ -26,11 +26,13 @@ final class TrinketsCompat implements CompatLayer {
 		int luminance = 0;
 		var component = TrinketsApi.getAttachment(entity);
 
-		for (var equipped : component.allEquipped(false)) {
-			luminance = Math.max(luminance, itemLightSources.getLuminance(equipped.get(), submergedInWater));
+		for (var equipped : component.getAllEquipped()) {
+			if (!equipped.getB().isEmpty()) {
+				luminance = Math.max(luminance, itemLightSources.getLuminance(equipped.getB(), submergedInWater));
 
-			if (luminance >= 15) {
-				break;
+				if (luminance >= 15) {
+					break;
+				}
 			}
 		}
 

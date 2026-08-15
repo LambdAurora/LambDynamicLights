@@ -33,7 +33,7 @@ public final class DevModeGui {
 			return;
 		}
 
-		ScreenEvents.AFTER_EXTRACT.register(
+		ScreenEvents.AFTER_RENDER.register(
 				(screen, graphics, mouseX, mouseY, tickDelta) -> extractRenderState(graphics.vanilla()),
 				Predicate.not(SettingsScreen.class::isInstance)
 		);

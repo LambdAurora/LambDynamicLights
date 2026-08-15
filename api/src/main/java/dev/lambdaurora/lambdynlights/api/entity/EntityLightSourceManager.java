@@ -11,7 +11,7 @@ package dev.lambdaurora.lambdynlights.api.entity;
 
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
 import dev.yumi.commons.event.Event;
-import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
+import net.minecraft.advancements.criterion.EntityTypePredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;

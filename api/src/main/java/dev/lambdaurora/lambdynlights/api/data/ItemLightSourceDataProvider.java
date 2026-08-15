@@ -11,7 +11,7 @@ package dev.lambdaurora.lambdynlights.api.data;
 
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSource;
 import dev.lambdaurora.lambdynlights.api.item.ItemLuminance;
-import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;

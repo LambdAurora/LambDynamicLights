@@ -11,8 +11,8 @@ package dev.lambdaurora.lambdynlights.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.lambdaurora.lambdynlights.LambDynLights;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.level.BlockAndLightGetter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.At;
  * @version 4.10.2
  * @since 4.2.3
  */
-@Mixin(value = LightCoordsUtil.BrightnessGetter.class, priority = 900)
+@Mixin(value = LevelRenderer.BrightnessGetter.class, priority = 900)
 public interface BrightnessGetterMixin {
 	@ModifyReturnValue(
 			method = "lambda$static$0",

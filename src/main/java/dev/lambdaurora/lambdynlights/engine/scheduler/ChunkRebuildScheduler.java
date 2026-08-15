@@ -10,6 +10,7 @@
 package dev.lambdaurora.lambdynlights.engine.scheduler;
 
 import dev.lambdaurora.lambdynlights.engine.source.DynamicLightSource;
+import dev.lambdaurora.lambdynlights.mixin.LevelRendererAccessor;
 import dev.lambdaurora.lambdynlights.util.DynamicLightDebugRenderer;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongSet;
@@ -94,7 +95,7 @@ public abstract class ChunkRebuildScheduler implements Closeable {
 
 	private void scheduleChunkRebuild(int x, int y, int z) {
 		if (this.client.level != null) {
-			this.client.levelExtractor.setSectionDirty(x, y, z);
+			((LevelRendererAccessor) this.client.levelRenderer).lambdynlights$scheduleChunkRebuild(x, y, z, false);
 		}
 	}
 }

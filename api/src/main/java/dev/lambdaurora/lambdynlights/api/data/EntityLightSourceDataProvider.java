@@ -11,7 +11,7 @@ package dev.lambdaurora.lambdynlights.api.data;
 
 import dev.lambdaurora.lambdynlights.api.entity.EntityLightSource;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
-import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
+import net.minecraft.advancements.criterion.EntityTypePredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.data.PackOutput;

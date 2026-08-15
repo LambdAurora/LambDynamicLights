@@ -14,7 +14,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.cubemob.AbstractCubeMob;
+import net.minecraft.world.entity.monster.Slime;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -47,7 +47,7 @@ public record CubeMobSquishLuminance(
 
 	@Override
 	public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
-		if (entity instanceof AbstractCubeMob slime) {
+		if (entity instanceof Slime slime) {
 			if (slime.squish > threshold) return this.highSquishLuminance.getLuminance(itemLightSourceManager, entity);
 			else return this.lowSquishLuminance.getLuminance(itemLightSourceManager, entity);
 		}

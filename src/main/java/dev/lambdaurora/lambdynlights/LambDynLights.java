@@ -243,7 +243,7 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 		var mode = TickMode.REAL_TIME;
 
 		// If the entity is far behind the camera, we greatly slow it down.
-		var camera = Minecraft.getInstance().gameRenderer.mainCamera();
+		var camera = Minecraft.getInstance().gameRenderer.getMainCamera();
 		var planeNormal = camera.forwardVector();
 		var planeOrigin = camera.position();
 
@@ -403,7 +403,7 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 			this.config.getSelfLightSource().set(newValue);
 			this.config.save();
 
-			client.gui.chatListener().handleOverlay(
+			client.getChatListener().handleOverlay(
 					Component.translatable(
 							LambDynLightsConstants.NAMESPACE + ".key.toggle_fps_dynamic_lighting.info",
 							toggleText.copy().withStyle(newValue ? ChatFormatting.GREEN : ChatFormatting.RED)

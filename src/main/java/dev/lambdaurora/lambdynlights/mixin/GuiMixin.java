@@ -9,7 +9,6 @@
 
 package dev.lambdaurora.lambdynlights.mixin;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import dev.lambdaurora.lambdynlights.gui.DevModeGui;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -25,11 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Gui.class)
 public class GuiMixin {
 	@Inject(method = "extractRenderState", at = @At("TAIL"))
-	private void lambdynlights$onExtractRenderState(
-			DeltaTracker deltaTracker, boolean shouldRenderLevel, boolean resourcesLoaded,
-			CallbackInfo ci,
-			@Local(name = "graphics") GuiGraphicsExtractor graphics
-	) {
+	private void lambdynlights$onExtractRenderState(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
 		DevModeGui.extractRenderState(graphics);
 	}
 }
