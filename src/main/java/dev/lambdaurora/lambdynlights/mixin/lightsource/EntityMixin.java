@@ -50,11 +50,12 @@ public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
 	public abstract boolean isCurrentlyGlowing();
 
 	@Shadow
-	public abstract boolean isInvisible();
-
-	@Shadow
 	@Final
 	protected SynchedEntityData entityData;
+
+	@Shadow
+	public abstract boolean isSpectator();
+
 	// Must be private, DO NOT TRUST INHERITANCE WHEN USING @UNIQUE
 	@Unique
 	private int lambdynlights$luminance = 0;
@@ -124,7 +125,7 @@ public abstract class EntityMixin implements EntityDynamicLightSourceBehavior {
 
 	@Override
 	public void dynamicLightTick() {
-		if (this.isInvisible()) {
+		if (this.isSpectator()) {
 			this.lambdynlights$luminance = 0;
 		} else {
 			this.lambdynlights$luminance = this.isOnFire() ? 15 : 0;
