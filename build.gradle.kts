@@ -29,7 +29,7 @@ val fabricApiModules = listOf(
 	fabricApi.module("fabric-resource-conditions-api-v1", libs.versions.fabric.api.get()),
 )
 
-val neoforge: SourceSet by sourceSets.creating {
+val neoforge = sourceSets.create("neoforge") {
 	this.compileClasspath += sourceSets.main.get().compileClasspath
 	this.runtimeClasspath += sourceSets.main.get().runtimeClasspath
 }
@@ -166,11 +166,10 @@ dependencies {
 }
 
 loom.runs.getByName("client") {
-	this.vmArg("-DMC_DEBUG_ENABLED")
-	this.vmArg("-DMC_DEBUG_HOTKEYS")
+	this.jvmArguments.addAll("-DMC_DEBUG_ENABLED", "-DMC_DEBUG_HOTKEYS")
 }
 
-val convertAWtoAT by tasks.registering(ConvertAccessWidenerToTransformer::class) {
+val convertAWtoATTask = tasks.register("convertAWtoAT", ConvertAccessWidenerToTransformer::class) {
 	this.group = "generation"
 	this.input = loom.accessWidenerPath
 	this.output = project.layout.buildDirectory.get().file("generated/accesstransformer.cfg")
@@ -181,7 +180,7 @@ tasks.jar {
 	archiveClassifier.set("dev")
 }
 
-val generateJarJarMetadata by tasks.registering(GenerateNeoForgeJiJDataTask::class) {
+val generateJarJarMetadataTask = tasks.register<GenerateNeoForgeJiJDataTask>("generateJarJarMetadata") {
 	val includeConfig = project.configurations.getByName("includeInternal");
 	this.from(includeConfig)
 	this.outputFile.set(
@@ -193,10 +192,10 @@ val generateJarJarMetadata by tasks.registering(GenerateNeoForgeJiJDataTask::cla
 	)
 }
 
-val adjustJarJarMetadata by tasks.registering(AdjustJarJarMetadataTask::class) {
-	this.dependsOn(generateJarJarMetadata)
+val adjustJarJarMetadataTask = tasks.register<AdjustJarJarMetadataTask>("adjustJarJarMetadata") {
+	this.dependsOn(generateJarJarMetadataTask)
 	this.artifactGroup.set(project.group.toString())
-	this.jarJarMetadata.set(generateJarJarMetadata.flatMap { it.outputFile })
+	this.jarJarMetadata.set(generateJarJarMetadataTask.flatMap { it.outputFile })
 	this.outputFile.set(
 		project.layout.buildDirectory
 			.asFile
@@ -207,7 +206,7 @@ val adjustJarJarMetadata by tasks.registering(AdjustJarJarMetadataTask::class) {
 }
 
 tasks.shadowJar {
-	dependsOn(tasks.jar, adjustJarJarMetadata)
+	dependsOn(tasks.jar, adjustJarJarMetadataTask)
 	configurations = listOf(project.configurations["shadow"])
 	archiveClassifier.set("")
 	relocate("com.electronwill.nightconfig", "dev.lambdaurora.lambdynlights.shadow.nightconfig")
@@ -216,11 +215,11 @@ tasks.shadowJar {
 		rename { "${it}_${Constants.NAME}" }
 	}
 
-	from(adjustJarJarMetadata.map { it.outputFile }) {
+	from(adjustJarJarMetadataTask.map { it.outputFile }) {
 		into("META-INF/jarjar")
 	}
 	from(neoforge.output)
-	from(convertAWtoAT) {
+	from(convertAWtoATTask) {
 		into("META-INF")
 	}
 }
@@ -233,7 +232,7 @@ loom.nestJars(
 tasks.named<Jar>("sourcesJar") {
 	this.from(neoforge.java.sourceDirectories)
 	this.from(neoforge.resources.sourceDirectories)
-	this.from(convertAWtoAT) {
+	this.from(convertAWtoATTask) {
 		into("META-INF")
 	}
 }
@@ -242,7 +241,7 @@ val mainSourceSet = sourceSets.main.get()
 lambdamcdev.replaceArtifactInConfiguration(mainSourceSet.apiConfigurationName, tasks.shadowJar)
 lambdamcdev.replaceArtifactInConfiguration(mainSourceSet.runtimeElementsConfigurationName, tasks.shadowJar)
 
-val packageModrinth by tasks.registering(PackageModrinthTask::class) {
+tasks.register<PackageModrinthTask>("packageModrinth") {
 	this.group = "publishing"
 	this.versionType.set(ldl.versionType())
 	this.versionName.set("${Constants.PRETTY_NAME} ${ldl.version()} (${McVersionLookup.getVersionTag(ldl.mcVersion())})")
