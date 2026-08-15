@@ -89,7 +89,7 @@ jobs:
       - name: "Extract files"
         run: unzip dist/modrinth.zip
       - name: "Release on Modrinth"
-        uses: LambdAurora/modrinth_publish@v0.1.5
+        uses: LambdAurora/modrinth_publish@v0.2.0
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
           project: "yBW8D80W"
@@ -119,8 +119,9 @@ jobs:
             core.setOutput("name", json.name);
             core.setOutput("game_versions", json.game_versions.join("\n"));
             core.setOutput("loaders", json.loaders.join("\n"));
+            core.setOutput("environment", json.environment.replace("_only", "_required"));
             await fs.writeFile("CHANGELOG.md", json.changelog);
-      - uses: Kir-Antipov/mc-publish@v3.3
+      - uses: Kira-NT/mc-publish@v3.3.1
         with:
           curseforge-id: 393442
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
@@ -135,6 +136,7 @@ jobs:
           loaders: ${{ steps.manifest.outputs.loaders }}
           game-versions: ${{ steps.manifest.outputs.game_versions }}
           game-version-filter: none
+          environment: ${{ steps.manifest.outputs.environment }}
           dependencies: |
             fabric-api(required)
             modmenu(optional)

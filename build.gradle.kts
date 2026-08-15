@@ -1,4 +1,5 @@
 import com.modrinth.minotaur.dependencies.ModDependency
+import dev.lambdaurora.mcdev.api.EnvironmentType
 import dev.lambdaurora.mcdev.api.McVersionLookup
 import dev.lambdaurora.mcdev.api.ModVersionDependency
 import dev.lambdaurora.mcdev.api.manifest.Nmt
@@ -247,6 +248,7 @@ tasks.register<PackageModrinthTask>("packageModrinth") {
 	this.versionName.set("${Constants.PRETTY_NAME} ${ldl.version()} (${McVersionLookup.getVersionTag(ldl.mcVersion())})")
 	this.gameVersions.set(ldl.compatibleMcVersions())
 	this.loaders.set(listOf("fabric", "quilt", "neoforge"))
+	this.environment.set(EnvironmentType.CLIENT_ONLY)
 	this.dependencies.set(
 		listOf(
 			ModVersionDependency("P7dR8mSH", ModVersionDependency.Type.REQUIRED),
