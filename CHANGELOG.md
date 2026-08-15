@@ -626,6 +626,13 @@
 - Deprecated `lambdynlights:magma_cube` entity luminance, replaced by `lambdynlights:cube_mob_squish`.
 - Updated particle dynamic light ticking to mitigate performance issues with Particle Core, similar to AsyncParticles.
 
+### 4.11.1
+
+- Backported some changes:
+  - Updated Malay and Malay (Jawi) translations ([#388](https://github.com/LambdAurora/LambDynamicLights/pull/388), [#389](https://github.com/LambdAurora/LambDynamicLights/pull/389)).
+  - Added the mod icon to the Sodium configuration screen ([#390](https://github.com/LambdAurora/LambDynamicLights/pull/390)).
+  - Fixed version display in configuration screen being misplaced with some resolutions.
+
 ## 4.12.0
 
 - Updated to Minecraft 26.2.
@@ -645,6 +652,10 @@
 ### 4.12.2
 
 - Added the mod icon to the Sodium configuration screen ([#390](https://github.com/LambdAurora/LambDynamicLights/pull/390)).
+
+### 4.12.3
+
+- Fixed version display in configuration screen being misplaced with some resolutions.
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"

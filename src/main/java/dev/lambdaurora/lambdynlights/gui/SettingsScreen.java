@@ -302,7 +302,7 @@ public class SettingsScreen extends SpruceScreen {
 
 		void addVersionLabel() {
 			this.addWidget(new SpruceLabelWidget(
-					Position.of(0, 16), VERSION,
+					Position.of(0, this.tabbedWidget.getList().getY() - 12), VERSION,
 					this.width() - 4, SpruceTextAlignment.RIGHT
 			));
 		}
