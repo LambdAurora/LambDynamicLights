@@ -22,7 +22,7 @@ nightconfig = "3.8.1"
 
 # Gradle
 gradle-licenser = "4.0.+"
-gradle-loom = "1.16.+"
+gradle-loom = "1.17.+"
 gradle-lambdamcdev = "2.2.0"
 gson = "2.11.0"
 
