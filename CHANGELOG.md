@@ -632,6 +632,8 @@
   - Updated Malay and Malay (Jawi) translations ([#388](https://github.com/LambdAurora/LambDynamicLights/pull/388), [#389](https://github.com/LambdAurora/LambDynamicLights/pull/389)).
   - Added the mod icon to the Sodium configuration screen ([#390](https://github.com/LambdAurora/LambDynamicLights/pull/390)).
   - Fixed version display in configuration screen being misplaced with some resolutions.
+  - Fixed the configuration save task thread executor not being shutdown when closing the game. ([#396](https://github.com/LambdAurora/LambDynamicLights/issues/396))
+    - The configuration saving task is now using Minecraft's own I/O thread pool, which is properly shutdown.
 
 ## 4.12.0
 
