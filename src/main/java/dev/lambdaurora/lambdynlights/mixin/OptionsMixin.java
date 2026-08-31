@@ -22,6 +22,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Environment(EnvType.CLIENT)
 @Mixin(Options.class)
 public class OptionsMixin {
@@ -32,9 +35,9 @@ public class OptionsMixin {
 
 	@Inject(at = @At("HEAD"), method = "load()V")
 	private void lambdynlights$onLoad(CallbackInfo ci) {
-		var keyMappings = new KeyMapping[this.keyMappings.length + 1];
-		System.arraycopy(this.keyMappings, 0, keyMappings, 0, this.keyMappings.length);
-		keyMappings[keyMappings.length - 1] = LambDynLights.TOGGLE_FPS_DYNAMIC_LIGHTING;
-		this.keyMappings = keyMappings;
+		var keyMappings = new ArrayList<>(List.of(this.keyMappings));
+		keyMappings.remove(LambDynLights.TOGGLE_FPS_DYNAMIC_LIGHTING); // Make sure there are no duplicates.
+		keyMappings.add(LambDynLights.TOGGLE_FPS_DYNAMIC_LIGHTING);
+		this.keyMappings = keyMappings.toArray(KeyMapping[]::new);
 	}
 }
