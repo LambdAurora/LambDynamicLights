@@ -583,6 +583,11 @@
 - Notice: this is the End-of-Life update for LambDynamicLights on Minecraft 1.21.
 - Added the mod icon to the Sodium configuration screen ([#390](https://github.com/LambdAurora/LambDynamicLights/pull/390)).
 
+### 4.8.11
+
+- Reminder of notice: this is the End-of-Life update for LambDynamicLights on Minecraft 1.21.
+- Fixed duplicate keybind corrupting `options.txt` ([#311](https://github.com/LambdAurora/LambDynamicLights/issues/311), [#386](https://github.com/LambdAurora/LambDynamicLights/issues/386)).
+
 ## 4.9.0
 
 - Updated to Minecraft 1.21.11.
