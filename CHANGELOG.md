@@ -583,6 +583,11 @@
 - Notice: this is the End-of-Life update for LambDynamicLights on Minecraft 1.21.
 - Added the mod icon to the Sodium configuration screen ([#390](https://github.com/LambdAurora/LambDynamicLights/pull/390)).
 
+### 4.8.11
+
+- Reminder of notice: this is the End-of-Life update for LambDynamicLights on Minecraft 1.21.
+- Fixed duplicate keybind corrupting `options.txt` ([#311](https://github.com/LambdAurora/LambDynamicLights/issues/311), [#386](https://github.com/LambdAurora/LambDynamicLights/issues/386)).
+
 ## 4.9.0
 
 - Updated to Minecraft 1.21.11.
@@ -637,6 +642,11 @@
   - Fixed inconsistent behavior with invisible entities emitting dynamic lighting ([#394](https://github.com/LambdAurora/LambDynamicLights/issues/394)).
     - The initial intent of the check was to make sure spectator entities do not emit dynamic lighting, but some forms of invisibility do not hide items in hands which should emit light.
 
+### 4.11.2
+
+- Backported some changes:
+  - Fixed duplicate keybind corrupting `options.txt` ([#311](https://github.com/LambdAurora/LambDynamicLights/issues/311), [#386](https://github.com/LambdAurora/LambDynamicLights/issues/386)).
+
 ## 4.12.0
 
 - Updated to Minecraft 26.2.
@@ -664,6 +674,10 @@
   - The configuration saving task is now using Minecraft's own I/O thread pool, which is properly shutdown.
 - Fixed inconsistent behavior with invisible entities emitting dynamic lighting ([#394](https://github.com/LambdAurora/LambDynamicLights/issues/394)).
   - The initial intent of the check was to make sure spectator entities do not emit dynamic lighting, but some forms of invisibility do not hide items in hands which should emit light.
+
+### 4.12.4
+
+- Fixed duplicate keybind corrupting `options.txt` ([#311](https://github.com/LambdAurora/LambDynamicLights/issues/311), [#386](https://github.com/LambdAurora/LambDynamicLights/issues/386)).
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
