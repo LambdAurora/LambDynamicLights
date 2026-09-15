@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.lambdynlights.gui;
 
+import com.mojang.blaze3d.Blaze3D;
 import dev.lambdaurora.lambdynlights.DynamicLightsConfig;
 import dev.lambdaurora.lambdynlights.ExplosiveLightingMode;
 import dev.lambdaurora.lambdynlights.LambDynLights;
@@ -33,10 +34,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Util;
 import net.minecraft.world.entity.EntityTypes;
 import org.jspecify.annotations.Nullable;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -46,7 +47,7 @@ import java.util.stream.Collectors;
  * Represents the settings screen of LambDynamicLights.
  *
  * @author LambdAurora
- * @version 4.9.0
+ * @version 4.13.0
  * @since 1.0.0
  */
 public class SettingsScreen extends SpruceScreen {
@@ -193,7 +194,7 @@ public class SettingsScreen extends SpruceScreen {
 		var supportMeButton = new SpruceButtonWidget(
 				Position.of(this, 4, resetButtonPos.getRelativeY()),
 				tabsWidth - 8, 20, Component.translatable("lambdynlights.menu.support_me"),
-				btn -> Util.getPlatform().openUri("https://donate.lambdaurora.dev/")
+				btn -> Blaze3D.openUri(URI.create("https://donate.lambdaurora.dev/"))
 		);
 		supportMeButton.setTooltip(Component.translatable("lambdynlights.menu.support_me.tooltip"));
 		this.addRenderableWidget(supportMeButton);

@@ -11,14 +11,14 @@ package dev.lambdaurora.lambdynlights.api.entity.luminance;
 
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import org.jetbrains.annotations.Range;
 
 /**
  * Provides the luminance value of an enderman.
  *
  * @author LambdAurora
- * @version 4.0.0
+ * @version 4.13.0
  * @since 4.0.0
  */
 public final class EndermanLuminance implements EntityLuminance {
@@ -33,7 +33,7 @@ public final class EndermanLuminance implements EntityLuminance {
 
 	@Override
 	public @Range(from = 0, to = 15) int getLuminance(ItemLightSourceManager itemLightSourceManager, Entity entity) {
-		if (entity instanceof EnderMan enderman && enderman.getCarriedBlock() != null) {
+		if (entity instanceof Enderman enderman && enderman.getCarriedBlock() != null) {
 			return enderman.getCarriedBlock().getLightEmission();
 		}
 

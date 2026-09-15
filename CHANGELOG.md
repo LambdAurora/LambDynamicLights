@@ -679,6 +679,12 @@
 
 - Fixed duplicate keybind corrupting `options.txt` ([#311](https://github.com/LambdAurora/LambDynamicLights/issues/311), [#386](https://github.com/LambdAurora/LambDynamicLights/issues/386)).
 
+## 4.13.0
+
+- Updated to Minecraft 26.3.
+- Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI "SpruceUI page"
 [pridelib]: https://github.com/Queerbric/pridelib "Pridelib page"
 [Yumi Commons]: https://github.com/YumiProject/yumi-commons "Yumi Commons page"

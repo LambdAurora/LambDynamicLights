@@ -9,8 +9,8 @@
 
 package dev.lambdaurora.lambdynlights.gui;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import dev.lambdaurora.spruceui.background.Background;
 import dev.lambdaurora.spruceui.background.SimpleColorBackground;
 import dev.lambdaurora.spruceui.render.SpruceGuiGraphics;
@@ -41,7 +41,7 @@ import java.util.Random;
  * If you have an issue with this, I don't care.
  *
  * @author LambdAurora
- * @version 4.10.0
+ * @version 4.13.0
  * @since 2.1.0
  */
 public final class RandomPrideFlagBackground implements Background {

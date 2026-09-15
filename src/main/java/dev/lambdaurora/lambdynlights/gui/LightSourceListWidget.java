@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.lambdynlights.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.lambdaurora.lambdynlights.accessor.DynamicLightHandlerHolder;
 import dev.lambdaurora.spruceui.Position;
 import dev.lambdaurora.spruceui.SpruceTextAlignment;
@@ -43,7 +44,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.EntityType;
 import org.jspecify.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -291,7 +291,7 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 			} while (!element.mouseClicked(event, doubleClick));
 
 			this.setFocused(element);
-			if (event.button() == GLFW.GLFW_MOUSE_BUTTON_1)
+			if (event.button() == InputConstants.MOUSE_BUTTON_LEFT)
 				this.dragging = true;
 
 			return true;
@@ -305,7 +305,7 @@ public class LightSourceListWidget extends SpruceEntryListWidget<LightSourceList
 
 		@Override
 		protected boolean onMouseDrag(MouseButtonEvent event, double deltaX, double deltaY) {
-			return this.getFocused() != null && this.dragging && event.button() == GLFW.GLFW_MOUSE_BUTTON_1
+			return this.getFocused() != null && this.dragging && event.button() == InputConstants.MOUSE_BUTTON_LEFT
 					&& this.getFocused().mouseDragged(event, deltaX, deltaY);
 		}
 

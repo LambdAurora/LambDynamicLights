@@ -59,7 +59,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Unmodifiable;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,8 +83,8 @@ public class LambDynLights implements ClientModInitializer, DynamicLightsContext
 
 	public static final KeyMapping TOGGLE_FPS_DYNAMIC_LIGHTING = new KeyMapping(
 			LambDynLightsConstants.NAMESPACE + ".key.toggle_fps_dynamic_lighting",
-			InputConstants.Type.KEYSYM,
-			GLFW.GLFW_KEY_UNKNOWN,
+			InputConstants.Type.KEYBOARD,
+			InputConstants.UNKNOWN.getValue(),
 			KeyMapping.Category.MISC
 	);
 
